@@ -1,0 +1,212 @@
+rules_version = '2';
+
+// JW Congregation Scheduler — Firestore security rules.
+//
+// Deployment: the self-hosting admin pastes this file into
+// Firebase console -> Firestore Database -> Rules (see docs/SETUP-ADMIN.md).
+//
+// Model:
+//  - One Firebase project = one congregation.
+//  - publishers/{uid}.verified gates all congregation data.
+//  - publishers/{uid}.roles.{section} grants per-section admin rights;
+//    roles.fullAdmin grants everything.
+//  - Sensitive personal data lives in publishers/{uid}/private/profile so that
+//    ordinary verified publishers only see names/qualifications of others.
+//  - First-admin bootstrap: congregation/meta can only ever be created once
+//    (Firestore 'create' matches only when the doc does not exist); its
+//    founderUid may then create a fully privileged publisher doc for itself.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- helpers ----------
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myPublisherPath() {
+      return /databases/$(database)/documents/publishers/$(request.auth.uid);
+    }
+
+    function me() {
+      return get(myPublisherPath()).data;
+    }
+
+    function isVerified() {
+      return isSignedIn()
+        && exists(myPublisherPath())
+        && me().verified == true;
+    }
+
+    function hasRole(role) {
+      return isVerified()
+        && (me().roles[role] == true || me().roles.fullAdmin == true);
+    }
+
+    function metaPath() {
+      return /databases/$(database)/documents/congregation/meta;
+    }
+
+    function isFounder() {
+      return isSignedIn()
+        && exists(metaPath())
+        && get(metaPath()).data.founderUid == request.auth.uid;
+    }
+
+    // Roles map with every flag false (shape enforced on self-registration).
+    function noRoles(roles) {
+      return !roles.values().hasAny([true]);
+    }
+
+    // ---------- congregation ----------
+
+    match /congregation/{docId} {
+      // Signed-in but not-yet-verified users may read meta (congregation name
+      // on the "awaiting verification" screen).
+      allow read: if isSignedIn();
+      // Bootstrap: 'create' only matches when the doc does not exist yet, so
+      // whoever writes congregation/meta first becomes the founder. Racing
+      // second writers hit the 'update' rule and are denied.
+      allow create: if isSignedIn()
+        && docId == 'meta'
+        && request.resource.data.founderUid == request.auth.uid;
+      allow update: if hasRole('fullAdmin');
+      allow delete: if false;
+    }
+
+    // ---------- publishers ----------
+
+    match /publishers/{publisherId} {
+      // Own doc always readable (unverified users watch it for verification);
+      // verified publishers read everyone (names/qualifications for schedules).
+      allow read: if isSignedIn()
+        && (request.auth.uid == publisherId || isVerified() || hasRole('publishers'));
+
+      // Founder creates their own doc pre-verified with fullAdmin.
+      // Anyone else self-registers strictly unverified with no roles.
+      // Publisher-admins may create records for members without accounts.
+      allow create: if hasRole('publishers')
+        || (isSignedIn() && request.auth.uid == publisherId && isFounder()
+            && request.resource.data.verified == true)
+        || (isSignedIn() && request.auth.uid == publisherId
+            && request.resource.data.verified == false
+            && noRoles(request.resource.data.roles));
+
+      // Self-service edits may not touch privilege fields.
+      allow update: if hasRole('publishers')
+        || (isSignedIn() && request.auth.uid == publisherId
+            && !request.resource.data.diff(resource.data).affectedKeys()
+                .hasAny(['verified', 'roles', 'qualifications'].toSet()));
+
+      allow delete: if hasRole('publishers');
+
+      // Sensitive personal data: self + publisher-admins only.
+      match /private/{docId} {
+        allow read: if isSignedIn()
+          && (request.auth.uid == publisherId || hasRole('publishers'));
+        allow create, delete: if isSignedIn()
+          && (request.auth.uid == publisherId || hasRole('publishers'));
+        // E-mail is the login identity; it may only change on records of
+        // members without an app account (hasAccount != true).
+        allow update: if (isSignedIn()
+            && (request.auth.uid == publisherId || hasRole('publishers')))
+          && (!('email' in resource.data)
+              || request.resource.data.email == resource.data.email
+              || get(/databases/$(database)/documents/publishers/$(publisherId))
+                  .data.hasAccount != true);
+      }
+    }
+
+    // ---------- information board ----------
+
+    match /infoboard_items/{itemId} {
+      allow read: if isVerified();
+      allow write: if hasRole('infoBoard');
+    }
+
+    match /files/{fileId} {
+      allow read: if isVerified();
+      allow write: if hasRole('infoBoard');
+
+      match /chunks/{chunkId} {
+        allow read: if isVerified();
+        allow write: if hasRole('infoBoard');
+      }
+    }
+
+    // ---------- events ----------
+
+    match /events/{eventId} {
+      allow read: if isVerified();
+      allow write: if hasRole('events');
+    }
+
+    // ---------- schedules ----------
+
+    match /lmm_weeks/{weekId} {
+      allow read: if isVerified();
+      allow write: if hasRole('lmmSchedule');
+    }
+
+    match /weekend_weeks/{weekId} {
+      allow read: if isVerified();
+      allow write: if hasRole('weekendSchedule');
+    }
+
+    match /pw_recurring/{ruleId} {
+      allow read: if isVerified();
+      allow write: if hasRole('publicWitnessing');
+    }
+
+    match /pw_slots/{slotId} {
+      allow read: if isVerified();
+      allow write: if hasRole('publicWitnessing');
+    }
+
+    // ---------- territories ----------
+
+    match /territories/{territoryId} {
+      allow read: if isVerified();
+      allow write: if hasRole('territories');
+    }
+
+    match /territory_assignments/{assignmentId} {
+      // Publishers see own assignments (client must query
+      // where publisherId == uid); territory-admins see all.
+      allow read: if hasRole('territories')
+        || (isVerified() && resource.data.publisherId == request.auth.uid);
+      allow create, delete: if hasRole('territories');
+      // A publisher may only return their own territory (+ optional notes).
+      allow update: if hasRole('territories')
+        || (isVerified()
+            && resource.data.publisherId == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(['returnedDate', 'returnNotes'].toSet()));
+    }
+
+    // ---------- ministry reports ----------
+    // reports/{yyyy-MM}/entries/{publisherId}
+
+    match /reports/{month} {
+      // Month parent docs are never written; entries live in the subcollection.
+      allow read: if isVerified();
+      allow write: if false;
+
+      match /entries/{publisherId} {
+        allow read: if hasRole('reports')
+          || (isVerified() && request.auth.uid == publisherId);
+        allow create, update: if hasRole('reports')
+          || (isVerified() && request.auth.uid == publisherId);
+        allow delete: if hasRole('reports');
+      }
+    }
+
+    // ---------- meeting attendance ----------
+
+    match /attendance/{entryId} {
+      allow read: if isVerified();
+      allow write: if hasRole('attendance');
+    }
+  }
+}
