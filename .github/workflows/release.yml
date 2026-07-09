@@ -104,6 +104,31 @@ jobs:
           --build-name=${{ steps.ver.outputs.version_name }}
           --build-number=${{ steps.ver.outputs.build_number }}
 
+      # Attach the raw outputs to the workflow run first — this always succeeds
+      # (even if a later publishing step fails) so the AAB/APK are downloadable
+      # from the Actions run page regardless of Play/Release outcomes.
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ steps.ver.outputs.version_name }}-${{ steps.ver.outputs.build_number }}
+          path: |
+            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: warn
+
+      # Create the GitHub Release before the Play upload, so a Play failure
+      # (e.g. the app not yet created in the Play Console) never blocks it.
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.ver.outputs.version_name }}+${{ steps.ver.outputs.build_number }}
+          name: v${{ steps.ver.outputs.version_name }} (build ${{ steps.ver.outputs.build_number }})
+          generate_release_notes: true
+          files: |
+            build/app/outputs/bundle/release/app-release.aab
+            build/app/outputs/flutter-apk/app-release.apk
+
       - name: Upload AAB to Google Play
         uses: r0adkll/upload-google-play@v1
         with:
@@ -114,16 +139,6 @@ jobs:
           # Production releases go up as a draft to be reviewed/rolled out by a
           # human in the Play Console. Other tracks publish immediately.
           status: ${{ github.event.inputs.play_track == 'production' && 'draft' || 'completed' }}
-
-      - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ steps.ver.outputs.version_name }}+${{ steps.ver.outputs.build_number }}
-          name: v${{ steps.ver.outputs.version_name }} (build ${{ steps.ver.outputs.build_number }})
-          generate_release_notes: true
-          files: |
-            build/app/outputs/bundle/release/app-release.aab
-            build/app/outputs/flutter-apk/app-release.apk
 
   # --------------------------------------------------------------------------
   # iOS  ->  App Store Connect / TestFlight
