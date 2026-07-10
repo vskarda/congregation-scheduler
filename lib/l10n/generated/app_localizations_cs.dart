@@ -265,6 +265,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navS1 => 'Zpráva S-1';
 
   @override
+  String get navTalks => 'Náměty veřejných přednášek';
+
+  @override
   String get navSettings => 'Nastavení sboru';
 
   @override
@@ -559,6 +562,65 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get customFieldAdd => 'Přidat pole programu';
+
+  @override
+  String get pickerFromCatalog => 'Ze seznamu';
+
+  @override
+  String get talksUpdateFromPdf => 'Aktualizovat náměty z PDF';
+
+  @override
+  String get talksPickPdf => 'Vybrat PDF S-99';
+
+  @override
+  String get talksParseError =>
+      'Z tohoto souboru se nepodařilo načíst náměty přednášek. Použijte oficiální PDF formuláře S-99.';
+
+  @override
+  String talksImportSummary(int total, int added, int changed, int removed) {
+    return 'Nalezeno námětů: $total — nové: $added, změněné: $changed, odstraněné: $removed';
+  }
+
+  @override
+  String get talksImportSave => 'Uložit náměty';
+
+  @override
+  String talksImportDone(int count) {
+    return 'Náměty uloženy. Aktualizovaná nadcházející shromáždění: $count.';
+  }
+
+  @override
+  String talksLastDelivered(String date) {
+    return 'Naposledy předneseno $date';
+  }
+
+  @override
+  String get talksNeverDelivered => 'Zatím nepředneseno';
+
+  @override
+  String get talksScheduled => 'naplánováno';
+
+  @override
+  String get talksNew => 'Nový';
+
+  @override
+  String get talksChanged => 'Změněný';
+
+  @override
+  String get talksRemoved => 'Odstraněný';
+
+  @override
+  String get talksSearchHint => 'Hledat přednášku…';
+
+  @override
+  String get talksEmpty =>
+      'Zatím žádné náměty přednášek. Importujte je z PDF formuláře S-99.';
+
+  @override
+  String get talksOpenCatalog => 'Spravovat náměty přednášek';
+
+  @override
+  String get talksEditTitle => 'Upravit námět';
 
   @override
   String get pwNoSlots => 'Tento týden není žádné veřejné svědectví.';

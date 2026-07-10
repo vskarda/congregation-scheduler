@@ -265,6 +265,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navS1 => 'S-1 report';
 
   @override
+  String get navTalks => 'Public talk titles';
+
+  @override
   String get navSettings => 'Congregation settings';
 
   @override
@@ -558,6 +561,64 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get customFieldAdd => 'Add program field';
+
+  @override
+  String get pickerFromCatalog => 'From list';
+
+  @override
+  String get talksUpdateFromPdf => 'Update titles from PDF';
+
+  @override
+  String get talksPickPdf => 'Choose S-99 PDF';
+
+  @override
+  String get talksParseError =>
+      'Could not read talk titles from this file. Use an official S-99 form PDF.';
+
+  @override
+  String talksImportSummary(int total, int added, int changed, int removed) {
+    return '$total talks found: $added new, $changed changed, $removed removed';
+  }
+
+  @override
+  String get talksImportSave => 'Save titles';
+
+  @override
+  String talksImportDone(int count) {
+    return 'Titles saved. $count upcoming meetings updated.';
+  }
+
+  @override
+  String talksLastDelivered(String date) {
+    return 'Last delivered $date';
+  }
+
+  @override
+  String get talksNeverDelivered => 'Not delivered yet';
+
+  @override
+  String get talksScheduled => 'scheduled';
+
+  @override
+  String get talksNew => 'New';
+
+  @override
+  String get talksChanged => 'Changed';
+
+  @override
+  String get talksRemoved => 'Removed';
+
+  @override
+  String get talksSearchHint => 'Search talks…';
+
+  @override
+  String get talksEmpty => 'No talk titles yet. Import them from an S-99 PDF.';
+
+  @override
+  String get talksOpenCatalog => 'Manage talk titles';
+
+  @override
+  String get talksEditTitle => 'Edit title';
 
   @override
   String get pwNoSlots => 'No public witnessing this week.';

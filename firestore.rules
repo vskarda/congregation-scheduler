@@ -154,6 +154,13 @@ service cloud.firestore {
       allow write: if hasRole('weekendSchedule');
     }
 
+    // Public talk title catalog (S-99); readable by all verified users
+    // so the weekend talk picker can offer the titles.
+    match /public_talks/{docId} {
+      allow read: if isVerified();
+      allow write: if hasRole('weekendSchedule');
+    }
+
     match /pw_recurring/{ruleId} {
       allow read: if isVerified();
       allow write: if hasRole('publicWitnessing');

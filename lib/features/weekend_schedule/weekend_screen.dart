@@ -10,6 +10,7 @@ import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
+import 'talk_title_editor.dart';
 
 class WeekendScreen extends StatelessWidget {
   const WeekendScreen({super.key});
@@ -75,27 +76,12 @@ class _WeekContent extends ConsumerWidget {
   final bool canEdit;
 
   Future<void> _editTalkTitle(BuildContext context, WidgetRef ref) async {
-    final l10n = context.l10n;
-    final ctrl = TextEditingController(text: week.talkTitle);
-    final saved = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.weekendTalkTitle),
-        content: TextField(controller: ctrl, autofocus: true, maxLines: 2),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.commonCancel)),
-          FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.commonSave)),
-        ],
-      ),
-    );
-    if (saved == true) {
-      await _save(ref, week.copyWith(talkTitle: ctrl.text.trim()));
+    final result = await showTalkTitleEditor(context,
+        talkNo: week.talkNo, title: week.talkTitle);
+    if (result != null) {
+      await _save(
+          ref, week.copyWith(talkNo: result.talkNo, talkTitle: result.title));
     }
-    ctrl.dispose();
   }
 
   Future<void> _editAssignment(
@@ -214,7 +200,11 @@ class _WeekContent extends ConsumerWidget {
                 title: Text(l10n.weekendTalkTitle,
                     style: theme.textTheme.labelLarge),
                 subtitle: Text(
-                  week.talkTitle.isEmpty ? '—' : week.talkTitle,
+                  week.talkTitle.isEmpty
+                      ? '—'
+                      : week.talkNo == null
+                          ? week.talkTitle
+                          : '${week.talkNo}. ${week.talkTitle}',
                   style: theme.textTheme.titleMedium,
                 ),
                 onTap: canEdit ? () => _editTalkTitle(context, ref) : null,

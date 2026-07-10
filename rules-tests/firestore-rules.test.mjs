@@ -26,6 +26,7 @@ let env;
 const FOUNDER = 'founder-uid';
 const ADMIN = 'admin-uid'; // publishers + reports admin
 const LMM_ADMIN = 'lmm-admin-uid';
+const WEEKEND_ADMIN = 'weekend-admin-uid';
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
@@ -71,6 +72,10 @@ async function seed() {
       ...basePublisher,
       roles: { ...basePublisher.roles, lmmSchedule: true },
     });
+    await setDoc(doc(f, `publishers/${WEEKEND_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, weekendSchedule: true },
+    });
     await setDoc(doc(f, `publishers/${ATTENDANCE_ADMIN}`), {
       ...basePublisher,
       roles: { ...basePublisher.roles, attendance: true },
@@ -106,6 +111,11 @@ async function seed() {
       meetingType: 'weekend',
       inPerson: 50,
       online: 10,
+    });
+    await setDoc(doc(f, 'public_talks/catalog'), {
+      titles: { 1: 'How Well Do You Know God?' },
+      updatedAt: '2026-07-01',
+      source: 'S-99_E.pdf',
     });
   });
 }
@@ -370,6 +380,41 @@ describe('territory assignments', () => {
     );
     await assertFails(
       deleteDoc(doc(db(VERIFIED), 'territory_assignments/ta1')),
+    );
+  });
+});
+
+describe('public talk titles catalog', () => {
+  it('verified publisher reads the catalog but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'public_talks/catalog')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'public_talks/catalog'), {
+        titles: { 1: 'Hijacked' },
+      }),
+    );
+  });
+
+  it('unverified user cannot read the catalog', async () => {
+    await assertFails(getDoc(doc(db(UNVERIFIED), 'public_talks/catalog')));
+  });
+
+  it('weekend admin can replace the catalog', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(WEEKEND_ADMIN), 'public_talks/catalog'), {
+        titles: { 1: 'How Well Do You Know God?', 2: 'New Title' },
+        updatedAt: '2026-07-10',
+        source: 'S-99_B.pdf',
+      }),
+    );
+  });
+
+  it('weekend admin writes weekend weeks carrying a talk number', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(WEEKEND_ADMIN), 'weekend_weeks/2026-07-13'), {
+        talkTitle: 'How Well Do You Know God?',
+        talkNo: 1,
+        allAssigneeIds: [],
+      }),
     );
   });
 });

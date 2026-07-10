@@ -578,6 +578,12 @@ abstract class AppLocalizations {
   /// **'S-1 report'**
   String get navS1;
 
+  /// No description provided for @navTalks.
+  ///
+  /// In en, this message translates to:
+  /// **'Public talk titles'**
+  String get navTalks;
+
   /// No description provided for @navSettings.
   ///
   /// In en, this message translates to:
@@ -1135,6 +1141,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add program field'**
   String get customFieldAdd;
+
+  /// No description provided for @pickerFromCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'From list'**
+  String get pickerFromCatalog;
+
+  /// No description provided for @talksUpdateFromPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Update titles from PDF'**
+  String get talksUpdateFromPdf;
+
+  /// No description provided for @talksPickPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose S-99 PDF'**
+  String get talksPickPdf;
+
+  /// No description provided for @talksParseError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read talk titles from this file. Use an official S-99 form PDF.'**
+  String get talksParseError;
+
+  /// No description provided for @talksImportSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} talks found: {added} new, {changed} changed, {removed} removed'**
+  String talksImportSummary(int total, int added, int changed, int removed);
+
+  /// No description provided for @talksImportSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save titles'**
+  String get talksImportSave;
+
+  /// No description provided for @talksImportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Titles saved. {count} upcoming meetings updated.'**
+  String talksImportDone(int count);
+
+  /// No description provided for @talksLastDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Last delivered {date}'**
+  String talksLastDelivered(String date);
+
+  /// No description provided for @talksNeverDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not delivered yet'**
+  String get talksNeverDelivered;
+
+  /// No description provided for @talksScheduled.
+  ///
+  /// In en, this message translates to:
+  /// **'scheduled'**
+  String get talksScheduled;
+
+  /// No description provided for @talksNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get talksNew;
+
+  /// No description provided for @talksChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed'**
+  String get talksChanged;
+
+  /// No description provided for @talksRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed'**
+  String get talksRemoved;
+
+  /// No description provided for @talksSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search talks…'**
+  String get talksSearchHint;
+
+  /// No description provided for @talksEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No talk titles yet. Import them from an S-99 PDF.'**
+  String get talksEmpty;
+
+  /// No description provided for @talksOpenCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage talk titles'**
+  String get talksOpenCatalog;
+
+  /// No description provided for @talksEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit title'**
+  String get talksEditTitle;
 
   /// No description provided for @pwNoSlots.
   ///

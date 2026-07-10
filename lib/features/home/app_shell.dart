@@ -53,6 +53,9 @@ class AppShell extends ConsumerWidget {
       if (roles.canEditAttendance())
         _Destination(
             '/admin/attendance', Icons.tag_outlined, l10n.navAttendance),
+      if (roles.canEditWeekend())
+        _Destination('/admin/talks', Icons.record_voice_over_outlined,
+            l10n.navTalks),
       if (roles.fullAdmin)
         _Destination(
             '/admin/settings', Icons.settings_outlined, l10n.navSettings),

@@ -33,6 +33,39 @@ class WeekendRepository {
     return snap.docs.map(_fromDoc).toList();
   }
 
+  Future<List<WeekendWeek>> getAll() async {
+    final snap = await _col.get();
+    return snap.docs.map(_fromDoc).toList();
+  }
+
+  /// Rewrites talkTitle snapshots on weeks >= [fromWeekId] whose talkNo is in
+  /// [titlesByNo] and whose stored title differs. Returns the updated count.
+  Future<int> updateTalkTitles(Map<int, String> titlesByNo,
+      {required String fromWeekId}) async {
+    final weeks = await getRange(fromWeekId, '9999-12-31');
+    return updateTalkTitlesIn(weeks, titlesByNo);
+  }
+
+  /// Batch-updates [weeks] whose talkNo maps to a differing title.
+  Future<int> updateTalkTitlesIn(
+      List<WeekendWeek> weeks, Map<int, String> titlesByNo) async {
+    final dirty = weeks
+        .where((w) =>
+            w.talkNo != null &&
+            titlesByNo.containsKey(w.talkNo) &&
+            titlesByNo[w.talkNo] != w.talkTitle)
+        .toList();
+    // Firestore caps a WriteBatch at 500 operations.
+    for (var i = 0; i < dirty.length; i += 400) {
+      final batch = _db.batch();
+      for (final w in dirty.skip(i).take(400)) {
+        batch.update(_col.doc(w.id), {'talkTitle': titlesByNo[w.talkNo]!});
+      }
+      await batch.commit();
+    }
+    return dirty.length;
+  }
+
   Future<List<WeekendWeek>> getAssignedTo(String uid) async {
     final snap =
         await _col.where('allAssigneeIds', arrayContains: uid).get();
