@@ -105,16 +105,27 @@ service cloud.firestore {
       match /private/{docId} {
         allow read: if isSignedIn()
           && (request.auth.uid == publisherId || hasRole('publishers'));
-        allow create, delete: if isSignedIn()
+        allow delete: if isSignedIn()
           && (request.auth.uid == publisherId || hasRole('publishers'));
+        // Appointment (elder/MS) is set by publisher-admins only; a
+        // self-created doc must leave it at the default.
+        allow create: if hasRole('publishers')
+          || (isSignedIn() && request.auth.uid == publisherId
+              && request.resource.data.get('appointment', 'none') == 'none');
         // E-mail is the login identity; it may only change on records of
         // members without an app account (hasAccount != true).
+        // Appointment may not change on self-edits; get() with a default
+        // tolerates legacy docs that predate the field (the client always
+        // writes the full document).
         allow update: if (isSignedIn()
             && (request.auth.uid == publisherId || hasRole('publishers')))
           && (!('email' in resource.data)
               || request.resource.data.email == resource.data.email
               || get(/databases/$(database)/documents/publishers/$(publisherId))
-                  .data.hasAccount != true);
+                  .data.hasAccount != true)
+          && (hasRole('publishers')
+              || request.resource.data.get('appointment', 'none')
+                  == resource.data.get('appointment', 'none'));
       }
     }
 

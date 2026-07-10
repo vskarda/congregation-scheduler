@@ -42,4 +42,5 @@ const _$PublisherStatusEnumMap = {
   PublisherStatus.auxiliaryPioneer: 'auxPioneer',
   PublisherStatus.regularPioneer: 'regPioneer',
   PublisherStatus.specialPioneer: 'specialPioneer',
+  PublisherStatus.fieldMissionary: 'fieldMissionary',
 };

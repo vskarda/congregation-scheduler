@@ -14,10 +14,14 @@ class PublisherForm extends ConsumerStatefulWidget {
     super.key,
     required this.publisher,
     required this.private,
+    this.showAppointment = false,
   });
 
   final Publisher publisher;
   final PublisherPrivate? private;
+
+  /// Appointment (elder/MS) is maintained by publisher-admins only.
+  final bool showAppointment;
 
   @override
   ConsumerState<PublisherForm> createState() => _PublisherFormState();
@@ -34,6 +38,9 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
   late Gender _gender;
   late PublisherStatus _status;
   late String _birthDate;
+  late String _baptismDate;
+  late Hope _hope;
+  late Appointment _appointment;
   bool _busy = false;
 
   @override
@@ -50,6 +57,9 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
     _gender = p.gender;
     _status = p.status;
     _birthDate = priv?.birthDate ?? '';
+    _baptismDate = priv?.baptismDate ?? '';
+    _hope = priv?.hope ?? Hope.otherSheep;
+    _appointment = priv?.appointment ?? Appointment.none;
   }
 
   @override
@@ -74,6 +84,17 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
     if (picked != null) setState(() => _birthDate = dateKey(picked));
   }
 
+  Future<void> _pickBaptismDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: tryParseDateKey(_baptismDate) ?? DateTime(now.year - 10),
+      firstDate: DateTime(1900),
+      lastDate: now,
+    );
+    if (picked != null) setState(() => _baptismDate = dateKey(picked));
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final l10n = context.l10n;
@@ -94,6 +115,11 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           phone: _phone.text.trim(),
           address: _address.text.trim(),
           birthDate: _birthDate,
+          baptismDate: _baptismDate,
+          hope: _hope,
+          // Never edited on the self profile; the unchanged value must be
+          // written back or the security rules reject the save.
+          appointment: _appointment,
           emergencyNote: _emergency.text.trim(),
         ),
       );
@@ -158,6 +184,14 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
             ),
           ),
           const SizedBox(height: 12),
+          InkWell(
+            onTap: _pickBaptismDate,
+            child: InputDecorator(
+              decoration: InputDecoration(labelText: l10n.profileBaptismDate),
+              child: Text(_baptismDate.isEmpty ? '—' : _baptismDate),
+            ),
+          ),
+          const SizedBox(height: 12),
           DropdownButtonFormField<Gender>(
             initialValue: _gender,
             decoration: InputDecoration(labelText: l10n.profileGender),
@@ -166,6 +200,16 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
                 DropdownMenuItem(value: g, child: Text(genderLabel(l10n, g))),
             ],
             onChanged: (g) => setState(() => _gender = g ?? Gender.unknown),
+          ),
+          const SizedBox(height: 12),
+          DropdownButtonFormField<Hope>(
+            initialValue: _hope,
+            decoration: InputDecoration(labelText: l10n.profileHope),
+            items: [
+              for (final h in Hope.values)
+                DropdownMenuItem(value: h, child: Text(hopeLabel(l10n, h))),
+            ],
+            onChanged: (h) => setState(() => _hope = h ?? Hope.otherSheep),
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<PublisherStatus>(
@@ -179,6 +223,20 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
                 setState(() => _status = s ?? PublisherStatus.publisher),
           ),
           const SizedBox(height: 12),
+          if (widget.showAppointment) ...[
+            DropdownButtonFormField<Appointment>(
+              initialValue: _appointment,
+              decoration: InputDecoration(labelText: l10n.profileAppointment),
+              items: [
+                for (final a in Appointment.values)
+                  DropdownMenuItem(
+                      value: a, child: Text(appointmentLabel(l10n, a))),
+              ],
+              onChanged: (a) =>
+                  setState(() => _appointment = a ?? Appointment.none),
+            ),
+            const SizedBox(height: 12),
+          ],
           TextFormField(
             controller: _emergency,
             minLines: 2,

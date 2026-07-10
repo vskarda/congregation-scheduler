@@ -286,6 +286,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get profileBirthDate => 'Datum narození';
 
   @override
+  String get profileBaptismDate => 'Datum křtu';
+
+  @override
   String get profileGender => 'Pohlaví';
 
   @override
@@ -296,6 +299,15 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get genderFemale => 'Žena';
+
+  @override
+  String get profileHope => 'Naděje';
+
+  @override
+  String get hopeOtherSheep => 'Jiné ovce';
+
+  @override
+  String get hopeAnointed => 'Pomazaný';
 
   @override
   String get profileStatus => 'Služební postavení';
@@ -311,6 +323,18 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get statusSpecialPioneer => 'Zvláštní průkopník';
+
+  @override
+  String get statusFieldMissionary => 'Misionář';
+
+  @override
+  String get profileAppointment => 'Jmenování';
+
+  @override
+  String get appointmentMinisterialServant => 'Služební pomocník';
+
+  @override
+  String get appointmentElder => 'Starší';
 
   @override
   String get profileEmergency => 'Poznámka pro případ nouze';
@@ -346,6 +370,33 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reportComments => 'Poznámky';
+
+  @override
+  String get s21Export => 'Exportovat S-21 (PDF)';
+
+  @override
+  String get s21Title => 'SBOROVÝ ZÁZNAM ZVĚSTOVATELE';
+
+  @override
+  String get s21Name => 'Jméno:';
+
+  @override
+  String get s21DateOfBirth => 'Datum narození:';
+
+  @override
+  String get s21DateOfBaptism => 'Datum křtu:';
+
+  @override
+  String get s21HoursHeader => 'Hodiny (u průkopníků a misionářů)';
+
+  @override
+  String get s21Remarks => 'Poznámky';
+
+  @override
+  String get s21Total => 'Celkem';
+
+  @override
+  String get s21FormCode => 'S-21-B 11/23';
 
   @override
   String get pubAdminInvite => 'Pozvat';

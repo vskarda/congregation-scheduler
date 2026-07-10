@@ -317,6 +317,92 @@ describe('private profiles', () => {
       }),
     );
   });
+
+  it('self edits baptism date and hope, not appointment', async () => {
+    await assertSucceeds(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        baptismDate: '2005-06-11',
+        hope: 'anointed',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        appointment: 'elder',
+      }),
+    );
+  });
+
+  it('self full-doc save on a legacy doc keeps appointment at default', async () => {
+    // The app always rewrites the whole document; the seeded doc predates
+    // the appointment field.
+    const fullDoc = {
+      email: 'v@example.com',
+      phone: '123',
+      address: '',
+      birthDate: '1990-01-01',
+      baptismDate: '2005-06-11',
+      hope: 'otherSheep',
+      emergencyNote: 'call mom',
+    };
+    await assertSucceeds(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        ...fullDoc,
+        appointment: 'none',
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        ...fullDoc,
+        appointment: 'ministerialServant',
+      }),
+    );
+  });
+
+  it('self must carry an admin-set appointment through unchanged', async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), `publishers/${VERIFIED}/private/profile`),
+        { email: 'v@example.com', appointment: 'elder' },
+      );
+    });
+    await assertSucceeds(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        email: 'v@example.com',
+        phone: '999',
+        appointment: 'elder',
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
+        email: 'v@example.com',
+        phone: '999',
+        appointment: 'none',
+      }),
+    );
+  });
+
+  it('self create may not set an appointment', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(LMM_ADMIN), `publishers/${LMM_ADMIN}/private/profile`),
+        { email: 'lmm@example.com', appointment: 'elder' },
+      ),
+    );
+    await assertSucceeds(
+      setDoc(
+        doc(db(LMM_ADMIN), `publishers/${LMM_ADMIN}/private/profile`),
+        { email: 'lmm@example.com', appointment: 'none' },
+      ),
+    );
+  });
+
+  it('publishers-admin sets appointment on others', async () => {
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}/private/profile`), {
+        appointment: 'elder',
+      }),
+    );
+  });
 });
 
 describe('reports', () => {

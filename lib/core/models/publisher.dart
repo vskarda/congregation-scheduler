@@ -134,6 +134,13 @@ abstract class PublisherPrivate with _$PublisherPrivate {
 
     /// yyyy-MM-dd
     @Default('') String birthDate,
+
+    /// yyyy-MM-dd
+    @Default('') String baptismDate,
+    @Default(Hope.otherSheep) Hope hope,
+
+    /// Set by publisher-admins only (enforced in firestore.rules).
+    @Default(Appointment.none) Appointment appointment,
     @Default('') String emergencyNote,
   }) = _PublisherPrivate;
 

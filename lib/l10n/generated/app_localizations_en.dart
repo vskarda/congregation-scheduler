@@ -286,6 +286,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileBirthDate => 'Birth date';
 
   @override
+  String get profileBaptismDate => 'Baptism date';
+
+  @override
   String get profileGender => 'Gender';
 
   @override
@@ -296,6 +299,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get genderFemale => 'Female';
+
+  @override
+  String get profileHope => 'Hope';
+
+  @override
+  String get hopeOtherSheep => 'Other sheep';
+
+  @override
+  String get hopeAnointed => 'Anointed';
 
   @override
   String get profileStatus => 'Service status';
@@ -311,6 +323,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusSpecialPioneer => 'Special pioneer';
+
+  @override
+  String get statusFieldMissionary => 'Field missionary';
+
+  @override
+  String get profileAppointment => 'Appointment';
+
+  @override
+  String get appointmentMinisterialServant => 'Ministerial servant';
+
+  @override
+  String get appointmentElder => 'Elder';
 
   @override
   String get profileEmergency => 'Emergency note';
@@ -346,6 +370,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportComments => 'Comments';
+
+  @override
+  String get s21Export => 'Export S-21 (PDF)';
+
+  @override
+  String get s21Title => 'CONGREGATION\'S PUBLISHER RECORD';
+
+  @override
+  String get s21Name => 'Name:';
+
+  @override
+  String get s21DateOfBirth => 'Date of birth:';
+
+  @override
+  String get s21DateOfBaptism => 'Date of baptism:';
+
+  @override
+  String get s21HoursHeader => 'Hours (If pioneer or field missionary)';
+
+  @override
+  String get s21Remarks => 'Remarks';
+
+  @override
+  String get s21Total => 'Total';
+
+  @override
+  String get s21FormCode => 'S-21-E 11/23';
 
   @override
   String get pubAdminInvite => 'Invite';

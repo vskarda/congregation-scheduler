@@ -620,6 +620,12 @@ abstract class AppLocalizations {
   /// **'Birth date'**
   String get profileBirthDate;
 
+  /// No description provided for @profileBaptismDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Baptism date'**
+  String get profileBaptismDate;
+
   /// No description provided for @profileGender.
   ///
   /// In en, this message translates to:
@@ -643,6 +649,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Female'**
   String get genderFemale;
+
+  /// No description provided for @profileHope.
+  ///
+  /// In en, this message translates to:
+  /// **'Hope'**
+  String get profileHope;
+
+  /// No description provided for @hopeOtherSheep.
+  ///
+  /// In en, this message translates to:
+  /// **'Other sheep'**
+  String get hopeOtherSheep;
+
+  /// No description provided for @hopeAnointed.
+  ///
+  /// In en, this message translates to:
+  /// **'Anointed'**
+  String get hopeAnointed;
 
   /// No description provided for @profileStatus.
   ///
@@ -673,6 +697,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Special pioneer'**
   String get statusSpecialPioneer;
+
+  /// No description provided for @statusFieldMissionary.
+  ///
+  /// In en, this message translates to:
+  /// **'Field missionary'**
+  String get statusFieldMissionary;
+
+  /// No description provided for @profileAppointment.
+  ///
+  /// In en, this message translates to:
+  /// **'Appointment'**
+  String get profileAppointment;
+
+  /// No description provided for @appointmentMinisterialServant.
+  ///
+  /// In en, this message translates to:
+  /// **'Ministerial servant'**
+  String get appointmentMinisterialServant;
+
+  /// No description provided for @appointmentElder.
+  ///
+  /// In en, this message translates to:
+  /// **'Elder'**
+  String get appointmentElder;
 
   /// No description provided for @profileEmergency.
   ///
@@ -739,6 +787,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Comments'**
   String get reportComments;
+
+  /// No description provided for @s21Export.
+  ///
+  /// In en, this message translates to:
+  /// **'Export S-21 (PDF)'**
+  String get s21Export;
+
+  /// No description provided for @s21Title.
+  ///
+  /// In en, this message translates to:
+  /// **'CONGREGATION\'S PUBLISHER RECORD'**
+  String get s21Title;
+
+  /// No description provided for @s21Name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name:'**
+  String get s21Name;
+
+  /// No description provided for @s21DateOfBirth.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of birth:'**
+  String get s21DateOfBirth;
+
+  /// No description provided for @s21DateOfBaptism.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of baptism:'**
+  String get s21DateOfBaptism;
+
+  /// No description provided for @s21HoursHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours (If pioneer or field missionary)'**
+  String get s21HoursHeader;
+
+  /// No description provided for @s21Remarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Remarks'**
+  String get s21Remarks;
+
+  /// No description provided for @s21Total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get s21Total;
+
+  /// No description provided for @s21FormCode.
+  ///
+  /// In en, this message translates to:
+  /// **'S-21-E 11/23'**
+  String get s21FormCode;
 
   /// No description provided for @pubAdminInvite.
   ///

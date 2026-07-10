@@ -110,7 +110,10 @@ class PublisherDetailScreen extends ConsumerWidget {
             _AssignTab(publisher: publisher),
             Padding(
               padding: const EdgeInsets.all(16),
-              child: PublisherRecordView(publisherId: publisherId),
+              child: PublisherRecordView(
+                publisherId: publisherId,
+                showS21Export: true,
+              ),
             ),
           ],
         ),
@@ -175,6 +178,7 @@ class _ProfileTab extends ConsumerWidget {
                 key: ValueKey('${publisher.id}-admin-form'),
                 publisher: publisher,
                 private: priv,
+                showAppointment: true,
               ),
             ],
           ),

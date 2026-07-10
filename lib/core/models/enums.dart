@@ -18,6 +18,24 @@ enum PublisherStatus {
   regularPioneer,
   @JsonValue('specialPioneer')
   specialPioneer,
+  @JsonValue('fieldMissionary')
+  fieldMissionary,
+}
+
+enum Hope {
+  @JsonValue('otherSheep')
+  otherSheep,
+  @JsonValue('anointed')
+  anointed,
+}
+
+enum Appointment {
+  @JsonValue('none')
+  none,
+  @JsonValue('ministerialServant')
+  ministerialServant,
+  @JsonValue('elder')
+  elder,
 }
 
 enum EventType {

@@ -113,6 +113,7 @@ const _$PublisherStatusEnumMap = {
   PublisherStatus.auxiliaryPioneer: 'auxPioneer',
   PublisherStatus.regularPioneer: 'regPioneer',
   PublisherStatus.specialPioneer: 'specialPioneer',
+  PublisherStatus.fieldMissionary: 'fieldMissionary',
 };
 
 _PublisherPrivate _$PublisherPrivateFromJson(Map<String, dynamic> json) =>
@@ -121,6 +122,11 @@ _PublisherPrivate _$PublisherPrivateFromJson(Map<String, dynamic> json) =>
       phone: json['phone'] as String? ?? '',
       address: json['address'] as String? ?? '',
       birthDate: json['birthDate'] as String? ?? '',
+      baptismDate: json['baptismDate'] as String? ?? '',
+      hope: $enumDecodeNullable(_$HopeEnumMap, json['hope']) ?? Hope.otherSheep,
+      appointment:
+          $enumDecodeNullable(_$AppointmentEnumMap, json['appointment']) ??
+          Appointment.none,
       emergencyNote: json['emergencyNote'] as String? ?? '',
     );
 
@@ -130,5 +136,19 @@ Map<String, dynamic> _$PublisherPrivateToJson(_PublisherPrivate instance) =>
       'phone': instance.phone,
       'address': instance.address,
       'birthDate': instance.birthDate,
+      'baptismDate': instance.baptismDate,
+      'hope': _$HopeEnumMap[instance.hope]!,
+      'appointment': _$AppointmentEnumMap[instance.appointment]!,
       'emergencyNote': instance.emergencyNote,
     };
+
+const _$HopeEnumMap = {
+  Hope.otherSheep: 'otherSheep',
+  Hope.anointed: 'anointed',
+};
+
+const _$AppointmentEnumMap = {
+  Appointment.none: 'none',
+  Appointment.ministerialServant: 'ministerialServant',
+  Appointment.elder: 'elder',
+};

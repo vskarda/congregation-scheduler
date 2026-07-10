@@ -7,6 +7,19 @@ String statusLabel(AppLocalizations l10n, PublisherStatus status) =>
       PublisherStatus.auxiliaryPioneer => l10n.statusAuxPioneer,
       PublisherStatus.regularPioneer => l10n.statusRegPioneer,
       PublisherStatus.specialPioneer => l10n.statusSpecialPioneer,
+      PublisherStatus.fieldMissionary => l10n.statusFieldMissionary,
+    };
+
+String hopeLabel(AppLocalizations l10n, Hope hope) => switch (hope) {
+      Hope.otherSheep => l10n.hopeOtherSheep,
+      Hope.anointed => l10n.hopeAnointed,
+    };
+
+String appointmentLabel(AppLocalizations l10n, Appointment appointment) =>
+    switch (appointment) {
+      Appointment.none => l10n.commonNone,
+      Appointment.ministerialServant => l10n.appointmentMinisterialServant,
+      Appointment.elder => l10n.appointmentElder,
     };
 
 String genderLabel(AppLocalizations l10n, Gender gender) => switch (gender) {

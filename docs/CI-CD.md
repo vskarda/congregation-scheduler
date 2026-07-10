@@ -147,8 +147,8 @@ the key + CSR with OpenSSL on Windows:
 # 1) private key
 openssl genrsa -out ios_dist.key 2048
 # 2) CSR (fill in your email + name)
-openssl req -new -key ios_dist.key -out ios_dist.csr `
-  -subj "/emailAddress=you@example.com/CN=Your Name/C=US"
+  //(does not work) openssl req -new -key ios_dist.key -out ios_dist.csr -subj "/emailAddress=vitezslav.skarda@icloud.com/CN=Vitezslav Skarda/C=CZ"
+   //(this one works) MSYS_NO_PATHCONV=1 openssl req -new -key ios_dist.key -out ios_dist.csr -subj "/C=CZ/CN=Vitezslav Skarda/emailAddress=vitezslav.skarda@icloud.com"
 ```
 
 3. <https://developer.apple.com/account/resources/certificates> → **+** →
