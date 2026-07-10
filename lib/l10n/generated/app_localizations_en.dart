@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get commonBack => 'Back';
+
+  @override
   String get commonRetry => 'Retry';
 
   @override
@@ -367,6 +370,25 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pubAdminDeleteConfirm =>
       'Delete this publisher and their private data? Their reports stay stored.';
+
+  @override
+  String get pubAdminSelfVerifiedWarningTitle =>
+      'Turn off your own Verified status?';
+
+  @override
+  String get pubAdminSelfVerifiedWarningBody =>
+      'You are removing Verified from your own account. You will immediately lose access to the congregation\'s data, and only another Full Admin will be able to restore it. Are you sure you want to continue?';
+
+  @override
+  String get pubAdminSelfFullAdminWarningTitle =>
+      'Remove your own Full Admin rights?';
+
+  @override
+  String get pubAdminSelfFullAdminWarningBody =>
+      'You are removing Full Admin from your own account. If you are the only administrator, no one — including you — will be able to undo this. Are you sure you want to continue?';
+
+  @override
+  String get pubAdminSelfWarningConfirm => 'Remove my access';
 
   @override
   String get roleFullAdmin => 'Full administrator';

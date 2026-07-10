@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @commonBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get commonBack;
+
   /// No description provided for @commonRetry.
   ///
   /// In en, this message translates to:
@@ -775,6 +781,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this publisher and their private data? Their reports stay stored.'**
   String get pubAdminDeleteConfirm;
+
+  /// No description provided for @pubAdminSelfVerifiedWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off your own Verified status?'**
+  String get pubAdminSelfVerifiedWarningTitle;
+
+  /// No description provided for @pubAdminSelfVerifiedWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are removing Verified from your own account. You will immediately lose access to the congregation\'s data, and only another Full Admin will be able to restore it. Are you sure you want to continue?'**
+  String get pubAdminSelfVerifiedWarningBody;
+
+  /// No description provided for @pubAdminSelfFullAdminWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove your own Full Admin rights?'**
+  String get pubAdminSelfFullAdminWarningTitle;
+
+  /// No description provided for @pubAdminSelfFullAdminWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are removing Full Admin from your own account. If you are the only administrator, no one — including you — will be able to undo this. Are you sure you want to continue?'**
+  String get pubAdminSelfFullAdminWarningBody;
+
+  /// No description provided for @pubAdminSelfWarningConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove my access'**
+  String get pubAdminSelfWarningConfirm;
 
   /// No description provided for @roleFullAdmin.
   ///

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/data/publishers_repository.dart';
+import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import 'publisher_form.dart';
@@ -31,6 +32,7 @@ class PublisherDetailScreen extends ConsumerWidget {
     }
 
     final repo = ref.read(publishersRepositoryProvider);
+    final isSelf = ref.watch(currentUidProvider) == publisher.id;
 
     Future<void> confirmDelete() async {
       final confirmed = await showDialog<bool>(
@@ -60,6 +62,11 @@ class PublisherDetailScreen extends ConsumerWidget {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            tooltip: l10n.commonBack,
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.go('/admin/publishers'),
+          ),
           title: Text(publisher.fullName),
           actions: [
             Row(
@@ -67,8 +74,17 @@ class PublisherDetailScreen extends ConsumerWidget {
                 Text(l10n.pubAdminVerified),
                 Switch(
                   value: publisher.verified,
-                  onChanged: (v) =>
-                      repo.update(publisher.copyWith(verified: v)),
+                  onChanged: (v) async {
+                    if (!v && isSelf) {
+                      final ok = await _confirmSelfPrivilegeRemoval(
+                        context,
+                        title: l10n.pubAdminSelfVerifiedWarningTitle,
+                        body: l10n.pubAdminSelfVerifiedWarningBody,
+                      );
+                      if (!ok) return;
+                    }
+                    repo.update(publisher.copyWith(verified: v));
+                  },
                 ),
               ],
             ),
@@ -90,7 +106,7 @@ class PublisherDetailScreen extends ConsumerWidget {
         body: TabBarView(
           children: [
             _ProfileTab(publisher: publisher),
-            _RolesTab(publisher: publisher),
+            _RolesTab(publisher: publisher, isSelf: isSelf),
             _AssignTab(publisher: publisher),
             Padding(
               padding: const EdgeInsets.all(16),
@@ -101,6 +117,40 @@ class PublisherDetailScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Strict confirmation before an admin removes a privilege from their own
+/// account (Verified or Full Admin) — a misclick here can lock them out.
+Future<bool> _confirmSelfPrivilegeRemoval(
+  BuildContext context, {
+  required String title,
+  required String body,
+}) async {
+  final l10n = context.l10n;
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      icon: Icon(Icons.warning_amber_rounded,
+          color: Theme.of(context).colorScheme.error, size: 32),
+      title: Text(title),
+      content: Text(body),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(l10n.commonCancel),
+        ),
+        FilledButton(
+          style: FilledButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.error,
+            foregroundColor: Theme.of(context).colorScheme.onError,
+          ),
+          onPressed: () => Navigator.of(context).pop(true),
+          child: Text(l10n.pubAdminSelfWarningConfirm),
+        ),
+      ],
+    ),
+  );
+  return confirmed == true;
 }
 
 class _ProfileTab extends ConsumerWidget {
@@ -135,9 +185,10 @@ class _ProfileTab extends ConsumerWidget {
 }
 
 class _RolesTab extends ConsumerWidget {
-  const _RolesTab({required this.publisher});
+  const _RolesTab({required this.publisher, required this.isSelf});
 
   final Publisher publisher;
+  final bool isSelf;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -148,51 +199,82 @@ class _RolesTab extends ConsumerWidget {
     Future<void> save(Roles updated) =>
         repo.update(publisher.copyWith(roles: updated));
 
-    final entries = <(String, bool, Roles Function(bool))>[
-      (l10n.roleFullAdmin, roles.fullAdmin, (v) => roles.copyWith(fullAdmin: v)),
-      (l10n.navInfoBoard, roles.infoBoard, (v) => roles.copyWith(infoBoard: v)),
-      (l10n.navEvents, roles.events, (v) => roles.copyWith(events: v)),
-      (l10n.navLmm, roles.lmmSchedule, (v) => roles.copyWith(lmmSchedule: v)),
+    final entries = <(String, bool, Roles Function(bool), bool)>[
+      (
+        l10n.roleFullAdmin,
+        roles.fullAdmin,
+        (v) => roles.copyWith(fullAdmin: v),
+        true,
+      ),
+      (
+        l10n.navInfoBoard,
+        roles.infoBoard,
+        (v) => roles.copyWith(infoBoard: v),
+        false,
+      ),
+      (l10n.navEvents, roles.events, (v) => roles.copyWith(events: v), false),
+      (
+        l10n.navLmm,
+        roles.lmmSchedule,
+        (v) => roles.copyWith(lmmSchedule: v),
+        false,
+      ),
       (
         l10n.navWeekend,
         roles.weekendSchedule,
-        (v) => roles.copyWith(weekendSchedule: v)
+        (v) => roles.copyWith(weekendSchedule: v),
+        false,
       ),
       (
         l10n.navPublicWitnessing,
         roles.publicWitnessing,
-        (v) => roles.copyWith(publicWitnessing: v)
+        (v) => roles.copyWith(publicWitnessing: v),
+        false,
       ),
       (
         l10n.navTerritories,
         roles.territories,
-        (v) => roles.copyWith(territories: v)
+        (v) => roles.copyWith(territories: v),
+        false,
       ),
       (
         '${l10n.navReportsAdmin} + ${l10n.navS1}',
         roles.reports,
-        (v) => roles.copyWith(reports: v)
+        (v) => roles.copyWith(reports: v),
+        false,
       ),
       (
         l10n.navAttendance,
         roles.attendance,
-        (v) => roles.copyWith(attendance: v)
+        (v) => roles.copyWith(attendance: v),
+        false,
       ),
       (
         l10n.navPublishersAdmin,
         roles.publishers,
-        (v) => roles.copyWith(publishers: v)
+        (v) => roles.copyWith(publishers: v),
+        false,
       ),
     ];
 
     return ListView(
       padding: const EdgeInsets.all(8),
       children: [
-        for (final (label, value, update) in entries)
+        for (final (label, value, update, sensitive) in entries)
           SwitchListTile(
             title: Text(label),
             value: value,
-            onChanged: (v) => save(update(v)),
+            onChanged: (v) async {
+              if (sensitive && !v && isSelf) {
+                final ok = await _confirmSelfPrivilegeRemoval(
+                  context,
+                  title: l10n.pubAdminSelfFullAdminWarningTitle,
+                  body: l10n.pubAdminSelfFullAdminWarningBody,
+                );
+                if (!ok) return;
+              }
+              save(update(v));
+            },
           ),
       ],
     );

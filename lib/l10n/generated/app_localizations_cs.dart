@@ -30,6 +30,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get commonClose => 'Zavřít';
 
   @override
+  String get commonBack => 'Zpět';
+
+  @override
   String get commonRetry => 'Zkusit znovu';
 
   @override
@@ -366,6 +369,24 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get pubAdminDeleteConfirm =>
       'Smazat tohoto zvěstovatele a jeho osobní údaje? Jeho zprávy zůstanou uloženy.';
+
+  @override
+  String get pubAdminSelfVerifiedWarningTitle => 'Vypnout vlastní ověření?';
+
+  @override
+  String get pubAdminSelfVerifiedWarningBody =>
+      'Chystáte se odebrat sami sobě stav Ověřen(a). Okamžitě ztratíte přístup k datům sboru a obnovit ho bude moci jen jiný hlavní administrátor. Opravdu chcete pokračovat?';
+
+  @override
+  String get pubAdminSelfFullAdminWarningTitle =>
+      'Odebrat si práva hlavního administrátora?';
+
+  @override
+  String get pubAdminSelfFullAdminWarningBody =>
+      'Chystáte se odebrat sami sobě práva hlavního administrátora. Pokud jste jediný administrátor, nebude to moci vrátit zpět nikdo, ani vy. Opravdu chcete pokračovat?';
+
+  @override
+  String get pubAdminSelfWarningConfirm => 'Odebrat si přístup';
 
   @override
   String get roleFullAdmin => 'Hlavní administrátor';
