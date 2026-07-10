@@ -265,14 +265,6 @@ jobs:
           fi
           echo "path=${ipa_files[0]}" >> "$GITHUB_OUTPUT"
 
-      - name: Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v4
-        with:
-          app-path: ${{ steps.ipa.outputs.path }}
-          issuer-id: ${{ secrets.APPSTORE_API_ISSUER_ID }}
-          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
-
       - name: Upload IPA artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -280,3 +272,11 @@ jobs:
           name: ios-ipa
           path: ${{ steps.ipa.outputs.path }}
           if-no-files-found: warn
+
+      - name: Upload to TestFlight
+        uses: apple-actions/upload-testflight-build@v4
+        with:
+          app-path: ${{ steps.ipa.outputs.path }}
+          issuer-id: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
