@@ -1,0 +1,13 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^git status --short; git diff -- \\.github/workflows/release\\.yml$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^\\$ruby = Get-Command ruby -ErrorAction SilentlyContinue; if \\(\\$ruby\\) \\{ ruby -e \"require 'yaml'; YAML\\.load_file\\('\\.github/workflows/release\\.yml'\\); puts 'YAML parsed successfully'\" \\} else \\{ Write-Error 'Ruby is not installed; unable to parse workflow YAML\\.'; exit 1 \\}; git diff --check; git diff -- \\.github/workflows/release\\.yml$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "npx --yes prettier": true
+    }
+}

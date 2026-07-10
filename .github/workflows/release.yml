@@ -253,10 +253,22 @@ jobs:
           --build-number=${{ steps.ver.outputs.build_number }}
           --export-options-plist=ios/ExportOptions.plist
 
+      - name: Locate IPA
+        id: ipa
+        shell: bash
+        run: |
+          shopt -s nullglob
+          ipa_files=(build/ios/ipa/*.ipa)
+          if (( ${#ipa_files[@]} != 1 )); then
+            echo "Expected exactly one IPA, found ${#ipa_files[@]}." >&2
+            exit 1
+          fi
+          echo "path=${ipa_files[0]}" >> "$GITHUB_OUTPUT"
+
       - name: Upload to TestFlight
-        uses: apple-actions/upload-testflight-build@v3
+        uses: apple-actions/upload-testflight-build@v4
         with:
-          app-path: build/ios/ipa/*.ipa
+          app-path: ${{ steps.ipa.outputs.path }}
           issuer-id: ${{ secrets.APPSTORE_API_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
@@ -266,5 +278,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: build/ios/ipa/*.ipa
+          path: ${{ steps.ipa.outputs.path }}
           if-no-files-found: warn
