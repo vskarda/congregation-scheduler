@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/data/congregation_repository.dart';
+import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 
@@ -63,10 +64,17 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
   Future<void> _save() async {
     final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
+    final uid = ref.read(currentUidProvider);
     setState(() => _busy = true);
     try {
-      await ref.read(congregationRepositoryProvider).updateMeta(
-          _meta.copyWith(name: _name.text.trim()));
+      var meta = _meta.copyWith(name: _name.text.trim());
+      // congregation/meta may be absent (e.g. Firestore data reset); a
+      // set(merge:true) then becomes a *create*, which the rules only allow
+      // when founderUid == the caller's uid. Preserve an existing founderUid.
+      if (meta.founderUid.isEmpty && uid != null) {
+        meta = meta.copyWith(founderUid: uid);
+      }
+      await ref.read(congregationRepositoryProvider).updateMeta(meta);
       messenger.showSnackBar(SnackBar(content: Text(l10n.profileSaved)));
     } catch (e) {
       messenger.showSnackBar(

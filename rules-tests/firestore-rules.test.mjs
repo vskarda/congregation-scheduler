@@ -24,6 +24,7 @@ import {
 let env;
 
 const FOUNDER = 'founder-uid';
+const FULL_ADMIN = 'full-admin-uid';
 const ADMIN = 'admin-uid'; // publishers + reports admin
 const LMM_ADMIN = 'lmm-admin-uid';
 const WEEKEND_ADMIN = 'weekend-admin-uid';
@@ -63,6 +64,10 @@ async function seed() {
     await setDoc(doc(f, 'congregation/meta'), {
       name: 'Test Cong',
       founderUid: FOUNDER,
+    });
+    await setDoc(doc(f, `publishers/${FULL_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, fullAdmin: true },
     });
     await setDoc(doc(f, `publishers/${ADMIN}`), {
       ...basePublisher,
@@ -266,6 +271,54 @@ describe('founder bootstrap', () => {
         name: 'X',
         founderUid: FOUNDER,
       }),
+    );
+  });
+});
+
+describe('congregation settings', () => {
+  it('full admin updates congregation meta', async () => {
+    await assertSucceeds(
+      setDoc(
+        doc(db(FULL_ADMIN), 'congregation/meta'),
+        { name: 'Renamed Cong' },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('full admin re-creates absent meta only with own founderUid', async () => {
+    // Mirrors the client fix: when congregation/meta is missing, the Settings
+    // save becomes a create and must stamp the caller's uid as founderUid.
+    await env.clearFirestore();
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), `publishers/${FULL_ADMIN}`), {
+        ...basePublisher,
+        roles: { ...basePublisher.roles, fullAdmin: true },
+      });
+    });
+    await assertFails(
+      setDoc(
+        doc(db(FULL_ADMIN), 'congregation/meta'),
+        { name: 'Rebuilt', founderUid: FOUNDER },
+        { merge: true },
+      ),
+    );
+    await assertSucceeds(
+      setDoc(
+        doc(db(FULL_ADMIN), 'congregation/meta'),
+        { name: 'Rebuilt', founderUid: FULL_ADMIN },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('verified non-admin cannot update congregation meta', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(VERIFIED), 'congregation/meta'),
+        { name: 'Hijack' },
+        { merge: true },
+      ),
     );
   });
 });
