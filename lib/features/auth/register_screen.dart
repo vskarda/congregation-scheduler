@@ -44,6 +44,11 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       _busy = true;
       _error = null;
     });
+    // Keep the router from redirecting to complete-profile during the brief
+    // window where the founder is signed in without a publisher doc yet.
+    if (widget.isNewCongregation) {
+      ref.read(registrationInProgressProvider.notifier).set(true);
+    }
     try {
       final auth = ref.read(authServiceProvider);
       if (widget.isNewCongregation) {
@@ -65,9 +70,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       // Router redirects (home for the founder, awaiting for joiners).
     } on CongregationExistsException {
       if (mounted) setState(() => _error = l10n.setupCongregationExists);
+    } on DatabaseNotReadyException {
+      if (mounted) setState(() => _error = l10n.setupDatabaseNotReady);
     } catch (e) {
       if (mounted) setState(() => _error = authErrorMessage(context, e));
     } finally {
+      if (widget.isNewCongregation) {
+        ref.read(registrationInProgressProvider.notifier).set(false);
+      }
       if (mounted) setState(() => _busy = false);
     }
   }

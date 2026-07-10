@@ -42,6 +42,7 @@
   "setupModeNew": "Založit nový sbor",
   "setupModeNewSubtitle": "Jste první administrátor nově vytvořeného projektu Firebase.",
   "setupCongregationExists": "Tento sbor už je založený. Zvolte místo toho „Připojit se ke sboru“.",
+  "setupDatabaseNotReady": "Databáze sboru se stále spouští. Chvíli počkejte a zkuste to znovu.",
   "setupReconfigure": "Změnit konfiguraci",
   "setupRestartRequired": "Konfigurace byla uložena. Zavřete a znovu otevřete aplikaci, aby se projevila.",
 

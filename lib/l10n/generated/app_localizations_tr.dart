@@ -138,6 +138,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu cemaat zaten kurulmuş. Bunun yerine \"Cemaatime katıl\" seçeneğini belirleyin.';
 
   @override
+  String get setupDatabaseNotReady =>
+      'Cemaat veritabanı hâlâ başlatılıyor. Lütfen biraz bekleyip tekrar deneyin.';
+
+  @override
   String get setupReconfigure => 'Yapılandırmayı değiştir';
 
   @override

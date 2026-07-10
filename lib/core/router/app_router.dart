@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/attendance/attendance_screen.dart';
+import '../../features/auth/auth_service.dart';
 import '../../features/auth/awaiting_screen.dart';
 import '../../features/auth/complete_profile_screen.dart';
 import '../../features/auth/login_screen.dart';
@@ -33,6 +34,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen(firebaseReadyProvider, (_, _) => refresh.value++);
   ref.listen(authStateProvider, (_, _) => refresh.value++);
   ref.listen(myPublisherProvider, (_, _) => refresh.value++);
+  ref.listen(registrationInProgressProvider, (_, _) => refresh.value++);
   ref.listen(hideAdminUiProvider, (_, _) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
@@ -55,6 +57,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       if (user == null) {
         return onAuthScreens ? null : '/login';
       }
+
+      // A "set up new congregation" flow is mid-write: the founder is signed in
+      // but their publisher doc isn't created yet. Stay put instead of bouncing
+      // to complete-profile until the flow finishes (or rolls back).
+      if (ref.read(registrationInProgressProvider)) return null;
 
       final publisherAsync = ref.read(myPublisherProvider);
       if (publisherAsync.isLoading) return null;

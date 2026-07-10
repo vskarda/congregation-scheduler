@@ -138,6 +138,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This congregation is already set up. Choose \"Join my congregation\" instead.';
 
   @override
+  String get setupDatabaseNotReady =>
+      'The congregation database is still starting up. Please wait a moment and try again.';
+
+  @override
   String get setupReconfigure => 'Change configuration';
 
   @override

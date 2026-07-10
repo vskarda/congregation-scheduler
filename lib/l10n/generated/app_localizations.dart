@@ -340,6 +340,12 @@ abstract class AppLocalizations {
   /// **'This congregation is already set up. Choose \"Join my congregation\" instead.'**
   String get setupCongregationExists;
 
+  /// No description provided for @setupDatabaseNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'The congregation database is still starting up. Please wait a moment and try again.'**
+  String get setupDatabaseNotReady;
+
   /// No description provided for @setupReconfigure.
   ///
   /// In en, this message translates to:

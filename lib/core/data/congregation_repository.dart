@@ -17,6 +17,15 @@ class CongregationRepository {
         return data == null ? null : CongregationMeta.fromJson(data);
       });
 
+  /// One-shot read used to positively determine congregation state before
+  /// writing (so a transient permission denial is never mistaken for "the
+  /// congregation already exists"). Null when the document does not exist.
+  Future<CongregationMeta?> getMeta() async {
+    final snap = await _meta.get();
+    final data = snap.data();
+    return data == null ? null : CongregationMeta.fromJson(data);
+  }
+
   /// Succeeds only for the very first caller (rules allow create-if-absent).
   Future<void> createMeta(CongregationMeta meta) => _meta.set(meta.toJson());
 

@@ -139,6 +139,10 @@ class AppLocalizationsCs extends AppLocalizations {
       'Tento sbor už je založený. Zvolte místo toho „Připojit se ke sboru“.';
 
   @override
+  String get setupDatabaseNotReady =>
+      'Databáze sboru se stále spouští. Chvíli počkejte a zkuste to znovu.';
+
+  @override
   String get setupReconfigure => 'Změnit konfiguraci';
 
   @override
