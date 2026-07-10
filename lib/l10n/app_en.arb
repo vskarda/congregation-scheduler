@@ -199,7 +199,6 @@
   "@pickerLastAssigned": {"placeholders": {"date": {"type": "String"}}},
   "pickerNever": "Never assigned",
   "importTitle": "Import Meeting Workbook",
-  "importPickFile": "Choose .epub file",
   "importNoWeeks": "No usable weeks were found in this file.",
   "importWeekExists": "Already exists — program will be updated, assignments kept",
   "importSave": "Import {count} weeks",

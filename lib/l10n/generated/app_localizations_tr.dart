@@ -102,8 +102,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get setupPickQrImage => 'QR kodu fotoğrafı seç';
 
   @override
-  String get setupQrNotFoundInImage =>
-      'Bu resimde QR kodu bulunamadı.';
+  String get setupQrNotFoundInImage => 'Bu resimde QR kodu bulunamadı.';
 
   @override
   String get setupConnect => 'Bağlan';
@@ -136,7 +135,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get setupCongregationExists =>
-      'Bu cemaat zaten kurulmuş. Bunun yerine "Cemaatime katıl" seçeneğini belirleyin.';
+      'Bu cemaat zaten kurulmuş. Bunun yerine \"Cemaatime katıl\" seçeneğini belirleyin.';
 
   @override
   String get setupReconfigure => 'Yapılandırmayı değiştir';
@@ -204,8 +203,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authErrorEmailInUse => 'Bu e-posta ile zaten bir hesap var.';
 
   @override
-  String get authErrorWeakPassword =>
-      'Parola çok zayıf (en az 6 karakter).';
+  String get authErrorWeakPassword => 'Parola çok zayıf (en az 6 karakter).';
 
   @override
   String authErrorGeneric(String message) {
@@ -444,7 +442,8 @@ class AppLocalizationsTr extends AppLocalizations {
       'Bu müjdeci ve özel verileri silinsin mi? Raporları saklanır.';
 
   @override
-  String get pubAdminSelfVerifiedWarningTitle => 'Kendi Doğrulandı durumunuzu kapatmak mı?';
+  String get pubAdminSelfVerifiedWarningTitle =>
+      'Kendi Doğrulandı durumunuzu kapatmak mı?';
 
   @override
   String get pubAdminSelfVerifiedWarningBody =>
@@ -580,11 +579,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get importTitle => 'İbadet Kitapçığını İçe Aktar';
 
   @override
-  String get importPickFile => '.epub dosyası seç';
-
-  @override
-  String get importNoWeeks =>
-      'Bu dosyada kullanılabilir hafta bulunamadı.';
+  String get importNoWeeks => 'Bu dosyada kullanılabilir hafta bulunamadı.';
 
   @override
   String get importWeekExists =>

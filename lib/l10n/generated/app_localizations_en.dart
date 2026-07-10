@@ -581,9 +581,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importTitle => 'Import Meeting Workbook';
 
   @override
-  String get importPickFile => 'Choose .epub file';
-
-  @override
   String get importNoWeeks => 'No usable weeks were found in this file.';
 
   @override

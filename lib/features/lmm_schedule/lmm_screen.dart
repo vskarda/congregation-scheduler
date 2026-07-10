@@ -10,6 +10,7 @@ import '../../core/models/models.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
+import 'epub_import/import_actions.dart';
 import 'epub_import/import_screen.dart';
 
 class LmmScreen extends StatelessWidget {
@@ -65,7 +66,7 @@ class LmmWeekView extends ConsumerWidget {
   }
 }
 
-class _EmptyWeekView extends ConsumerWidget {
+class _EmptyWeekView extends ConsumerStatefulWidget {
   const _EmptyWeekView({required this.weekId, required this.canEdit});
 
   final String weekId;
@@ -88,27 +89,87 @@ class _EmptyWeekView extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_EmptyWeekView> createState() => _EmptyWeekViewState();
+}
+
+class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
+  bool _busy = false;
+  String? _error;
+
+  Future<void> _openWeeks(List<LmmWeek>? weeks) async {
+    if (weeks == null) return; // cancelled, or nothing published online
+    if (weeks.isEmpty) {
+      setState(() => _error = context.l10n.importNoWeeks);
+      return;
+    }
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => EpubImportScreen(weeks: weeks)));
+  }
+
+  Future<void> _run(Future<List<LmmWeek>?> Function() action) async {
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      await _openWeeks(await action());
+    } catch (e) {
+      if (mounted) {
+        setState(() => _error = context.l10n.commonErrorDetail(e.toString()));
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _pickFile() => _run(pickEpubWeeks);
+
+  Future<void> _checkOnline() =>
+      _run(() => fetchCdnWeeks(Localizations.localeOf(context)));
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(l10n.weekNoSchedule),
-          if (canEdit) ...[
+          if (widget.canEdit) ...[
             const SizedBox(height: 16),
             FilledButton.icon(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const EpubImportScreen())),
+              onPressed: _busy ? null : _pickFile,
               icon: const Icon(Icons.file_open_outlined),
               label: Text(l10n.weekImportEpub),
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
-              onPressed: () => saveLmmWeek(ref, _skeleton(weekId)),
+              onPressed: _busy ? null : _checkOnline,
+              icon: const Icon(Icons.cloud_download_outlined),
+              label: Text(l10n.weekCheckCdn),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _busy
+                  ? null
+                  : () => saveLmmWeek(
+                      ref, _EmptyWeekView._skeleton(widget.weekId)),
               icon: const Icon(Icons.add),
               label: Text(l10n.weekCreateEmpty),
             ),
+            if (_busy) ...[
+              const SizedBox(height: 16),
+              const SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2)),
+            ],
+            if (_error != null) ...[
+              const SizedBox(height: 8),
+              Text(_error!,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.error)),
+            ],
           ],
         ],
       ),

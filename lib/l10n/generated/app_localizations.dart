@@ -1186,12 +1186,6 @@ abstract class AppLocalizations {
   /// **'Import Meeting Workbook'**
   String get importTitle;
 
-  /// No description provided for @importPickFile.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose .epub file'**
-  String get importPickFile;
-
   /// No description provided for @importNoWeeks.
   ///
   /// In en, this message translates to:

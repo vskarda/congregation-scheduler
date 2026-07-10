@@ -580,9 +580,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get importTitle => 'Import pracovního sešitu';
 
   @override
-  String get importPickFile => 'Vybrat soubor .epub';
-
-  @override
   String get importNoWeeks =>
       'V souboru nebyly nalezeny žádné použitelné týdny.';
 
