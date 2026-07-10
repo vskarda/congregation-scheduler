@@ -21,6 +21,7 @@ class MyAssignmentEntry {
     required this.roleKey,
     this.detail = '',
     this.time,
+    this.endTime,
   });
 
   final AssignmentSource source;
@@ -28,6 +29,7 @@ class MyAssignmentEntry {
   final String roleKey;
   final String detail;
   final String? time;
+  final String? endTime;
 }
 
 final myUpcomingAssignmentsProvider =
@@ -41,7 +43,8 @@ final myUpcomingAssignmentsProvider =
 
   void addSupport(
     AssignmentSource source,
-    String date, {
+    String date,
+    String time, {
     required Assignment attendants,
     required Assignment microphones,
     required Assignment audioVideo,
@@ -49,20 +52,24 @@ final myUpcomingAssignmentsProvider =
   }) {
     if (attendants.contains(uid)) {
       entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'attendants'));
+          source: source, date: date, roleKey: 'attendants', time: time));
     }
     if (microphones.contains(uid)) {
       entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'microphones'));
+          source: source, date: date, roleKey: 'microphones', time: time));
     }
     if (audioVideo.contains(uid)) {
       entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'audioVideo'));
+          source: source, date: date, roleKey: 'audioVideo', time: time));
     }
     for (final c in custom) {
       if (c.assignment.contains(uid)) {
         entries.add(MyAssignmentEntry(
-            source: source, date: date, roleKey: 'custom', detail: c.label));
+            source: source,
+            date: date,
+            roleKey: 'custom',
+            detail: c.label,
+            time: time));
       }
     }
   }
@@ -81,17 +88,19 @@ final myUpcomingAssignmentsProvider =
             source: AssignmentSource.lmm,
             date: date,
             roleKey: part.type.name,
-            detail: part.title));
+            detail: part.title,
+            time: meta.lmmTime));
       }
       if (part.assistant.contains(uid)) {
         entries.add(MyAssignmentEntry(
             source: AssignmentSource.lmm,
             date: date,
             roleKey: 'assistant',
-            detail: part.title));
+            detail: part.title,
+            time: meta.lmmTime));
       }
     }
-    addSupport(AssignmentSource.lmm, date,
+    addSupport(AssignmentSource.lmm, date, meta.lmmTime,
         attendants: week.attendants,
         microphones: week.microphones,
         audioVideo: week.audioVideo,
@@ -111,17 +120,22 @@ final myUpcomingAssignmentsProvider =
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'speaker',
-          detail: week.talkTitle));
+          detail: week.talkTitle,
+          time: meta.weekendTime));
     }
     if (week.chairman.contains(uid)) {
       entries.add(MyAssignmentEntry(
           source: AssignmentSource.weekend,
           date: date,
-          roleKey: 'weekendChairman'));
+          roleKey: 'weekendChairman',
+          time: meta.weekendTime));
     }
     if (week.wtReader.contains(uid)) {
       entries.add(MyAssignmentEntry(
-          source: AssignmentSource.weekend, date: date, roleKey: 'wtReader'));
+          source: AssignmentSource.weekend,
+          date: date,
+          roleKey: 'wtReader',
+          time: meta.weekendTime));
     }
     for (final c in week.customFields) {
       if (c.assignment.contains(uid)) {
@@ -129,10 +143,11 @@ final myUpcomingAssignmentsProvider =
             source: AssignmentSource.weekend,
             date: date,
             roleKey: 'custom',
-            detail: c.label));
+            detail: c.label,
+            time: meta.weekendTime));
       }
     }
-    addSupport(AssignmentSource.weekend, date,
+    addSupport(AssignmentSource.weekend, date, meta.weekendTime,
         attendants: week.attendants,
         microphones: week.microphones,
         audioVideo: week.audioVideo,
@@ -147,7 +162,8 @@ final myUpcomingAssignmentsProvider =
         date: slot.date,
         roleKey: 'pw',
         detail: slot.location,
-        time: '${slot.startTime}–${slot.endTime}'));
+        time: slot.startTime,
+        endTime: slot.endTime));
   }
 
   entries.sort((a, b) => a.date.compareTo(b.date));

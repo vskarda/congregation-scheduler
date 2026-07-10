@@ -262,6 +262,7 @@
   "eventDateTo": "To (optional)",
   "eventLocation": "Location",
   "eventNotes": "Notes",
+  "eventAddToCalendar": "Add to calendar",
   "myAssignments": "My upcoming assignments",
   "myAssignmentsNone": "No upcoming assignments.",
   "roleAssistant": "Assistant",

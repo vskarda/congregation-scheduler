@@ -756,6 +756,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get eventNotes => 'Notes';
 
   @override
+  String get eventAddToCalendar => 'Add to calendar';
+
+  @override
   String get myAssignments => 'My upcoming assignments';
 
   @override

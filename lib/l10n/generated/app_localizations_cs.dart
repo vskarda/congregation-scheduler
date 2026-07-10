@@ -758,6 +758,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get eventNotes => 'Poznámky';
 
   @override
+  String get eventAddToCalendar => 'Přidat do kalendáře';
+
+  @override
   String get myAssignments => 'Moje nadcházející úkoly';
 
   @override

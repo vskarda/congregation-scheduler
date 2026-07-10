@@ -1,3 +1,5 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -39,6 +41,55 @@ String assignmentRoleLabel(AppLocalizations l10n, String roleKey) =>
       'pw' => l10n.rolePw,
       _ => '',
     };
+
+String assignmentTitle(AppLocalizations l10n, MyAssignmentEntry entry) => [
+      assignmentRoleLabel(l10n, entry.roleKey),
+      if (entry.detail.isNotEmpty) '— ${entry.detail}',
+    ].join(' ');
+
+String? assignmentTimeLabel(MyAssignmentEntry entry) => switch (entry.time) {
+      null => null,
+      final t when entry.endTime == null => t,
+      final t => '$t–${entry.endTime}',
+    };
+
+/// Standard length of a JW meeting; per-meeting duration isn't stored.
+const _meetingDuration = Duration(minutes: 105);
+
+DateTime _combineDateAndTime(DateTime day, String hhMm) {
+  final parts = hhMm.split(':');
+  return DateTime(
+      day.year, day.month, day.day, int.parse(parts[0]), int.parse(parts[1]));
+}
+
+Event eventCalendarEvent(AppLocalizations l10n, EventItem event) {
+  final start = parseDateKey(event.dateFrom);
+  final lastDay =
+      event.dateTo.isNotEmpty ? parseDateKey(event.dateTo) : start;
+  return Event(
+    title: event.title.isEmpty ? eventTypeLabel(l10n, event.type) : event.title,
+    description: event.notes,
+    location: event.location,
+    startDate: start,
+    // All-day ranges are exclusive of the end date.
+    endDate: lastDay.add(const Duration(days: 1)),
+    allDay: true,
+  );
+}
+
+Event assignmentCalendarEvent(AppLocalizations l10n, MyAssignmentEntry entry) {
+  final day = parseDateKey(entry.date);
+  final start = _combineDateAndTime(day, entry.time!);
+  final end = entry.endTime != null
+      ? _combineDateAndTime(day, entry.endTime!)
+      : start.add(_meetingDuration);
+  return Event(
+    title: assignmentTitle(l10n, entry),
+    location: entry.source == AssignmentSource.pw ? entry.detail : '',
+    startDate: start,
+    endDate: end,
+  );
+}
 
 class EventsScreen extends ConsumerWidget {
   const EventsScreen({super.key});
@@ -123,6 +174,15 @@ class EventsScreen extends ConsumerWidget {
                                       .bodySmall),
                           ],
                         ),
+                        trailing: kIsWeb
+                            ? null
+                            : IconButton(
+                                icon: const Icon(
+                                    Icons.event_available_outlined),
+                                tooltip: l10n.eventAddToCalendar,
+                                onPressed: () => Add2Calendar.addEvent2Cal(
+                                    eventCalendarEvent(l10n, event)),
+                              ),
                         onTap: canEdit
                             ? () => _showEventDialog(context, ref,
                                 existing: event)
@@ -168,14 +228,25 @@ class EventsScreen extends ConsumerWidget {
                         },
                         size: 20,
                       ),
-                      title: Text([
-                        assignmentRoleLabel(l10n, entry.roleKey),
-                        if (entry.detail.isNotEmpty) '— ${entry.detail}',
-                      ].join(' ')),
+                      title: Text(assignmentTitle(l10n, entry)),
                       subtitle: Text([
                         dateFmt.format(parseDateKey(entry.date)),
-                        if (entry.time != null) entry.time!,
+                        if (assignmentTimeLabel(entry) != null)
+                          assignmentTimeLabel(entry)!,
                       ].join('  ')),
+                      trailing: kIsWeb
+                          ? null
+                          : IconButton(
+                              icon: const Icon(
+                                  Icons.event_available_outlined,
+                                  size: 20),
+                              tooltip: l10n.eventAddToCalendar,
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              visualDensity: VisualDensity.compact,
+                              onPressed: () => Add2Calendar.addEvent2Cal(
+                                  assignmentCalendarEvent(l10n, entry)),
+                            ),
                     ),
                 ],
               );

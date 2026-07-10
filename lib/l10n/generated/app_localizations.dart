@@ -1516,6 +1516,12 @@ abstract class AppLocalizations {
   /// **'Notes'**
   String get eventNotes;
 
+  /// No description provided for @eventAddToCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to calendar'**
+  String get eventAddToCalendar;
+
   /// No description provided for @myAssignments.
   ///
   /// In en, this message translates to:

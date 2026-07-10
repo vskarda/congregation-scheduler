@@ -756,6 +756,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get eventNotes => 'Notlar';
 
   @override
+  String get eventAddToCalendar => 'Takvime ekle';
+
+  @override
   String get myAssignments => 'Yaklaşan atamalarım';
 
   @override

@@ -252,6 +252,7 @@
   "eventDateTo": "Do (nepovinné)",
   "eventLocation": "Místo",
   "eventNotes": "Poznámky",
+  "eventAddToCalendar": "Přidat do kalendáře",
   "myAssignments": "Moje nadcházející úkoly",
   "myAssignmentsNone": "Žádné nadcházející úkoly.",
   "roleAssistant": "Pomocník",

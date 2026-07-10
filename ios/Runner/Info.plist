@@ -36,6 +36,10 @@
 	<string>The camera is used to scan congregation invitation QR codes.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to pick a saved QR code image when setting up the app.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Used to add events and assignments to your calendar.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Used to add events and assignments to your calendar.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
