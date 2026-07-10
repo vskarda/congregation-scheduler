@@ -82,7 +82,11 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
     });
     try {
       final locale = Localizations.localeOf(context).languageCode;
-      final lang = locale == 'cs' ? 'B' : 'E';
+      final lang = switch (locale) {
+        'cs' => 'B',
+        'tr' => 'T',
+        _ => 'E',
+      };
       final now = DateTime.now();
       // Workbook issues cover two months starting with odd months; try the
       // current issue and the next one (which may not be published yet).

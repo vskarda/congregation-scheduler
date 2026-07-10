@@ -30,7 +30,8 @@ core/          bootstrap, config, theme, l10n, shared widgets
 - **Routing**: go_router with redirect guards:
   no config → `/setup`; signed out → `/login`; unverified → `/awaiting`;
   admin routes additionally check the role flags on the own publisher doc.
-- **i18n**: ARB files (`app_en.arb`, `app_cs.arb`), `flutter gen-l10n`.
+- **i18n**: ARB files (`app_en.arb`, `app_cs.arb`, `app_tr.arb`), `flutter
+  gen-l10n`.
 
 ## Key domain decisions
 
@@ -84,7 +85,8 @@ scripture, songs, and parts. Section/part detection is structure-first
 (`dc-icon--gem/wheat/sheep` wrapper classes, `<h3>N. Title</h3>` +
 `(10 min.) instructions` detail paragraphs in the 2024+ markup) with
 language-aware text fallbacks for the legacy inline format (Czech `mwb_B_*`,
-English `mwb_E_*`). Part instructions land in `LmmPart.description`.
+English `mwb_E_*`, Turkish `mwb_T_*`). Part instructions land in
+`LmmPart.description`.
 
 Re-importing an existing week merges via `week_merge.dart`: program content
 is refreshed while part ids, assignments and support roles are preserved

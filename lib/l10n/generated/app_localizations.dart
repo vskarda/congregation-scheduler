@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_cs.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_tr.dart';
 
 // ignore_for_file: type=lint
 
@@ -96,6 +97,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('cs'),
     Locale('en'),
+    Locale('tr'),
   ];
 
   /// No description provided for @appTitle.
@@ -367,6 +369,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Čeština'**
   String get languageCzech;
+
+  /// No description provided for @languageTurkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Türkçe'**
+  String get languageTurkish;
 
   /// No description provided for @profileCompleteTitle.
   ///
@@ -2030,7 +2038,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['cs', 'en'].contains(locale.languageCode);
+      <String>['cs', 'en', 'tr'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -2043,6 +2051,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsCs();
     case 'en':
       return AppLocalizationsEn();
+    case 'tr':
+      return AppLocalizationsTr();
   }
 
   throw FlutterError(

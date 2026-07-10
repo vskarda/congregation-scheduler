@@ -22,7 +22,7 @@ else with a QR code.
 - Meeting attendance (in-person/online, monthly averages)
 - Publisher management: verification, granular per-section admin roles,
   assignment qualifications, emergency notes
-- Czech + English UI
+- Czech, English, and Turkish UI
 
 **Platforms:** Android, iOS, Web. **State:** Riverpod. **Backend:** Firebase
 Auth + Firestore on the free Spark plan (no Cloud Functions, no Firebase

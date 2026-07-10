@@ -21,9 +21,9 @@ import '../../../core/utils/dates.dart';
 ///  * legacy/simple: plain text lines like `1. Title (10 min.)` with section
 ///    headings recognized by their wording.
 ///
-/// Supported publication languages: English (mwb_E_*) and Czech (mwb_B_*);
-/// the structural markers above are language independent, only date ranges
-/// and heading keywords are language specific.
+/// Supported publication languages: English (mwb_E_*), Czech (mwb_B_*), and
+/// Turkish (mwb_T_*); structural markers above are language independent, only
+/// date ranges and heading keywords are language specific.
 abstract final class MwbParser {
   static const _enMonths = {
     'JANUARY': 1,
@@ -57,14 +57,31 @@ abstract final class MwbParser {
     'PROSINCE': 12,
   };
 
+  static const _trMonths = {
+    'OCAK': 1,
+    'ŞUBAT': 2,
+    'MART': 3,
+    'NİSAN': 4,
+    'MAYIS': 5,
+    'HAZİRAN': 6,
+    'TEMMUZ': 7,
+    'AĞUSTOS': 8,
+    'EYLÜL': 9,
+    'EKİM': 10,
+    'KASIM': 11,
+    'ARALIK': 12,
+  };
+
   static final _numberedTitlePattern = RegExp(r'^\s*\d+\.\s*(.+)$');
 
-  // "(10 min.)", "(Br. … 3 min.)"; the digits directly before "min".
-  static final _durationPattern = RegExp(r'\((?:\D{0,12}?)?(\d+)\s*min',
+  // "(10 min.)", "(Br. … 3 min.)", "(10 dk.)"; the digits directly before
+  // the localized minutes abbreviation.
+  static final _durationPattern = RegExp(r'\((?:\D{0,12}?)?(\d+)\s*(?:min|dk)',
       caseSensitive: false, unicode: true);
 
   static final _songPattern =
-      RegExp(r'(?:SONG|PÍSEŇ)\s*(?:Č\.\s*)?(\d+)', caseSensitive: false);
+      RegExp(r'(?:SONG|PÍSEŇ|İLAHİ)\s*(?:Ç\.\s*)?(\d+)',
+          caseSensitive: false);
 
   // Zero-width characters (ZWSP..ZWJ, BOM) that leak into extracted text.
   static final _invisiblePattern = RegExp('[\u200B-\u200D\uFEFF]');
@@ -279,11 +296,13 @@ abstract final class MwbParser {
       };
       if (section == LmmSection.treasures) {
         if (titleUpper.contains('SPIRITUAL GEMS') ||
-            titleUpper.contains('DUCHOVNÍ PERLY')) {
+            titleUpper.contains('DUCHOVNÍ PERLY') ||
+            titleUpper.contains('RUHSAL HAZİNELER')) {
           type = LmmPartType.gems;
         } else if (titleUpper.contains('BIBLE READING') ||
             titleUpper.contains('ČTENÍ BIBLE') ||
-            titleUpper.contains('ČTENÍ Z BIBLE')) {
+            titleUpper.contains('ČTENÍ Z BIBLE') ||
+            titleUpper.contains('KUTSAL KİTAP OKUMASI')) {
           type = LmmPartType.bibleReading;
         } else if (treasuresIndex == 1) {
           type = LmmPartType.gems;
@@ -294,7 +313,8 @@ abstract final class MwbParser {
       }
       if (section == LmmSection.living &&
           (titleUpper.contains('CONGREGATION BIBLE STUDY') ||
-              titleUpper.contains('SBOROVÉ STUDIUM'))) {
+              titleUpper.contains('SBOROVÉ STUDIUM') ||
+              titleUpper.contains('CEMAAT KUTSAL KİTAP TETKİKİ'))) {
         type = LmmPartType.cbsConductor;
       }
 
@@ -362,14 +382,19 @@ abstract final class MwbParser {
   static LmmSection? _sectionFromText(String text) {
     final upper = text.toUpperCase();
     if (upper.contains('POKLADY Z BOŽÍHO') ||
-        upper.contains('TREASURES FROM')) {
+        upper.contains('TREASURES FROM') ||
+        upper.contains('TANRI’NIN SÖZÜNDEKİ HAZİNELER') ||
+        upper.contains("TANRI'NIN SÖZÜNDEKİ HAZİNELER")) {
       return LmmSection.treasures;
     }
-    if (upper.contains('FIELD MINISTRY') || upper.contains('VE SLUŽBĚ')) {
+    if (upper.contains('FIELD MINISTRY') ||
+        upper.contains('VE SLUŽBĚ') ||
+        upper.contains('TARLA HİZMETİNDE')) {
       return LmmSection.ministry;
     }
     if (upper.contains('LIVING AS CHRISTIANS') ||
-        upper.contains('KŘESŤANSKÝ ŽIVOT')) {
+        upper.contains('KŘESŤANSKÝ ŽIVOT') ||
+        upper.contains('HIRİSTİYANLAR OLARAK')) {
       return LmmSection.living;
     }
     return null;
@@ -398,6 +423,7 @@ abstract final class MwbParser {
     for (final (months, monthComesFirst) in [
       (_enMonths, true),
       (_csMonths, false),
+      (_trMonths, false),
     ]) {
       for (final entry in months.entries) {
         var idx = upper.indexOf(entry.key);

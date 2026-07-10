@@ -154,6 +154,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageCzech => 'Čeština';
 
   @override
+  String get languageTurkish => 'Türkçe';
+
+  @override
   String get profileCompleteTitle => 'Complete your profile';
 
   @override
