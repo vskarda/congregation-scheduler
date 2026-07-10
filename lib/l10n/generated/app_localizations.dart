@@ -572,6 +572,18 @@ abstract class AppLocalizations {
   /// **'Congregation settings'**
   String get navSettings;
 
+  /// No description provided for @adminToggleHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide admin options'**
+  String get adminToggleHide;
+
+  /// No description provided for @adminToggleShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show admin options'**
+  String get adminToggleShow;
+
   /// No description provided for @profilePhone.
   ///
   /// In en, this message translates to:

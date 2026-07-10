@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/lmm_repository.dart';
-import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/widgets/assignment_chips.dart';
@@ -52,7 +52,7 @@ class LmmWeekView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final weekAsync = ref.watch(lmmWeekProvider(weekId));
-    final canEdit = ref.watch(myRolesProvider).canEditLmm();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditLmm();
 
     return weekAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),

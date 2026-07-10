@@ -262,6 +262,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Congregation settings';
 
   @override
+  String get adminToggleHide => 'Hide admin options';
+
+  @override
+  String get adminToggleShow => 'Show admin options';
+
+  @override
   String get profilePhone => 'Phone number';
 
   @override

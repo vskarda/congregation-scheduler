@@ -4,8 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../core/config/app_config.dart';
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/infoboard_repository.dart';
-import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -18,7 +18,7 @@ class InfoBoardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final canEdit = ref.watch(myRolesProvider).canEditInfoBoard();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditInfoBoard();
     final itemsAsync = ref.watch(infoboardItemsProvider);
     final today = dateKey(DateTime.now());
 

@@ -89,6 +89,8 @@
   "navReportsAdmin": "Reports overview",
   "navS1": "S-1 report",
   "navSettings": "Congregation settings",
+  "adminToggleHide": "Hide admin options",
+  "adminToggleShow": "Show admin options",
 
   "profilePhone": "Phone number",
   "profileBirthDate": "Birth date",

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/attendance_repository.dart';
 import '../../core/data/congregation_repository.dart';
-import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
@@ -32,7 +32,7 @@ class AttendanceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final canEdit = ref.watch(myRolesProvider).canEditAttendance();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditAttendance();
     final entriesAsync = ref.watch(attendanceEntriesProvider);
 
     return entriesAsync.when(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/data/pw_repository.dart';
@@ -62,7 +63,7 @@ class PwScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(pwMaterializationProvider);
-    final canEdit = ref.watch(myRolesProvider).canEditPublicWitnessing();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditPublicWitnessing();
     final l10n = context.l10n;
 
     return Scaffold(

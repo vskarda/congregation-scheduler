@@ -23,6 +23,7 @@ import '../../features/setup/setup_mode_screen.dart';
 import '../../features/setup/setup_screen.dart';
 import '../../features/territories/territories_screen.dart';
 import '../../features/weekend_schedule/weekend_screen.dart';
+import '../data/admin_mode_provider.dart';
 import '../data/publishers_repository.dart';
 import '../firebase/firebase_providers.dart';
 
@@ -31,6 +32,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen(firebaseReadyProvider, (_, _) => refresh.value++);
   ref.listen(authStateProvider, (_, _) => refresh.value++);
   ref.listen(myPublisherProvider, (_, _) => refresh.value++);
+  ref.listen(hideAdminUiProvider, (_, _) => refresh.value++);
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -65,6 +67,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         return loc == '/awaiting' ? null : '/awaiting';
       }
       if (onAuthScreens || loc == '/awaiting' || loc == '/complete-profile') {
+        return '/';
+      }
+      // Admin routes are hidden while "view as publisher" mode is on.
+      if (loc.startsWith('/admin') && ref.read(hideAdminUiProvider)) {
         return '/';
       }
       return null;

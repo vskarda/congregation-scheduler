@@ -86,6 +86,8 @@
   "navReportsAdmin": "Přehled zpráv",
   "navS1": "Zpráva S-1",
   "navSettings": "Nastavení sboru",
+  "adminToggleHide": "Skrýt možnosti správce",
+  "adminToggleShow": "Zobrazit možnosti správce",
 
   "profilePhone": "Telefonní číslo",
   "profileBirthDate": "Datum narození",

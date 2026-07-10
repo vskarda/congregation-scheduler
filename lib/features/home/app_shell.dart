@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
@@ -25,7 +26,9 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final roles = ref.watch(myRolesProvider);
+    final roles = ref.watch(effectiveRolesProvider);
+    final realRoles = ref.watch(myRolesProvider);
+    final hideAdmin = ref.watch(hideAdminUiProvider);
 
     final main = <_Destination>[
       _Destination('/', Icons.campaign_outlined, l10n.navInfoBoard),
@@ -64,9 +67,26 @@ class AppShell extends ConsumerWidget {
       closeDrawerOnTap: !wide,
     );
 
+    final appBar = AppBar(
+      title: Text(title),
+      actions: [
+        if (realRoles.any)
+          IconButton(
+            // Icon shows the action: pencil = enable editing, slash = hide it.
+            icon: Icon(hideAdmin ? Icons.edit_outlined : Icons.edit_off_outlined),
+            tooltip: hideAdmin ? l10n.adminToggleShow : l10n.adminToggleHide,
+            onPressed: () {
+              final hide = !hideAdmin;
+              ref.read(hideAdminUiProvider.notifier).set(hide);
+              if (hide && location.startsWith('/admin')) context.go('/');
+            },
+          ),
+      ],
+    );
+
     if (wide) {
       return Scaffold(
-        appBar: AppBar(title: Text(title)),
+        appBar: appBar,
         body: Row(
           children: [
             SizedBox(width: 280, child: panel),
@@ -77,7 +97,7 @@ class AppShell extends ConsumerWidget {
       );
     }
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: appBar,
       drawer: Drawer(child: panel),
       body: child,
     );

@@ -261,6 +261,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navSettings => 'Nastavení sboru';
 
   @override
+  String get adminToggleHide => 'Skrýt možnosti správce';
+
+  @override
+  String get adminToggleShow => 'Zobrazit možnosti správce';
+
+  @override
   String get profilePhone => 'Telefonní číslo';
 
   @override

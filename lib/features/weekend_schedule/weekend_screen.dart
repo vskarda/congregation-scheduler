@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
-import '../../core/data/publishers_repository.dart';
 import '../../core/data/weekend_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -36,7 +36,7 @@ class _WeekendWeekView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final weekAsync = ref.watch(weekendWeekProvider(weekId));
-    final canEdit = ref.watch(myRolesProvider).canEditWeekend();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditWeekend();
 
     return weekAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),

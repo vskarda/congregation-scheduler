@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/events_repository.dart';
-import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
@@ -46,7 +46,7 @@ class EventsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final canEdit = ref.watch(myRolesProvider).canEditEvents();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditEvents();
     final eventsAsync = ref.watch(eventsProvider);
     final mineAsync = ref.watch(myUpcomingAssignmentsProvider);
     final locale = Localizations.localeOf(context).toString();

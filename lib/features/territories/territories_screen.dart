@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/data/territories_repository.dart';
 import '../../core/l10n/l10n.dart';
@@ -15,7 +16,7 @@ class TerritoriesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final canEdit = ref.watch(myRolesProvider).canEditTerritories();
+    final canEdit = ref.watch(effectiveRolesProvider).canEditTerritories();
     return Scaffold(
       floatingActionButton: canEdit
           ? FloatingActionButton(
