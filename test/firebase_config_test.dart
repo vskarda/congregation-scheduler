@@ -1,4 +1,5 @@
 import 'package:congregation_scheduler/core/firebase/firebase_bootstrap.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -48,6 +49,37 @@ const firebaseConfig = {
     test('rejects configs missing required fields', () {
       expect(
           FirebaseBootstrap.parseOptions('{"apiKey": "k"}'), isNull);
+    });
+  });
+
+  group('FirebaseBootstrap.parseOptions app id platform adaptation', () {
+    const webConfig =
+        '{"apiKey": "k", "projectId": "p", "appId": "1:123:web:abc"}';
+
+    tearDown(() => debugDefaultTargetPlatformOverride = null);
+
+    test('rewrites the web platform token to ios on Apple platforms', () {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      expect(
+          FirebaseBootstrap.parseOptions(webConfig)!.appId, '1:123:ios:abc');
+
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+      expect(
+          FirebaseBootstrap.parseOptions(webConfig)!.appId, '1:123:ios:abc');
+    });
+
+    test('keeps the original web app id on Android', () {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      expect(
+          FirebaseBootstrap.parseOptions(webConfig)!.appId, '1:123:web:abc');
+    });
+
+    test('leaves a non-web app id untouched on iOS', () {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      const iosConfig =
+          '{"apiKey": "k", "projectId": "p", "appId": "1:123:ios:def"}';
+      expect(
+          FirebaseBootstrap.parseOptions(iosConfig)!.appId, '1:123:ios:def');
     });
   });
 }

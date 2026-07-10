@@ -15,6 +15,14 @@ app. On first run the Setup wizard accepts a Firebase **web** config JSON
 every launch. The same web config works on Android/iOS/Web because only
 Auth + Firestore REST/gRPC endpoints are used.
 
+One platform caveat: Apple's native Firebase SDK aborts (uncaught
+Objective-C `NSException` → SIGABRT, uncatchable from Dart) when initialized
+with a *web* app id (`1:<sender>:web:<hex>`), while Android accepts it. So
+`parseOptions` rewrites the app-id platform token to `ios` on iOS/macOS only
+(`_appIdForPlatform`); the app id isn't used for Auth/Firestore auth (that's
+`apiKey` + `projectId`), and the stored/shared config keeps the original web
+id so the QR/JSON invite stays cross-platform.
+
 ## Layers
 
 ```

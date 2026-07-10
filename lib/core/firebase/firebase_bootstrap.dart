@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Initializes Firebase at runtime from a congregation-provided web config
@@ -57,12 +58,32 @@ abstract final class FirebaseBootstrap {
     }
     return FirebaseOptions(
       apiKey: apiKey,
-      appId: appId,
+      appId: _appIdForPlatform(appId),
       projectId: projectId,
       messagingSenderId: (raw['messagingSenderId'] as String?) ?? '',
       authDomain: raw['authDomain'] as String?,
       storageBucket: raw['storageBucket'] as String?,
       measurementId: raw['measurementId'] as String?,
+    );
+  }
+
+  /// Apple's native Firebase SDK throws an uncaught Objective-C exception —
+  /// which FlutterFire cannot marshal back to Dart, so it aborts the process
+  /// (SIGABRT) — when `Firebase.initializeApp` is handed a *web* app id
+  /// (`1:<sender>:web:<hex>`). Android tolerates the same id. Only Auth +
+  /// Firestore are used (they authenticate via apiKey + projectId, not the app
+  /// id), so on iOS/macOS we present the same id with an `ios` platform token
+  /// to satisfy the native validation without registering a separate iOS app.
+  /// The stored config keeps the original web id so the QR/JSON invite stays
+  /// cross-platform. See docs/ARCHITECTURE.md.
+  static String _appIdForPlatform(String appId) {
+    if (kIsWeb) return appId;
+    final isApple = defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
+    if (!isApple) return appId;
+    return appId.replaceFirstMapped(
+      RegExp(r'^(\d+:\d+):web:'),
+      (m) => '${m[1]}:ios:',
     );
   }
 
