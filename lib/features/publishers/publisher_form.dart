@@ -29,6 +29,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
   late final TextEditingController _lastName;
   late final TextEditingController _email;
   late final TextEditingController _phone;
+  late final TextEditingController _address;
   late final TextEditingController _emergency;
   late Gender _gender;
   late PublisherStatus _status;
@@ -44,6 +45,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
     _lastName = TextEditingController(text: p.lastName);
     _email = TextEditingController(text: priv?.email ?? '');
     _phone = TextEditingController(text: priv?.phone ?? '');
+    _address = TextEditingController(text: priv?.address ?? '');
     _emergency = TextEditingController(text: priv?.emergencyNote ?? '');
     _gender = p.gender;
     _status = p.status;
@@ -56,6 +58,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
     _lastName.dispose();
     _email.dispose();
     _phone.dispose();
+    _address.dispose();
     _emergency.dispose();
     super.dispose();
   }
@@ -89,6 +92,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
         PublisherPrivate(
           email: _email.text.trim(),
           phone: _phone.text.trim(),
+          address: _address.text.trim(),
           birthDate: _birthDate,
           emergencyNote: _emergency.text.trim(),
         ),
@@ -137,6 +141,13 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
             controller: _phone,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(labelText: l10n.profilePhone),
+          ),
+          const SizedBox(height: 12),
+          TextFormField(
+            controller: _address,
+            minLines: 1,
+            maxLines: 3,
+            decoration: InputDecoration(labelText: l10n.profileAddress),
           ),
           const SizedBox(height: 12),
           InkWell(

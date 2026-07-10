@@ -92,6 +92,7 @@
   "adminToggleShow": "Zobrazit možnosti správce",
 
   "profilePhone": "Telefonní číslo",
+  "profileAddress": "Adresa",
   "profileBirthDate": "Datum narození",
   "profileGender": "Pohlaví",
   "genderUnknown": "—",

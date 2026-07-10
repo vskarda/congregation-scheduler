@@ -130,6 +130,7 @@ abstract class PublisherPrivate with _$PublisherPrivate {
   const factory PublisherPrivate({
     @Default('') String email,
     @Default('') String phone,
+    @Default('') String address,
 
     /// yyyy-MM-dd
     @Default('') String birthDate,

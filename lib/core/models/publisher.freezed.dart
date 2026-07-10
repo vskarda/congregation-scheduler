@@ -940,7 +940,7 @@ $QualificationsCopyWith<$Res> get qualifications {
 /// @nodoc
 mixin _$PublisherPrivate {
 
- String get email; String get phone;/// yyyy-MM-dd
+ String get email; String get phone; String get address;/// yyyy-MM-dd
  String get birthDate; String get emergencyNote;
 /// Create a copy of PublisherPrivate
 /// with the given fields replaced by the non-null parameter values.
@@ -954,16 +954,16 @@ $PublisherPrivateCopyWith<PublisherPrivate> get copyWith => _$PublisherPrivateCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublisherPrivate&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.emergencyNote, emergencyNote) || other.emergencyNote == emergencyNote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PublisherPrivate&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.emergencyNote, emergencyNote) || other.emergencyNote == emergencyNote));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,email,phone,birthDate,emergencyNote);
+int get hashCode => Object.hash(runtimeType,email,phone,address,birthDate,emergencyNote);
 
 @override
 String toString() {
-  return 'PublisherPrivate(email: $email, phone: $phone, birthDate: $birthDate, emergencyNote: $emergencyNote)';
+  return 'PublisherPrivate(email: $email, phone: $phone, address: $address, birthDate: $birthDate, emergencyNote: $emergencyNote)';
 }
 
 
@@ -974,7 +974,7 @@ abstract mixin class $PublisherPrivateCopyWith<$Res>  {
   factory $PublisherPrivateCopyWith(PublisherPrivate value, $Res Function(PublisherPrivate) _then) = _$PublisherPrivateCopyWithImpl;
 @useResult
 $Res call({
- String email, String phone, String birthDate, String emergencyNote
+ String email, String phone, String address, String birthDate, String emergencyNote
 });
 
 
@@ -991,10 +991,11 @@ class _$PublisherPrivateCopyWithImpl<$Res>
 
 /// Create a copy of PublisherPrivate
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? phone = null,Object? birthDate = null,Object? emergencyNote = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? email = null,Object? phone = null,Object? address = null,Object? birthDate = null,Object? emergencyNote = null,}) {
   return _then(_self.copyWith(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,birthDate: null == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
 as String,emergencyNote: null == emergencyNote ? _self.emergencyNote : emergencyNote // ignore: cast_nullable_to_non_nullable
 as String,
@@ -1082,10 +1083,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String phone,  String birthDate,  String emergencyNote)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String email,  String phone,  String address,  String birthDate,  String emergencyNote)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PublisherPrivate() when $default != null:
-return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);case _:
+return $default(_that.email,_that.phone,_that.address,_that.birthDate,_that.emergencyNote);case _:
   return orElse();
 
 }
@@ -1103,10 +1104,10 @@ return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String phone,  String birthDate,  String emergencyNote)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String email,  String phone,  String address,  String birthDate,  String emergencyNote)  $default,) {final _that = this;
 switch (_that) {
 case _PublisherPrivate():
-return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);case _:
+return $default(_that.email,_that.phone,_that.address,_that.birthDate,_that.emergencyNote);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1123,10 +1124,10 @@ return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);cas
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String phone,  String birthDate,  String emergencyNote)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String email,  String phone,  String address,  String birthDate,  String emergencyNote)?  $default,) {final _that = this;
 switch (_that) {
 case _PublisherPrivate() when $default != null:
-return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);case _:
+return $default(_that.email,_that.phone,_that.address,_that.birthDate,_that.emergencyNote);case _:
   return null;
 
 }
@@ -1138,11 +1139,12 @@ return $default(_that.email,_that.phone,_that.birthDate,_that.emergencyNote);cas
 @JsonSerializable()
 
 class _PublisherPrivate implements PublisherPrivate {
-  const _PublisherPrivate({this.email = '', this.phone = '', this.birthDate = '', this.emergencyNote = ''});
+  const _PublisherPrivate({this.email = '', this.phone = '', this.address = '', this.birthDate = '', this.emergencyNote = ''});
   factory _PublisherPrivate.fromJson(Map<String, dynamic> json) => _$PublisherPrivateFromJson(json);
 
 @override@JsonKey() final  String email;
 @override@JsonKey() final  String phone;
+@override@JsonKey() final  String address;
 /// yyyy-MM-dd
 @override@JsonKey() final  String birthDate;
 @override@JsonKey() final  String emergencyNote;
@@ -1160,16 +1162,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublisherPrivate&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.emergencyNote, emergencyNote) || other.emergencyNote == emergencyNote));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PublisherPrivate&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.birthDate, birthDate) || other.birthDate == birthDate)&&(identical(other.emergencyNote, emergencyNote) || other.emergencyNote == emergencyNote));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,email,phone,birthDate,emergencyNote);
+int get hashCode => Object.hash(runtimeType,email,phone,address,birthDate,emergencyNote);
 
 @override
 String toString() {
-  return 'PublisherPrivate(email: $email, phone: $phone, birthDate: $birthDate, emergencyNote: $emergencyNote)';
+  return 'PublisherPrivate(email: $email, phone: $phone, address: $address, birthDate: $birthDate, emergencyNote: $emergencyNote)';
 }
 
 
@@ -1180,7 +1182,7 @@ abstract mixin class _$PublisherPrivateCopyWith<$Res> implements $PublisherPriva
   factory _$PublisherPrivateCopyWith(_PublisherPrivate value, $Res Function(_PublisherPrivate) _then) = __$PublisherPrivateCopyWithImpl;
 @override @useResult
 $Res call({
- String email, String phone, String birthDate, String emergencyNote
+ String email, String phone, String address, String birthDate, String emergencyNote
 });
 
 
@@ -1197,10 +1199,11 @@ class __$PublisherPrivateCopyWithImpl<$Res>
 
 /// Create a copy of PublisherPrivate
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? phone = null,Object? birthDate = null,Object? emergencyNote = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? email = null,Object? phone = null,Object? address = null,Object? birthDate = null,Object? emergencyNote = null,}) {
   return _then(_PublisherPrivate(
 email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as String,birthDate: null == birthDate ? _self.birthDate : birthDate // ignore: cast_nullable_to_non_nullable
 as String,emergencyNote: null == emergencyNote ? _self.emergencyNote : emergencyNote // ignore: cast_nullable_to_non_nullable
 as String,

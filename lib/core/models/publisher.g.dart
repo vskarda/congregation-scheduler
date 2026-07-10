@@ -119,6 +119,7 @@ _PublisherPrivate _$PublisherPrivateFromJson(Map<String, dynamic> json) =>
     _PublisherPrivate(
       email: json['email'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
+      address: json['address'] as String? ?? '',
       birthDate: json['birthDate'] as String? ?? '',
       emergencyNote: json['emergencyNote'] as String? ?? '',
     );
@@ -127,6 +128,7 @@ Map<String, dynamic> _$PublisherPrivateToJson(_PublisherPrivate instance) =>
     <String, dynamic>{
       'email': instance.email,
       'phone': instance.phone,
+      'address': instance.address,
       'birthDate': instance.birthDate,
       'emergencyNote': instance.emergencyNote,
     };

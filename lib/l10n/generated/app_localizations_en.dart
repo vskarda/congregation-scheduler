@@ -277,6 +277,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profilePhone => 'Phone number';
 
   @override
+  String get profileAddress => 'Address';
+
+  @override
   String get profileBirthDate => 'Birth date';
 
   @override

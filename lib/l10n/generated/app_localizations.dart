@@ -602,6 +602,12 @@ abstract class AppLocalizations {
   /// **'Phone number'**
   String get profilePhone;
 
+  /// No description provided for @profileAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get profileAddress;
+
   /// No description provided for @profileBirthDate.
   ///
   /// In en, this message translates to:

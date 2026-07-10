@@ -277,6 +277,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get profilePhone => 'Telefonní číslo';
 
   @override
+  String get profileAddress => 'Adresa';
+
+  @override
   String get profileBirthDate => 'Datum narození';
 
   @override

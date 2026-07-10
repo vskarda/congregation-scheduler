@@ -95,6 +95,7 @@
   "adminToggleShow": "Show admin options",
 
   "profilePhone": "Phone number",
+  "profileAddress": "Address",
   "profileBirthDate": "Birth date",
   "profileGender": "Gender",
   "genderUnknown": "—",
