@@ -23,14 +23,16 @@ class PwRepository {
   PwRecurring _ruleFromDoc(DocumentSnapshot<Map<String, dynamic>> doc) =>
       PwRecurring.fromJson(doc.data()!).copyWith(id: doc.id);
 
-  Stream<List<PwSlot>> watchRange(String fromDate, String toDate) => _slots
+  Stream<List<PwSlot>> watchRange(String fromDate, String toDate,
+          {bool includeCancelled = false}) =>
+      _slots
           .where('date', isGreaterThanOrEqualTo: fromDate)
           .where('date', isLessThanOrEqualTo: toDate)
           .snapshots()
           .map((snap) {
         final list = snap.docs
             .map(_slotFromDoc)
-            .where((s) => !s.cancelled)
+            .where((s) => includeCancelled || !s.cancelled)
             .toList();
         list.sort((a, b) => '${a.date} ${a.startTime}'
             .compareTo('${b.date} ${b.startTime}'));
@@ -147,6 +149,41 @@ class PwRepository {
       result.add(dateKey(day));
       day = day.add(const Duration(days: 7));
     }
+    return result;
+  }
+
+  /// Pure helper (unit-tested): merges [concrete] slots with virtual
+  /// instances expanded from [rules] for [from, untilExclusive), so recurring
+  /// slots are visible even where the materializer never wrote docs (regular
+  /// publishers, past weeks, beyond the horizon).
+  ///
+  /// [concrete] must include cancelled instances — they suppress their
+  /// virtual counterpart but are excluded from the result. Virtual slots
+  /// carry the deterministic materializer id (`{ruleId}_{date}`) so editing
+  /// or deleting one writes the exact doc the materializer would create.
+  static List<PwSlot> mergeWithRules(List<PwSlot> concrete,
+      List<PwRecurring> rules, DateTime from, DateTime untilExclusive) {
+    final covered = concrete
+        .where((s) => s.recurringId.isNotEmpty)
+        .map((s) => '${s.recurringId}_${s.date}')
+        .toSet();
+    final result = concrete.where((s) => !s.cancelled).toList();
+    for (final rule in rules) {
+      for (final date in materializedDates(rule, from, untilExclusive)) {
+        if (covered.contains('${rule.id}_$date')) continue;
+        result.add(PwSlot(
+          id: '${rule.id}_$date',
+          date: date,
+          startTime: rule.startTime,
+          endTime: rule.endTime,
+          location: rule.location,
+          assignment: rule.defaultAssignment,
+          recurringId: rule.id,
+        ).withRecomputedAssignees());
+      }
+    }
+    result.sort((a, b) =>
+        '${a.date} ${a.startTime}'.compareTo('${b.date} ${b.startTime}'));
     return result;
   }
 }

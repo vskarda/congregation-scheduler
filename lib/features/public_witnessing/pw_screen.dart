@@ -13,12 +13,36 @@ import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
 import 'pw_recurring_screen.dart';
 
-/// Slots of one week (weekId = Monday key).
-final pwWeekSlotsProvider =
+/// Concrete slots of one week, including cancelled instances (needed so a
+/// cancelled recurring instance suppresses its virtual counterpart).
+final _pwWeekRawSlotsProvider =
     StreamProvider.family<List<PwSlot>, String>((ref, weekId) {
   final monday = parseDateKey(weekId);
   final sunday = dateKey(monday.add(const Duration(days: 6)));
-  return ref.watch(pwRepositoryProvider).watchRange(weekId, sunday);
+  return ref
+      .watch(pwRepositoryProvider)
+      .watchRange(weekId, sunday, includeCancelled: true);
+});
+
+/// Slots of one week (weekId = Monday key): concrete slots merged with
+/// instances expanded from the recurring rules, so recurring slots show up
+/// for every user and every browsed week, not just where the materializer
+/// already wrote docs.
+final pwWeekSlotsProvider =
+    Provider.family<AsyncValue<List<PwSlot>>, String>((ref, weekId) {
+  final slots = ref.watch(_pwWeekRawSlotsProvider(weekId));
+  final rules = ref.watch(pwRecurringProvider);
+  final monday = parseDateKey(weekId);
+  return slots.when(
+    loading: () => const AsyncValue.loading(),
+    error: (e, st) => AsyncValue.error(e, st),
+    data: (concrete) => rules.when(
+      loading: () => const AsyncValue.loading(),
+      error: (e, st) => AsyncValue.error(e, st),
+      data: (ruleList) => AsyncValue.data(PwRepository.mergeWithRules(
+          concrete, ruleList, monday, monday.add(const Duration(days: 7)))),
+    ),
+  );
 });
 
 /// Ensures recurring rules are materialized ahead; runs once per session for
