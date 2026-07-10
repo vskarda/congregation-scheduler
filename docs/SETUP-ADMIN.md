@@ -16,16 +16,17 @@ You need: a Google account and a computer with a web browser.
 
 ## 2. Enable Email/Password sign-in
 
-1. In the left menu: **Build → Authentication** → **Get started**.
+1. In the left menu: **Security → Authentication** → **Get started**.
 2. Tab **Sign-in method** → **Email/Password** → enable the first toggle
    (leave "Email link" off) → **Save**.
 
 ## 3. Create the Firestore database
 
-1. Left menu: **Build → Firestore Database** → **Create database**.
-2. Choose a location close to you (e.g. `europe-west3` for Central Europe).
+1. Left menu: **Databases & Storage → Firestore** → **Create database**.
+2. Choose Standard edition
+3. Choose a location close to you (e.g. `europe-west3` for Central Europe).
    This cannot be changed later.
-3. Start in **production mode** → **Create**.
+4. Start in **production mode** → **Create**.
 
 ## 4. Install the security rules
 
@@ -44,7 +45,8 @@ publishers can see schedules, only you can edit them).
 ## 5. Get the app configuration
 
 1. Click the ⚙️ gear icon (top left) → **Project settings**.
-2. Scroll to **Your apps** → click the **Web** icon (`</>`).
+2. Make sure you are on the **General** tab at the top of the page.
+3. Click the **Web** icon (`</>`).
 3. Nickname: `congregation-app` → **Register app** (no hosting needed).
 4. You will see a code block containing `const firebaseConfig = { ... }`.
    Copy just the part between `{` and `}` **including the braces**, e.g.:
