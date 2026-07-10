@@ -27,7 +27,7 @@ Future<List<LmmWeek>?> fetchCdnWeeks(Locale locale) async {
   const template = AppConfig.workbookCdnUrlTemplate;
   final lang = switch (locale.languageCode) {
     'cs' => 'B',
-    'tr' => 'T',
+    'tr' => 'TK',
     _ => 'E',
   };
   final now = DateTime.now();

@@ -22,7 +22,7 @@ import '../../../core/utils/dates.dart';
 ///    headings recognized by their wording.
 ///
 /// Supported publication languages: English (mwb_E_*), Czech (mwb_B_*), and
-/// Turkish (mwb_T_*); structural markers above are language independent, only
+/// Turkish (mwb_TK_*); structural markers above are language independent, only
 /// date ranges and heading keywords are language specific.
 abstract final class MwbParser {
   static const _enMonths = {
