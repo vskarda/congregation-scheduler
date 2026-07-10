@@ -107,9 +107,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               path: '/territories',
               builder: (_, _) => const TerritoriesScreen()),
           GoRoute(path: '/report', builder: (_, _) => const ReportScreen()),
-          GoRoute(
-              path: '/attendance',
-              builder: (_, _) => const AttendanceScreen()),
           GoRoute(path: '/profile', builder: (_, _) => const ProfileScreen()),
           GoRoute(
               path: '/admin/publishers',
@@ -118,6 +115,9 @@ final routerProvider = Provider<GoRouter>((ref) {
               path: '/admin/reports',
               builder: (_, _) => const AdminReportsScreen()),
           GoRoute(path: '/admin/s1', builder: (_, _) => const S1Screen()),
+          GoRoute(
+              path: '/admin/attendance',
+              builder: (_, _) => const AttendanceScreen()),
           GoRoute(
               path: '/admin/settings',
               builder: (_, _) => const SettingsScreen()),

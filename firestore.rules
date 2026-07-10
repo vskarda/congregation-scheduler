@@ -205,7 +205,7 @@ service cloud.firestore {
     // ---------- meeting attendance ----------
 
     match /attendance/{entryId} {
-      allow read: if isVerified();
+      allow read: if hasRole('attendance');
       allow write: if hasRole('attendance');
     }
   }

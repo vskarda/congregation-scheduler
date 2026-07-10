@@ -39,7 +39,6 @@ class AppShell extends ConsumerWidget {
       _Destination('/territories', Icons.map_outlined, l10n.navTerritories),
       _Destination('/report', Icons.assignment_turned_in_outlined,
           l10n.navReport),
-      _Destination('/attendance', Icons.tag_outlined, l10n.navAttendance),
       _Destination('/profile', Icons.person_outline, l10n.navProfile),
     ];
     final admin = <_Destination>[
@@ -51,6 +50,9 @@ class AppShell extends ConsumerWidget {
             l10n.navReportsAdmin),
       if (roles.canEditReports())
         _Destination('/admin/s1', Icons.summarize_outlined, l10n.navS1),
+      if (roles.canEditAttendance())
+        _Destination(
+            '/admin/attendance', Icons.tag_outlined, l10n.navAttendance),
       if (roles.fullAdmin)
         _Destination(
             '/admin/settings', Icons.settings_outlined, l10n.navSettings),

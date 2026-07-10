@@ -26,6 +26,7 @@ let env;
 const FOUNDER = 'founder-uid';
 const ADMIN = 'admin-uid'; // publishers + reports admin
 const LMM_ADMIN = 'lmm-admin-uid';
+const ATTENDANCE_ADMIN = 'attendance-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
 
@@ -70,6 +71,10 @@ async function seed() {
       ...basePublisher,
       roles: { ...basePublisher.roles, lmmSchedule: true },
     });
+    await setDoc(doc(f, `publishers/${ATTENDANCE_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, attendance: true },
+    });
     await setDoc(doc(f, `publishers/${VERIFIED}`), { ...basePublisher });
     await setDoc(doc(f, `publishers/${UNVERIFIED}`), {
       ...basePublisher,
@@ -95,6 +100,12 @@ async function seed() {
     await setDoc(doc(f, 'reports/2026-06/entries/' + VERIFIED), {
       month: '2026-06',
       participated: true,
+    });
+    await setDoc(doc(f, 'attendance/2026-06-01_weekend'), {
+      date: '2026-06-01',
+      meetingType: 'weekend',
+      inPerson: 50,
+      online: 10,
     });
   });
 }
@@ -359,6 +370,36 @@ describe('territory assignments', () => {
     );
     await assertFails(
       deleteDoc(doc(db(VERIFIED), 'territory_assignments/ta1')),
+    );
+  });
+});
+
+describe('attendance', () => {
+  it('verified publisher without the attendance role cannot read or write', async () => {
+    await assertFails(
+      getDoc(doc(db(VERIFIED), 'attendance/2026-06-01_weekend')),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'attendance/2026-07-05_weekend'), {
+        date: '2026-07-05',
+        meetingType: 'weekend',
+        inPerson: 40,
+        online: 5,
+      }),
+    );
+  });
+
+  it('attendance admin can read and write entries', async () => {
+    await assertSucceeds(
+      getDoc(doc(db(ATTENDANCE_ADMIN), 'attendance/2026-06-01_weekend')),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(ATTENDANCE_ADMIN), 'attendance/2026-07-05_weekend'), {
+        date: '2026-07-05',
+        meetingType: 'weekend',
+        inPerson: 40,
+        online: 5,
+      }),
     );
   });
 });
