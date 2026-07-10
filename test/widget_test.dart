@@ -3,6 +3,7 @@ import 'package:congregation_scheduler/core/firebase/firebase_providers.dart';
 import 'package:congregation_scheduler/core/l10n/locale_provider.dart';
 import 'package:congregation_scheduler/features/setup/setup_screen.dart';
 import 'package:congregation_scheduler/l10n/generated/app_localizations.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
