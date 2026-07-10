@@ -31,6 +31,8 @@
   "setupConfigLabel": "Konfigurace Firebase (JSON)",
   "setupConfigHint": "apiKey, authDomain, projectId, …",
   "setupScanQr": "Naskenovat QR kód",
+  "setupPickQrImage": "Vybrat fotku QR kódu",
+  "setupQrNotFoundInImage": "V tomto obrázku nebyl nalezen žádný QR kód.",
   "setupConnect": "Připojit",
   "setupInvalidJson": "Toto není platná konfigurace ve formátu JSON. Musí obsahovat alespoň apiKey, projectId a appId.",
   "setupConnectionFailed": "S touto konfigurací se nepodařilo připojit: {message}",

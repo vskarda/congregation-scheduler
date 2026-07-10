@@ -32,6 +32,8 @@
   "setupConfigLabel": "Firebase configuration (JSON)",
   "setupConfigHint": "apiKey, authDomain, projectId, …",
   "setupScanQr": "Scan QR code",
+  "setupPickQrImage": "Choose QR code photo",
+  "setupQrNotFoundInImage": "No QR code was found in that image.",
   "setupConnect": "Connect",
   "setupInvalidJson": "This is not valid configuration JSON. It must contain at least apiKey, projectId and appId.",
   "setupConnectionFailed": "Could not connect with this configuration: {message}",

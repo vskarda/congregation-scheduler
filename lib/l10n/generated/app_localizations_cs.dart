@@ -99,6 +99,13 @@ class AppLocalizationsCs extends AppLocalizations {
   String get setupScanQr => 'Naskenovat QR kód';
 
   @override
+  String get setupPickQrImage => 'Vybrat fotku QR kódu';
+
+  @override
+  String get setupQrNotFoundInImage =>
+      'V tomto obrázku nebyl nalezen žádný QR kód.';
+
+  @override
   String get setupConnect => 'Připojit';
 
   @override

@@ -272,6 +272,18 @@ abstract class AppLocalizations {
   /// **'Scan QR code'**
   String get setupScanQr;
 
+  /// No description provided for @setupPickQrImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose QR code photo'**
+  String get setupPickQrImage;
+
+  /// No description provided for @setupQrNotFoundInImage.
+  ///
+  /// In en, this message translates to:
+  /// **'No QR code was found in that image.'**
+  String get setupQrNotFoundInImage;
+
   /// No description provided for @setupConnect.
   ///
   /// In en, this message translates to:

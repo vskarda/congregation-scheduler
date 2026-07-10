@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>The camera is used to scan congregation invitation QR codes.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to pick a saved QR code image when setting up the app.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

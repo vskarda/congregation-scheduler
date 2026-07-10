@@ -99,6 +99,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setupScanQr => 'Scan QR code';
 
   @override
+  String get setupPickQrImage => 'Choose QR code photo';
+
+  @override
+  String get setupQrNotFoundInImage => 'No QR code was found in that image.';
+
+  @override
   String get setupConnect => 'Connect';
 
   @override
