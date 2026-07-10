@@ -914,6 +914,12 @@ abstract class AppLocalizations {
   /// **'Title'**
   String get partTitle;
 
+  /// No description provided for @partDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get partDescription;
+
   /// No description provided for @partDuration.
   ///
   /// In en, this message translates to:
@@ -1013,7 +1019,7 @@ abstract class AppLocalizations {
   /// No description provided for @importWeekExists.
   ///
   /// In en, this message translates to:
-  /// **'Already exists — will be overwritten'**
+  /// **'Already exists — program will be updated, assignments kept'**
   String get importWeekExists;
 
   /// No description provided for @importSave.
@@ -1027,6 +1033,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Imported.'**
   String get importDone;
+
+  /// No description provided for @importCdnNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No workbook issue is available online yet.'**
+  String get importCdnNothing;
 
   /// No description provided for @weekendTalkTitle.
   ///

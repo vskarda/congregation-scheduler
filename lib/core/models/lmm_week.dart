@@ -14,6 +14,10 @@ abstract class LmmPart with _$LmmPart {
     @Default(LmmSection.treasures) LmmSection section,
     @Default(LmmPartType.custom) LmmPartType type,
     @Default('') String title,
+
+    /// Instructions/reference from the workbook, e.g. "HOUSE TO HOUSE.
+    /// Share a Bible truth… (lmd lesson 1 point 5)" or "wcg chap. 15".
+    @Default('') String description,
     int? durationMin,
     @Default(Assignment()) Assignment assignment,
 

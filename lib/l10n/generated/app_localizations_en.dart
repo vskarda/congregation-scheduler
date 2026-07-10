@@ -440,6 +440,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get partTitle => 'Title';
 
   @override
+  String get partDescription => 'Description';
+
+  @override
   String get partDuration => 'Duration (min)';
 
   @override
@@ -490,7 +493,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importNoWeeks => 'No usable weeks were found in this file.';
 
   @override
-  String get importWeekExists => 'Already exists — will be overwritten';
+  String get importWeekExists =>
+      'Already exists — program will be updated, assignments kept';
 
   @override
   String importSave(int count) {
@@ -499,6 +503,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importDone => 'Imported.';
+
+  @override
+  String get importCdnNothing => 'No workbook issue is available online yet.';
 
   @override
   String get weekendTalkTitle => 'Public talk';

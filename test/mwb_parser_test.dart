@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
@@ -43,8 +44,63 @@ const _csWeek = '''
 </body></html>
 ''';
 
+/// Sanitized replica of the 2024+ workbook markup (mwb_E_202611): part
+/// titles in <h3>, duration + instructions in the following detail
+/// paragraph, sections marked by dc-icon-- wrapper classes.
+const _enWeek2026 = '''
+<html><body class="jwac dir-ltr ml-E pub-mwb docId-202026401">
+<article>
+<h1 id="p1"><span>NOVEMBER 2-8</span></h1>
+<h2 id="p2">JEREMIAH 49-50</h2>
+<div class="bodyTxt">
+<h3 class="dc-icon--music du-fontSize--base" id="p3">Song 1 and Prayer | Opening Comments (1 min.)</h3>
+<div id="tt7" class="du-fontSize--basePlus2 dc-icon--gem dc-icon-layout--top">
+<h2 class="du-color--teal-700" id="p4">TREASURES FROM GOD’S WORD</h2>
+</div>
+<div id="tt9" class="du-bgColor--bgSecondary">
+<h3 class="du-color--teal-700" id="p5">1. Help Others Benefit From Jehovah’s Mercy</h3>
+<div id="tt11"><div id="tt12">
+<p id="p6">(10 min.)</p>
+<p id="p7">Jehovah rightly condemned Babylon (Jer 50:14, 29, 31)</p>
+</div></div>
+<h3 class="du-color--teal-700" id="p10">2. Spiritual Gems</h3>
+<div id="tt14"><div id="tt15">
+<p id="p11">(10 min.)</p>
+<ul><li><p id="p12">Jer 50:24—In what way did Jehovah catch Babylon in a “snare”?</p></li></ul>
+</div></div>
+<h3 class="du-color--teal-700" id="p16">3. Bible Reading</h3>
+<div id="tt28">
+<p id="p17">(4 min.) Jer 50:24-40 (th study 11)</p>
+</div>
+</div>
+<div id="tt29" class="dc-icon--wheat dc-icon-layout--top">
+<h2 class="du-color--gold-700" id="p18">APPLY YOURSELF TO THE FIELD MINISTRY</h2>
+</div>
+<h3 class="du-color--gold-700" id="p19">4. Starting a Conversation</h3>
+<div id="tt32"><p id="p20">(3 min.) HOUSE TO HOUSE. Share a Bible truth. (lmd lesson 1 point 5)</p></div>
+<h3 class="du-color--gold-700" id="p21">5. Following Up</h3>
+<div id="tt34"><p id="p22">(4 min.) HOUSE TO HOUSE. (lmd lesson 9 point 3)</p></div>
+<h3 class="du-color--gold-700" id="p23">6. Making Disciples</h3>
+<div id="tt36"><p id="p24">(5 min.) lff lesson 20 point 4 (lmd lesson 11 point 4)</p></div>
+<div id="tt37" class="dc-icon--sheep dc-icon-layout--top">
+<h2 class="du-color--maroon-600" id="p25">LIVING AS CHRISTIANS</h2>
+</div>
+<h3 class="dc-icon--music" id="p26">Song 44</h3>
+<h3 class="du-color--maroon-600" id="p27">7. Never Forget What Jehovah Remembers</h3>
+<div id="tt42"><div id="tt43">
+<p id="p28">(15 min.) Discussion.</p>
+<p id="p29">Play the VIDEO. Then ask the audience:</p>
+</div></div>
+<h3 class="du-color--maroon-600" id="p32">8. Congregation Bible Study</h3>
+<div id="tt52"><p id="p33">(30 min.) wcg chap. 15</p></div>
+<h3 id="p34">Concluding Comments (3 min.) | Song 33 and Prayer</h3>
+</div>
+</article>
+</body></html>
+''';
+
 void main() {
-  group('MwbParser.parseWeekDocument', () {
+  group('MwbParser.parseWeekDocument (legacy inline format)', () {
     test('parses an English week', () {
       final week =
           MwbParser.parseWeekDocument(_enWeek, issue: (2026, 7));
@@ -114,26 +170,179 @@ void main() {
     });
   });
 
+  group('MwbParser.parseWeekDocument (2024+ format)', () {
+    test('parses a full week with detail paragraphs', () {
+      final week =
+          MwbParser.parseWeekDocument(_enWeek2026, issue: (2026, 11));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-11-02');
+      expect(week.weekLabel, 'NOVEMBER 2-8 | JEREMIAH 49-50');
+      expect(week.songs, ['1', '44', '33']);
+
+      expect(week.parts.map((p) => p.type).toList(), [
+        LmmPartType.chairman,
+        LmmPartType.prayer,
+        LmmPartType.treasures,
+        LmmPartType.gems,
+        LmmPartType.bibleReading,
+        LmmPartType.fieldMinistry,
+        LmmPartType.fieldMinistry,
+        LmmPartType.fieldMinistry,
+        LmmPartType.living,
+        LmmPartType.cbsConductor,
+        LmmPartType.cbsReader,
+        LmmPartType.prayer,
+      ]);
+
+      final treasures = week.parts
+          .firstWhere((p) => p.type == LmmPartType.treasures);
+      expect(treasures.title, 'Help Others Benefit From Jehovah’s Mercy');
+      expect(treasures.durationMin, 10);
+      expect(treasures.description, '');
+
+      final reading = week.parts
+          .firstWhere((p) => p.type == LmmPartType.bibleReading);
+      expect(reading.durationMin, 4);
+      expect(reading.description, 'Jer 50:24-40 (th study 11)');
+
+      final demos = week.parts
+          .where((p) => p.type == LmmPartType.fieldMinistry)
+          .toList();
+      expect(demos.map((p) => p.durationMin), [3, 4, 5]);
+      expect(demos.first.description,
+          'HOUSE TO HOUSE. Share a Bible truth. (lmd lesson 1 point 5)');
+
+      final cbs = week.parts
+          .firstWhere((p) => p.type == LmmPartType.cbsConductor);
+      expect(cbs.durationMin, 30);
+      expect(cbs.description, 'wcg chap. 15');
+    });
+
+    test('detects sections from icon classes when headings are unknown', () {
+      final html = _enWeek2026
+          .replaceFirst('TREASURES FROM GOD’S WORD', 'SCHÄTZE AUS GOTTES WORT')
+          .replaceFirst(
+              'APPLY YOURSELF TO THE FIELD MINISTRY', 'UNS IM DIENST VERBESSERN')
+          .replaceFirst('LIVING AS CHRISTIANS', 'UNSER LEBEN ALS CHRIST');
+      final week = MwbParser.parseWeekDocument(html, issue: (2026, 11));
+      expect(week, isNotNull);
+      expect(
+          week!.parts
+              .where((p) => p.type == LmmPartType.fieldMinistry)
+              .length,
+          3);
+      expect(
+          week.parts
+              .where((p) => p.section == LmmSection.living)
+              .map((p) => p.type),
+          contains(LmmPartType.cbsConductor));
+    });
+
+    test('uses explicit years in rollover headings', () {
+      final html = _enWeek2026.replaceFirst(
+          'NOVEMBER 2-8', 'DECEMBER 28, 2026–JANUARY 3, 2027');
+      // No issue/fileName available at all.
+      final week = MwbParser.parseWeekDocument(html);
+      expect(week, isNotNull);
+      expect(week!.id, '2026-12-28');
+    });
+  });
+
   group('MwbParser.parse (epub zip)', () {
-    test('extracts weeks from OEBPS xhtml files, sorted and deduped', () {
+    Uint8List zip(Map<String, String> entries) {
       final archive = Archive();
-      void add(String name, String content) {
+      entries.forEach((name, content) {
         final bytes = utf8.encode(content);
         archive.addFile(ArchiveFile(name, bytes.length, bytes));
-      }
+      });
+      return Uint8List.fromList(ZipEncoder().encode(archive));
+    }
 
-      add('OEBPS/week2.xhtml',
-          _enWeek.replaceFirst('JULY 6-12', 'JULY 13-19'));
-      add('OEBPS/week1.xhtml', _enWeek);
-      add('OEBPS/toc.xhtml',
-          '<html><body><h1>Contents</h1></body></html>');
-      add('mimetype', 'application/epub+zip');
-
-      final zipped = ZipEncoder().encode(archive);
-      final weeks = MwbParser.parse(Uint8List.fromList(zipped),
-          fileName: 'mwb_E_202607.epub');
+    test('extracts weeks from OEBPS xhtml files, sorted and deduped', () {
+      final bytes = zip({
+        'OEBPS/week2.xhtml':
+            _enWeek.replaceFirst('JULY 6-12', 'JULY 13-19'),
+        'OEBPS/week1.xhtml': _enWeek,
+        'OEBPS/toc.xhtml': '<html><body><h1>Contents</h1></body></html>',
+        'mimetype': 'application/epub+zip',
+      });
+      final weeks = MwbParser.parse(bytes, fileName: 'mwb_E_202607.epub');
       expect(weeks.map((w) => w.id).toList(),
           ['2026-07-06', '2026-07-13']);
     });
+
+    test('honors the OPF spine and skips non-linear documents', () {
+      const opf = '''
+<?xml version="1.0"?>
+<package xmlns="http://www.idpf.org/2007/opf">
+<manifest>
+<item id="week1" href="202026401.xhtml" media-type="application/xhtml+xml"/>
+<item id="extracted" href="202026401-extracted.xhtml" media-type="application/xhtml+xml"/>
+</manifest>
+<spine>
+<itemref idref="week1"/>
+<itemref idref="extracted" linear="no"/>
+</spine>
+</package>
+''';
+      final bytes = zip({
+        'mimetype': 'application/epub+zip',
+        'OEBPS/content.opf': opf,
+        'OEBPS/202026401.xhtml': _enWeek2026,
+        // Would parse as a different week if it were not spine-excluded.
+        'OEBPS/202026401-extracted.xhtml':
+            _enWeek2026.replaceFirst('NOVEMBER 2-8', 'NOVEMBER 9-15'),
+      });
+      final weeks = MwbParser.parse(bytes, fileName: 'mwb_E_202611.epub');
+      expect(weeks.map((w) => w.id).toList(), ['2026-11-02']);
+    });
+
+    test('records the requested source', () {
+      final bytes = zip({'OEBPS/week1.xhtml': _enWeek});
+      final weeks = MwbParser.parse(bytes,
+          fileName: 'mwb_E_202607.epub', source: 'cdn');
+      expect(weeks.single.source, 'cdn');
+    });
+  });
+
+  group('real workbook epub', () {
+    final epub = File('mwb_E_202611.epub');
+
+    test('parses all nine weeks of mwb_E_202611', () {
+      final weeks = MwbParser.parse(
+          Uint8List.fromList(epub.readAsBytesSync()),
+          fileName: 'mwb_E_202611.epub');
+      expect(weeks.map((w) => w.id).toList(), [
+        '2026-11-02',
+        '2026-11-09',
+        '2026-11-16',
+        '2026-11-23',
+        '2026-11-30',
+        '2026-12-07',
+        '2026-12-14',
+        '2026-12-21',
+        '2026-12-28',
+      ]);
+      for (final week in weeks) {
+        expect(week.songs, hasLength(3), reason: week.id);
+        expect(week.weekLabel, contains('|'), reason: week.id);
+        expect(week.parts.length, greaterThanOrEqualTo(10),
+            reason: week.id);
+        final demos = week.parts
+            .where((p) => p.type == LmmPartType.fieldMinistry)
+            .toList();
+        expect(demos, isNotEmpty, reason: week.id);
+        for (final demo in demos) {
+          expect(demo.durationMin, isNotNull, reason: week.id);
+          expect(demo.description, isNotEmpty, reason: week.id);
+        }
+        expect(
+            week.parts.any((p) => p.type == LmmPartType.cbsConductor),
+            isTrue,
+            reason: week.id);
+      }
+    }, skip: File('mwb_E_202611.epub').existsSync()
+        ? false
+        : 'mwb_E_202611.epub not present in the repo root');
   });
 }

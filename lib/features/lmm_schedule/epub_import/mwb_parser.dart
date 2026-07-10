@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:uuid/uuid.dart';
 
@@ -9,10 +10,20 @@ import '../../../core/models/models.dart';
 import '../../../core/utils/dates.dart';
 
 /// Heuristic parser for the Meeting Workbook (mwb) epub. Extracts one
-/// [LmmWeek] per weekly program file: date range, songs, and the numbered
-/// parts with durations, mapped onto sections and part types.
+/// [LmmWeek] per weekly program file: date range, weekly scripture, songs,
+/// and the numbered parts with durations and instructions, mapped onto
+/// sections and part types.
 ///
-/// Supported publication languages: English (mwb_E_*) and Czech (mwb_B_*).
+/// Two markup generations are supported:
+///  * current (2024+): section headings carry `dc-icon--gem/wheat/sheep`
+///    wrapper classes, part titles are `<h3>1. Title</h3>` with the duration
+///    in a following `<p>(10 min.) instructions…</p>` detail paragraph;
+///  * legacy/simple: plain text lines like `1. Title (10 min.)` with section
+///    headings recognized by their wording.
+///
+/// Supported publication languages: English (mwb_E_*) and Czech (mwb_B_*);
+/// the structural markers above are language independent, only date ranges
+/// and heading keywords are language specific.
 abstract final class MwbParser {
   static const _enMonths = {
     'JANUARY': 1,
@@ -46,16 +57,23 @@ abstract final class MwbParser {
     'PROSINCE': 12,
   };
 
-  static final _partPattern =
-      RegExp(r'^\s*\d+\.\s*(.+?)\s*\((?:\D{0,12}?)?(\d+)\s*min', unicode: true);
+  static final _numberedTitlePattern = RegExp(r'^\s*\d+\.\s*(.+)$');
+
+  // "(10 min.)", "(Br. … 3 min.)"; the digits directly before "min".
+  static final _durationPattern = RegExp(r'\((?:\D{0,12}?)?(\d+)\s*min',
+      caseSensitive: false, unicode: true);
 
   static final _songPattern =
       RegExp(r'(?:SONG|PÍSEŇ)\s*(?:Č\.\s*)?(\d+)', caseSensitive: false);
 
+  // Zero-width characters (ZWSP..ZWJ, BOM) that leak into extracted text.
+  static final _invisiblePattern = RegExp('[\u200B-\u200D\uFEFF]');
+
   /// [fileName] (e.g. mwb_E_202607.epub) provides the issue year/month used
-  /// to resolve week years; [now] is injectable for tests.
+  /// to resolve week years; [now] is injectable for tests. [source] is
+  /// recorded on the produced weeks ('epub' or 'cdn').
   static List<LmmWeek> parse(Uint8List bytes,
-      {String? fileName, DateTime? now}) {
+      {String? fileName, DateTime? now, String source = 'epub'}) {
     final archive = ZipDecoder().decodeBytes(bytes);
     (int, int)? issue;
     final m = RegExp(r'(20\d{2})(\d{2})').firstMatch(fileName ?? '');
@@ -63,18 +81,28 @@ abstract final class MwbParser {
       issue = (int.parse(m.group(1)!), int.parse(m.group(2)!));
     }
 
+    // Prefer the OPF spine (it excludes the "-extracted" reference files and
+    // covers via linear="no"); fall back to every xhtml in the zip.
+    final documents = _spineDocuments(archive) ??
+        [
+          for (final file in archive.files)
+            if (file.isFile &&
+                (file.name.toLowerCase().endsWith('.xhtml') ||
+                    file.name.toLowerCase().endsWith('.html')) &&
+                !file.name.toLowerCase().contains('-extracted'))
+              file
+        ];
+
     final weeks = <String, LmmWeek>{};
-    for (final file in archive.files) {
-      if (!file.isFile) continue;
-      final name = file.name.toLowerCase();
-      if (!name.endsWith('.xhtml') && !name.endsWith('.html')) continue;
+    for (final file in documents) {
       final String content;
       try {
         content = utf8.decode(file.content as List<int>);
       } on FormatException {
         continue;
       }
-      final week = parseWeekDocument(content, issue: issue, now: now);
+      final week =
+          parseWeekDocument(content, issue: issue, now: now, source: source);
       if (week != null) weeks[week.id] = week;
     }
     final result = weeks.values.toList()
@@ -82,24 +110,80 @@ abstract final class MwbParser {
     return result;
   }
 
+  /// Reading-order content documents from the epub package manifest/spine,
+  /// or null when the epub has no usable OPF.
+  static List<ArchiveFile>? _spineDocuments(Archive archive) {
+    ArchiveFile? opf;
+    for (final file in archive.files) {
+      if (file.isFile && file.name.toLowerCase().endsWith('.opf')) {
+        opf = file;
+        break;
+      }
+    }
+    if (opf == null) return null;
+    final String content;
+    try {
+      content = utf8.decode(opf.content as List<int>);
+    } on FormatException {
+      return null;
+    }
+
+    // The html parser handles the OPF XML well enough for attribute lookups.
+    final doc = html_parser.parse(content);
+    final hrefById = <String, String>{};
+    for (final item in doc.querySelectorAll('item')) {
+      final id = item.attributes['id'];
+      final href = item.attributes['href'];
+      if (id != null &&
+          href != null &&
+          item.attributes['media-type'] == 'application/xhtml+xml') {
+        hrefById[id] = href;
+      }
+    }
+
+    final dirEnd = opf.name.lastIndexOf('/');
+    final dir = dirEnd < 0 ? '' : opf.name.substring(0, dirEnd + 1);
+    final byName = {
+      for (final file in archive.files)
+        if (file.isFile) file.name: file
+    };
+    final documents = <ArchiveFile>[];
+    for (final ref in doc.querySelectorAll('itemref')) {
+      if (ref.attributes['linear'] == 'no') continue;
+      final href = hrefById[ref.attributes['idref']];
+      if (href == null) continue;
+      final file = byName['$dir$href'] ?? byName[href];
+      if (file != null) documents.add(file);
+    }
+    return documents.isEmpty ? null : documents;
+  }
+
+  static String _normalize(String text) => text
+      .replaceAll(_invisiblePattern, '')
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+
   /// Parses a single weekly XHTML document; returns null when the file is
   /// not a weekly program (toc, cover, …).
   static LmmWeek? parseWeekDocument(String content,
-      {(int, int)? issue, DateTime? now}) {
+      {(int, int)? issue, DateTime? now, String source = 'epub'}) {
     final doc = html_parser.parse(content);
     final body = doc.body;
     if (body == null) return null;
 
-    final blocks = <String>[];
+    final elements = <dom.Element>[];
+    final texts = <String>[];
     for (final el in body.querySelectorAll('h1,h2,h3,p,li')) {
-      final text = el.text.replaceAll(RegExp(r'\s+'), ' ').trim();
-      if (text.isNotEmpty && (blocks.isEmpty || blocks.last != text)) {
-        blocks.add(text);
-      }
+      final text = _normalize(el.text);
+      // Skip empties and the duplicate a nested <p> inside an <li> produces.
+      if (text.isEmpty || (texts.isNotEmpty && texts.last == text)) continue;
+      elements.add(el);
+      texts.add(text);
     }
-    if (blocks.isEmpty) return null;
+    if (elements.isEmpty) return null;
 
-    final headline = body.querySelector('h1')?.text.trim() ?? blocks.first;
+    final headline =
+        _normalize(body.querySelector('h1')?.text ?? texts.first);
     final weekStart = _parseWeekStart(headline, issue: issue, now: now);
 
     const uuid = Uuid();
@@ -118,40 +202,76 @@ abstract final class MwbParser {
     var section = LmmSection.treasures;
     var treasuresIndex = 0;
     var sawSectionHeading = false;
+    String? scripture;
 
-    for (final text in blocks) {
-      final upper = text.toUpperCase();
-      if (upper.contains('POKLADY Z BOŽÍHO') ||
-          upper.contains('TREASURES FROM')) {
-        section = LmmSection.treasures;
-        sawSectionHeading = true;
-        continue;
-      }
-      if (upper.contains('FIELD MINISTRY') ||
-          upper.contains('VE SLUŽBĚ')) {
-        section = LmmSection.ministry;
-        sawSectionHeading = true;
-        continue;
-      }
-      if (upper.contains('LIVING AS CHRISTIANS') ||
-          upper.contains('KŘESŤANSKÝ ŽIVOT')) {
-        section = LmmSection.living;
+    for (var i = 0; i < elements.length; i++) {
+      final el = elements[i];
+      final text = texts[i];
+      final tag = el.localName;
+      final isHeading = tag == 'h1' || tag == 'h2' || tag == 'h3';
+
+      final newSection = (tag == 'h2' ? _sectionFromClasses(el) : null) ??
+          (isHeading ? _sectionFromText(text) : null);
+      if (newSection != null) {
+        section = newSection;
         sawSectionHeading = true;
         continue;
       }
 
-      final songMatch = _songPattern.firstMatch(text);
-      if (songMatch != null && text.length < 40) {
-        songs.add(songMatch.group(1)!);
+      final numberedMatch =
+          tag != 'h1' && tag != 'h2' ? _numberedTitlePattern.firstMatch(text) : null;
+      if (numberedMatch == null) {
+        // Song lines: standalone in the legacy format, combined with the
+        // opening/concluding comments in the current one ("Song 1 and
+        // Prayer | Opening Comments (1 min.)").
+        final songMatch = _songPattern.firstMatch(text);
+        if (songMatch != null && (isHeading || text.length < 40)) {
+          songs.add(songMatch.group(1)!);
+          continue;
+        }
+        // Weekly scripture: the plain h2 between the date h1 and the first
+        // section heading, e.g. "JEREMIAH 49-50".
+        if (tag == 'h2' && scripture == null && !sawSectionHeading) {
+          scripture = text;
+        }
         continue;
       }
 
-      final partMatch = _partPattern.firstMatch(text);
-      if (partMatch == null) continue;
-      final title = partMatch.group(1)!;
-      final duration = int.parse(partMatch.group(2)!);
+      final rawTitle = numberedMatch.group(1)!;
+      final String title;
+      int? duration;
+      var description = '';
+
+      final inline = _durationPattern.firstMatch(rawTitle);
+      if (inline != null) {
+        // Legacy format: "1. Title (10 min.) …"
+        title = rawTitle.substring(0, inline.start).trim();
+        duration = int.parse(inline.group(1)!);
+        final close = rawTitle.indexOf(')', inline.end);
+        if (close >= 0) description = rawTitle.substring(close + 1).trim();
+      } else {
+        // Current format: duration + instructions live in the detail
+        // paragraphs that follow the <h3> title, e.g.
+        // "(4 min.) Jer 50:24-40 (th study 11)".
+        title = rawTitle;
+        for (var j = i + 1; j < elements.length; j++) {
+          final detailTag = elements[j].localName;
+          if (detailTag == 'h1' || detailTag == 'h2' || detailTag == 'h3') {
+            break;
+          }
+          final m = _durationPattern.firstMatch(texts[j]);
+          if (m == null) continue;
+          duration = int.parse(m.group(1)!);
+          final close = texts[j].indexOf(')', m.end);
+          if (close >= 0) description = texts[j].substring(close + 1).trim();
+          break;
+        }
+      }
+      // Numbered lines without a timing anywhere (toc entries, list items)
+      // are not program parts.
+      if (duration == null) continue;
+
       final titleUpper = title.toUpperCase();
-
       var type = switch (section) {
         LmmSection.ministry => LmmPartType.fieldMinistry,
         LmmSection.living => LmmPartType.living,
@@ -183,6 +303,7 @@ abstract final class MwbParser {
         section: section,
         type: type,
         title: title,
+        description: description,
         durationMin: duration,
       ));
       if (type == LmmPartType.cbsConductor) {
@@ -210,23 +331,60 @@ abstract final class MwbParser {
       return null;
     }
 
+    var weekLabel = headline;
+    if (scripture != null && !headline.contains('|')) {
+      weekLabel = '$headline | $scripture';
+    }
+
     return LmmWeek(
       id: dateKey(mondayOf(weekStart)),
-      weekLabel: headline,
+      weekLabel: weekLabel,
       songs: songs,
-      source: 'epub',
+      source: source,
       parts: parts,
     );
   }
 
+  /// Language-independent section detection: the section h2 sits inside a
+  /// wrapper div carrying the section's icon class.
+  static LmmSection? _sectionFromClasses(dom.Element el) {
+    dom.Element? node = el;
+    for (var depth = 0; depth < 4 && node != null; depth++) {
+      final classes = node.className;
+      if (classes.contains('dc-icon--gem')) return LmmSection.treasures;
+      if (classes.contains('dc-icon--wheat')) return LmmSection.ministry;
+      if (classes.contains('dc-icon--sheep')) return LmmSection.living;
+      node = node.parent;
+    }
+    return null;
+  }
+
+  static LmmSection? _sectionFromText(String text) {
+    final upper = text.toUpperCase();
+    if (upper.contains('POKLADY Z BOŽÍHO') ||
+        upper.contains('TREASURES FROM')) {
+      return LmmSection.treasures;
+    }
+    if (upper.contains('FIELD MINISTRY') || upper.contains('VE SLUŽBĚ')) {
+      return LmmSection.ministry;
+    }
+    if (upper.contains('LIVING AS CHRISTIANS') ||
+        upper.contains('KŘESŤANSKÝ ŽIVOT')) {
+      return LmmSection.living;
+    }
+    return null;
+  }
+
   /// Parses the start date out of headings like "JULY 7-13", "JUNE 30–JULY 6",
-  /// "7.–13. ČERVENCE" or "30. ČERVNA – 6. ČERVENCE | ŽALM 45".
+  /// "7.–13. ČERVENCE", "30. ČERVNA – 6. ČERVENCE | ŽALM 45" or
+  /// "DECEMBER 28, 2026–JANUARY 3, 2027".
   static DateTime? _parseWeekStart(String headline,
       {(int, int)? issue, DateTime? now}) {
     final upper = headline.toUpperCase();
 
-    // First day number in the text.
-    final dayMatch = RegExp(r'(\d{1,2})').firstMatch(upper);
+    // First 1-2 digit number that is not part of a longer number (skips the
+    // digits of explicit years like "2026").
+    final dayMatch = RegExp(r'(?<!\d)(\d{1,2})(?!\d)').firstMatch(upper);
     if (dayMatch == null) return null;
     final day = int.parse(dayMatch.group(1)!);
     if (day < 1 || day > 31) return null;
@@ -259,7 +417,12 @@ abstract final class MwbParser {
     if (month == null) return null;
 
     int year;
-    if (issue != null) {
+    final explicitYear = RegExp(r'20\d{2}').firstMatch(upper);
+    if (explicitYear != null) {
+      // Year-rollover weeks spell the years out, first one first:
+      // "DECEMBER 28, 2026–JANUARY 3, 2027".
+      year = int.parse(explicitYear.group(0)!);
+    } else if (issue != null) {
       year = issue.$1;
       // December issues contain January weeks (and vice versa at rollover).
       if (issue.$2 >= 11 && month <= 2) year++;

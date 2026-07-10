@@ -305,6 +305,8 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
     {LmmPart? existing, LmmSection? section}) async {
   final l10n = context.l10n;
   final titleCtrl = TextEditingController(text: existing?.title ?? '');
+  final descriptionCtrl =
+      TextEditingController(text: existing?.description ?? '');
   final durationCtrl = TextEditingController(
       text: existing?.durationMin?.toString() ?? '');
   var type = existing?.type ??
@@ -342,6 +344,12 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
             ),
             const SizedBox(height: 12),
             TextField(
+              controller: descriptionCtrl,
+              decoration:
+                  InputDecoration(labelText: l10n.partDescription),
+            ),
+            const SizedBox(height: 12),
+            TextField(
               controller: durationCtrl,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(labelText: l10n.partDuration),
@@ -361,6 +369,7 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
                       type: type);
               Navigator.of(context).pop(base.copyWith(
                 title: titleCtrl.text.trim(),
+                description: descriptionCtrl.text.trim(),
                 durationMin: int.tryParse(durationCtrl.text.trim()),
               ));
             },
@@ -371,6 +380,7 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
     ),
   );
   titleCtrl.dispose();
+  descriptionCtrl.dispose();
   durationCtrl.dispose();
   return result;
 }
@@ -450,6 +460,10 @@ class _PartTile extends ConsumerWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (part.description.isNotEmpty)
+            Text(part.description,
+                style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant)),
           AssignmentText(part.assignment),
           if (showAssistant)
             Row(

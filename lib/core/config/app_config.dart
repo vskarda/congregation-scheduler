@@ -1,12 +1,15 @@
 /// Global app constants.
 abstract final class AppConfig {
-  /// CDN URL template for the Meeting Workbook epub.
+  /// Publication-media API URL template used to locate the Meeting Workbook
+  /// epub online. The JSON response carries the epub download URL under
+  /// `files.{lang}.EPUB[0].file.url`; unpublished issues answer 404.
   ///
-  /// TODO: the real URL will be provided later and is deliberately kept out of
-  /// the UI. Placeholders: `{lang}` (publication language code, e.g. E / B)
-  /// and `{yyyyMM}` (issue month). While this is null the "check online"
-  /// action stays hidden and only file import is offered.
-  static const String? workbookCdnUrlTemplate = null;
+  /// Placeholders: `{lang}` (publication language code, e.g. E / B) and
+  /// `{yyyyMM}` (issue month). Note web builds may be blocked by CORS —
+  /// file import is the fallback there.
+  static const String workbookCdnUrlTemplate =
+      'https://app.jw-cdn.org/apis/pub-media/GETPUBMEDIALINKS'
+      '?output=json&pub=mwb&fileformat=EPUB&langwritten={lang}&issue={yyyyMM}';
 
   /// Maximum size of a file stored in Firestore (chunked). Larger files
   /// should be shared as external links.

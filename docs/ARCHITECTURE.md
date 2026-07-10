@@ -78,8 +78,20 @@ See header comment of [`firestore.rules`](../firestore.rules). Highlights:
 ## Meeting Workbook import
 
 `features/lmm_schedule/epub_import/` unzips the `.epub` (package `archive`),
-finds the weekly XHTML files, and extracts week ranges, songs, and parts with
-language-aware patterns (Czech `mwb_B_*`, English `mwb_E_*`). The optional
-CDN check downloads the same epub from a URL constant in
-`core/config/app_config.dart` (placeholder until provided; web builds may be
-blocked by CORS — file import is the universal path).
+walks the OPF spine to find the weekly XHTML documents (skipping the
+`-extracted` reference files), and extracts week ranges, the weekly
+scripture, songs, and parts. Section/part detection is structure-first
+(`dc-icon--gem/wheat/sheep` wrapper classes, `<h3>N. Title</h3>` +
+`(10 min.) instructions` detail paragraphs in the 2024+ markup) with
+language-aware text fallbacks for the legacy inline format (Czech `mwb_B_*`,
+English `mwb_E_*`). Part instructions land in `LmmPart.description`.
+
+Re-importing an existing week merges via `week_merge.dart`: program content
+is refreshed while part ids, assignments and support roles are preserved
+(parts matched by section/type in order; manual custom parts survive).
+
+The "check online" action queries the pub-media API (template in
+`core/config/app_config.dart`) for the current and next issue — the JSON
+response carries the epub URL under `files.{lang}.EPUB[0].file.url`,
+unpublished issues answer 404 and are skipped. Web builds may be blocked by
+CORS — file import is the universal path.

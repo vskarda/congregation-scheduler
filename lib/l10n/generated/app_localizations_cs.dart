@@ -439,6 +439,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get partTitle => 'Název';
 
   @override
+  String get partDescription => 'Popis';
+
+  @override
   String get partDuration => 'Délka (min)';
 
   @override
@@ -490,7 +493,8 @@ class AppLocalizationsCs extends AppLocalizations {
       'V souboru nebyly nalezeny žádné použitelné týdny.';
 
   @override
-  String get importWeekExists => 'Už existuje — bude přepsán';
+  String get importWeekExists =>
+      'Už existuje — program se aktualizuje, úkoly zůstanou';
 
   @override
   String importSave(int count) {
@@ -499,6 +503,10 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get importDone => 'Importováno.';
+
+  @override
+  String get importCdnNothing =>
+      'Žádné číslo sešitu zatím není online k dispozici.';
 
   @override
   String get weekendTalkTitle => 'Veřejná přednáška';

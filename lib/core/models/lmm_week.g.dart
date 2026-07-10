@@ -15,6 +15,7 @@ _LmmPart _$LmmPartFromJson(Map<String, dynamic> json) => _LmmPart(
       $enumDecodeNullable(_$LmmPartTypeEnumMap, json['type']) ??
       LmmPartType.custom,
   title: json['title'] as String? ?? '',
+  description: json['description'] as String? ?? '',
   durationMin: (json['durationMin'] as num?)?.toInt(),
   assignment: json['assignment'] == null
       ? const Assignment()
@@ -29,6 +30,7 @@ Map<String, dynamic> _$LmmPartToJson(_LmmPart instance) => <String, dynamic>{
   'section': _$LmmSectionEnumMap[instance.section]!,
   'type': _$LmmPartTypeEnumMap[instance.type]!,
   'title': instance.title,
+  'description': instance.description,
   'durationMin': instance.durationMin,
   'assignment': instance.assignment.toJson(),
   'assistant': instance.assistant.toJson(),

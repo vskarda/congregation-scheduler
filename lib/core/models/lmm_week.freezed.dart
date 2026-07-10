@@ -15,7 +15,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$LmmPart {
 
- String get id; LmmSection get section; LmmPartType get type; String get title; int? get durationMin; Assignment get assignment;/// Demonstration assistant (field-ministry parts).
+ String get id; LmmSection get section; LmmPartType get type; String get title;/// Instructions/reference from the workbook, e.g. "HOUSE TO HOUSE.
+/// Share a Bible truth… (lmd lesson 1 point 5)" or "wcg chap. 15".
+ String get description; int? get durationMin; Assignment get assignment;/// Demonstration assistant (field-ministry parts).
  Assignment get assistant;
 /// Create a copy of LmmPart
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +31,16 @@ $LmmPartCopyWith<LmmPart> get copyWith => _$LmmPartCopyWithImpl<LmmPart>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LmmPart&&(identical(other.id, id) || other.id == id)&&(identical(other.section, section) || other.section == section)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.assistant, assistant) || other.assistant == assistant));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LmmPart&&(identical(other.id, id) || other.id == id)&&(identical(other.section, section) || other.section == section)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.assistant, assistant) || other.assistant == assistant));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,section,type,title,durationMin,assignment,assistant);
+int get hashCode => Object.hash(runtimeType,id,section,type,title,description,durationMin,assignment,assistant);
 
 @override
 String toString() {
-  return 'LmmPart(id: $id, section: $section, type: $type, title: $title, durationMin: $durationMin, assignment: $assignment, assistant: $assistant)';
+  return 'LmmPart(id: $id, section: $section, type: $type, title: $title, description: $description, durationMin: $durationMin, assignment: $assignment, assistant: $assistant)';
 }
 
 
@@ -49,7 +51,7 @@ abstract mixin class $LmmPartCopyWith<$Res>  {
   factory $LmmPartCopyWith(LmmPart value, $Res Function(LmmPart) _then) = _$LmmPartCopyWithImpl;
 @useResult
 $Res call({
- String id, LmmSection section, LmmPartType type, String title, int? durationMin, Assignment assignment, Assignment assistant
+ String id, LmmSection section, LmmPartType type, String title, String description, int? durationMin, Assignment assignment, Assignment assistant
 });
 
 
@@ -66,12 +68,13 @@ class _$LmmPartCopyWithImpl<$Res>
 
 /// Create a copy of LmmPart
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? section = null,Object? type = null,Object? title = null,Object? durationMin = freezed,Object? assignment = null,Object? assistant = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? section = null,Object? type = null,Object? title = null,Object? description = null,Object? durationMin = freezed,Object? assignment = null,Object? assistant = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,section: null == section ? _self.section : section // ignore: cast_nullable_to_non_nullable
 as LmmSection,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as LmmPartType,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,durationMin: freezed == durationMin ? _self.durationMin : durationMin // ignore: cast_nullable_to_non_nullable
 as int?,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,assistant: null == assistant ? _self.assistant : assistant // ignore: cast_nullable_to_non_nullable
@@ -178,10 +181,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  LmmSection section,  LmmPartType type,  String title,  int? durationMin,  Assignment assignment,  Assignment assistant)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  LmmSection section,  LmmPartType type,  String title,  String description,  int? durationMin,  Assignment assignment,  Assignment assistant)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LmmPart() when $default != null:
-return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,_that.assignment,_that.assistant);case _:
+return $default(_that.id,_that.section,_that.type,_that.title,_that.description,_that.durationMin,_that.assignment,_that.assistant);case _:
   return orElse();
 
 }
@@ -199,10 +202,10 @@ return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  LmmSection section,  LmmPartType type,  String title,  int? durationMin,  Assignment assignment,  Assignment assistant)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  LmmSection section,  LmmPartType type,  String title,  String description,  int? durationMin,  Assignment assignment,  Assignment assistant)  $default,) {final _that = this;
 switch (_that) {
 case _LmmPart():
-return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,_that.assignment,_that.assistant);case _:
+return $default(_that.id,_that.section,_that.type,_that.title,_that.description,_that.durationMin,_that.assignment,_that.assistant);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -219,10 +222,10 @@ return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  LmmSection section,  LmmPartType type,  String title,  int? durationMin,  Assignment assignment,  Assignment assistant)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  LmmSection section,  LmmPartType type,  String title,  String description,  int? durationMin,  Assignment assignment,  Assignment assistant)?  $default,) {final _that = this;
 switch (_that) {
 case _LmmPart() when $default != null:
-return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,_that.assignment,_that.assistant);case _:
+return $default(_that.id,_that.section,_that.type,_that.title,_that.description,_that.durationMin,_that.assignment,_that.assistant);case _:
   return null;
 
 }
@@ -234,13 +237,16 @@ return $default(_that.id,_that.section,_that.type,_that.title,_that.durationMin,
 @JsonSerializable()
 
 class _LmmPart implements LmmPart {
-  const _LmmPart({this.id = '', this.section = LmmSection.treasures, this.type = LmmPartType.custom, this.title = '', this.durationMin, this.assignment = const Assignment(), this.assistant = const Assignment()});
+  const _LmmPart({this.id = '', this.section = LmmSection.treasures, this.type = LmmPartType.custom, this.title = '', this.description = '', this.durationMin, this.assignment = const Assignment(), this.assistant = const Assignment()});
   factory _LmmPart.fromJson(Map<String, dynamic> json) => _$LmmPartFromJson(json);
 
 @override@JsonKey() final  String id;
 @override@JsonKey() final  LmmSection section;
 @override@JsonKey() final  LmmPartType type;
 @override@JsonKey() final  String title;
+/// Instructions/reference from the workbook, e.g. "HOUSE TO HOUSE.
+/// Share a Bible truth… (lmd lesson 1 point 5)" or "wcg chap. 15".
+@override@JsonKey() final  String description;
 @override final  int? durationMin;
 @override@JsonKey() final  Assignment assignment;
 /// Demonstration assistant (field-ministry parts).
@@ -259,16 +265,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LmmPart&&(identical(other.id, id) || other.id == id)&&(identical(other.section, section) || other.section == section)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.assistant, assistant) || other.assistant == assistant));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LmmPart&&(identical(other.id, id) || other.id == id)&&(identical(other.section, section) || other.section == section)&&(identical(other.type, type) || other.type == type)&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.durationMin, durationMin) || other.durationMin == durationMin)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.assistant, assistant) || other.assistant == assistant));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,section,type,title,durationMin,assignment,assistant);
+int get hashCode => Object.hash(runtimeType,id,section,type,title,description,durationMin,assignment,assistant);
 
 @override
 String toString() {
-  return 'LmmPart(id: $id, section: $section, type: $type, title: $title, durationMin: $durationMin, assignment: $assignment, assistant: $assistant)';
+  return 'LmmPart(id: $id, section: $section, type: $type, title: $title, description: $description, durationMin: $durationMin, assignment: $assignment, assistant: $assistant)';
 }
 
 
@@ -279,7 +285,7 @@ abstract mixin class _$LmmPartCopyWith<$Res> implements $LmmPartCopyWith<$Res> {
   factory _$LmmPartCopyWith(_LmmPart value, $Res Function(_LmmPart) _then) = __$LmmPartCopyWithImpl;
 @override @useResult
 $Res call({
- String id, LmmSection section, LmmPartType type, String title, int? durationMin, Assignment assignment, Assignment assistant
+ String id, LmmSection section, LmmPartType type, String title, String description, int? durationMin, Assignment assignment, Assignment assistant
 });
 
 
@@ -296,12 +302,13 @@ class __$LmmPartCopyWithImpl<$Res>
 
 /// Create a copy of LmmPart
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? section = null,Object? type = null,Object? title = null,Object? durationMin = freezed,Object? assignment = null,Object? assistant = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? section = null,Object? type = null,Object? title = null,Object? description = null,Object? durationMin = freezed,Object? assignment = null,Object? assistant = null,}) {
   return _then(_LmmPart(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,section: null == section ? _self.section : section // ignore: cast_nullable_to_non_nullable
 as LmmSection,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as LmmPartType,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,durationMin: freezed == durationMin ? _self.durationMin : durationMin // ignore: cast_nullable_to_non_nullable
 as int?,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,assistant: null == assistant ? _self.assistant : assistant // ignore: cast_nullable_to_non_nullable
