@@ -180,6 +180,14 @@ abstract final class MwbParser {
       .replaceAll(RegExp(r'\s+'), ' ')
       .trim();
 
+  // Uppercase for keyword matching that also folds the Turkish dotted capital
+  // "İ" onto ASCII "I". `toUpperCase()` is locale independent, so a lowercase
+  // "i" in a mixed-case source title ("Kitap İncelemesi") maps to a dotless
+  // "I" while headings already spelled with "İ" keep the dot — comparisons
+  // fold both sides so the dot no longer decides a match.
+  static String _matchKey(String text) =>
+      text.toUpperCase().replaceAll('İ', 'I');
+
   /// Parses a single weekly XHTML document; returns null when the file is
   /// not a weekly program (toc, cover, …).
   static LmmWeek? parseWeekDocument(String content,
@@ -288,7 +296,7 @@ abstract final class MwbParser {
       // are not program parts.
       if (duration == null) continue;
 
-      final titleUpper = title.toUpperCase();
+      final titleUpper = _matchKey(title);
       var type = switch (section) {
         LmmSection.ministry => LmmPartType.fieldMinistry,
         LmmSection.living => LmmPartType.living,
@@ -297,12 +305,13 @@ abstract final class MwbParser {
       if (section == LmmSection.treasures) {
         if (titleUpper.contains('SPIRITUAL GEMS') ||
             titleUpper.contains('DUCHOVNÍ PERLY') ||
-            titleUpper.contains('RUHSAL HAZİNELER')) {
+            titleUpper.contains('RUHSAL HAZINELER') ||
+            titleUpper.contains('RUHI HAZINELER')) {
           type = LmmPartType.gems;
         } else if (titleUpper.contains('BIBLE READING') ||
             titleUpper.contains('ČTENÍ BIBLE') ||
             titleUpper.contains('ČTENÍ Z BIBLE') ||
-            titleUpper.contains('KUTSAL KİTAP OKUMASI')) {
+            titleUpper.contains('KUTSAL KITAP OKUMASI')) {
           type = LmmPartType.bibleReading;
         } else if (treasuresIndex == 1) {
           type = LmmPartType.gems;
@@ -314,7 +323,9 @@ abstract final class MwbParser {
       if (section == LmmSection.living &&
           (titleUpper.contains('CONGREGATION BIBLE STUDY') ||
               titleUpper.contains('SBOROVÉ STUDIUM') ||
-              titleUpper.contains('CEMAAT KUTSAL KİTAP TETKİKİ'))) {
+              titleUpper.contains('CEMAAT KUTSAL KITAP TETKIKI') ||
+              titleUpper.contains('CEMAAT KUTSAL KITAP INCELEMESI') ||
+              titleUpper.contains('CEMAAT KUTSAL KITAP'))) {
         type = LmmPartType.cbsConductor;
       }
 
@@ -380,21 +391,23 @@ abstract final class MwbParser {
   }
 
   static LmmSection? _sectionFromText(String text) {
-    final upper = text.toUpperCase();
+    final upper = _matchKey(text);
     if (upper.contains('POKLADY Z BOŽÍHO') ||
         upper.contains('TREASURES FROM') ||
-        upper.contains('TANRI’NIN SÖZÜNDEKİ HAZİNELER') ||
-        upper.contains("TANRI'NIN SÖZÜNDEKİ HAZİNELER")) {
+        upper.contains('TANRI’NIN SÖZÜNDEKI HAZINELER') ||
+        upper.contains("TANRI'NIN SÖZÜNDEKI HAZINELER")) {
       return LmmSection.treasures;
     }
     if (upper.contains('FIELD MINISTRY') ||
         upper.contains('VE SLUŽBĚ') ||
-        upper.contains('TARLA HİZMETİNDE')) {
+        upper.contains('TARLA HIZMETINDE') ||
+        upper.contains('HIZMETTE BECERILERIMIZI')) {
       return LmmSection.ministry;
     }
     if (upper.contains('LIVING AS CHRISTIANS') ||
         upper.contains('KŘESŤANSKÝ ŽIVOT') ||
-        upper.contains('HIRİSTİYANLAR OLARAK')) {
+        upper.contains('HIRISTIYANLAR OLARAK') ||
+        upper.contains('HIRISTIYANCA YAŞAM')) {
       return LmmSection.living;
     }
     return null;

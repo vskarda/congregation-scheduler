@@ -52,11 +52,11 @@ const _trWeek = '''
 <p>1. Yehova Kralını Bereketler (10 dk.)</p>
 <p>2. Ruhi Hazineler (10 dk.)</p>
 <p>3. Kutsal Kitap Okuması (4 dk.)</p>
-<h2>TARLA HİZMETİNDE BECERİLİ OLUN</h2>
+<h2>HİZMETTE BECERİLERİMİZİ GELİŞTİRELİM</h2>
 <p>4. Sohbete Başlama (3 dk.)</p>
-<h2>HIRİSTİYANLAR OLARAK YAŞAYIN</h2>
+<h2>HIRİSTİYANCA YAŞAM</h2>
 <p>İLAHİ 22</p>
-<p>5. Cemaat Kutsal Kitap Tetkiki (30 dk.)</p>
+<p>5. Cemaat Kutsal Kitap İncelemesi (30 dk.)</p>
 <p>İLAHİ 33 ve dua</p>
 </body></html>
 ''';

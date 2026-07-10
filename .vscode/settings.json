@@ -8,6 +8,7 @@
             "approve": true,
             "matchCommandLine": true
         },
-        "npx --yes prettier": true
+        "npx --yes prettier": true,
+        "flutter": true
     }
 }

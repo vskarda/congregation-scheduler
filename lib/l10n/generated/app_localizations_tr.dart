@@ -227,25 +227,25 @@ class AppLocalizationsTr extends AppLocalizations {
       'Hesabınız oluşturuldu. Cemaatin bilgilerini görebilmeniz için cemaat yöneticisinin hesabınızı doğrulaması gerekiyor.';
 
   @override
-  String get navInfoBoard => 'Duyuru panosu';
+  String get navInfoBoard => 'İlan Panosu';
 
   @override
   String get navEvents => 'Etkinlikler';
 
   @override
-  String get navLmm => 'Yaşamımız ve Hizmetimiz';
+  String get navLmm => 'Hayatımız ve Hizmetimiz';
 
   @override
-  String get navWeekend => 'Hafta sonu ibadeti';
+  String get navWeekend => 'Hafta Sonu İbadeti';
 
   @override
-  String get navPublicWitnessing => 'Halka açık şahitlik';
+  String get navPublicWitnessing => 'Halka Açık Şahitlik';
 
   @override
-  String get navTerritories => 'Bölgeler';
+  String get navTerritories => 'Sahalar';
 
   @override
-  String get navReport => 'Hizmet raporu';
+  String get navReport => 'Tarla Hizmeti Raporu';
 
   @override
   String get navAttendance => 'Katılım';
@@ -260,16 +260,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navPublishersAdmin => 'Müjdeciler';
 
   @override
-  String get navReportsAdmin => 'Rapor özeti';
+  String get navReportsAdmin => 'Rapor Özeti';
 
   @override
-  String get navS1 => 'S-1 raporu';
+  String get navS1 => 'S-1 Raporu';
 
   @override
-  String get navTalks => 'Halka açık konuşma başlıkları';
+  String get navTalks => 'Halka Yönelik Konuşma Başlıkları';
 
   @override
-  String get navSettings => 'Cemaat ayarları';
+  String get navSettings => 'Cemaat Ayarları';
 
   @override
   String get adminToggleHide => 'Yönetici seçeneklerini gizle';
@@ -305,7 +305,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileHope => 'Ümit';
 
   @override
-  String get hopeOtherSheep => 'Başka koyunlar';
+  String get hopeOtherSheep => 'Başka koyun';
 
   @override
   String get hopeAnointed => 'Meshedilmiş';
@@ -317,22 +317,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get statusPublisher => 'Müjdeci';
 
   @override
-  String get statusAuxPioneer => 'Yardımcı öncü';
+  String get statusAuxPioneer => 'Öncü Yardımcı';
 
   @override
-  String get statusRegPioneer => 'Daimi öncü';
+  String get statusRegPioneer => 'Daimi Öncü';
 
   @override
-  String get statusSpecialPioneer => 'Özel öncü';
+  String get statusSpecialPioneer => 'Özel Öncü';
 
   @override
-  String get statusFieldMissionary => 'Saha misyoneri';
+  String get statusFieldMissionary => 'Görevli Vaiz';
 
   @override
-  String get profileAppointment => 'Görev';
+  String get profileAppointment => 'Tayin';
 
   @override
-  String get appointmentMinisterialServant => 'Hizmet görevlisi';
+  String get appointmentMinisterialServant => 'Hizmet Görevlisi';
 
   @override
   String get appointmentElder => 'İhtiyar';
@@ -347,11 +347,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileSaved => 'Kaydedildi';
 
   @override
-  String get profileRecord => 'Müjdeci kaydı';
+  String get profileRecord => 'Müjdeci Kaydı';
 
   @override
   String serviceYear(int year) {
-    return 'Hizmet yılı $year';
+    return 'Hizmet Yılı $year';
   }
 
   @override
@@ -361,19 +361,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportParticipated => 'Hizmete katıldı';
 
   @override
-  String get reportStudies => 'Kutsal Kitap tetkikleri';
+  String get reportStudies => 'Kutsal Kitap İncelemeleri';
 
   @override
   String get reportHours => 'Saat';
 
   @override
-  String get reportCredit => 'Kredi saatleri';
+  String get reportCredit => 'Kredi Saatleri';
 
   @override
-  String get reportComments => 'Yorumlar';
+  String get reportComments => 'Not';
 
   @override
-  String get s21Export => 'S-21\'i dışa aktar (PDF)';
+  String get s21Export => 'S-21\'i Dışa Aktar (PDF)';
 
   @override
   String get s21Title => 'CEMAAT MÜJDECİ KAYDI';
@@ -388,7 +388,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get s21DateOfBaptism => 'Vaftiz tarihi:';
 
   @override
-  String get s21HoursHeader => 'Saatler (Öncü veya saha misyoneriyse)';
+  String get s21HoursHeader => 'Saatler (Öncü veya Saha Misyoneriyse)';
 
   @override
   String get s21Remarks => 'Notlar';
@@ -403,18 +403,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminInvite => 'Davet et';
 
   @override
-  String get pubAdminInviteTitle => 'Cemaate davet et';
+  String get pubAdminInviteTitle => 'Cemaate Davet Et';
 
   @override
   String get pubAdminInviteBody =>
-      'Yeni üye bu QR kodunu uygulamada tarar, kaydolur ve sonra aşağıda doğrulanmamış olarak görünür. Erişim vermek için doğrulayın.';
+      'Yeni müjdeci bu QR kodunu uygulamada tarar, kaydolur ve sonra aşağıda doğrulanmamış olarak görünür. Erişim vermek için doğrulayın.';
 
   @override
-  String get pubAdminAddRecord => 'Müjdeci kaydı ekle';
+  String get pubAdminAddRecord => 'Müjdeci Kaydı Ekle';
 
   @override
   String get pubAdminAddRecordHint =>
-      'Uygulamayı kullanmayacak bir üyenin kaydı; yöneticiler onun raporlarını girebilir.';
+      'Uygulamayı kullanmayacak bir müjdecinin kaydı; yöneticiler onun raporlarını girebilir.';
 
   @override
   String get pubAdminVerified => 'Doğrulandı';
@@ -443,15 +443,15 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>
-      'Kendi Doğrulandı durumunuzu kapatmak mı?';
+      'Kendi Doğrulandı Durumunuzu İptal Etmek mi?';
 
   @override
   String get pubAdminSelfVerifiedWarningBody =>
-      'Kendi hesabınızdan Doğrulandı durumunu kaldırıyorsunuz. Cemaat verilerine erişiminizi hemen kaybedersiniz ve yalnızca başka bir Tam Yönetici bunu geri yükleyebilir. Devam etmek istediğinizden emin misiniz?';
+      'Kendi hesabınızın Doğrulandı durumunu kaldırıyorsunuz. Cemaat verilerine erişiminizi hemen kaybedersiniz ve yalnızca başka bir Tam Yönetici bunu geri yükleyebilir. Devam etmek istediğinizden emin misiniz?';
 
   @override
   String get pubAdminSelfFullAdminWarningTitle =>
-      'Kendi Tam Yönetici yetkinizi kaldırmak mı?';
+      'Kendi Tam Yönetici Yetkinizi Kaldırmak mı?';
 
   @override
   String get pubAdminSelfFullAdminWarningBody =>
@@ -461,22 +461,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminSelfWarningConfirm => 'Erişimimi kaldır';
 
   @override
-  String get roleFullAdmin => 'Tam yönetici';
+  String get roleFullAdmin => 'Tam Yönetici';
 
   @override
   String get weekNoSchedule => 'Bu hafta için henüz program yok.';
 
   @override
-  String get weekCreateEmpty => 'Boş hafta oluştur';
+  String get weekCreateEmpty => 'Boş Hafta Oluştur';
 
   @override
-  String get weekImportEpub => '.epub dosyasından içe aktar';
+  String get weekImportEpub => '.epub Dosyasından İçe Aktar';
 
   @override
-  String get weekCheckCdn => 'Çevrimiçi denetle';
+  String get weekCheckCdn => 'Çevrimiçi Denetle';
 
   @override
-  String get weekDelete => 'Bu haftayı sil';
+  String get weekDelete => 'Bu Haftayı Sil';
 
   @override
   String get lmmSongs => 'İlahiler';
@@ -488,31 +488,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sectionTreasures => 'TANRI’NIN SÖZÜNDEKİ HAZİNELER';
 
   @override
-  String get sectionMinistry => 'TARLA HİZMETİNDE BECERİLİ OLALIM';
+  String get sectionMinistry => 'TARLA HİZMETİNDE KENİDİNİZİ GELİŞTİRİN';
 
   @override
-  String get sectionLiving => 'HIRİSTİYANLAR OLARAK YAŞAMIMIZ';
+  String get sectionLiving => 'HIRİSTİYAN OLARAK YAŞAM TARZIMIZ';
 
   @override
   String get sectionClosing => 'Kapanış';
 
   @override
-  String get partChairman => 'Başkan';
+  String get partChairman => 'Başkanlik eden';
 
   @override
-  String get partOpeningPrayer => 'Açılış duası';
+  String get partOpeningPrayer => 'Açılış Duası';
 
   @override
-  String get partClosingPrayer => 'Kapanış duası';
+  String get partClosingPrayer => 'Kapanış Duası';
 
   @override
-  String get partGems => 'Ruhi hazineler';
+  String get partGems => 'Ruhi Hazineler';
 
   @override
-  String get partBibleReading => 'Kutsal Kitap okuması';
+  String get partBibleReading => 'Kutsal Kitap Okuması';
 
   @override
-  String get partCbs => 'Cemaat Kutsal Kitap Tetkiki';
+  String get partCbs => 'Cemaat Kutsal Kitap İncelemesi';
 
   @override
   String get partCbsReader => 'Okuyucu';
@@ -526,7 +526,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get partEdit => 'Kısmı düzenle';
+  String get partEdit => 'Kısmı Düzenle';
 
   @override
   String get partTitle => 'Başlık';
@@ -538,22 +538,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get partDuration => 'Süre (dk.)';
 
   @override
-  String get partAdd => 'Kısım ekle';
+  String get partAdd => 'Kısım Ekle';
 
   @override
   String get partDeleteConfirm => 'Bu program kısmı silinsin mi?';
 
   @override
-  String get supportAttendants => 'Görevliler';
+  String get supportAttendants => 'Teşrifatçi';
 
   @override
-  String get supportMicrophones => 'Mikrofonlar';
+  String get supportMicrophones => 'Mikrofon';
 
   @override
-  String get supportAudioVideo => 'Ses/video';
+  String get supportAudioVideo => 'Ses ve Görüntü';
 
   @override
-  String get customAssignmentAdd => 'Özel atama ekle';
+  String get customAssignmentAdd => 'Başka Görevi Ekle';
 
   @override
   String get customLabel => 'Etiket';
@@ -573,7 +573,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get pickerNever => 'Hiç atanmadı';
+  String get pickerNever => 'Hiç yapmadı';
 
   @override
   String get importTitle => 'İbadet Kitapçığını İçe Aktar';
@@ -587,7 +587,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String importSave(int count) {
-    return '$count haftayı içe aktar';
+    return '$count Haftayı İçe Aktar';
   }
 
   @override
@@ -598,32 +598,32 @@ class AppLocalizationsTr extends AppLocalizations {
       'Henüz çevrimiçi kullanılabilir bir kitapçık sayısı yok.';
 
   @override
-  String get weekendTalkTitle => 'Halka açık konuşma';
+  String get weekendTalkTitle => 'Halka Yönelik Konuşma';
 
   @override
   String get weekendSpeaker => 'Konuşmacı';
 
   @override
-  String get weekendChairmanLabel => 'Başkan';
+  String get weekendChairmanLabel => 'Başkanlik eden';
 
   @override
-  String get weekendWtReader => 'Gözcü Kulesi okuyucusu';
+  String get weekendWtReader => 'Gözcü Kulesi Okuyucusu';
 
   @override
-  String get customFieldAdd => 'Program alanı ekle';
+  String get customFieldAdd => 'Program Alanı Ekle';
 
   @override
   String get pickerFromCatalog => 'Listeden';
 
   @override
-  String get talksUpdateFromPdf => 'Başlıkları PDF\'den güncelle';
+  String get talksUpdateFromPdf => 'Başlıkları PDF\'den Güncelle';
 
   @override
-  String get talksPickPdf => 'S-99 PDF\'si seç';
+  String get talksPickPdf => 'S-99 PDF\'i Seç';
 
   @override
   String get talksParseError =>
-      'Bu dosyadan konuşma başlıkları okunamadı. Resmî S-99 formu PDF\'si kullanın.';
+      'Bu dosyadan konuşma başlıkları okunamadı. Resmî S-99 formu PDF\'i kullanın.';
 
   @override
   String talksImportSummary(int total, int added, int changed, int removed) {
@@ -631,7 +631,7 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get talksImportSave => 'Başlıkları kaydet';
+  String get talksImportSave => 'Başlıkları Kaydet';
 
   @override
   String talksImportDone(int count) {
@@ -666,19 +666,19 @@ class AppLocalizationsTr extends AppLocalizations {
       'Henüz konuşma başlığı yok. S-99 PDF\'sinden içe aktarın.';
 
   @override
-  String get talksOpenCatalog => 'Konuşma başlıklarını yönet';
+  String get talksOpenCatalog => 'Halka Yönelik Konuşma Başlıklarını Yönet';
 
   @override
-  String get talksEditTitle => 'Başlığı düzenle';
+  String get talksEditTitle => 'Başlığı Düzenle';
 
   @override
-  String get pwNoSlots => 'Bu hafta halka açık şahitlik yok.';
+  String get pwNoSlots => 'Bu hafta Halka Açık Yerde Şahitlik yok.';
 
   @override
-  String get pwAddSlot => 'Zaman aralığı ekle';
+  String get pwAddSlot => 'Zaman Aralığı Ekle';
 
   @override
-  String get pwEditSlot => 'Zaman aralığını düzenle';
+  String get pwEditSlot => 'Zaman Aralığını Düzenle';
 
   @override
   String get pwLocation => 'Yer';
@@ -690,10 +690,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pwTimeTo => 'Bitiş';
 
   @override
-  String get pwRecurringRules => 'Tekrarlanan zaman aralıkları';
+  String get pwRecurringRules => 'Tekrarlanan Zaman Aralıkları';
 
   @override
-  String get pwRecurringAdd => 'Tekrarlanan zaman aralığı ekle';
+  String get pwRecurringAdd => 'Tekrarlanan Zaman Aralığı Ekle';
 
   @override
   String get pwWeekday => 'Haftanın günü';
@@ -711,16 +711,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pwDate => 'Tarih';
 
   @override
-  String get eventsUpcoming => 'Yaklaşan etkinlikler';
+  String get eventsUpcoming => 'Yaklaşan Etkinlikler';
 
   @override
   String get eventsNone => 'Yaklaşan etkinlik yok.';
 
   @override
-  String get eventAdd => 'Etkinlik ekle';
+  String get eventAdd => 'Etkinlik Ekle';
 
   @override
-  String get eventEdit => 'Etkinliği düzenle';
+  String get eventEdit => 'Etkinliği Düzenle';
 
   @override
   String get eventTitle => 'Başlık';
@@ -729,16 +729,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get eventType => 'Tür';
 
   @override
-  String get eventTypeConvention => 'Bölge ibadeti';
+  String get eventTypeConvention => 'Bölge Kongresi';
 
   @override
-  String get eventTypeAssembly => 'Çevre ibadeti';
+  String get eventTypeAssembly => 'Çevre Kongresi';
 
   @override
   String get eventTypeMemorial => 'Anma Yemeği';
 
   @override
-  String get eventTypeCoVisit => 'Çevre gözetmeninin ziyareti';
+  String get eventTypeCoVisit => 'Çevre Gözetmeninin Ziyareti';
 
   @override
   String get eventTypeOther => 'Diğer';
@@ -756,22 +756,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get eventNotes => 'Notlar';
 
   @override
-  String get eventAddToCalendar => 'Takvime ekle';
+  String get eventAddToCalendar => 'Takvime Ekle';
 
   @override
-  String get myAssignments => 'Yaklaşan atamalarım';
+  String get myAssignments => 'Yaklaşan Görevlerim';
 
   @override
-  String get myAssignmentsNone => 'Yaklaşan atamanız yok.';
+  String get myAssignmentsNone => 'Yaklaşan görevleriniz yok.';
 
   @override
   String get roleAssistant => 'Yardımcı';
 
   @override
-  String get rolePw => 'Halka açık şahitlik';
+  String get rolePw => 'Halka Açık Yerde Şahitlik';
 
   @override
-  String get reportSubmit => 'Rapor gönder';
+  String get reportSubmit => 'Rapor Ver';
 
   @override
   String reportSubmittedAt(String date) {
@@ -791,44 +791,44 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String reportSummaryReported(int reported, int total) {
-    return 'Rapor gönderildi: $reported / $total';
+    return 'Rapor Verenler: $reported / $total';
   }
 
   @override
-  String get attAdd => 'Katılım kaydet';
+  String get attAdd => 'Katılım Kaydet';
 
   @override
-  String get attInPerson => 'Yüz yüze';
+  String get attInPerson => 'Salonda';
 
   @override
-  String get attOnline => 'Çevrimiçi';
+  String get attOnline => 'Zoomda';
 
   @override
   String get attTotal => 'Toplam';
 
   @override
-  String get attMeetingLmm => 'Hafta içi ibadeti';
+  String get attMeetingLmm => 'Hafta İçi İbadeti';
 
   @override
-  String get attMeetingWeekend => 'Hafta sonu ibadeti';
+  String get attMeetingWeekend => 'Hafta Sonu İbadeti';
 
   @override
-  String get attOverview => 'Aylık ortalamalar';
+  String get attOverview => 'Aylık Ortalamalar';
 
   @override
-  String get attRecent => 'Son ibadetler';
+  String get attRecent => 'Son İbadetler';
 
   @override
   String get attSaved => 'Katılım kaydedildi.';
 
   @override
-  String get terrMine => 'Bölgelerim';
+  String get terrMine => 'Sahalarım';
 
   @override
-  String get terrNoMine => 'Size atanmış bölge yok.';
+  String get terrNoMine => 'Size atanmış saha yok.';
 
   @override
-  String get terrAll => 'Tüm bölgeler';
+  String get terrAll => 'Tüm Sahalar';
 
   @override
   String terrAssignedOn(String date) {
@@ -836,10 +836,10 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get terrReturn => 'İade et';
+  String get terrReturn => 'İade Et';
 
   @override
-  String get terrReturnTitle => 'Bölgeyi iade et';
+  String get terrReturnTitle => 'Sahayı İade Et';
 
   @override
   String get terrReturnNotes => 'Notlar (isteğe bağlı)';
@@ -848,10 +848,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get terrMap => 'Harita';
 
   @override
-  String get terrAdd => 'Bölge ekle';
+  String get terrAdd => 'Saha Ekle';
 
   @override
-  String get terrEdit => 'Bölgeyi düzenle';
+  String get terrEdit => 'Sahayı Düzenle';
 
   @override
   String get terrName => 'Ad';
@@ -889,19 +889,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get terrStatsFinished => 'Dönemde tamamlanan';
 
   @override
-  String get terrRemoveAssignment => 'Atamayı kaldır';
+  String get terrRemoveAssignment => 'Atamayı Kaldır';
 
   @override
-  String get infoEmpty => 'Şu an bilgi yok.';
+  String get infoEmpty => 'Şu anda ilan bulunmuyor.';
 
   @override
-  String get infoAddText => 'Metin ekle';
+  String get infoAddText => 'Yazılı İlan Ekle';
 
   @override
-  String get infoAddFile => 'Dosya yükle (PDF/resim)';
+  String get infoAddFile => 'Dosya Yükle (PDF/Resim)';
 
   @override
-  String get infoAddLink => 'Bağlantı ekle';
+  String get infoAddLink => 'Bağlantı Ekle';
 
   @override
   String get infoTitle => 'Başlık';
@@ -929,32 +929,32 @@ class AppLocalizationsTr extends AppLocalizations {
   String get infoDownloading => 'Dosya yükleniyor…';
 
   @override
-  String get infoEditItem => 'Öğeyi düzenle';
+  String get infoEditItem => 'İlanı Düzenle';
 
   @override
   String get s1Active =>
-      'Tüm faal müjdeciler (son 6 ayda en az bir kez rapor verenler)';
+      'Tüm etkin müjdeciler (son 6 ayda en az bir kez rapor verenler)';
 
   @override
-  String get s1AvgMid => 'Ortalama katılım — hafta içi ibadeti';
+  String get s1AvgMid => 'Ortalama Katılım — Hafta İçi İbadeti';
 
   @override
-  String get s1AvgWeekend => 'Ortalama katılım — hafta sonu ibadeti';
+  String get s1AvgWeekend => 'Ortalama Katılım — Hafta Sonu İbadeti';
 
   @override
   String get s1Publishers => 'Müjdeciler';
 
   @override
-  String get s1AuxPioneers => 'Yardımcı öncüler';
+  String get s1AuxPioneers => 'Öncü Yardımcılar';
 
   @override
-  String get s1RegPioneers => 'Daimi öncüler';
+  String get s1RegPioneers => 'Daimi Öncüler';
 
   @override
   String get s1Count => 'Sayı';
 
   @override
-  String get s1Studies => 'Kutsal Kitap tetkikleri';
+  String get s1Studies => 'Kutsal Kitap İncelemeleri';
 
   @override
   String get s1Hours => 'Saatler (toplam)';
@@ -976,7 +976,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qSupportSection => 'İbadet desteği ve diğer';
 
   @override
-  String get qChairman => 'Başkan (hafta içi)';
+  String get qChairman => 'Başkanlik eden (hafta içi)';
 
   @override
   String get qPrayer => 'Dua';
@@ -994,25 +994,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qFieldMinistry => 'Öğrenci görevleri (hizmet)';
 
   @override
-  String get qLiving => 'Hıristiyanlar olarak yaşamımız';
+  String get qLiving => 'Hıristiyanlar Olarak Yaşam Tarzımız';
 
   @override
-  String get qCbsConductor => 'Cemaat Kutsal Kitap Tetkiki idarecisi';
+  String get qCbsConductor => 'Cemaat Kutsal Kitap İncelemesi idarecisi';
 
   @override
-  String get qCbsReader => 'Cemaat Kutsal Kitap Tetkiki okuyucusu';
+  String get qCbsReader => 'Cemaat Kutsal Kitap İncelemesi okuyucusu';
 
   @override
-  String get qPublicTalk => 'Halka açık konuşma';
+  String get qPublicTalk => 'Halka yönelik konuşma';
 
   @override
-  String get qWeekendChairman => 'Başkan (hafta sonu)';
+  String get qWeekendChairman => 'Başkanlik eden (hafta sonu)';
 
   @override
   String get qWtReader => 'Gözcü Kulesi okuyucusu';
 
   @override
-  String get qAttendant => 'Görevli';
+  String get qAttendant => 'Teşrifatçi';
 
   @override
   String get qMicrophone => 'Mikrofonlar';
@@ -1021,5 +1021,5 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qAudioVideo => 'Ses/video';
 
   @override
-  String get qPublicWitnessing => 'Halka açık şahitlik';
+  String get qPublicWitnessing => 'Halka açık yerde şahitlik';
 }
