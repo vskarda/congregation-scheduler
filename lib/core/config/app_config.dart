@@ -4,7 +4,7 @@ abstract final class AppConfig {
   /// epub online. The JSON response carries the epub download URL under
   /// `files.{lang}.EPUB[0].file.url`; unpublished issues answer 404.
   ///
-  /// Placeholders: `{lang}` (publication language code, e.g. E / B) and
+  /// Placeholders: `{lang}` (publication language code, e.g. E / B / T) and
   /// `{yyyyMM}` (issue month). Note web builds may be blocked by CORS —
   /// file import is the fallback there.
   static const String workbookCdnUrlTemplate =

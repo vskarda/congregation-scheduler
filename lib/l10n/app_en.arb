@@ -50,6 +50,7 @@
   "languageSystem": "System language",
   "languageEnglish": "English",
   "languageCzech": "Čeština",
+  "languageTurkish": "Türkçe",
 
   "profileCompleteTitle": "Complete your profile",
   "profileCompleteBody": "Your account exists but the profile is missing. Enter your name to finish registration.",

@@ -44,6 +44,23 @@ const _csWeek = '''
 </body></html>
 ''';
 
+const _trWeek = '''
+<html><body>
+<h1>6-12 TEMMUZ | MEZMUR 45</h1>
+<p>İLAHİ 1 ve dua</p>
+<h2>TANRI’NIN SÖZÜNDEKİ HAZİNELER</h2>
+<p>1. Yehova Kralını Bereketler (10 dk.)</p>
+<p>2. Ruhi Hazineler (10 dk.)</p>
+<p>3. Kutsal Kitap Okuması (4 dk.)</p>
+<h2>TARLA HİZMETİNDE BECERİLİ OLUN</h2>
+<p>4. Sohbete Başlama (3 dk.)</p>
+<h2>HIRİSTİYANLAR OLARAK YAŞAYIN</h2>
+<p>İLAHİ 22</p>
+<p>5. Cemaat Kutsal Kitap Tetkiki (30 dk.)</p>
+<p>İLAHİ 33 ve dua</p>
+</body></html>
+''';
+
 /// Sanitized replica of the 2024+ workbook markup (mwb_E_202611): part
 /// titles in <h3>, duration + instructions in the following detail
 /// paragraph, sections marked by dc-icon-- wrapper classes.
@@ -150,6 +167,22 @@ void main() {
           week.parts.any((p) => p.type == LmmPartType.gems), isTrue);
       expect(week.parts.any((p) => p.type == LmmPartType.bibleReading),
           isTrue);
+    });
+
+    test('parses a Turkish week', () {
+      final week =
+          MwbParser.parseWeekDocument(_trWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.songs, ['1', '22', '33']);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
     });
 
     test('resolves January weeks in a December issue to the next year', () {
