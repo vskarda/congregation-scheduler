@@ -1,8 +1,8 @@
 # Pinned so CI (and everyone) builds against the same minimum iOS version.
-# 13.0 matches IPHONEOS_DEPLOYMENT_TARGET in the Xcode project and is the
-# minimum required by the Firebase iOS SDK pulled in by cloud_firestore /
-# firebase_auth.
-platform :ios, '13.0'
+# 15.0 matches IPHONEOS_DEPLOYMENT_TARGET in the Xcode project. Firebase's
+# Swift Package Manager products (cloud_firestore / firebase_auth / firebase_core)
+# require iOS 15.0 minimum as of their current SDK versions.
+platform :ios, '15.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
