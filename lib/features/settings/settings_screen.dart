@@ -16,8 +16,8 @@ class SettingsScreen extends ConsumerWidget {
     final metaAsync = ref.watch(congregationMetaProvider);
     return metaAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(
-          child: Text(context.l10n.commonErrorDetail(e.toString()))),
+      error: (e, _) =>
+          Center(child: Text(context.l10n.commonErrorDetail(e.toString()))),
       data: (meta) => _SettingsForm(meta: meta ?? const CongregationMeta()),
     );
   }
@@ -49,15 +49,18 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
     final picked = await showTimePicker(
       context: context,
       initialTime: TimeOfDay(
-          hour: int.tryParse(parts[0]) ?? 18,
-          minute: int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0),
+        hour: int.tryParse(parts[0]) ?? 18,
+        minute: int.tryParse(parts.length > 1 ? parts[1] : '0') ?? 0,
+      ),
     );
     if (picked != null) {
       final value =
           '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-      setState(() => _meta = lmm
-          ? _meta.copyWith(lmmTime: value)
-          : _meta.copyWith(weekendTime: value));
+      setState(
+        () => _meta = lmm
+            ? _meta.copyWith(lmmTime: value)
+            : _meta.copyWith(weekendTime: value),
+      );
     }
   }
 
@@ -78,7 +81,8 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
       messenger.showSnackBar(SnackBar(content: Text(l10n.profileSaved)));
     } catch (e) {
       messenger.showSnackBar(
-          SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))));
+        SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))),
+      );
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -99,8 +103,7 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 4),
-            child:
-                Text(label, style: Theme.of(context).textTheme.labelLarge),
+            child: Text(label, style: Theme.of(context).textTheme.labelLarge),
           ),
           Row(
             children: [
@@ -109,12 +112,13 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
                   initialValue: weekday,
                   items: [
                     for (var d = DateTime.monday; d <= DateTime.sunday; d++)
-                      DropdownMenuItem(
-                          value: d, child: Text(weekdayName(d))),
+                      DropdownMenuItem(value: d, child: Text(weekdayName(d))),
                   ],
-                  onChanged: (d) => setState(() => _meta = lmm
-                      ? _meta.copyWith(lmmWeekday: d ?? weekday)
-                      : _meta.copyWith(weekendWeekday: d ?? weekday)),
+                  onChanged: (d) => setState(
+                    () => _meta = lmm
+                        ? _meta.copyWith(lmmWeekday: d ?? weekday)
+                        : _meta.copyWith(weekendWeekday: d ?? weekday),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -140,6 +144,24 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
               decoration: InputDecoration(labelText: l10n.settingsName),
             ),
             meetingRow(l10n.settingsLmmMeeting, true),
+            Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: DropdownButtonFormField<int>(
+                initialValue: _meta.lmmClassCount.clamp(1, 3),
+                decoration: InputDecoration(
+                  labelText: l10n.settingsLmmClassCount,
+                ),
+                items: [
+                  for (var c = 1; c <= 3; c++)
+                    DropdownMenuItem(value: c, child: Text('$c')),
+                ],
+                onChanged: (c) => setState(
+                  () => _meta = _meta.copyWith(
+                    lmmClassCount: c ?? _meta.lmmClassCount,
+                  ),
+                ),
+              ),
+            ),
             meetingRow(l10n.settingsWeekendMeeting, false),
             const SizedBox(height: 24),
             FilledButton(

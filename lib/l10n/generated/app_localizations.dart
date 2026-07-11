@@ -1096,6 +1096,18 @@ abstract class AppLocalizations {
   /// **'{min} min'**
   String partMinutes(int min);
 
+  /// No description provided for @lmmClassMain.
+  ///
+  /// In en, this message translates to:
+  /// **'Main hall'**
+  String get lmmClassMain;
+
+  /// No description provided for @lmmClassN.
+  ///
+  /// In en, this message translates to:
+  /// **'Class {index}'**
+  String lmmClassN(int index);
+
   /// No description provided for @partEdit.
   ///
   /// In en, this message translates to:
@@ -2007,6 +2019,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Midweek meeting (day and time)'**
   String get settingsLmmMeeting;
+
+  /// No description provided for @settingsLmmClassCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Midweek meeting classes'**
+  String get settingsLmmClassCount;
 
   /// No description provided for @settingsWeekendMeeting.
   ///

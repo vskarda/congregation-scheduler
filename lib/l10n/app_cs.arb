@@ -178,6 +178,8 @@
   "partCbsReader": "Čtenář",
   "partAssistant": "Pomocník",
   "partMinutes": "{min} min",
+  "lmmClassMain": "Hlavní sál",
+  "lmmClassN": "Třída {index}",
   "partEdit": "Upravit bod",
   "partTitle": "Název",
   "partDescription": "Popis",
@@ -341,6 +343,7 @@
 
   "settingsName": "Název sboru",
   "settingsLmmMeeting": "Shromáždění v týdnu (den a čas)",
+  "settingsLmmClassCount": "Počet tříd (shromáždění v týdnu)",
   "settingsWeekendMeeting": "Víkendové shromáždění (den a čas)",
 
   "qSupportSection": "Podpora shromáždění a další",

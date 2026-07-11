@@ -33,12 +33,13 @@ class MyAssignmentEntry {
   final String? endTime;
 }
 
-final myUpcomingAssignmentsProvider =
-    FutureProvider<List<MyAssignmentEntry>>((ref) async {
+final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
+  ref,
+) async {
   final uid = ref.watch(currentUidProvider);
   if (uid == null) return const [];
-  final meta = ref.watch(congregationMetaProvider).value ??
-      const CongregationMeta();
+  final meta =
+      ref.watch(congregationMetaProvider).value ?? const CongregationMeta();
   final today = dateKey(DateTime.now());
   final entries = <MyAssignmentEntry>[];
 
@@ -52,130 +53,207 @@ final myUpcomingAssignmentsProvider =
     required List<CustomAssignment> custom,
   }) {
     if (attendants.contains(uid)) {
-      entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'attendants', time: time));
+      entries.add(
+        MyAssignmentEntry(
+          source: source,
+          date: date,
+          roleKey: 'attendants',
+          time: time,
+        ),
+      );
     }
     if (microphones.contains(uid)) {
-      entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'microphones', time: time));
+      entries.add(
+        MyAssignmentEntry(
+          source: source,
+          date: date,
+          roleKey: 'microphones',
+          time: time,
+        ),
+      );
     }
     if (audioVideo.contains(uid)) {
-      entries.add(MyAssignmentEntry(
-          source: source, date: date, roleKey: 'audioVideo', time: time));
+      entries.add(
+        MyAssignmentEntry(
+          source: source,
+          date: date,
+          roleKey: 'audioVideo',
+          time: time,
+        ),
+      );
     }
     for (final c in custom) {
       if (c.assignment.contains(uid)) {
-        entries.add(MyAssignmentEntry(
+        entries.add(
+          MyAssignmentEntry(
             source: source,
             date: date,
             roleKey: 'custom',
             detail: c.label,
-            time: time));
+            time: time,
+          ),
+        );
       }
     }
   }
 
-  final lmmWeeks =
-      await ref.watch(lmmRepositoryProvider).getAssignedTo(uid);
+  final lmmWeeks = await ref.watch(lmmRepositoryProvider).getAssignedTo(uid);
   for (final week in lmmWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
-    final date =
-        dateKey(monday.add(Duration(days: meta.lmmWeekday - 1)));
+    final date = dateKey(monday.add(Duration(days: meta.lmmWeekday - 1)));
     if (date.compareTo(today) < 0) continue;
     for (final part in week.parts) {
       if (part.assignment.contains(uid)) {
-        entries.add(MyAssignmentEntry(
+        entries.add(
+          MyAssignmentEntry(
             source: AssignmentSource.lmm,
             date: date,
             roleKey: part.type.name,
             detail: part.title,
-            time: meta.lmmTime));
+            time: meta.lmmTime,
+          ),
+        );
       }
       if (part.assistant.contains(uid)) {
-        entries.add(MyAssignmentEntry(
+        entries.add(
+          MyAssignmentEntry(
             source: AssignmentSource.lmm,
             date: date,
             roleKey: 'assistant',
             detail: part.title,
-            time: meta.lmmTime));
+            time: meta.lmmTime,
+          ),
+        );
+      }
+      // Auxiliary-class slots are only surfaced while the class is enabled
+      // in the congregation settings (data survives a disable/re-enable).
+      for (var c = 2; c <= meta.lmmClassCount.clamp(1, 3); c++) {
+        if (part.assignmentFor(c).contains(uid)) {
+          entries.add(
+            MyAssignmentEntry(
+              source: AssignmentSource.lmm,
+              date: date,
+              roleKey: '${part.type.name}#$c',
+              detail: part.title,
+              time: meta.lmmTime,
+            ),
+          );
+        }
+        if (part.assistantFor(c).contains(uid)) {
+          entries.add(
+            MyAssignmentEntry(
+              source: AssignmentSource.lmm,
+              date: date,
+              roleKey: 'assistant#$c',
+              detail: part.title,
+              time: meta.lmmTime,
+            ),
+          );
+        }
       }
     }
-    addSupport(AssignmentSource.lmm, date, meta.lmmTime,
-        attendants: week.attendants,
-        microphones: week.microphones,
-        audioVideo: week.audioVideo,
-        custom: week.customAssignments);
+    addSupport(
+      AssignmentSource.lmm,
+      date,
+      meta.lmmTime,
+      attendants: week.attendants,
+      microphones: week.microphones,
+      audioVideo: week.audioVideo,
+      custom: week.customAssignments,
+    );
   }
 
-  final weekendWeeks =
-      await ref.watch(weekendRepositoryProvider).getAssignedTo(uid);
+  final weekendWeeks = await ref
+      .watch(weekendRepositoryProvider)
+      .getAssignedTo(uid);
   for (final week in weekendWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
-    final date =
-        dateKey(monday.add(Duration(days: meta.weekendWeekday - 1)));
+    final date = dateKey(monday.add(Duration(days: meta.weekendWeekday - 1)));
     if (date.compareTo(today) < 0) continue;
     if (week.speaker.contains(uid)) {
-      entries.add(MyAssignmentEntry(
+      entries.add(
+        MyAssignmentEntry(
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'speaker',
           detail: week.talkTitle,
-          time: meta.weekendTime));
+          time: meta.weekendTime,
+        ),
+      );
     }
     if (week.chairman.contains(uid)) {
-      entries.add(MyAssignmentEntry(
+      entries.add(
+        MyAssignmentEntry(
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'weekendChairman',
-          time: meta.weekendTime));
+          time: meta.weekendTime,
+        ),
+      );
     }
     if (week.wtReader.contains(uid)) {
-      entries.add(MyAssignmentEntry(
+      entries.add(
+        MyAssignmentEntry(
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'wtReader',
-          time: meta.weekendTime));
+          time: meta.weekendTime,
+        ),
+      );
     }
     for (final c in week.customFields) {
       if (c.assignment.contains(uid)) {
-        entries.add(MyAssignmentEntry(
+        entries.add(
+          MyAssignmentEntry(
             source: AssignmentSource.weekend,
             date: date,
             roleKey: 'custom',
             detail: c.label,
-            time: meta.weekendTime));
+            time: meta.weekendTime,
+          ),
+        );
       }
     }
-    addSupport(AssignmentSource.weekend, date, meta.weekendTime,
-        attendants: week.attendants,
-        microphones: week.microphones,
-        audioVideo: week.audioVideo,
-        custom: week.customAssignments);
+    addSupport(
+      AssignmentSource.weekend,
+      date,
+      meta.weekendTime,
+      attendants: week.attendants,
+      microphones: week.microphones,
+      audioVideo: week.audioVideo,
+      custom: week.customAssignments,
+    );
   }
 
   final slots = await ref.watch(pwRepositoryProvider).getAssignedTo(uid);
   for (final slot in slots) {
     if (slot.date.compareTo(today) < 0) continue;
-    entries.add(MyAssignmentEntry(
+    entries.add(
+      MyAssignmentEntry(
         source: AssignmentSource.pw,
         date: slot.date,
         roleKey: 'pw',
         detail: slot.location,
         time: slot.startTime,
-        endTime: slot.endTime));
+        endTime: slot.endTime,
+      ),
+    );
   }
 
   final meetings = await ref.watch(fsmRepositoryProvider).getAssignedTo(uid);
   for (final meeting in meetings) {
     if (meeting.date.compareTo(today) < 0) continue;
-    entries.add(MyAssignmentEntry(
+    entries.add(
+      MyAssignmentEntry(
         source: AssignmentSource.fsm,
         date: meeting.date,
         roleKey: 'fsm',
         detail: meeting.location,
-        time: meeting.time));
+        time: meeting.time,
+      ),
+    );
   }
 
   entries.sort((a, b) => a.date.compareTo(b.date));

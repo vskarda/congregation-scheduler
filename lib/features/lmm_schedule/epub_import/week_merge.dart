@@ -9,8 +9,7 @@ import '../../../core/models/models.dart';
 /// the second field-ministry demo keeps the assignment of the previous
 /// second field-ministry demo. Manually added custom parts survive at the
 /// end of their section. [LmmWeek.allAssigneeIds] is recomputed on save.
-LmmWeek mergeParsedWeek(
-    {required LmmWeek existing, required LmmWeek parsed}) {
+LmmWeek mergeParsedWeek({required LmmWeek existing, required LmmWeek parsed}) {
   String groupKey(LmmPart p) => '${p.section.name}/${p.type.name}';
 
   final existingByGroup = <String, List<LmmPart>>{};
@@ -29,18 +28,25 @@ LmmWeek mergeParsedWeek(
     if (candidates != null && index < candidates.length) {
       final match = candidates[index];
       matchedIds.add(match.id);
-      parts.add(part.copyWith(
-        id: match.id,
-        assignment: match.assignment,
-        assistant: match.assistant,
-      ));
+      parts.add(
+        part.copyWith(
+          id: match.id,
+          assignment: match.assignment,
+          assistant: match.assistant,
+          assignment2: match.assignment2,
+          assistant2: match.assistant2,
+          assignment3: match.assignment3,
+          assistant3: match.assistant3,
+        ),
+      );
     } else {
       parts.add(part);
     }
   }
 
-  for (final custom in existing.parts.where((p) =>
-      p.type == LmmPartType.custom && !matchedIds.contains(p.id))) {
+  for (final custom in existing.parts.where(
+    (p) => p.type == LmmPartType.custom && !matchedIds.contains(p.id),
+  )) {
     // Insert after the last merged part of the same section, or in global
     // section order when the section is otherwise empty.
     var insertAt = -1;
@@ -53,7 +59,8 @@ LmmWeek mergeParsedWeek(
     if (insertAt < 0) {
       final order = LmmSection.values.indexOf(custom.section);
       insertAt = parts.indexWhere(
-          (p) => LmmSection.values.indexOf(p.section) > order);
+        (p) => LmmSection.values.indexOf(p.section) > order,
+      );
       if (insertAt < 0) insertAt = parts.length;
     }
     parts.insert(insertAt, custom);

@@ -534,6 +534,14 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get lmmClassMain => 'Hlavní sál';
+
+  @override
+  String lmmClassN(int index) {
+    return 'Třída $index';
+  }
+
+  @override
   String get partEdit => 'Upravit bod';
 
   @override
@@ -1016,6 +1024,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get settingsLmmMeeting => 'Shromáždění v týdnu (den a čas)';
+
+  @override
+  String get settingsLmmClassCount => 'Počet tříd (shromáždění v týdnu)';
 
   @override
   String get settingsWeekendMeeting => 'Víkendové shromáždění (den a čas)';

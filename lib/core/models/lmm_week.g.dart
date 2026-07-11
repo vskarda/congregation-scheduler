@@ -23,6 +23,18 @@ _LmmPart _$LmmPartFromJson(Map<String, dynamic> json) => _LmmPart(
   assistant: json['assistant'] == null
       ? const Assignment()
       : Assignment.fromJson(json['assistant'] as Map<String, dynamic>),
+  assignment2: json['assignment2'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['assignment2'] as Map<String, dynamic>),
+  assistant2: json['assistant2'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['assistant2'] as Map<String, dynamic>),
+  assignment3: json['assignment3'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['assignment3'] as Map<String, dynamic>),
+  assistant3: json['assistant3'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['assistant3'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LmmPartToJson(_LmmPart instance) => <String, dynamic>{
@@ -34,6 +46,10 @@ Map<String, dynamic> _$LmmPartToJson(_LmmPart instance) => <String, dynamic>{
   'durationMin': instance.durationMin,
   'assignment': instance.assignment.toJson(),
   'assistant': instance.assistant.toJson(),
+  'assignment2': instance.assignment2.toJson(),
+  'assistant2': instance.assistant2.toJson(),
+  'assignment3': instance.assignment3.toJson(),
+  'assistant3': instance.assistant3.toJson(),
 };
 
 const _$LmmSectionEnumMap = {

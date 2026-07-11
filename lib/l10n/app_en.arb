@@ -183,6 +183,9 @@
   "partAssistant": "Assistant",
   "partMinutes": "{min} min",
   "@partMinutes": {"placeholders": {"min": {"type": "int"}}},
+  "lmmClassMain": "Main hall",
+  "lmmClassN": "Class {index}",
+  "@lmmClassN": {"placeholders": {"index": {"type": "int"}}},
   "partEdit": "Edit part",
   "partTitle": "Title",
   "partDescription": "Description",
@@ -356,6 +359,7 @@
 
   "settingsName": "Congregation name",
   "settingsLmmMeeting": "Midweek meeting (day and time)",
+  "settingsLmmClassCount": "Midweek meeting classes",
   "settingsWeekendMeeting": "Weekend meeting (day and time)",
 
   "qSupportSection": "Meeting support and other",

@@ -30,61 +30,75 @@ abstract final class HistoryKeys {
 /// Invalidate this provider after saving any schedule.
 final assignmentHistoryProvider =
     FutureProvider<Map<String, Map<String, String>>>((ref) async {
-  final from =
-      weekIdOf(addMonths(DateTime.now(), -AppConfig.pickerHistoryMonths));
-  const until = '9999-12-31';
+      final from = weekIdOf(
+        addMonths(DateTime.now(), -AppConfig.pickerHistoryMonths),
+      );
+      const until = '9999-12-31';
 
-  final result = <String, Map<String, String>>{};
-  void record(String key, Assignment assignment, String date) {
-    final byUid = result.putIfAbsent(key, () => {});
-    for (final uid in assignment.publisherIds) {
-      final prev = byUid[uid];
-      if (prev == null || date.compareTo(prev) > 0) byUid[uid] = date;
-    }
-  }
+      final result = <String, Map<String, String>>{};
+      void record(String key, Assignment assignment, String date) {
+        final byUid = result.putIfAbsent(key, () => {});
+        for (final uid in assignment.publisherIds) {
+          final prev = byUid[uid];
+          if (prev == null || date.compareTo(prev) > 0) byUid[uid] = date;
+        }
+      }
 
-  final lmmWeeks =
-      await ref.watch(lmmRepositoryProvider).getRange(from, until);
-  for (final week in lmmWeeks) {
-    for (final part in week.parts) {
-      record(HistoryKeys.lmmPart(part.type), part.assignment, week.id);
-      record(HistoryKeys.lmmAssistant, part.assistant, week.id);
-    }
-    record(HistoryKeys.attendant, week.attendants, week.id);
-    record(HistoryKeys.microphone, week.microphones, week.id);
-    record(HistoryKeys.audioVideo, week.audioVideo, week.id);
-    for (final c in week.customAssignments) {
-      record(HistoryKeys.custom, c.assignment, week.id);
-    }
-  }
+      final lmmWeeks = await ref
+          .watch(lmmRepositoryProvider)
+          .getRange(from, until);
+      for (final week in lmmWeeks) {
+        for (final part in week.parts) {
+          record(HistoryKeys.lmmPart(part.type), part.assignment, week.id);
+          record(HistoryKeys.lmmAssistant, part.assistant, week.id);
+          // Auxiliary classes share the main history keys: the student pool is
+          // congregation-wide, so an assignment in any class counts as recent.
+          record(HistoryKeys.lmmPart(part.type), part.assignment2, week.id);
+          record(HistoryKeys.lmmAssistant, part.assistant2, week.id);
+          record(HistoryKeys.lmmPart(part.type), part.assignment3, week.id);
+          record(HistoryKeys.lmmAssistant, part.assistant3, week.id);
+        }
+        record(HistoryKeys.attendant, week.attendants, week.id);
+        record(HistoryKeys.microphone, week.microphones, week.id);
+        record(HistoryKeys.audioVideo, week.audioVideo, week.id);
+        for (final c in week.customAssignments) {
+          record(HistoryKeys.custom, c.assignment, week.id);
+        }
+      }
 
-  final weekendWeeks =
-      await ref.watch(weekendRepositoryProvider).getRange(from, until);
-  for (final week in weekendWeeks) {
-    record(HistoryKeys.weekendSpeaker, week.speaker, week.id);
-    record(HistoryKeys.weekendChairman, week.chairman, week.id);
-    record(HistoryKeys.weekendWtReader, week.wtReader, week.id);
-    for (final c in week.customFields) {
-      record(HistoryKeys.custom, c.assignment, week.id);
-    }
-    record(HistoryKeys.attendant, week.attendants, week.id);
-    record(HistoryKeys.microphone, week.microphones, week.id);
-    record(HistoryKeys.audioVideo, week.audioVideo, week.id);
-    for (final c in week.customAssignments) {
-      record(HistoryKeys.custom, c.assignment, week.id);
-    }
-  }
+      final weekendWeeks = await ref
+          .watch(weekendRepositoryProvider)
+          .getRange(from, until);
+      for (final week in weekendWeeks) {
+        record(HistoryKeys.weekendSpeaker, week.speaker, week.id);
+        record(HistoryKeys.weekendChairman, week.chairman, week.id);
+        record(HistoryKeys.weekendWtReader, week.wtReader, week.id);
+        for (final c in week.customFields) {
+          record(HistoryKeys.custom, c.assignment, week.id);
+        }
+        record(HistoryKeys.attendant, week.attendants, week.id);
+        record(HistoryKeys.microphone, week.microphones, week.id);
+        record(HistoryKeys.audioVideo, week.audioVideo, week.id);
+        for (final c in week.customAssignments) {
+          record(HistoryKeys.custom, c.assignment, week.id);
+        }
+      }
 
-  final slots = await ref.watch(pwRepositoryProvider).getRange(from, until);
-  for (final slot in slots) {
-    record(HistoryKeys.publicWitnessing, slot.assignment, slot.date);
-  }
+      final slots = await ref.watch(pwRepositoryProvider).getRange(from, until);
+      for (final slot in slots) {
+        record(HistoryKeys.publicWitnessing, slot.assignment, slot.date);
+      }
 
-  final meetings =
-      await ref.watch(fsmRepositoryProvider).getRange(from, until);
-  for (final meeting in meetings) {
-    record(HistoryKeys.fieldServiceMeetings, meeting.assignment, meeting.date);
-  }
+      final meetings = await ref
+          .watch(fsmRepositoryProvider)
+          .getRange(from, until);
+      for (final meeting in meetings) {
+        record(
+          HistoryKeys.fieldServiceMeetings,
+          meeting.assignment,
+          meeting.date,
+        );
+      }
 
-  return result;
-});
+      return result;
+    });

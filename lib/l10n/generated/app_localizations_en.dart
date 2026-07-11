@@ -535,6 +535,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get lmmClassMain => 'Main hall';
+
+  @override
+  String lmmClassN(int index) {
+    return 'Class $index';
+  }
+
+  @override
   String get partEdit => 'Edit part';
 
   @override
@@ -1014,6 +1022,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsLmmMeeting => 'Midweek meeting (day and time)';
+
+  @override
+  String get settingsLmmClassCount => 'Midweek meeting classes';
 
   @override
   String get settingsWeekendMeeting => 'Weekend meeting (day and time)';

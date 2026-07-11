@@ -4,6 +4,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
+import '../../core/data/congregation_repository.dart';
 import '../../core/data/lmm_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -29,13 +30,31 @@ Future<void> saveLmmWeek(WidgetRef ref, LmmWeek week) async {
   ref.invalidate(assignmentHistoryProvider);
 }
 
+/// Selected class in the schedule view (1 = main hall); kept top-level so
+/// the selection survives week paging.
+class LmmSelectedClassNotifier extends Notifier<int> {
+  @override
+  int build() => 1;
+
+  void set(int classIndex) => state = classIndex;
+}
+
+final lmmSelectedClassProvider =
+    NotifierProvider<LmmSelectedClassNotifier, int>(
+      LmmSelectedClassNotifier.new,
+    );
+
+String lmmClassLabel(AppLocalizations l10n, int classIndex) =>
+    classIndex == 1 ? l10n.lmmClassMain : l10n.lmmClassN(classIndex);
+
 String lmmPartDefaultLabel(AppLocalizations l10n, LmmPart part) {
   if (part.title.isNotEmpty) return part.title;
   return switch (part.type) {
     LmmPartType.chairman => l10n.partChairman,
-    LmmPartType.prayer => part.section == LmmSection.opening
-        ? l10n.partOpeningPrayer
-        : l10n.partClosingPrayer,
+    LmmPartType.prayer =>
+      part.section == LmmSection.opening
+          ? l10n.partOpeningPrayer
+          : l10n.partClosingPrayer,
     LmmPartType.gems => l10n.partGems,
     LmmPartType.bibleReading => l10n.partBibleReading,
     LmmPartType.cbsConductor => l10n.partCbs,
@@ -74,18 +93,21 @@ class _EmptyWeekView extends ConsumerStatefulWidget {
 
   static LmmWeek _skeleton(String weekId) {
     const uuid = Uuid();
-    LmmPart part(LmmSection s, LmmPartType t, {int? min}) => LmmPart(
-        id: uuid.v4(), section: s, type: t, durationMin: min);
-    return LmmWeek(id: weekId, parts: [
-      part(LmmSection.opening, LmmPartType.chairman),
-      part(LmmSection.opening, LmmPartType.prayer),
-      part(LmmSection.treasures, LmmPartType.treasures, min: 10),
-      part(LmmSection.treasures, LmmPartType.gems, min: 10),
-      part(LmmSection.treasures, LmmPartType.bibleReading, min: 4),
-      part(LmmSection.living, LmmPartType.cbsConductor, min: 30),
-      part(LmmSection.living, LmmPartType.cbsReader),
-      part(LmmSection.closing, LmmPartType.prayer),
-    ]);
+    LmmPart part(LmmSection s, LmmPartType t, {int? min}) =>
+        LmmPart(id: uuid.v4(), section: s, type: t, durationMin: min);
+    return LmmWeek(
+      id: weekId,
+      parts: [
+        part(LmmSection.opening, LmmPartType.chairman),
+        part(LmmSection.opening, LmmPartType.prayer),
+        part(LmmSection.treasures, LmmPartType.treasures, min: 10),
+        part(LmmSection.treasures, LmmPartType.gems, min: 10),
+        part(LmmSection.treasures, LmmPartType.bibleReading, min: 4),
+        part(LmmSection.living, LmmPartType.cbsConductor, min: 30),
+        part(LmmSection.living, LmmPartType.cbsReader),
+        part(LmmSection.closing, LmmPartType.prayer),
+      ],
+    );
   }
 
   @override
@@ -102,8 +124,9 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
       setState(() => _error = context.l10n.importNoWeeks);
       return;
     }
-    await Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => EpubImportScreen(weeks: weeks)));
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => EpubImportScreen(weeks: weeks)));
   }
 
   Future<void> _run(Future<List<LmmWeek>?> Function() action) async {
@@ -153,22 +176,26 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
               onPressed: _busy
                   ? null
                   : () => saveLmmWeek(
-                      ref, _EmptyWeekView._skeleton(widget.weekId)),
+                      ref,
+                      _EmptyWeekView._skeleton(widget.weekId),
+                    ),
               icon: const Icon(Icons.add),
               label: Text(l10n.weekCreateEmpty),
             ),
             if (_busy) ...[
               const SizedBox(height: 16),
               const SizedBox(
-                  width: 20,
-                  height: 20,
-                  child: CircularProgressIndicator(strokeWidth: 2)),
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
             ],
             if (_error != null) ...[
               const SizedBox(height: 8),
-              Text(_error!,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.error)),
+              Text(
+                _error!,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ],
           ],
         ],
@@ -184,22 +211,25 @@ class _WeekContent extends ConsumerWidget {
   final bool canEdit;
 
   static Color _sectionColor(LmmSection s) => switch (s) {
-        LmmSection.treasures => const Color(0xFF2F6B77),
-        LmmSection.ministry => const Color(0xFF9C6F19),
-        LmmSection.living => const Color(0xFF8E2E33),
-        _ => const Color(0xFF5C6BC0),
-      };
+    LmmSection.treasures => const Color(0xFF2F6B77),
+    LmmSection.ministry => const Color(0xFF9C6F19),
+    LmmSection.living => const Color(0xFF8E2E33),
+    _ => const Color(0xFF5C6BC0),
+  };
 
   String _sectionLabel(AppLocalizations l10n, LmmSection s) => switch (s) {
-        LmmSection.opening => l10n.sectionOpening,
-        LmmSection.treasures => l10n.sectionTreasures,
-        LmmSection.ministry => l10n.sectionMinistry,
-        LmmSection.living => l10n.sectionLiving,
-        LmmSection.closing => l10n.sectionClosing,
-      };
+    LmmSection.opening => l10n.sectionOpening,
+    LmmSection.treasures => l10n.sectionTreasures,
+    LmmSection.ministry => l10n.sectionMinistry,
+    LmmSection.living => l10n.sectionLiving,
+    LmmSection.closing => l10n.sectionClosing,
+  };
 
   Future<void> _editSongs(
-      BuildContext context, WidgetRef ref, AppLocalizations l10n) async {
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) async {
     final ctrl = TextEditingController(text: week.songs.join(', '));
     final saved = await showDialog<bool>(
       context: context,
@@ -208,11 +238,13 @@ class _WeekContent extends ConsumerWidget {
         content: TextField(controller: ctrl, autofocus: true),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.commonCancel)),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
           FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.commonSave)),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonSave),
+          ),
         ],
       ),
     );
@@ -228,7 +260,10 @@ class _WeekContent extends ConsumerWidget {
   }
 
   Future<void> _confirmDeleteWeek(
-      BuildContext context, WidgetRef ref, AppLocalizations l10n) async {
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -236,11 +271,13 @@ class _WeekContent extends ConsumerWidget {
         content: Text(l10n.commonConfirmDeleteBody),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.commonCancel)),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
           FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.commonDelete)),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonDelete),
+          ),
         ],
       ),
     );
@@ -254,6 +291,14 @@ class _WeekContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final classCount =
+        (ref.watch(congregationMetaProvider).value?.lmmClassCount ?? 1).clamp(
+          1,
+          3,
+        );
+    final classIndex = classCount >= 2
+        ? ref.watch(lmmSelectedClassProvider).clamp(1, classCount)
+        : 1;
 
     final children = <Widget>[
       Padding(
@@ -265,8 +310,7 @@ class _WeekContent extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (week.weekLabel.isNotEmpty)
-                    Text(week.weekLabel,
-                        style: theme.textTheme.titleMedium),
+                    Text(week.weekLabel, style: theme.textTheme.titleMedium),
                   if (week.songs.isNotEmpty || canEdit)
                     InkWell(
                       onTap: canEdit
@@ -287,8 +331,7 @@ class _WeekContent extends ConsumerWidget {
                   if (v == 'delete') _confirmDeleteWeek(context, ref, l10n);
                 },
                 itemBuilder: (_) => [
-                  PopupMenuItem(
-                      value: 'delete', child: Text(l10n.weekDelete)),
+                  PopupMenuItem(value: 'delete', child: Text(l10n.weekDelete)),
                 ],
               ),
           ],
@@ -296,36 +339,64 @@ class _WeekContent extends ConsumerWidget {
       ),
     ];
 
+    if (classCount >= 2) {
+      children.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+          child: Center(
+            child: SegmentedButton<int>(
+              segments: [
+                for (var c = 1; c <= classCount; c++)
+                  ButtonSegment(value: c, label: Text(lmmClassLabel(l10n, c))),
+              ],
+              selected: {classIndex},
+              onSelectionChanged: (s) =>
+                  ref.read(lmmSelectedClassProvider.notifier).set(s.first),
+            ),
+          ),
+        ),
+      );
+    }
+
     for (final section in LmmSection.values) {
       final parts = week.parts.where((p) => p.section == section).toList();
       // Non-admins don't need empty sections; admins get them with an
       // add-part button.
       if (parts.isEmpty && !canEdit) continue;
-      children.add(Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 2),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                _sectionLabel(l10n, section),
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: _sectionColor(section),
-                  fontWeight: FontWeight.bold,
+      children.add(
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 2),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  _sectionLabel(l10n, section),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: _sectionColor(section),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            if (canEdit)
-              IconButton(
-                visualDensity: VisualDensity.compact,
-                tooltip: l10n.partAdd,
-                icon: const Icon(Icons.add, size: 18),
-                onPressed: () => _addPart(context, ref, section),
-              ),
-          ],
+              if (canEdit)
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  tooltip: l10n.partAdd,
+                  icon: const Icon(Icons.add, size: 18),
+                  onPressed: () => _addPart(context, ref, section),
+                ),
+            ],
+          ),
         ),
-      ));
+      );
       for (final part in parts) {
-        children.add(_PartTile(week: week, part: part, canEdit: canEdit));
+        children.add(
+          _PartTile(
+            week: week,
+            part: part,
+            canEdit: canEdit,
+            classIndex: classIndex,
+          ),
+        );
       }
     }
 
@@ -336,7 +407,10 @@ class _WeekContent extends ConsumerWidget {
   }
 
   Future<void> _addPart(
-      BuildContext context, WidgetRef ref, LmmSection section) async {
+    BuildContext context,
+    WidgetRef ref,
+    LmmSection section,
+  ) async {
     final part = await showLmmPartDialog(context, section: section);
     if (part == null) return;
     // Insert after the last existing part of the same section.
@@ -348,12 +422,12 @@ class _WeekContent extends ConsumerWidget {
         break;
       }
     }
-    if (insertAt == parts.length &&
-        parts.every((p) => p.section != section)) {
+    if (insertAt == parts.length && parts.every((p) => p.section != section)) {
       // No part of this section yet: keep global section order.
       final order = LmmSection.values.indexOf(section);
       insertAt = parts.indexWhere(
-          (p) => LmmSection.values.indexOf(p.section) > order);
+        (p) => LmmSection.values.indexOf(p.section) > order,
+      );
       if (insertAt < 0) insertAt = parts.length;
     }
     parts.insert(insertAt, part);
@@ -362,15 +436,21 @@ class _WeekContent extends ConsumerWidget {
 }
 
 /// Dialog for creating/editing a part (title, duration, type for new parts).
-Future<LmmPart?> showLmmPartDialog(BuildContext context,
-    {LmmPart? existing, LmmSection? section}) async {
+Future<LmmPart?> showLmmPartDialog(
+  BuildContext context, {
+  LmmPart? existing,
+  LmmSection? section,
+}) async {
   final l10n = context.l10n;
   final titleCtrl = TextEditingController(text: existing?.title ?? '');
-  final descriptionCtrl =
-      TextEditingController(text: existing?.description ?? '');
+  final descriptionCtrl = TextEditingController(
+    text: existing?.description ?? '',
+  );
   final durationCtrl = TextEditingController(
-      text: existing?.durationMin?.toString() ?? '');
-  var type = existing?.type ??
+    text: existing?.durationMin?.toString() ?? '',
+  );
+  var type =
+      existing?.type ??
       switch (section) {
         LmmSection.ministry => LmmPartType.fieldMinistry,
         LmmSection.living => LmmPartType.living,
@@ -406,8 +486,7 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
             const SizedBox(height: 12),
             TextField(
               controller: descriptionCtrl,
-              decoration:
-                  InputDecoration(labelText: l10n.partDescription),
+              decoration: InputDecoration(labelText: l10n.partDescription),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -419,20 +498,25 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.commonCancel)),
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.commonCancel),
+          ),
           FilledButton(
             onPressed: () {
-              final base = existing ??
+              final base =
+                  existing ??
                   LmmPart(
-                      id: const Uuid().v4(),
-                      section: section ?? LmmSection.living,
-                      type: type);
-              Navigator.of(context).pop(base.copyWith(
-                title: titleCtrl.text.trim(),
-                description: descriptionCtrl.text.trim(),
-                durationMin: int.tryParse(durationCtrl.text.trim()),
-              ));
+                    id: const Uuid().v4(),
+                    section: section ?? LmmSection.living,
+                    type: type,
+                  );
+              Navigator.of(context).pop(
+                base.copyWith(
+                  title: titleCtrl.text.trim(),
+                  description: descriptionCtrl.text.trim(),
+                  durationMin: int.tryParse(durationCtrl.text.trim()),
+                ),
+              );
             },
             child: Text(l10n.commonSave),
           ),
@@ -447,21 +531,39 @@ Future<LmmPart?> showLmmPartDialog(BuildContext context,
 }
 
 class _PartTile extends ConsumerWidget {
-  const _PartTile(
-      {required this.week, required this.part, required this.canEdit});
+  const _PartTile({
+    required this.week,
+    required this.part,
+    required this.canEdit,
+    required this.classIndex,
+  });
 
   final LmmWeek week;
   final LmmPart part;
   final bool canEdit;
 
-  Future<void> _assign(BuildContext context, WidgetRef ref,
-      {required bool assistant}) async {
+  /// Class selected in the schedule view; only student parts store separate
+  /// assignments per class (see [_effectiveClass]).
+  final int classIndex;
+
+  int get _effectiveClass => part.isStudentPart ? classIndex : 1;
+
+  Future<void> _assign(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool assistant,
+  }) async {
     final l10n = context.l10n;
-    final label = lmmPartDefaultLabel(l10n, part);
+    final classIndex = _effectiveClass;
+    var label = lmmPartDefaultLabel(l10n, part);
+    if (assistant) label = '${l10n.partAssistant} — $label';
+    if (classIndex > 1) label = '$label — ${lmmClassLabel(l10n, classIndex)}';
     final result = await showAssignmentEditor(
       context,
-      title: assistant ? '${l10n.partAssistant} — $label' : label,
-      initial: assistant ? part.assistant : part.assignment,
+      title: label,
+      initial: assistant
+          ? part.assistantFor(classIndex)
+          : part.assignmentFor(classIndex),
       historyKey: assistant
           ? HistoryKeys.lmmAssistant
           : HistoryKeys.lmmPart(part.type),
@@ -471,14 +573,15 @@ class _PartTile extends ConsumerWidget {
     );
     if (result == null) return;
     final updated = assistant
-        ? part.copyWith(assistant: result)
-        : part.copyWith(assignment: result);
+        ? part.withAssistantFor(classIndex, result)
+        : part.withAssignmentFor(classIndex, result);
     await _saveVariant(ref, updated);
   }
 
   Future<void> _saveVariant(WidgetRef ref, LmmPart updated) async {
-    final parts =
-        week.parts.map((p) => p.id == updated.id ? updated : p).toList();
+    final parts = week.parts
+        .map((p) => p.id == updated.id ? updated : p)
+        .toList();
     await saveLmmWeek(ref, week.copyWith(parts: parts));
   }
 
@@ -491,19 +594,21 @@ class _PartTile extends ConsumerWidget {
         content: Text(l10n.partDeleteConfirm),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.commonCancel)),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel),
+          ),
           FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.commonDelete)),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonDelete),
+          ),
         ],
       ),
     );
     if (confirmed == true) {
       await saveLmmWeek(
-          ref,
-          week.copyWith(
-              parts: week.parts.where((p) => p.id != part.id).toList()));
+        ref,
+        week.copyWith(parts: week.parts.where((p) => p.id != part.id).toList()),
+      );
     }
   }
 
@@ -512,8 +617,10 @@ class _PartTile extends ConsumerWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final isMinistryPart = part.type == LmmPartType.fieldMinistry;
+    final assignment = part.assignmentFor(_effectiveClass);
+    final assistantAssignment = part.assistantFor(_effectiveClass);
     final showAssistant =
-        isMinistryPart && (canEdit || part.assistant.isNotEmpty);
+        isMinistryPart && (canEdit || assistantAssignment.isNotEmpty);
 
     return ListTile(
       dense: true,
@@ -522,19 +629,27 @@ class _PartTile extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (part.description.isNotEmpty)
-            Text(part.description,
-                style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant)),
-          AssignmentText(part.assignment),
+            Text(
+              part.description,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          AssignmentText(assignment),
           if (showAssistant)
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('${l10n.partAssistant}: ',
-                    style: theme.textTheme.bodySmall),
+                Text(
+                  '${l10n.partAssistant}: ',
+                  style: theme.textTheme.bodySmall,
+                ),
                 Flexible(
-                    child: AssignmentText(part.assistant,
-                        style: theme.textTheme.bodySmall)),
+                  child: AssignmentText(
+                    assistantAssignment,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ),
               ],
             ),
         ],
@@ -542,9 +657,7 @@ class _PartTile extends ConsumerWidget {
       leading: SizedBox(
         width: 48,
         child: Text(
-          part.durationMin == null
-              ? ''
-              : l10n.partMinutes(part.durationMin!),
+          part.durationMin == null ? '' : l10n.partMinutes(part.durationMin!),
           style: theme.textTheme.bodySmall,
           textAlign: TextAlign.right,
         ),
@@ -558,23 +671,24 @@ class _PartTile extends ConsumerWidget {
                   case 'assistant':
                     await _assign(context, ref, assistant: true);
                   case 'edit':
-                    final edited =
-                        await showLmmPartDialog(context, existing: part);
+                    final edited = await showLmmPartDialog(
+                      context,
+                      existing: part,
+                    );
                     if (edited != null) await _saveVariant(ref, edited);
                   case 'delete':
                     await _delete(context, ref);
                 }
               },
               itemBuilder: (_) => [
-                PopupMenuItem(
-                    value: 'assign', child: Text(l10n.commonEdit)),
+                PopupMenuItem(value: 'assign', child: Text(l10n.commonEdit)),
                 if (isMinistryPart)
                   PopupMenuItem(
-                      value: 'assistant',
-                      child: Text(l10n.partAssistant)),
+                    value: 'assistant',
+                    child: Text(l10n.partAssistant),
+                  ),
                 PopupMenuItem(value: 'edit', child: Text(l10n.partEdit)),
-                PopupMenuItem(
-                    value: 'delete', child: Text(l10n.commonDelete)),
+                PopupMenuItem(value: 'delete', child: Text(l10n.commonDelete)),
               ],
             )
           : null,
@@ -599,21 +713,16 @@ class _SupportCard extends ConsumerWidget {
       microphones: week.microphones,
       audioVideo: week.audioVideo,
       customAssignments: week.customAssignments,
-      onChanged: ({
-        attendants,
-        microphones,
-        audioVideo,
-        customAssignments,
-      }) =>
+      onChanged: ({attendants, microphones, audioVideo, customAssignments}) =>
           saveLmmWeek(
-        ref,
-        week.copyWith(
-          attendants: attendants ?? week.attendants,
-          microphones: microphones ?? week.microphones,
-          audioVideo: audioVideo ?? week.audioVideo,
-          customAssignments: customAssignments ?? week.customAssignments,
-        ),
-      ),
+            ref,
+            week.copyWith(
+              attendants: attendants ?? week.attendants,
+              microphones: microphones ?? week.microphones,
+              audioVideo: audioVideo ?? week.audioVideo,
+              customAssignments: customAssignments ?? week.customAssignments,
+            ),
+          ),
     );
   }
 }
@@ -640,7 +749,8 @@ class SupportAssignmentsCard extends ConsumerWidget {
     Assignment? microphones,
     Assignment? audioVideo,
     List<CustomAssignment>? customAssignments,
-  }) onChanged;
+  })
+  onChanged;
 
   Future<void> _edit(
     BuildContext context, {
@@ -650,11 +760,13 @@ class SupportAssignmentsCard extends ConsumerWidget {
     required bool Function(Publisher) qualifies,
     required Future<void> Function(Assignment) save,
   }) async {
-    final result = await showAssignmentEditor(context,
-        title: title,
-        initial: initial,
-        historyKey: historyKey,
-        qualifies: qualifies);
+    final result = await showAssignmentEditor(
+      context,
+      title: title,
+      initial: initial,
+      historyKey: historyKey,
+      qualifies: qualifies,
+    );
     if (result != null) await save(result);
   }
 
@@ -672,19 +784,23 @@ class SupportAssignmentsCard extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.commonCancel)),
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.commonCancel),
+          ),
           FilledButton(
-              onPressed: () => Navigator.of(context).pop(ctrl.text.trim()),
-              child: Text(l10n.commonAdd)),
+            onPressed: () => Navigator.of(context).pop(ctrl.text.trim()),
+            child: Text(l10n.commonAdd),
+          ),
         ],
       ),
     );
     if (label != null && label.isNotEmpty) {
-      await onChanged(customAssignments: [
-        ...customAssignments,
-        CustomAssignment(label: label),
-      ]);
+      await onChanged(
+        customAssignments: [
+          ...customAssignments,
+          CustomAssignment(label: label),
+        ],
+      );
     }
     ctrl.dispose();
   }
@@ -698,18 +814,18 @@ class SupportAssignmentsCard extends ConsumerWidget {
       required Assignment assignment,
       required VoidCallback? onTap,
       VoidCallback? onDelete,
-    }) =>
-        ListTile(
-          dense: true,
-          title: Text(label),
-          subtitle: AssignmentText(assignment),
-          onTap: onTap,
-          trailing: onDelete != null
-              ? IconButton(
-                  icon: const Icon(Icons.delete_outline, size: 18),
-                  onPressed: onDelete)
-              : null,
-        );
+    }) => ListTile(
+      dense: true,
+      title: Text(label),
+      subtitle: AssignmentText(assignment),
+      onTap: onTap,
+      trailing: onDelete != null
+          ? IconButton(
+              icon: const Icon(Icons.delete_outline, size: 18),
+              onPressed: onDelete,
+            )
+          : null,
+    );
 
     return Card(
       child: Column(
@@ -720,36 +836,42 @@ class SupportAssignmentsCard extends ConsumerWidget {
             assignment: attendants,
             onTap: !canEdit
                 ? null
-                : () => _edit(context,
+                : () => _edit(
+                    context,
                     title: l10n.supportAttendants,
                     initial: attendants,
                     historyKey: HistoryKeys.attendant,
                     qualifies: (p) => p.qualifications.attendant,
-                    save: (a) => onChanged(attendants: a)),
+                    save: (a) => onChanged(attendants: a),
+                  ),
           ),
           row(
             label: l10n.supportMicrophones,
             assignment: microphones,
             onTap: !canEdit
                 ? null
-                : () => _edit(context,
+                : () => _edit(
+                    context,
                     title: l10n.supportMicrophones,
                     initial: microphones,
                     historyKey: HistoryKeys.microphone,
                     qualifies: (p) => p.qualifications.microphone,
-                    save: (a) => onChanged(microphones: a)),
+                    save: (a) => onChanged(microphones: a),
+                  ),
           ),
           row(
             label: l10n.supportAudioVideo,
             assignment: audioVideo,
             onTap: !canEdit
                 ? null
-                : () => _edit(context,
+                : () => _edit(
+                    context,
                     title: l10n.supportAudioVideo,
                     initial: audioVideo,
                     historyKey: HistoryKeys.audioVideo,
                     qualifies: (p) => p.qualifications.audioVideo,
-                    save: (a) => onChanged(audioVideo: a)),
+                    save: (a) => onChanged(audioVideo: a),
+                  ),
           ),
           for (var i = 0; i < customAssignments.length; i++)
             row(
@@ -757,17 +879,18 @@ class SupportAssignmentsCard extends ConsumerWidget {
               assignment: customAssignments[i].assignment,
               onTap: !canEdit
                   ? null
-                  : () => _edit(context,
+                  : () => _edit(
+                      context,
                       title: customAssignments[i].label,
                       initial: customAssignments[i].assignment,
                       historyKey: HistoryKeys.custom,
                       qualifies: (_) => true,
                       save: (a) {
                         final updated = [...customAssignments];
-                        updated[i] =
-                            updated[i].copyWith(assignment: a);
+                        updated[i] = updated[i].copyWith(assignment: a);
                         return onChanged(customAssignments: updated);
-                      }),
+                      },
+                    ),
               onDelete: !canEdit
                   ? null
                   : () {

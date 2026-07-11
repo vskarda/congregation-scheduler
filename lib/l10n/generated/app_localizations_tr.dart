@@ -533,6 +533,14 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get lmmClassMain => 'Ana salon';
+
+  @override
+  String lmmClassN(int index) {
+    return 'Sınıf $index';
+  }
+
+  @override
   String get partEdit => 'Kısmı Düzenle';
 
   @override
@@ -1014,6 +1022,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsLmmMeeting => 'Hafta içi ibadeti (gün ve saat)';
+
+  @override
+  String get settingsLmmClassCount => 'Hafta içi ibadet sınıf sayısı';
 
   @override
   String get settingsWeekendMeeting => 'Hafta sonu ibadeti (gün ve saat)';
