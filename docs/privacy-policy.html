@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Congregation Scheduler</title>
+<style>
+  :root { color-scheme: light dark; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e6e6e6; background: #14161a; }
+    a { color: #7db6ff; }
+    table, th, td { border-color: #3a3d44 !important; }
+    code { background: #23262c; }
+  }
+  h1 { font-size: 1.6rem; margin-bottom: .25rem; }
+  h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  .updated { color: #666; font-size: .9rem; margin-top: 0; }
+  .notice {
+    background: #fff8e1;
+    border: 1px solid #f0d98c;
+    border-radius: 8px;
+    padding: .9rem 1.1rem;
+    margin: 1.25rem 0;
+  }
+  @media (prefers-color-scheme: dark) {
+    .notice { background: #2a2410; border-color: #6b5b1f; }
+  }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ddd; padding: .5rem .6rem; text-align: left; vertical-align: top; font-size: .95rem; }
+  th { background: rgba(127,127,127,.08); }
+  code { background: #f2f2f2; padding: .1rem .35rem; border-radius: 4px; font-size: .9em; }
+</style>
+</head>
+<body>
+
+<h1>Privacy Policy — Congregation Scheduler</h1>
+<p class="updated">Last updated: [DATE — fill in on publish]</p>
+
+<p>Congregation Scheduler ("the app") is developed independently by
+[DEVELOPER NAME / PLACEHOLDER] ("we", "us"). This policy explains what
+data the app handles and, importantly, <strong>who controls it</strong> —
+because of how the app is built, that is usually not us.</p>
+
+<div class="notice">
+<strong>This app is not affiliated with, endorsed by, or produced by the
+Watch Tower Bible and Tract Society or any official Jehovah's Witnesses
+entity.</strong> It is an independent, unofficial tool built for
+congregations to self-host their own scheduling data.
+</div>
+
+<h2>1. The app is self-hosted — we do not run a server</h2>
+<p>Congregation Scheduler has no central backend operated by us. Each
+congregation's administrator creates and owns a <strong>free Firebase
+project</strong> under their own Google account, and the app connects
+directly to that project. This means:</p>
+<ul>
+  <li>Your congregation's data lives in infrastructure your own
+  administrator controls, not on servers we operate.</li>
+  <li>We (the app developer) have <strong>no access, login, or backdoor</strong>
+  to any congregation's data. We cannot see, export, or delete it — only
+  your congregation's administrator(s) can, through their own Firebase
+  console.</li>
+  <li>Each congregation's administrator is effectively the data controller
+  for that congregation's data. If you have questions about how your
+  specific congregation's data is handled, contact your local
+  administrator first.</li>
+</ul>
+
+<h2>2. What data the app collects, and where it goes</h2>
+<p>All of the data below is written directly from your device to
+<strong>your congregation's own Firebase project</strong> (Google Cloud
+infrastructure, in whatever region your administrator selected when
+creating it). None of it passes through, or is stored by, any server we
+operate.</p>
+
+<table>
+<tr><th>Category</th><th>Examples</th><th>Notes</th></tr>
+<tr><td>Account data</td><td>E-mail address, password (handled by Firebase Authentication)</td><td>Needed to sign in</td></tr>
+<tr><td>Profile data</td><td>Name, phone number, birth date, an emergency-contact note</td><td>Entered by you or an administrator; visible only to you and administrators with the relevant role</td></tr>
+<tr><td>Scheduling &amp; assignment data</td><td>Meeting parts, roles, qualifications, attendance counts</td><td>Visible to verified members of your congregation per their granted roles</td></tr>
+<tr><td>Ministry activity</td><td>Field-service reports, monthly summaries</td><td>Entered by you or an administrator</td></tr>
+<tr><td>Territory data</td><td>Addresses/notes you or your congregation enter, map links</td><td>Text you type in, not derived from device location</td></tr>
+<tr><td>Files you upload</td><td>PDFs, images attached to the information board or reports</td><td>Stored (chunked) inside your congregation's Firestore database, capped at 10&nbsp;MB per file</td></tr>
+</table>
+
+<p>We do <strong>not</strong> collect analytics, usage statistics,
+advertising identifiers, or crash reports. The app contains no analytics
+SDK, no advertising SDK, and no third-party tracker of any kind — only
+Firebase Authentication and Firestore (the database), both operated by
+Google on behalf of your congregation's administrator.</p>
+
+<h2>3. Device permissions</h2>
+<table>
+<tr><th>Permission</th><th>Why the app asks for it</th></tr>
+<tr><td>Camera</td><td>To scan a congregation's invitation QR code during setup/registration</td></tr>
+<tr><td>Photo library</td><td>To pick a previously-saved QR code image instead of scanning live</td></tr>
+<tr><td>Calendar</td><td>To add a meeting or assignment to your device calendar, only when you choose to</td></tr>
+<tr><td>Contacts</td><td>Required by the underlying calendar-event API on some platforms; the app does not read or store your contacts</td></tr>
+<tr><td>Internet</td><td>To communicate with your congregation's Firebase project</td></tr>
+</table>
+<p>The app requests each permission only at the moment it's needed for the
+action you took, and none of them are used for tracking.</p>
+
+<h2>4. Who can see your data</h2>
+<p>Access is controlled by Firestore security rules published by your
+congregation's administrator (the app ships a reference rules file that
+every self-hosted instance uses). In short:</p>
+<ul>
+  <li>Nothing is visible until an administrator marks your account
+  "verified."</li>
+  <li>Sensitive fields (e-mail, phone, birth date, emergency note) are only
+  readable by you and administrators with publisher-management rights.</li>
+  <li>Administrators can grant granular roles (e.g. schedule editing,
+  reports) to other verified members.</li>
+</ul>
+
+<h2>5. Third parties</h2>
+<p>The only third party involved is <strong>Google Firebase</strong>, which
+provides the authentication and database infrastructure your
+congregation's administrator chose to use. We do not sell data, share it
+with advertisers, or transmit it anywhere else. Google's own privacy
+practices for Firebase apply to data at that layer; see
+<a href="https://policies.google.com/privacy">Google's Privacy Policy</a>
+and
+<a href="https://firebase.google.com/terms/data-processing-terms">Firebase's data processing terms</a>.</p>
+
+<h2>6. Data retention &amp; deletion</h2>
+<p>Because there is no central server, data retention is controlled
+entirely by your congregation's administrator through their Firebase
+project:</p>
+<ul>
+  <li>An administrator can remove a publisher record (and that publisher's
+  private profile data) from within the app.</li>
+  <li>An administrator can delete data, or the entire Firebase project, at
+  any time from the Firebase console — this permanently removes the
+  congregation's data.</li>
+  <li>[PLACEHOLDER — update once in-app self-service account deletion
+  ships: describe how an individual user can request deletion of their
+  own account directly from the app, or the web/e-mail process to request
+  it from their administrator in the meantime.]</li>
+</ul>
+
+<h2>7. Children's data</h2>
+<p>The app is a scheduling tool used by congregation administrators and
+members generally acting in a volunteer capacity; it is not directed at
+children, and we do not knowingly collect data specifically from children
+independent of a responsible administrator entering or supervising that
+data on the congregation's behalf.</p>
+
+<h2>8. Changes to this policy</h2>
+<p>If this policy changes, the "Last updated" date above will change and,
+for material changes, we will note it in the app's release notes.</p>
+
+<h2>9. Contact</h2>
+<p>Questions about the app itself (not your congregation's specific data —
+contact your administrator for that):
+<strong>[SUPPORT EMAIL — confirm before publishing, e.g. vskarda@gmail.com]</strong>.</p>
+
+</body>
+</html>
