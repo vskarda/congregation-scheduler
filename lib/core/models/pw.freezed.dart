@@ -636,4 +636,283 @@ $AssignmentCopyWith<$Res> get assignment {
 }
 }
 
+
+/// @nodoc
+mixin _$PwApplication {
+
+@JsonKey(includeFromJson: false, includeToJson: false) String get id; String get slotId;/// yyyy-MM-dd; denormalized copy of the slot date for range queries.
+ String get date;/// == the applicant's auth uid.
+ String get publisherId;@NullableTimestampConverter() DateTime? get appliedAt;
+/// Create a copy of PwApplication
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PwApplicationCopyWith<PwApplication> get copyWith => _$PwApplicationCopyWithImpl<PwApplication>(this as PwApplication, _$identity);
+
+  /// Serializes this PwApplication to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PwApplication&&(identical(other.id, id) || other.id == id)&&(identical(other.slotId, slotId) || other.slotId == slotId)&&(identical(other.date, date) || other.date == date)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,slotId,date,publisherId,appliedAt);
+
+@override
+String toString() {
+  return 'PwApplication(id: $id, slotId: $slotId, date: $date, publisherId: $publisherId, appliedAt: $appliedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PwApplicationCopyWith<$Res>  {
+  factory $PwApplicationCopyWith(PwApplication value, $Res Function(PwApplication) _then) = _$PwApplicationCopyWithImpl;
+@useResult
+$Res call({
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String slotId, String date, String publisherId,@NullableTimestampConverter() DateTime? appliedAt
+});
+
+
+
+
+}
+/// @nodoc
+class _$PwApplicationCopyWithImpl<$Res>
+    implements $PwApplicationCopyWith<$Res> {
+  _$PwApplicationCopyWithImpl(this._self, this._then);
+
+  final PwApplication _self;
+  final $Res Function(PwApplication) _then;
+
+/// Create a copy of PwApplication
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? slotId = null,Object? date = null,Object? publisherId = null,Object? appliedAt = freezed,}) {
+  return _then(_self.copyWith(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,slotId: null == slotId ? _self.slotId : slotId // ignore: cast_nullable_to_non_nullable
+as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as String,publisherId: null == publisherId ? _self.publisherId : publisherId // ignore: cast_nullable_to_non_nullable
+as String,appliedAt: freezed == appliedAt ? _self.appliedAt : appliedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+}
+
+
+/// Adds pattern-matching-related methods to [PwApplication].
+extension PwApplicationPatterns on PwApplication {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _PwApplication value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _PwApplication() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _PwApplication value)  $default,){
+final _that = this;
+switch (_that) {
+case _PwApplication():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _PwApplication value)?  $default,){
+final _that = this;
+switch (_that) {
+case _PwApplication() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String slotId,  String date,  String publisherId, @NullableTimestampConverter()  DateTime? appliedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _PwApplication() when $default != null:
+return $default(_that.id,_that.slotId,_that.date,_that.publisherId,_that.appliedAt);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String slotId,  String date,  String publisherId, @NullableTimestampConverter()  DateTime? appliedAt)  $default,) {final _that = this;
+switch (_that) {
+case _PwApplication():
+return $default(_that.id,_that.slotId,_that.date,_that.publisherId,_that.appliedAt);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String slotId,  String date,  String publisherId, @NullableTimestampConverter()  DateTime? appliedAt)?  $default,) {final _that = this;
+switch (_that) {
+case _PwApplication() when $default != null:
+return $default(_that.id,_that.slotId,_that.date,_that.publisherId,_that.appliedAt);case _:
+  return null;
+
+}
+}
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class _PwApplication implements PwApplication {
+  const _PwApplication({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.slotId = '', this.date = '', this.publisherId = '', @NullableTimestampConverter() this.appliedAt});
+  factory _PwApplication.fromJson(Map<String, dynamic> json) => _$PwApplicationFromJson(json);
+
+@override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
+@override@JsonKey() final  String slotId;
+/// yyyy-MM-dd; denormalized copy of the slot date for range queries.
+@override@JsonKey() final  String date;
+/// == the applicant's auth uid.
+@override@JsonKey() final  String publisherId;
+@override@NullableTimestampConverter() final  DateTime? appliedAt;
+
+/// Create a copy of PwApplication
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$PwApplicationCopyWith<_PwApplication> get copyWith => __$PwApplicationCopyWithImpl<_PwApplication>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$PwApplicationToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PwApplication&&(identical(other.id, id) || other.id == id)&&(identical(other.slotId, slotId) || other.slotId == slotId)&&(identical(other.date, date) || other.date == date)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,slotId,date,publisherId,appliedAt);
+
+@override
+String toString() {
+  return 'PwApplication(id: $id, slotId: $slotId, date: $date, publisherId: $publisherId, appliedAt: $appliedAt)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$PwApplicationCopyWith<$Res> implements $PwApplicationCopyWith<$Res> {
+  factory _$PwApplicationCopyWith(_PwApplication value, $Res Function(_PwApplication) _then) = __$PwApplicationCopyWithImpl;
+@override @useResult
+$Res call({
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String slotId, String date, String publisherId,@NullableTimestampConverter() DateTime? appliedAt
+});
+
+
+
+
+}
+/// @nodoc
+class __$PwApplicationCopyWithImpl<$Res>
+    implements _$PwApplicationCopyWith<$Res> {
+  __$PwApplicationCopyWithImpl(this._self, this._then);
+
+  final _PwApplication _self;
+  final $Res Function(_PwApplication) _then;
+
+/// Create a copy of PwApplication
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? slotId = null,Object? date = null,Object? publisherId = null,Object? appliedAt = freezed,}) {
+  return _then(_PwApplication(
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,slotId: null == slotId ? _self.slotId : slotId // ignore: cast_nullable_to_non_nullable
+as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as String,publisherId: null == publisherId ? _self.publisherId : publisherId // ignore: cast_nullable_to_non_nullable
+as String,appliedAt: freezed == appliedAt ? _self.appliedAt : appliedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
+  ));
+}
+
+
+}
+
 // dart format on

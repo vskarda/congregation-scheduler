@@ -593,6 +593,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickerNever => 'Never assigned';
 
   @override
+  String get pickerApplied => 'Applied';
+
+  @override
   String get importTitle => 'Import Meeting Workbook';
 
   @override
@@ -724,6 +727,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pwDate => 'Date';
+
+  @override
+  String get pwApply => 'Apply for this slot';
+
+  @override
+  String get pwWithdraw => 'Withdraw application';
+
+  @override
+  String pwApplicants(int count) {
+    return '$count applied';
+  }
 
   @override
   String get fsmNoMeetings => 'No meetings for field service this week.';

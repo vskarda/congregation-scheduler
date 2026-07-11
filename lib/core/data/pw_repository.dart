@@ -17,8 +17,15 @@ class PwRepository {
   CollectionReference<Map<String, dynamic>> get _recurring =>
       _db.collection('pw_recurring');
 
+  CollectionReference<Map<String, dynamic>> get _applications =>
+      _db.collection('pw_applications');
+
   PwSlot _slotFromDoc(DocumentSnapshot<Map<String, dynamic>> doc) =>
       PwSlot.fromJson(doc.data()!).copyWith(id: doc.id);
+
+  PwApplication _applicationFromDoc(
+          DocumentSnapshot<Map<String, dynamic>> doc) =>
+      PwApplication.fromJson(doc.data()!).copyWith(id: doc.id);
 
   PwRecurring _ruleFromDoc(DocumentSnapshot<Map<String, dynamic>> doc) =>
       PwRecurring.fromJson(doc.data()!).copyWith(id: doc.id);
@@ -48,11 +55,19 @@ class PwRepository {
     }
   }
 
-  /// One-off slots are removed; recurring instances are kept as cancelled so
-  /// the materializer doesn't bring them back.
+  /// One-off slots are removed (along with their applications); recurring
+  /// instances are kept as cancelled so the materializer doesn't bring them
+  /// back (their applications become invisible orphans, which is harmless).
   Future<void> deleteSlot(PwSlot slot) async {
     if (slot.recurringId.isEmpty) {
-      await _slots.doc(slot.id).delete();
+      final apps =
+          await _applications.where('slotId', isEqualTo: slot.id).get();
+      final batch = _db.batch();
+      batch.delete(_slots.doc(slot.id));
+      for (final doc in apps.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
     } else {
       await _slots.doc(slot.id).set(
           slot.copyWith(cancelled: true).toJson());
@@ -75,6 +90,49 @@ class PwRepository {
         .where((s) => !s.cancelled)
         .toList();
   }
+
+  /// Applies [uid] for [slot]. Idempotent thanks to the deterministic doc id;
+  /// works for virtual (not yet materialized) slots too, whose ids are
+  /// equally deterministic.
+  Future<void> applyForSlot(PwSlot slot, String uid) =>
+      _applications.doc(PwApplication.docId(slot.id, uid)).set({
+        'slotId': slot.id,
+        'date': slot.date,
+        'publisherId': uid,
+        'appliedAt': FieldValue.serverTimestamp(),
+      });
+
+  Future<void> withdrawApplication(String slotId, String uid) =>
+      _applications.doc(PwApplication.docId(slotId, uid)).delete();
+
+  /// All applications in a date range. Only PW admins may run this query
+  /// (security rules restrict non-admins to their own applications).
+  Stream<List<PwApplication>> watchApplicationsInRange(
+          String fromDate, String toDate) =>
+      _applications
+          .where('date', isGreaterThanOrEqualTo: fromDate)
+          .where('date', isLessThanOrEqualTo: toDate)
+          .snapshots()
+          .map((snap) => snap.docs.map(_applicationFromDoc).toList());
+
+  /// Applications for one slot, oldest first. Admin-only query; queried by
+  /// slotId (not the denormalized date) so it stays correct even if an admin
+  /// moved the slot to another date.
+  Future<List<PwApplication>> getApplicationsForSlot(String slotId) async {
+    final snap =
+        await _applications.where('slotId', isEqualTo: slotId).get();
+    final list = snap.docs.map(_applicationFromDoc).toList();
+    list.sort((a, b) => (a.appliedAt ?? DateTime(2000))
+        .compareTo(b.appliedAt ?? DateTime(2000)));
+    return list;
+  }
+
+  /// The caller's own applications. Must filter by publisherId only so the
+  /// query is provable against the self-read security rule.
+  Stream<List<PwApplication>> watchMyApplications(String uid) => _applications
+      .where('publisherId', isEqualTo: uid)
+      .snapshots()
+      .map((snap) => snap.docs.map(_applicationFromDoc).toList());
 
   Stream<List<PwRecurring>> watchRecurring() =>
       _recurring.snapshots().map((snap) {

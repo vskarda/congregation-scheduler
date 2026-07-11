@@ -30,8 +30,11 @@ const LMM_ADMIN = 'lmm-admin-uid';
 const WEEKEND_ADMIN = 'weekend-admin-uid';
 const FSM_ADMIN = 'fsm-admin-uid';
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
+const PW_ADMIN = 'pw-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
+// Verified publisher with the public-witnessing qualification.
+const QUALIFIED = 'qualified-uid';
 
 const basePublisher = {
   firstName: 'Test',
@@ -91,6 +94,14 @@ async function seed() {
       ...basePublisher,
       roles: { ...basePublisher.roles, attendance: true },
     });
+    await setDoc(doc(f, `publishers/${PW_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, publicWitnessing: true },
+    });
+    await setDoc(doc(f, `publishers/${QUALIFIED}`), {
+      ...basePublisher,
+      qualifications: { publicWitnessing: true },
+    });
     await setDoc(doc(f, `publishers/${VERIFIED}`), { ...basePublisher });
     await setDoc(doc(f, `publishers/${UNVERIFIED}`), {
       ...basePublisher,
@@ -136,6 +147,28 @@ async function seed() {
       recurringId: '',
       cancelled: false,
       allAssigneeIds: [],
+    });
+    await setDoc(doc(f, 'pw_slots/slot1'), {
+      date: '2026-08-01',
+      startTime: '09:00',
+      endTime: '11:00',
+      location: 'Town square',
+      assignment: { publisherIds: [], freeText: '' },
+      recurringId: '',
+      cancelled: false,
+      allAssigneeIds: [],
+    });
+    await setDoc(doc(f, `pw_applications/slot1_${QUALIFIED}`), {
+      slotId: 'slot1',
+      date: '2026-08-01',
+      publisherId: QUALIFIED,
+      appliedAt: null,
+    });
+    await setDoc(doc(f, 'pw_applications/slot1_other-uid'), {
+      slotId: 'slot1',
+      date: '2026-08-01',
+      publisherId: 'other-uid',
+      appliedAt: null,
     });
   });
 }
@@ -354,6 +387,156 @@ describe('section roles', () => {
     );
     await assertFails(
       setDoc(doc(db(LMM_ADMIN), 'weekend_weeks/2026-07-13'), {}),
+    );
+  });
+});
+
+describe('public witnessing slots', () => {
+  it('verified publisher reads slots but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'pw_slots/slot1')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'pw_slots/slot2'), { date: '2026-08-02' }),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'pw_recurring/r1'), { weekday: 6 }),
+    );
+  });
+
+  it('only the pw admin writes slots', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(PW_ADMIN), 'pw_slots/slot2'), { date: '2026-08-02' }),
+    );
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'pw_slots/slot3'), { date: '2026-08-03' }),
+    );
+  });
+});
+
+describe('public witnessing applications', () => {
+  const application = (slotId, uid) => ({
+    slotId,
+    date: '2026-08-08',
+    publisherId: uid,
+    appliedAt: null,
+  });
+
+  it('qualified publisher applies, incl. for a virtual slot id', async () => {
+    await assertSucceeds(
+      setDoc(
+        doc(db(QUALIFIED), `pw_applications/rule1_2026-08-08_${QUALIFIED}`),
+        application('rule1_2026-08-08', QUALIFIED),
+      ),
+    );
+  });
+
+  it('doc id must be {slotId}_{uid}', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(QUALIFIED), `pw_applications/mismatch_${QUALIFIED}`),
+        application('rule1_2026-08-08', QUALIFIED),
+      ),
+    );
+  });
+
+  it('cannot apply on behalf of someone else', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(QUALIFIED), 'pw_applications/rule1_2026-08-08_other-uid'),
+        application('rule1_2026-08-08', 'other-uid'),
+      ),
+    );
+  });
+
+  it('unqualified and unverified publishers cannot apply', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(VERIFIED), `pw_applications/rule1_2026-08-08_${VERIFIED}`),
+        application('rule1_2026-08-08', VERIFIED),
+      ),
+    );
+    await assertFails(
+      setDoc(
+        doc(db(UNVERIFIED), `pw_applications/rule1_2026-08-08_${UNVERIFIED}`),
+        application('rule1_2026-08-08', UNVERIFIED),
+      ),
+    );
+  });
+
+  it('rejects extra fields and malformed dates', async () => {
+    await assertFails(
+      setDoc(
+        doc(db(QUALIFIED), `pw_applications/rule1_2026-08-08_${QUALIFIED}`),
+        { ...application('rule1_2026-08-08', QUALIFIED), note: 'pick me' },
+      ),
+    );
+    await assertFails(
+      setDoc(
+        doc(db(QUALIFIED), `pw_applications/rule1_2026-08-08_${QUALIFIED}`),
+        { ...application('rule1_2026-08-08', QUALIFIED), date: 'whenever' },
+      ),
+    );
+  });
+
+  it('publisher lists only own applications', async () => {
+    await assertSucceeds(
+      getDocs(
+        query(
+          collection(db(QUALIFIED), 'pw_applications'),
+          where('publisherId', '==', QUALIFIED),
+        ),
+      ),
+    );
+    await assertFails(
+      getDocs(collection(db(QUALIFIED), 'pw_applications')),
+    );
+    await assertFails(
+      getDoc(doc(db(QUALIFIED), 'pw_applications/slot1_other-uid')),
+    );
+  });
+
+  it('pw admin sees all applications, other admins none', async () => {
+    await assertSucceeds(
+      getDocs(collection(db(PW_ADMIN), 'pw_applications')),
+    );
+    await assertSucceeds(
+      getDocs(
+        query(
+          collection(db(PW_ADMIN), 'pw_applications'),
+          where('date', '>=', '2026-07-27'),
+          where('date', '<=', '2026-08-02'),
+        ),
+      ),
+    );
+    await assertFails(
+      getDocs(collection(db(LMM_ADMIN), 'pw_applications')),
+    );
+  });
+
+  it('publisher withdraws own application only', async () => {
+    await assertSucceeds(
+      deleteDoc(doc(db(QUALIFIED), `pw_applications/slot1_${QUALIFIED}`)),
+    );
+    await assertFails(
+      deleteDoc(doc(db(QUALIFIED), 'pw_applications/slot1_other-uid')),
+    );
+  });
+
+  it('pw admin deletes any application', async () => {
+    await assertSucceeds(
+      deleteDoc(doc(db(PW_ADMIN), 'pw_applications/slot1_other-uid')),
+    );
+  });
+
+  it('applications are immutable once created', async () => {
+    await assertFails(
+      updateDoc(doc(db(QUALIFIED), `pw_applications/slot1_${QUALIFIED}`), {
+        date: '2026-08-02',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(PW_ADMIN), `pw_applications/slot1_${QUALIFIED}`), {
+        date: '2026-08-02',
+      }),
     );
   });
 });

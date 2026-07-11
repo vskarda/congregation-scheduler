@@ -196,6 +196,7 @@
   "pickerFreeText": "Text",
   "pickerLastAssigned": "Naposledy: {date}",
   "pickerNever": "Zatím bez úkolu",
+  "pickerApplied": "Přihlášen(a)",
   "importTitle": "Import pracovního sešitu",
   "importNoWeeks": "V souboru nebyly nalezeny žádné použitelné týdny.",
   "importWeekExists": "Už existuje — program se aktualizuje, úkoly zůstanou",
@@ -240,6 +241,9 @@
   "pwValidUntil": "Platí do (nepovinné)",
   "pwAssignees": "Přiděleno",
   "pwDate": "Datum",
+  "pwApply": "Přihlásit se na tento termín",
+  "pwWithdraw": "Zrušit přihlášku",
+  "pwApplicants": "Přihlášeni: {count}",
 
   "fsmNoMeetings": "Tento týden nejsou žádné schůzky před službou.",
   "fsmAddMeeting": "Přidat schůzku",

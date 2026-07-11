@@ -592,6 +592,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pickerNever => 'Zatím bez úkolu';
 
   @override
+  String get pickerApplied => 'Přihlášen(a)';
+
+  @override
   String get importTitle => 'Import pracovního sešitu';
 
   @override
@@ -726,6 +729,17 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get pwDate => 'Datum';
+
+  @override
+  String get pwApply => 'Přihlásit se na tento termín';
+
+  @override
+  String get pwWithdraw => 'Zrušit přihlášku';
+
+  @override
+  String pwApplicants(int count) {
+    return 'Přihlášeni: $count';
+  }
 
   @override
   String get fsmNoMeetings => 'Tento týden nejsou žádné schůzky před službou.';

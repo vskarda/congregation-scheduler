@@ -591,6 +591,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pickerNever => 'Hiç yapmadı';
 
   @override
+  String get pickerApplied => 'Başvurdu';
+
+  @override
   String get importTitle => 'İbadet Kitapçığını İçe Aktar';
 
   @override
@@ -724,6 +727,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get pwDate => 'Tarih';
+
+  @override
+  String get pwApply => 'Bu zaman aralığına başvur';
+
+  @override
+  String get pwWithdraw => 'Başvuruyu geri çek';
+
+  @override
+  String pwApplicants(int count) {
+    return '$count başvuru';
+  }
 
   @override
   String get fsmNoMeetings => 'Bu hafta tarla buluşması yok.';

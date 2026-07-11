@@ -13,7 +13,9 @@ import '../utils/dates.dart';
 ///
 /// [qualifies] filters the default "qualified" view; [historyKey] selects
 /// which history feeds the least-recently-assigned ordering. Admins can
-/// always switch to "all publishers" or free text.
+/// always switch to "all publishers" or free text. [applicantIds] (in
+/// application order) marks publishers who applied for this assignment;
+/// they are pinned to the top of the qualified list with a badge.
 Future<Assignment?> showAssignmentEditor(
   BuildContext context, {
   required String title,
@@ -21,6 +23,7 @@ Future<Assignment?> showAssignmentEditor(
   required String historyKey,
   required bool Function(Publisher) qualifies,
   bool multi = true,
+  List<String> applicantIds = const [],
 }) {
   return showDialog<Assignment>(
     context: context,
@@ -30,6 +33,7 @@ Future<Assignment?> showAssignmentEditor(
       historyKey: historyKey,
       qualifies: qualifies,
       multi: multi,
+      applicantIds: applicantIds,
     ),
   );
 }
@@ -43,6 +47,7 @@ class _AssignmentEditorDialog extends ConsumerStatefulWidget {
     required this.historyKey,
     required this.qualifies,
     required this.multi,
+    required this.applicantIds,
   });
 
   final String title;
@@ -50,6 +55,7 @@ class _AssignmentEditorDialog extends ConsumerStatefulWidget {
   final String historyKey;
   final bool Function(Publisher) qualifies;
   final bool multi;
+  final List<String> applicantIds;
 
   @override
   ConsumerState<_AssignmentEditorDialog> createState() =>
@@ -102,14 +108,27 @@ class _AssignmentEditorDialogState
     final locale = Localizations.localeOf(context).toString();
     final dateFmt = DateFormat.yMMMd(locale);
 
+    final applicantOrder = {
+      for (var i = 0; i < widget.applicantIds.length; i++)
+        widget.applicantIds[i]: i,
+    };
+
     List<Publisher> visible;
     switch (_mode) {
       case _Mode.qualified:
         visible = publishers
             .where((p) => p.verified && widget.qualifies(p))
             .toList()
-          // Least recently assigned first; never-assigned to the very top.
+          // Applicants first (in application order), then least recently
+          // assigned; never-assigned to the very top.
           ..sort((a, b) {
+            final aa = applicantOrder[a.id];
+            final ab = applicantOrder[b.id];
+            if (aa != null || ab != null) {
+              if (aa == null) return 1;
+              if (ab == null) return -1;
+              return aa.compareTo(ab);
+            }
             final da = history[a.id] ?? '';
             final db = history[b.id] ?? '';
             final byDate = da.compareTo(db);
@@ -123,10 +142,13 @@ class _AssignmentEditorDialogState
       case _Mode.freeText:
         visible = const [];
     }
-    // Keep already-selected people visible even if unqualified/unverified.
+    // Keep already-selected people and applicants visible even if
+    // unqualified/unverified.
     final visibleIds = visible.map((p) => p.id).toSet();
     final missing = publishers
-        .where((p) => _selected.contains(p.id) && !visibleIds.contains(p.id))
+        .where((p) =>
+            (_selected.contains(p.id) || applicantOrder.containsKey(p.id)) &&
+            !visibleIds.contains(p.id))
         .toList();
     visible = [...missing, ...visible];
 
@@ -176,6 +198,12 @@ class _AssignmentEditorDialogState
                                   ? l10n.pickerNever
                                   : l10n.pickerLastAssigned(dateFmt
                                       .format(parseDateKey(last))))
+                              : null,
+                          secondary: applicantOrder.containsKey(p.id)
+                              ? Chip(
+                                  label: Text(l10n.pickerApplied),
+                                  visualDensity: VisualDensity.compact,
+                                )
                               : null,
                           controlAffinity:
                               ListTileControlAffinity.leading,

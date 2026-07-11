@@ -182,6 +182,29 @@ service cloud.firestore {
       allow write: if hasRole('publicWitnessing');
     }
 
+    match /pw_applications/{applicationId} {
+      // A qualified publisher applies for a PW slot. Doc id {slotId}_{uid}
+      // makes applying idempotent and works for not-yet-materialized
+      // recurring slots (their virtual {ruleId}_{date} ids are stable).
+      // Applicant names are admin-only: publishers must query with
+      // publisherId == their own uid.
+      allow read: if hasRole('publicWitnessing')
+        || (isVerified() && resource.data.publisherId == request.auth.uid);
+      allow create: if isVerified()
+        && me().qualifications.publicWitnessing == true
+        && request.resource.data.publisherId == request.auth.uid
+        && applicationId == request.resource.data.slotId + '_' + request.auth.uid
+        && request.resource.data.slotId is string
+        && request.resource.data.slotId.size() > 0
+        && request.resource.data.date is string
+        && request.resource.data.date.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && request.resource.data.keys()
+            .hasOnly(['slotId', 'date', 'publisherId', 'appliedAt']);
+      allow update: if false;
+      allow delete: if hasRole('publicWitnessing')
+        || (isVerified() && resource.data.publisherId == request.auth.uid);
+    }
+
     match /fsm_recurring/{ruleId} {
       allow read: if isVerified();
       allow write: if hasRole('fieldServiceMeetings');

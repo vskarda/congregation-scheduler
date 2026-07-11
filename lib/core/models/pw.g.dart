@@ -56,3 +56,20 @@ Map<String, dynamic> _$PwSlotToJson(_PwSlot instance) => <String, dynamic>{
   'cancelled': instance.cancelled,
   'allAssigneeIds': instance.allAssigneeIds,
 };
+
+_PwApplication _$PwApplicationFromJson(Map<String, dynamic> json) =>
+    _PwApplication(
+      slotId: json['slotId'] as String? ?? '',
+      date: json['date'] as String? ?? '',
+      publisherId: json['publisherId'] as String? ?? '',
+      appliedAt: const NullableTimestampConverter().fromJson(json['appliedAt']),
+    );
+
+Map<String, dynamic> _$PwApplicationToJson(
+  _PwApplication instance,
+) => <String, dynamic>{
+  'slotId': instance.slotId,
+  'date': instance.date,
+  'publisherId': instance.publisherId,
+  'appliedAt': const NullableTimestampConverter().toJson(instance.appliedAt),
+};

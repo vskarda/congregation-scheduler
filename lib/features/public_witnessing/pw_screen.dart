@@ -6,6 +6,7 @@ import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/data/pw_repository.dart';
+import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
@@ -44,6 +45,43 @@ final pwWeekSlotsProvider =
           concrete, ruleList, monday, monday.add(const Duration(days: 7)))),
     ),
   );
+});
+
+/// Slot ids the current user has applied for. Not gated on the PW
+/// qualification, so someone who lost it can still see and withdraw
+/// their existing applications.
+final myPwApplicationsProvider = StreamProvider<Set<String>>((ref) {
+  final uid = ref.watch(currentUidProvider);
+  if (uid == null || !ref.watch(isVerifiedProvider)) {
+    return Stream.value(const <String>{});
+  }
+  return ref
+      .watch(pwRepositoryProvider)
+      .watchMyApplications(uid)
+      .map((apps) => apps.map((a) => a.slotId).toSet());
+});
+
+/// Applications of one week (weekId = Monday key) grouped by slot id. Only
+/// PW admins may run the underlying range query (uses the real roles, like
+/// [pwMaterializationProvider]); empty for everyone else.
+final pwWeekApplicationsProvider =
+    StreamProvider.family<Map<String, List<PwApplication>>, String>(
+        (ref, weekId) {
+  if (!ref.watch(myRolesProvider).canEditPublicWitnessing()) {
+    return Stream.value(const {});
+  }
+  final monday = parseDateKey(weekId);
+  final sunday = dateKey(monday.add(const Duration(days: 6)));
+  return ref
+      .watch(pwRepositoryProvider)
+      .watchApplicationsInRange(weekId, sunday)
+      .map((apps) {
+    final bySlot = <String, List<PwApplication>>{};
+    for (final app in apps) {
+      (bySlot[app.slotId] ??= []).add(app);
+    }
+    return bySlot;
+  });
 });
 
 /// Ensures recurring rules are materialized ahead; runs once per session for
@@ -115,6 +153,15 @@ class _PwWeekView extends ConsumerWidget {
     final locale = Localizations.localeOf(context).toString();
     final dayFmt = DateFormat.EEEE(locale);
     final dateFmt = DateFormat.MMMd(locale);
+    final uid = ref.watch(currentUidProvider);
+    final me = ref.watch(myPublisherProvider).value;
+    final appliedSlotIds =
+        ref.watch(myPwApplicationsProvider).value ?? const <String>{};
+    final weekApplications = canEdit
+        ? ref.watch(pwWeekApplicationsProvider(weekId)).value ??
+            const <String, List<PwApplication>>{}
+        : const <String, List<PwApplication>>{};
+    final todayKey = dateKey(DateTime.now());
 
     return slots.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -141,13 +188,13 @@ class _PwWeekView extends ConsumerWidget {
                       '${slot.startTime}–${slot.endTime}  ${slot.location}'),
                   subtitle: AssignmentText(slot.assignment),
                   trailing: canEdit
-                      ? IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          onPressed: () => ref
-                              .read(pwRepositoryProvider)
-                              .deleteSlot(slot),
-                        )
-                      : null,
+                      ? _adminTrailing(context, ref, slot,
+                          weekApplications[slot.id]?.length ?? 0)
+                      : _applyTrailing(context, ref, slot,
+                          uid: uid,
+                          me: me,
+                          hasApplied: appliedSlotIds.contains(slot.id),
+                          isPast: slot.date.compareTo(todayKey) < 0),
                   onTap: canEdit
                       ? () => showPwSlotDialog(context, ref, existing: slot)
                       : null,
@@ -158,6 +205,61 @@ class _PwWeekView extends ConsumerWidget {
       },
     );
   }
+
+  /// Delete button, prefixed with an applicant-count badge when anyone
+  /// applied for the slot.
+  Widget _adminTrailing(
+      BuildContext context, WidgetRef ref, PwSlot slot, int applicantCount) {
+    final delete = IconButton(
+      icon: const Icon(Icons.delete_outline),
+      onPressed: () => ref.read(pwRepositoryProvider).deleteSlot(slot),
+    );
+    if (applicantCount == 0) return delete;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Tooltip(
+          message: context.l10n.pwApplicants(applicantCount),
+          child: Badge.count(
+            count: applicantCount,
+            child: const Icon(Icons.front_hand_outlined),
+          ),
+        ),
+        delete,
+      ],
+    );
+  }
+
+  /// Apply/withdraw toggle for qualified publishers; a plain applied marker
+  /// on past slots; nothing when already assigned (the highlighted own name
+  /// in the subtitle says it all) or not qualified.
+  Widget? _applyTrailing(BuildContext context, WidgetRef ref, PwSlot slot,
+      {required String? uid,
+      required Publisher? me,
+      required bool hasApplied,
+      required bool isPast}) {
+    if (uid == null || slot.allAssigneeIds.contains(uid)) return null;
+    if (hasApplied) {
+      if (isPast) {
+        return Icon(Icons.front_hand, color: Theme.of(context).disabledColor);
+      }
+      return IconButton(
+        icon: Icon(Icons.front_hand,
+            color: Theme.of(context).colorScheme.primary),
+        tooltip: context.l10n.pwWithdraw,
+        onPressed: () =>
+            ref.read(pwRepositoryProvider).withdrawApplication(slot.id, uid),
+      );
+    }
+    final qualified =
+        me != null && me.verified && me.qualifications.publicWitnessing;
+    if (!qualified || isPast) return null;
+    return IconButton(
+      icon: const Icon(Icons.front_hand_outlined),
+      tooltip: context.l10n.pwApply,
+      onPressed: () => ref.read(pwRepositoryProvider).applyForSlot(slot, uid),
+    );
+  }
 }
 
 /// Create/edit one concrete slot.
@@ -166,6 +268,21 @@ Future<void> showPwSlotDialog(BuildContext context, WidgetRef ref,
   final l10n = context.l10n;
   var slot = existing ?? PwSlot(date: dateKey(DateTime.now()));
   final locationCtrl = TextEditingController(text: slot.location);
+
+  // Who applied for this slot (oldest first), so the assignee picker can
+  // pin and badge them.
+  final applicantIds = slot.id.isEmpty
+      ? const <String>[]
+      : [
+          for (final a in await ref
+              .read(pwRepositoryProvider)
+              .getApplicationsForSlot(slot.id))
+            a.publisherId
+        ];
+  if (!context.mounted) {
+    locationCtrl.dispose();
+    return;
+  }
 
   final saved = await showDialog<bool>(
     context: context,
@@ -250,6 +367,7 @@ Future<void> showPwSlotDialog(BuildContext context, WidgetRef ref,
                       initial: slot.assignment,
                       historyKey: HistoryKeys.publicWitnessing,
                       qualifies: (p) => p.qualifications.publicWitnessing,
+                      applicantIds: applicantIds,
                     );
                     if (result != null) {
                       setState(

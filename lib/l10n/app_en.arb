@@ -203,6 +203,7 @@
   "pickerLastAssigned": "Last: {date}",
   "@pickerLastAssigned": {"placeholders": {"date": {"type": "String"}}},
   "pickerNever": "Never assigned",
+  "pickerApplied": "Applied",
   "importTitle": "Import Meeting Workbook",
   "importNoWeeks": "No usable weeks were found in this file.",
   "importWeekExists": "Already exists — program will be updated, assignments kept",
@@ -251,6 +252,10 @@
   "pwValidUntil": "Valid until (optional)",
   "pwAssignees": "Assigned",
   "pwDate": "Date",
+  "pwApply": "Apply for this slot",
+  "pwWithdraw": "Withdraw application",
+  "pwApplicants": "{count} applied",
+  "@pwApplicants": {"placeholders": {"count": {"type": "int"}}},
 
   "fsmNoMeetings": "No meetings for field service this week.",
   "fsmAddMeeting": "Add meeting",

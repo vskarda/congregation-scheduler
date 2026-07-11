@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'assignment.dart';
+import 'converters.dart';
 
 part 'pw.freezed.dart';
 part 'pw.g.dart';
@@ -59,4 +60,30 @@ abstract class PwSlot with _$PwSlot {
 
   PwSlot withRecomputedAssignees() => copyWith(
       allAssigneeIds: assignment.publisherIds.toSet().toList()..sort());
+}
+
+/// A publisher's application (volunteering) for one [PwSlot], stored at
+/// pw_applications/{slotId}_{publisherId}. The deterministic id makes
+/// applying idempotent and works for not-yet-materialized recurring slots,
+/// whose virtual ids (`{ruleId}_{date}`) are stable.
+@freezed
+abstract class PwApplication with _$PwApplication {
+  const factory PwApplication({
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String id,
+    @Default('') String slotId,
+
+    /// yyyy-MM-dd; denormalized copy of the slot date for range queries.
+    @Default('') String date,
+
+    /// == the applicant's auth uid.
+    @Default('') String publisherId,
+    @NullableTimestampConverter() DateTime? appliedAt,
+  }) = _PwApplication;
+
+  factory PwApplication.fromJson(Map<String, dynamic> json) =>
+      _$PwApplicationFromJson(json);
+
+  static String docId(String slotId, String uid) => '${slotId}_$uid';
 }

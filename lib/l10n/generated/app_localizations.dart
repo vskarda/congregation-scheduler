@@ -1204,6 +1204,12 @@ abstract class AppLocalizations {
   /// **'Never assigned'**
   String get pickerNever;
 
+  /// No description provided for @pickerApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Applied'**
+  String get pickerApplied;
+
   /// No description provided for @importTitle.
   ///
   /// In en, this message translates to:
@@ -1449,6 +1455,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Date'**
   String get pwDate;
+
+  /// No description provided for @pwApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply for this slot'**
+  String get pwApply;
+
+  /// No description provided for @pwWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw application'**
+  String get pwWithdraw;
+
+  /// No description provided for @pwApplicants.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} applied'**
+  String pwApplicants(int count);
 
   /// No description provided for @fsmNoMeetings.
   ///
