@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_config.dart';
 import '../models/models.dart';
 import '../utils/dates.dart';
+import 'fsm_repository.dart';
 import 'lmm_repository.dart';
 import 'pw_repository.dart';
 import 'weekend_repository.dart';
@@ -20,6 +21,7 @@ abstract final class HistoryKeys {
   static const audioVideo = 'support.audioVideo';
   static const custom = 'custom';
   static const publicWitnessing = 'pw';
+  static const fieldServiceMeetings = 'fsm';
 }
 
 /// historyKey -> (publisherId -> most recent assignment date, incl. future
@@ -76,6 +78,12 @@ final assignmentHistoryProvider =
   final slots = await ref.watch(pwRepositoryProvider).getRange(from, until);
   for (final slot in slots) {
     record(HistoryKeys.publicWitnessing, slot.assignment, slot.date);
+  }
+
+  final meetings =
+      await ref.watch(fsmRepositoryProvider).getRange(from, until);
+  for (final meeting in meetings) {
+    record(HistoryKeys.fieldServiceMeetings, meeting.assignment, meeting.date);
   }
 
   return result;

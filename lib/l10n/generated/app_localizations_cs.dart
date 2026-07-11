@@ -248,6 +248,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navPublicWitnessing => 'Veřejné svědectví';
 
   @override
+  String get navFieldServiceMeetings => 'Schůzky před službou';
+
+  @override
   String get navTerritories => 'Obvody';
 
   @override
@@ -717,6 +720,42 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pwDate => 'Datum';
 
   @override
+  String get fsmNoMeetings => 'Tento týden nejsou žádné schůzky před službou.';
+
+  @override
+  String get fsmAddMeeting => 'Přidat schůzku';
+
+  @override
+  String get fsmEditMeeting => 'Upravit schůzku';
+
+  @override
+  String get fsmDate => 'Datum';
+
+  @override
+  String get fsmTime => 'Čas';
+
+  @override
+  String get fsmLocation => 'Místo';
+
+  @override
+  String get fsmConductor => 'Vede';
+
+  @override
+  String get fsmRecurringRules => 'Opakované schůzky';
+
+  @override
+  String get fsmRecurringAdd => 'Přidat opakovanou schůzku';
+
+  @override
+  String get fsmWeekday => 'Den v týdnu';
+
+  @override
+  String get fsmValidFrom => 'Platí od';
+
+  @override
+  String get fsmValidUntil => 'Platí do (nepovinné)';
+
+  @override
   String get eventsUpcoming => 'Nadcházející události';
 
   @override
@@ -775,6 +814,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get rolePw => 'Veřejné svědectví';
+
+  @override
+  String get roleFsm => 'Schůzka před službou';
 
   @override
   String get reportSubmit => 'Odeslat zprávu';
@@ -1028,4 +1070,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get qPublicWitnessing => 'Veřejné svědectví';
+
+  @override
+  String get qMinistryMeetingConductor => 'Vedoucí schůzky před službou';
 }

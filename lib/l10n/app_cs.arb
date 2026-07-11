@@ -81,6 +81,7 @@
   "navLmm": "Život a služba",
   "navWeekend": "Víkendové shromáždění",
   "navPublicWitnessing": "Veřejné svědectví",
+  "navFieldServiceMeetings": "Schůzky před službou",
   "navTerritories": "Obvody",
   "navReport": "Zpráva o službě",
   "navAttendance": "Návštěvnost",
@@ -238,6 +239,19 @@
   "pwAssignees": "Přiděleno",
   "pwDate": "Datum",
 
+  "fsmNoMeetings": "Tento týden nejsou žádné schůzky před službou.",
+  "fsmAddMeeting": "Přidat schůzku",
+  "fsmEditMeeting": "Upravit schůzku",
+  "fsmDate": "Datum",
+  "fsmTime": "Čas",
+  "fsmLocation": "Místo",
+  "fsmConductor": "Vede",
+  "fsmRecurringRules": "Opakované schůzky",
+  "fsmRecurringAdd": "Přidat opakovanou schůzku",
+  "fsmWeekday": "Den v týdnu",
+  "fsmValidFrom": "Platí od",
+  "fsmValidUntil": "Platí do (nepovinné)",
+
   "eventsUpcoming": "Nadcházející události",
   "eventsNone": "Žádné nadcházející události.",
   "eventAdd": "Přidat událost",
@@ -258,6 +272,7 @@
   "myAssignmentsNone": "Žádné nadcházející úkoly.",
   "roleAssistant": "Pomocník",
   "rolePw": "Veřejné svědectví",
+  "roleFsm": "Schůzka před službou",
 
   "reportSubmit": "Odeslat zprávu",
   "reportSubmittedAt": "Odesláno {date}",
@@ -344,5 +359,6 @@
   "qAttendant": "Pořadatel",
   "qMicrophone": "Mikrofony",
   "qAudioVideo": "Audio/video",
-  "qPublicWitnessing": "Veřejné svědectví"
+  "qPublicWitnessing": "Veřejné svědectví",
+  "qMinistryMeetingConductor": "Vedoucí schůzky před službou"
 }

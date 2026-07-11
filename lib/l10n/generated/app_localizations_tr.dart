@@ -246,6 +246,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navPublicWitnessing => 'Halka Açık Şahitlik';
 
   @override
+  String get navFieldServiceMeetings => 'Tarla Buluşmaları';
+
+  @override
   String get navTerritories => 'Sahalar';
 
   @override
@@ -715,6 +718,42 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pwDate => 'Tarih';
 
   @override
+  String get fsmNoMeetings => 'Bu hafta tarla buluşması yok.';
+
+  @override
+  String get fsmAddMeeting => 'Buluşma Ekle';
+
+  @override
+  String get fsmEditMeeting => 'Buluşmayı Düzenle';
+
+  @override
+  String get fsmDate => 'Tarih';
+
+  @override
+  String get fsmTime => 'Saat';
+
+  @override
+  String get fsmLocation => 'Yer';
+
+  @override
+  String get fsmConductor => 'İdare eden';
+
+  @override
+  String get fsmRecurringRules => 'Tekrarlanan Buluşmalar';
+
+  @override
+  String get fsmRecurringAdd => 'Tekrarlanan Buluşma Ekle';
+
+  @override
+  String get fsmWeekday => 'Haftanın günü';
+
+  @override
+  String get fsmValidFrom => 'Geçerlilik başlangıcı';
+
+  @override
+  String get fsmValidUntil => 'Geçerlilik bitişi (isteğe bağlı)';
+
+  @override
   String get eventsUpcoming => 'Yaklaşan Etkinlikler';
 
   @override
@@ -773,6 +812,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get rolePw => 'Halka Açık Yerde Şahitlik';
+
+  @override
+  String get roleFsm => 'Tarla buluşması';
 
   @override
   String get reportSubmit => 'Rapor Ver';
@@ -1026,4 +1068,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get qPublicWitnessing => 'Halka açık yerde şahitlik';
+
+  @override
+  String get qMinistryMeetingConductor => 'Tarla buluşmasını idare eden';
 }

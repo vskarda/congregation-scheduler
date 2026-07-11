@@ -236,6 +236,12 @@ class _RolesTab extends ConsumerWidget {
         false,
       ),
       (
+        l10n.navFieldServiceMeetings,
+        roles.fieldServiceMeetings,
+        (v) => roles.copyWith(fieldServiceMeetings: v),
+        false,
+      ),
+      (
         l10n.navTerritories,
         roles.territories,
         (v) => roles.copyWith(territories: v),
@@ -331,6 +337,11 @@ class _AssignTab extends ConsumerWidget {
         l10n.qPublicWitnessing,
         q.publicWitnessing,
         (v) => q.copyWith(publicWitnessing: v)
+      ),
+      (
+        l10n.qMinistryMeetingConductor,
+        q.ministryMeetingConductor,
+        (v) => q.copyWith(ministryMeetingConductor: v)
       ),
     ];
 

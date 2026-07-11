@@ -16,6 +16,7 @@ abstract class Roles with _$Roles {
     @Default(false) bool lmmSchedule,
     @Default(false) bool weekendSchedule,
     @Default(false) bool publicWitnessing,
+    @Default(false) bool fieldServiceMeetings,
     @Default(false) bool territories,
     @Default(false) bool reports,
     @Default(false) bool attendance,
@@ -31,6 +32,7 @@ abstract class Roles with _$Roles {
       lmmSchedule ||
       weekendSchedule ||
       publicWitnessing ||
+      fieldServiceMeetings ||
       territories ||
       reports ||
       attendance ||
@@ -42,6 +44,7 @@ abstract class Roles with _$Roles {
   bool canEditLmm() => lmmSchedule || fullAdmin;
   bool canEditWeekend() => weekendSchedule || fullAdmin;
   bool canEditPublicWitnessing() => publicWitnessing || fullAdmin;
+  bool canEditFieldServiceMeetings() => fieldServiceMeetings || fullAdmin;
   bool canEditTerritories() => territories || fullAdmin;
   bool canEditReports() => reports || fullAdmin;
   bool canEditAttendance() => attendance || fullAdmin;
@@ -71,6 +74,7 @@ abstract class Qualifications with _$Qualifications {
     @Default(false) bool microphone,
     @Default(false) bool audioVideo,
     @Default(false) bool publicWitnessing,
+    @Default(false) bool ministryMeetingConductor,
   }) = _Qualifications;
 
   factory Qualifications.fromJson(Map<String, dynamic> json) =>

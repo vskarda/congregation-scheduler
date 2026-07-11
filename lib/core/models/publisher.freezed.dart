@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Roles {
 
- bool get infoBoard; bool get events; bool get lmmSchedule; bool get weekendSchedule; bool get publicWitnessing; bool get territories; bool get reports; bool get attendance; bool get publishers; bool get fullAdmin;
+ bool get infoBoard; bool get events; bool get lmmSchedule; bool get weekendSchedule; bool get publicWitnessing; bool get fieldServiceMeetings; bool get territories; bool get reports; bool get attendance; bool get publishers; bool get fullAdmin;
 /// Create a copy of Roles
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RolesCopyWith<Roles> get copyWith => _$RolesCopyWithImpl<Roles>(this as Roles, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Roles&&(identical(other.infoBoard, infoBoard) || other.infoBoard == infoBoard)&&(identical(other.events, events) || other.events == events)&&(identical(other.lmmSchedule, lmmSchedule) || other.lmmSchedule == lmmSchedule)&&(identical(other.weekendSchedule, weekendSchedule) || other.weekendSchedule == weekendSchedule)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.territories, territories) || other.territories == territories)&&(identical(other.reports, reports) || other.reports == reports)&&(identical(other.attendance, attendance) || other.attendance == attendance)&&(identical(other.publishers, publishers) || other.publishers == publishers)&&(identical(other.fullAdmin, fullAdmin) || other.fullAdmin == fullAdmin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Roles&&(identical(other.infoBoard, infoBoard) || other.infoBoard == infoBoard)&&(identical(other.events, events) || other.events == events)&&(identical(other.lmmSchedule, lmmSchedule) || other.lmmSchedule == lmmSchedule)&&(identical(other.weekendSchedule, weekendSchedule) || other.weekendSchedule == weekendSchedule)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.fieldServiceMeetings, fieldServiceMeetings) || other.fieldServiceMeetings == fieldServiceMeetings)&&(identical(other.territories, territories) || other.territories == territories)&&(identical(other.reports, reports) || other.reports == reports)&&(identical(other.attendance, attendance) || other.attendance == attendance)&&(identical(other.publishers, publishers) || other.publishers == publishers)&&(identical(other.fullAdmin, fullAdmin) || other.fullAdmin == fullAdmin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,infoBoard,events,lmmSchedule,weekendSchedule,publicWitnessing,territories,reports,attendance,publishers,fullAdmin);
+int get hashCode => Object.hash(runtimeType,infoBoard,events,lmmSchedule,weekendSchedule,publicWitnessing,fieldServiceMeetings,territories,reports,attendance,publishers,fullAdmin);
 
 @override
 String toString() {
-  return 'Roles(infoBoard: $infoBoard, events: $events, lmmSchedule: $lmmSchedule, weekendSchedule: $weekendSchedule, publicWitnessing: $publicWitnessing, territories: $territories, reports: $reports, attendance: $attendance, publishers: $publishers, fullAdmin: $fullAdmin)';
+  return 'Roles(infoBoard: $infoBoard, events: $events, lmmSchedule: $lmmSchedule, weekendSchedule: $weekendSchedule, publicWitnessing: $publicWitnessing, fieldServiceMeetings: $fieldServiceMeetings, territories: $territories, reports: $reports, attendance: $attendance, publishers: $publishers, fullAdmin: $fullAdmin)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RolesCopyWith<$Res>  {
   factory $RolesCopyWith(Roles value, $Res Function(Roles) _then) = _$RolesCopyWithImpl;
 @useResult
 $Res call({
- bool infoBoard, bool events, bool lmmSchedule, bool weekendSchedule, bool publicWitnessing, bool territories, bool reports, bool attendance, bool publishers, bool fullAdmin
+ bool infoBoard, bool events, bool lmmSchedule, bool weekendSchedule, bool publicWitnessing, bool fieldServiceMeetings, bool territories, bool reports, bool attendance, bool publishers, bool fullAdmin
 });
 
 
@@ -65,13 +65,14 @@ class _$RolesCopyWithImpl<$Res>
 
 /// Create a copy of Roles
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? infoBoard = null,Object? events = null,Object? lmmSchedule = null,Object? weekendSchedule = null,Object? publicWitnessing = null,Object? territories = null,Object? reports = null,Object? attendance = null,Object? publishers = null,Object? fullAdmin = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? infoBoard = null,Object? events = null,Object? lmmSchedule = null,Object? weekendSchedule = null,Object? publicWitnessing = null,Object? fieldServiceMeetings = null,Object? territories = null,Object? reports = null,Object? attendance = null,Object? publishers = null,Object? fullAdmin = null,}) {
   return _then(_self.copyWith(
 infoBoard: null == infoBoard ? _self.infoBoard : infoBoard // ignore: cast_nullable_to_non_nullable
 as bool,events: null == events ? _self.events : events // ignore: cast_nullable_to_non_nullable
 as bool,lmmSchedule: null == lmmSchedule ? _self.lmmSchedule : lmmSchedule // ignore: cast_nullable_to_non_nullable
 as bool,weekendSchedule: null == weekendSchedule ? _self.weekendSchedule : weekendSchedule // ignore: cast_nullable_to_non_nullable
 as bool,publicWitnessing: null == publicWitnessing ? _self.publicWitnessing : publicWitnessing // ignore: cast_nullable_to_non_nullable
+as bool,fieldServiceMeetings: null == fieldServiceMeetings ? _self.fieldServiceMeetings : fieldServiceMeetings // ignore: cast_nullable_to_non_nullable
 as bool,territories: null == territories ? _self.territories : territories // ignore: cast_nullable_to_non_nullable
 as bool,reports: null == reports ? _self.reports : reports // ignore: cast_nullable_to_non_nullable
 as bool,attendance: null == attendance ? _self.attendance : attendance // ignore: cast_nullable_to_non_nullable
@@ -162,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool fieldServiceMeetings,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Roles() when $default != null:
-return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
+return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.fieldServiceMeetings,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
   return orElse();
 
 }
@@ -183,10 +184,10 @@ return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSche
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool fieldServiceMeetings,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)  $default,) {final _that = this;
 switch (_that) {
 case _Roles():
-return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
+return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.fieldServiceMeetings,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -203,10 +204,10 @@ return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSche
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool infoBoard,  bool events,  bool lmmSchedule,  bool weekendSchedule,  bool publicWitnessing,  bool fieldServiceMeetings,  bool territories,  bool reports,  bool attendance,  bool publishers,  bool fullAdmin)?  $default,) {final _that = this;
 switch (_that) {
 case _Roles() when $default != null:
-return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
+return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSchedule,_that.publicWitnessing,_that.fieldServiceMeetings,_that.territories,_that.reports,_that.attendance,_that.publishers,_that.fullAdmin);case _:
   return null;
 
 }
@@ -218,7 +219,7 @@ return $default(_that.infoBoard,_that.events,_that.lmmSchedule,_that.weekendSche
 @JsonSerializable()
 
 class _Roles extends Roles {
-  const _Roles({this.infoBoard = false, this.events = false, this.lmmSchedule = false, this.weekendSchedule = false, this.publicWitnessing = false, this.territories = false, this.reports = false, this.attendance = false, this.publishers = false, this.fullAdmin = false}): super._();
+  const _Roles({this.infoBoard = false, this.events = false, this.lmmSchedule = false, this.weekendSchedule = false, this.publicWitnessing = false, this.fieldServiceMeetings = false, this.territories = false, this.reports = false, this.attendance = false, this.publishers = false, this.fullAdmin = false}): super._();
   factory _Roles.fromJson(Map<String, dynamic> json) => _$RolesFromJson(json);
 
 @override@JsonKey() final  bool infoBoard;
@@ -226,6 +227,7 @@ class _Roles extends Roles {
 @override@JsonKey() final  bool lmmSchedule;
 @override@JsonKey() final  bool weekendSchedule;
 @override@JsonKey() final  bool publicWitnessing;
+@override@JsonKey() final  bool fieldServiceMeetings;
 @override@JsonKey() final  bool territories;
 @override@JsonKey() final  bool reports;
 @override@JsonKey() final  bool attendance;
@@ -245,16 +247,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Roles&&(identical(other.infoBoard, infoBoard) || other.infoBoard == infoBoard)&&(identical(other.events, events) || other.events == events)&&(identical(other.lmmSchedule, lmmSchedule) || other.lmmSchedule == lmmSchedule)&&(identical(other.weekendSchedule, weekendSchedule) || other.weekendSchedule == weekendSchedule)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.territories, territories) || other.territories == territories)&&(identical(other.reports, reports) || other.reports == reports)&&(identical(other.attendance, attendance) || other.attendance == attendance)&&(identical(other.publishers, publishers) || other.publishers == publishers)&&(identical(other.fullAdmin, fullAdmin) || other.fullAdmin == fullAdmin));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Roles&&(identical(other.infoBoard, infoBoard) || other.infoBoard == infoBoard)&&(identical(other.events, events) || other.events == events)&&(identical(other.lmmSchedule, lmmSchedule) || other.lmmSchedule == lmmSchedule)&&(identical(other.weekendSchedule, weekendSchedule) || other.weekendSchedule == weekendSchedule)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.fieldServiceMeetings, fieldServiceMeetings) || other.fieldServiceMeetings == fieldServiceMeetings)&&(identical(other.territories, territories) || other.territories == territories)&&(identical(other.reports, reports) || other.reports == reports)&&(identical(other.attendance, attendance) || other.attendance == attendance)&&(identical(other.publishers, publishers) || other.publishers == publishers)&&(identical(other.fullAdmin, fullAdmin) || other.fullAdmin == fullAdmin));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,infoBoard,events,lmmSchedule,weekendSchedule,publicWitnessing,territories,reports,attendance,publishers,fullAdmin);
+int get hashCode => Object.hash(runtimeType,infoBoard,events,lmmSchedule,weekendSchedule,publicWitnessing,fieldServiceMeetings,territories,reports,attendance,publishers,fullAdmin);
 
 @override
 String toString() {
-  return 'Roles(infoBoard: $infoBoard, events: $events, lmmSchedule: $lmmSchedule, weekendSchedule: $weekendSchedule, publicWitnessing: $publicWitnessing, territories: $territories, reports: $reports, attendance: $attendance, publishers: $publishers, fullAdmin: $fullAdmin)';
+  return 'Roles(infoBoard: $infoBoard, events: $events, lmmSchedule: $lmmSchedule, weekendSchedule: $weekendSchedule, publicWitnessing: $publicWitnessing, fieldServiceMeetings: $fieldServiceMeetings, territories: $territories, reports: $reports, attendance: $attendance, publishers: $publishers, fullAdmin: $fullAdmin)';
 }
 
 
@@ -265,7 +267,7 @@ abstract mixin class _$RolesCopyWith<$Res> implements $RolesCopyWith<$Res> {
   factory _$RolesCopyWith(_Roles value, $Res Function(_Roles) _then) = __$RolesCopyWithImpl;
 @override @useResult
 $Res call({
- bool infoBoard, bool events, bool lmmSchedule, bool weekendSchedule, bool publicWitnessing, bool territories, bool reports, bool attendance, bool publishers, bool fullAdmin
+ bool infoBoard, bool events, bool lmmSchedule, bool weekendSchedule, bool publicWitnessing, bool fieldServiceMeetings, bool territories, bool reports, bool attendance, bool publishers, bool fullAdmin
 });
 
 
@@ -282,13 +284,14 @@ class __$RolesCopyWithImpl<$Res>
 
 /// Create a copy of Roles
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? infoBoard = null,Object? events = null,Object? lmmSchedule = null,Object? weekendSchedule = null,Object? publicWitnessing = null,Object? territories = null,Object? reports = null,Object? attendance = null,Object? publishers = null,Object? fullAdmin = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? infoBoard = null,Object? events = null,Object? lmmSchedule = null,Object? weekendSchedule = null,Object? publicWitnessing = null,Object? fieldServiceMeetings = null,Object? territories = null,Object? reports = null,Object? attendance = null,Object? publishers = null,Object? fullAdmin = null,}) {
   return _then(_Roles(
 infoBoard: null == infoBoard ? _self.infoBoard : infoBoard // ignore: cast_nullable_to_non_nullable
 as bool,events: null == events ? _self.events : events // ignore: cast_nullable_to_non_nullable
 as bool,lmmSchedule: null == lmmSchedule ? _self.lmmSchedule : lmmSchedule // ignore: cast_nullable_to_non_nullable
 as bool,weekendSchedule: null == weekendSchedule ? _self.weekendSchedule : weekendSchedule // ignore: cast_nullable_to_non_nullable
 as bool,publicWitnessing: null == publicWitnessing ? _self.publicWitnessing : publicWitnessing // ignore: cast_nullable_to_non_nullable
+as bool,fieldServiceMeetings: null == fieldServiceMeetings ? _self.fieldServiceMeetings : fieldServiceMeetings // ignore: cast_nullable_to_non_nullable
 as bool,territories: null == territories ? _self.territories : territories // ignore: cast_nullable_to_non_nullable
 as bool,reports: null == reports ? _self.reports : reports // ignore: cast_nullable_to_non_nullable
 as bool,attendance: null == attendance ? _self.attendance : attendance // ignore: cast_nullable_to_non_nullable
@@ -305,7 +308,7 @@ as bool,
 /// @nodoc
 mixin _$Qualifications {
 
- bool get chairman; bool get prayer; bool get treasures; bool get gems; bool get bibleReading; bool get fieldMinistry; bool get livingParts; bool get cbsConductor; bool get cbsReader; bool get publicTalk; bool get weekendChairman; bool get wtReader; bool get attendant; bool get microphone; bool get audioVideo; bool get publicWitnessing;
+ bool get chairman; bool get prayer; bool get treasures; bool get gems; bool get bibleReading; bool get fieldMinistry; bool get livingParts; bool get cbsConductor; bool get cbsReader; bool get publicTalk; bool get weekendChairman; bool get wtReader; bool get attendant; bool get microphone; bool get audioVideo; bool get publicWitnessing; bool get ministryMeetingConductor;
 /// Create a copy of Qualifications
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -318,16 +321,16 @@ $QualificationsCopyWith<Qualifications> get copyWith => _$QualificationsCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Qualifications&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.prayer, prayer) || other.prayer == prayer)&&(identical(other.treasures, treasures) || other.treasures == treasures)&&(identical(other.gems, gems) || other.gems == gems)&&(identical(other.bibleReading, bibleReading) || other.bibleReading == bibleReading)&&(identical(other.fieldMinistry, fieldMinistry) || other.fieldMinistry == fieldMinistry)&&(identical(other.livingParts, livingParts) || other.livingParts == livingParts)&&(identical(other.cbsConductor, cbsConductor) || other.cbsConductor == cbsConductor)&&(identical(other.cbsReader, cbsReader) || other.cbsReader == cbsReader)&&(identical(other.publicTalk, publicTalk) || other.publicTalk == publicTalk)&&(identical(other.weekendChairman, weekendChairman) || other.weekendChairman == weekendChairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&(identical(other.attendant, attendant) || other.attendant == attendant)&&(identical(other.microphone, microphone) || other.microphone == microphone)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Qualifications&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.prayer, prayer) || other.prayer == prayer)&&(identical(other.treasures, treasures) || other.treasures == treasures)&&(identical(other.gems, gems) || other.gems == gems)&&(identical(other.bibleReading, bibleReading) || other.bibleReading == bibleReading)&&(identical(other.fieldMinistry, fieldMinistry) || other.fieldMinistry == fieldMinistry)&&(identical(other.livingParts, livingParts) || other.livingParts == livingParts)&&(identical(other.cbsConductor, cbsConductor) || other.cbsConductor == cbsConductor)&&(identical(other.cbsReader, cbsReader) || other.cbsReader == cbsReader)&&(identical(other.publicTalk, publicTalk) || other.publicTalk == publicTalk)&&(identical(other.weekendChairman, weekendChairman) || other.weekendChairman == weekendChairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&(identical(other.attendant, attendant) || other.attendant == attendant)&&(identical(other.microphone, microphone) || other.microphone == microphone)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.ministryMeetingConductor, ministryMeetingConductor) || other.ministryMeetingConductor == ministryMeetingConductor));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chairman,prayer,treasures,gems,bibleReading,fieldMinistry,livingParts,cbsConductor,cbsReader,publicTalk,weekendChairman,wtReader,attendant,microphone,audioVideo,publicWitnessing);
+int get hashCode => Object.hash(runtimeType,chairman,prayer,treasures,gems,bibleReading,fieldMinistry,livingParts,cbsConductor,cbsReader,publicTalk,weekendChairman,wtReader,attendant,microphone,audioVideo,publicWitnessing,ministryMeetingConductor);
 
 @override
 String toString() {
-  return 'Qualifications(chairman: $chairman, prayer: $prayer, treasures: $treasures, gems: $gems, bibleReading: $bibleReading, fieldMinistry: $fieldMinistry, livingParts: $livingParts, cbsConductor: $cbsConductor, cbsReader: $cbsReader, publicTalk: $publicTalk, weekendChairman: $weekendChairman, wtReader: $wtReader, attendant: $attendant, microphone: $microphone, audioVideo: $audioVideo, publicWitnessing: $publicWitnessing)';
+  return 'Qualifications(chairman: $chairman, prayer: $prayer, treasures: $treasures, gems: $gems, bibleReading: $bibleReading, fieldMinistry: $fieldMinistry, livingParts: $livingParts, cbsConductor: $cbsConductor, cbsReader: $cbsReader, publicTalk: $publicTalk, weekendChairman: $weekendChairman, wtReader: $wtReader, attendant: $attendant, microphone: $microphone, audioVideo: $audioVideo, publicWitnessing: $publicWitnessing, ministryMeetingConductor: $ministryMeetingConductor)';
 }
 
 
@@ -338,7 +341,7 @@ abstract mixin class $QualificationsCopyWith<$Res>  {
   factory $QualificationsCopyWith(Qualifications value, $Res Function(Qualifications) _then) = _$QualificationsCopyWithImpl;
 @useResult
 $Res call({
- bool chairman, bool prayer, bool treasures, bool gems, bool bibleReading, bool fieldMinistry, bool livingParts, bool cbsConductor, bool cbsReader, bool publicTalk, bool weekendChairman, bool wtReader, bool attendant, bool microphone, bool audioVideo, bool publicWitnessing
+ bool chairman, bool prayer, bool treasures, bool gems, bool bibleReading, bool fieldMinistry, bool livingParts, bool cbsConductor, bool cbsReader, bool publicTalk, bool weekendChairman, bool wtReader, bool attendant, bool microphone, bool audioVideo, bool publicWitnessing, bool ministryMeetingConductor
 });
 
 
@@ -355,7 +358,7 @@ class _$QualificationsCopyWithImpl<$Res>
 
 /// Create a copy of Qualifications
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? chairman = null,Object? prayer = null,Object? treasures = null,Object? gems = null,Object? bibleReading = null,Object? fieldMinistry = null,Object? livingParts = null,Object? cbsConductor = null,Object? cbsReader = null,Object? publicTalk = null,Object? weekendChairman = null,Object? wtReader = null,Object? attendant = null,Object? microphone = null,Object? audioVideo = null,Object? publicWitnessing = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? chairman = null,Object? prayer = null,Object? treasures = null,Object? gems = null,Object? bibleReading = null,Object? fieldMinistry = null,Object? livingParts = null,Object? cbsConductor = null,Object? cbsReader = null,Object? publicTalk = null,Object? weekendChairman = null,Object? wtReader = null,Object? attendant = null,Object? microphone = null,Object? audioVideo = null,Object? publicWitnessing = null,Object? ministryMeetingConductor = null,}) {
   return _then(_self.copyWith(
 chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as bool,prayer: null == prayer ? _self.prayer : prayer // ignore: cast_nullable_to_non_nullable
@@ -373,6 +376,7 @@ as bool,attendant: null == attendant ? _self.attendant : attendant // ignore: ca
 as bool,microphone: null == microphone ? _self.microphone : microphone // ignore: cast_nullable_to_non_nullable
 as bool,audioVideo: null == audioVideo ? _self.audioVideo : audioVideo // ignore: cast_nullable_to_non_nullable
 as bool,publicWitnessing: null == publicWitnessing ? _self.publicWitnessing : publicWitnessing // ignore: cast_nullable_to_non_nullable
+as bool,ministryMeetingConductor: null == ministryMeetingConductor ? _self.ministryMeetingConductor : ministryMeetingConductor // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -458,10 +462,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing,  bool ministryMeetingConductor)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Qualifications() when $default != null:
-return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing);case _:
+return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing,_that.ministryMeetingConductor);case _:
   return orElse();
 
 }
@@ -479,10 +483,10 @@ return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bib
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing,  bool ministryMeetingConductor)  $default,) {final _that = this;
 switch (_that) {
 case _Qualifications():
-return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing);case _:
+return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing,_that.ministryMeetingConductor);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -499,10 +503,10 @@ return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bib
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool chairman,  bool prayer,  bool treasures,  bool gems,  bool bibleReading,  bool fieldMinistry,  bool livingParts,  bool cbsConductor,  bool cbsReader,  bool publicTalk,  bool weekendChairman,  bool wtReader,  bool attendant,  bool microphone,  bool audioVideo,  bool publicWitnessing,  bool ministryMeetingConductor)?  $default,) {final _that = this;
 switch (_that) {
 case _Qualifications() when $default != null:
-return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing);case _:
+return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bibleReading,_that.fieldMinistry,_that.livingParts,_that.cbsConductor,_that.cbsReader,_that.publicTalk,_that.weekendChairman,_that.wtReader,_that.attendant,_that.microphone,_that.audioVideo,_that.publicWitnessing,_that.ministryMeetingConductor);case _:
   return null;
 
 }
@@ -514,7 +518,7 @@ return $default(_that.chairman,_that.prayer,_that.treasures,_that.gems,_that.bib
 @JsonSerializable()
 
 class _Qualifications extends Qualifications {
-  const _Qualifications({this.chairman = false, this.prayer = false, this.treasures = false, this.gems = false, this.bibleReading = false, this.fieldMinistry = false, this.livingParts = false, this.cbsConductor = false, this.cbsReader = false, this.publicTalk = false, this.weekendChairman = false, this.wtReader = false, this.attendant = false, this.microphone = false, this.audioVideo = false, this.publicWitnessing = false}): super._();
+  const _Qualifications({this.chairman = false, this.prayer = false, this.treasures = false, this.gems = false, this.bibleReading = false, this.fieldMinistry = false, this.livingParts = false, this.cbsConductor = false, this.cbsReader = false, this.publicTalk = false, this.weekendChairman = false, this.wtReader = false, this.attendant = false, this.microphone = false, this.audioVideo = false, this.publicWitnessing = false, this.ministryMeetingConductor = false}): super._();
   factory _Qualifications.fromJson(Map<String, dynamic> json) => _$QualificationsFromJson(json);
 
 @override@JsonKey() final  bool chairman;
@@ -533,6 +537,7 @@ class _Qualifications extends Qualifications {
 @override@JsonKey() final  bool microphone;
 @override@JsonKey() final  bool audioVideo;
 @override@JsonKey() final  bool publicWitnessing;
+@override@JsonKey() final  bool ministryMeetingConductor;
 
 /// Create a copy of Qualifications
 /// with the given fields replaced by the non-null parameter values.
@@ -547,16 +552,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Qualifications&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.prayer, prayer) || other.prayer == prayer)&&(identical(other.treasures, treasures) || other.treasures == treasures)&&(identical(other.gems, gems) || other.gems == gems)&&(identical(other.bibleReading, bibleReading) || other.bibleReading == bibleReading)&&(identical(other.fieldMinistry, fieldMinistry) || other.fieldMinistry == fieldMinistry)&&(identical(other.livingParts, livingParts) || other.livingParts == livingParts)&&(identical(other.cbsConductor, cbsConductor) || other.cbsConductor == cbsConductor)&&(identical(other.cbsReader, cbsReader) || other.cbsReader == cbsReader)&&(identical(other.publicTalk, publicTalk) || other.publicTalk == publicTalk)&&(identical(other.weekendChairman, weekendChairman) || other.weekendChairman == weekendChairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&(identical(other.attendant, attendant) || other.attendant == attendant)&&(identical(other.microphone, microphone) || other.microphone == microphone)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Qualifications&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.prayer, prayer) || other.prayer == prayer)&&(identical(other.treasures, treasures) || other.treasures == treasures)&&(identical(other.gems, gems) || other.gems == gems)&&(identical(other.bibleReading, bibleReading) || other.bibleReading == bibleReading)&&(identical(other.fieldMinistry, fieldMinistry) || other.fieldMinistry == fieldMinistry)&&(identical(other.livingParts, livingParts) || other.livingParts == livingParts)&&(identical(other.cbsConductor, cbsConductor) || other.cbsConductor == cbsConductor)&&(identical(other.cbsReader, cbsReader) || other.cbsReader == cbsReader)&&(identical(other.publicTalk, publicTalk) || other.publicTalk == publicTalk)&&(identical(other.weekendChairman, weekendChairman) || other.weekendChairman == weekendChairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&(identical(other.attendant, attendant) || other.attendant == attendant)&&(identical(other.microphone, microphone) || other.microphone == microphone)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&(identical(other.publicWitnessing, publicWitnessing) || other.publicWitnessing == publicWitnessing)&&(identical(other.ministryMeetingConductor, ministryMeetingConductor) || other.ministryMeetingConductor == ministryMeetingConductor));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,chairman,prayer,treasures,gems,bibleReading,fieldMinistry,livingParts,cbsConductor,cbsReader,publicTalk,weekendChairman,wtReader,attendant,microphone,audioVideo,publicWitnessing);
+int get hashCode => Object.hash(runtimeType,chairman,prayer,treasures,gems,bibleReading,fieldMinistry,livingParts,cbsConductor,cbsReader,publicTalk,weekendChairman,wtReader,attendant,microphone,audioVideo,publicWitnessing,ministryMeetingConductor);
 
 @override
 String toString() {
-  return 'Qualifications(chairman: $chairman, prayer: $prayer, treasures: $treasures, gems: $gems, bibleReading: $bibleReading, fieldMinistry: $fieldMinistry, livingParts: $livingParts, cbsConductor: $cbsConductor, cbsReader: $cbsReader, publicTalk: $publicTalk, weekendChairman: $weekendChairman, wtReader: $wtReader, attendant: $attendant, microphone: $microphone, audioVideo: $audioVideo, publicWitnessing: $publicWitnessing)';
+  return 'Qualifications(chairman: $chairman, prayer: $prayer, treasures: $treasures, gems: $gems, bibleReading: $bibleReading, fieldMinistry: $fieldMinistry, livingParts: $livingParts, cbsConductor: $cbsConductor, cbsReader: $cbsReader, publicTalk: $publicTalk, weekendChairman: $weekendChairman, wtReader: $wtReader, attendant: $attendant, microphone: $microphone, audioVideo: $audioVideo, publicWitnessing: $publicWitnessing, ministryMeetingConductor: $ministryMeetingConductor)';
 }
 
 
@@ -567,7 +572,7 @@ abstract mixin class _$QualificationsCopyWith<$Res> implements $QualificationsCo
   factory _$QualificationsCopyWith(_Qualifications value, $Res Function(_Qualifications) _then) = __$QualificationsCopyWithImpl;
 @override @useResult
 $Res call({
- bool chairman, bool prayer, bool treasures, bool gems, bool bibleReading, bool fieldMinistry, bool livingParts, bool cbsConductor, bool cbsReader, bool publicTalk, bool weekendChairman, bool wtReader, bool attendant, bool microphone, bool audioVideo, bool publicWitnessing
+ bool chairman, bool prayer, bool treasures, bool gems, bool bibleReading, bool fieldMinistry, bool livingParts, bool cbsConductor, bool cbsReader, bool publicTalk, bool weekendChairman, bool wtReader, bool attendant, bool microphone, bool audioVideo, bool publicWitnessing, bool ministryMeetingConductor
 });
 
 
@@ -584,7 +589,7 @@ class __$QualificationsCopyWithImpl<$Res>
 
 /// Create a copy of Qualifications
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? chairman = null,Object? prayer = null,Object? treasures = null,Object? gems = null,Object? bibleReading = null,Object? fieldMinistry = null,Object? livingParts = null,Object? cbsConductor = null,Object? cbsReader = null,Object? publicTalk = null,Object? weekendChairman = null,Object? wtReader = null,Object? attendant = null,Object? microphone = null,Object? audioVideo = null,Object? publicWitnessing = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? chairman = null,Object? prayer = null,Object? treasures = null,Object? gems = null,Object? bibleReading = null,Object? fieldMinistry = null,Object? livingParts = null,Object? cbsConductor = null,Object? cbsReader = null,Object? publicTalk = null,Object? weekendChairman = null,Object? wtReader = null,Object? attendant = null,Object? microphone = null,Object? audioVideo = null,Object? publicWitnessing = null,Object? ministryMeetingConductor = null,}) {
   return _then(_Qualifications(
 chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as bool,prayer: null == prayer ? _self.prayer : prayer // ignore: cast_nullable_to_non_nullable
@@ -602,6 +607,7 @@ as bool,attendant: null == attendant ? _self.attendant : attendant // ignore: ca
 as bool,microphone: null == microphone ? _self.microphone : microphone // ignore: cast_nullable_to_non_nullable
 as bool,audioVideo: null == audioVideo ? _self.audioVideo : audioVideo // ignore: cast_nullable_to_non_nullable
 as bool,publicWitnessing: null == publicWitnessing ? _self.publicWitnessing : publicWitnessing // ignore: cast_nullable_to_non_nullable
+as bool,ministryMeetingConductor: null == ministryMeetingConductor ? _self.ministryMeetingConductor : ministryMeetingConductor // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

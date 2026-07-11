@@ -12,6 +12,7 @@ _Roles _$RolesFromJson(Map<String, dynamic> json) => _Roles(
   lmmSchedule: json['lmmSchedule'] as bool? ?? false,
   weekendSchedule: json['weekendSchedule'] as bool? ?? false,
   publicWitnessing: json['publicWitnessing'] as bool? ?? false,
+  fieldServiceMeetings: json['fieldServiceMeetings'] as bool? ?? false,
   territories: json['territories'] as bool? ?? false,
   reports: json['reports'] as bool? ?? false,
   attendance: json['attendance'] as bool? ?? false,
@@ -25,6 +26,7 @@ Map<String, dynamic> _$RolesToJson(_Roles instance) => <String, dynamic>{
   'lmmSchedule': instance.lmmSchedule,
   'weekendSchedule': instance.weekendSchedule,
   'publicWitnessing': instance.publicWitnessing,
+  'fieldServiceMeetings': instance.fieldServiceMeetings,
   'territories': instance.territories,
   'reports': instance.reports,
   'attendance': instance.attendance,
@@ -50,6 +52,8 @@ _Qualifications _$QualificationsFromJson(Map<String, dynamic> json) =>
       microphone: json['microphone'] as bool? ?? false,
       audioVideo: json['audioVideo'] as bool? ?? false,
       publicWitnessing: json['publicWitnessing'] as bool? ?? false,
+      ministryMeetingConductor:
+          json['ministryMeetingConductor'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$QualificationsToJson(_Qualifications instance) =>
@@ -70,6 +74,7 @@ Map<String, dynamic> _$QualificationsToJson(_Qualifications instance) =>
       'microphone': instance.microphone,
       'audioVideo': instance.audioVideo,
       'publicWitnessing': instance.publicWitnessing,
+      'ministryMeetingConductor': instance.ministryMeetingConductor,
     };
 
 _Publisher _$PublisherFromJson(Map<String, dynamic> json) => _Publisher(

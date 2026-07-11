@@ -21,6 +21,9 @@ abstract final class AppConfig {
   /// How far ahead recurring public-witnessing slots are materialized.
   static const int pwMaterializeMonthsAhead = 3;
 
+  /// How far ahead recurring field-service meetings are materialized.
+  static const int fsmMaterializeMonthsAhead = 3;
+
   /// How much schedule history feeds the "least recently assigned" ordering.
   static const int pickerHistoryMonths = 18;
 }

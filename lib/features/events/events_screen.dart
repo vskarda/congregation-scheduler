@@ -39,6 +39,7 @@ String assignmentRoleLabel(AppLocalizations l10n, String roleKey) =>
       'microphones' => l10n.supportMicrophones,
       'audioVideo' => l10n.supportAudioVideo,
       'pw' => l10n.rolePw,
+      'fsm' => l10n.roleFsm,
       _ => '',
     };
 
@@ -55,6 +56,9 @@ String? assignmentTimeLabel(MyAssignmentEntry entry) => switch (entry.time) {
 
 /// Standard length of a JW meeting; per-meeting duration isn't stored.
 const _meetingDuration = Duration(minutes: 105);
+
+/// Meetings for field service are short; only their start time is stored.
+const _fsmDuration = Duration(minutes: 15);
 
 DateTime _combineDateAndTime(DateTime day, String hhMm) {
   final parts = hhMm.split(':');
@@ -82,10 +86,15 @@ Event assignmentCalendarEvent(AppLocalizations l10n, MyAssignmentEntry entry) {
   final start = _combineDateAndTime(day, entry.time!);
   final end = entry.endTime != null
       ? _combineDateAndTime(day, entry.endTime!)
-      : start.add(_meetingDuration);
+      : start.add(entry.source == AssignmentSource.fsm
+          ? _fsmDuration
+          : _meetingDuration);
   return Event(
     title: assignmentTitle(l10n, entry),
-    location: entry.source == AssignmentSource.pw ? entry.detail : '',
+    location: entry.source == AssignmentSource.pw ||
+            entry.source == AssignmentSource.fsm
+        ? entry.detail
+        : '',
     startDate: start,
     endDate: end,
   );
@@ -225,6 +234,8 @@ class EventsScreen extends ConsumerWidget {
                             Icons.groups_outlined,
                           AssignmentSource.pw =>
                             Icons.storefront_outlined,
+                          AssignmentSource.fsm =>
+                            Icons.diversity_3_outlined,
                         },
                         size: 20,
                       ),

@@ -84,6 +84,7 @@
   "navLmm": "Life and Ministry",
   "navWeekend": "Weekend meeting",
   "navPublicWitnessing": "Public witnessing",
+  "navFieldServiceMeetings": "Meetings for Field Service",
   "navTerritories": "Territories",
   "navReport": "Ministry report",
   "navAttendance": "Attendance",
@@ -248,6 +249,19 @@
   "pwAssignees": "Assigned",
   "pwDate": "Date",
 
+  "fsmNoMeetings": "No meetings for field service this week.",
+  "fsmAddMeeting": "Add meeting",
+  "fsmEditMeeting": "Edit meeting",
+  "fsmDate": "Date",
+  "fsmTime": "Time",
+  "fsmLocation": "Place",
+  "fsmConductor": "Conductor",
+  "fsmRecurringRules": "Recurring meetings",
+  "fsmRecurringAdd": "Add recurring meeting",
+  "fsmWeekday": "Day of week",
+  "fsmValidFrom": "Valid from",
+  "fsmValidUntil": "Valid until (optional)",
+
   "eventsUpcoming": "Upcoming events",
   "eventsNone": "No upcoming events.",
   "eventAdd": "Add event",
@@ -268,6 +282,7 @@
   "myAssignmentsNone": "No upcoming assignments.",
   "roleAssistant": "Assistant",
   "rolePw": "Public witnessing",
+  "roleFsm": "Meeting for field service",
 
   "reportSubmit": "Submit report",
   "reportSubmittedAt": "Submitted {date}",
@@ -359,5 +374,6 @@
   "qAttendant": "Attendant",
   "qMicrophone": "Microphones",
   "qAudioVideo": "Audio/video",
-  "qPublicWitnessing": "Public witnessing"
+  "qPublicWitnessing": "Public witnessing",
+  "qMinistryMeetingConductor": "Ministry meeting conductor"
 }

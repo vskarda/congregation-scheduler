@@ -28,6 +28,7 @@ const FULL_ADMIN = 'full-admin-uid';
 const ADMIN = 'admin-uid'; // publishers + reports admin
 const LMM_ADMIN = 'lmm-admin-uid';
 const WEEKEND_ADMIN = 'weekend-admin-uid';
+const FSM_ADMIN = 'fsm-admin-uid';
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
@@ -45,6 +46,7 @@ const basePublisher = {
     lmmSchedule: false,
     weekendSchedule: false,
     publicWitnessing: false,
+    fieldServiceMeetings: false,
     territories: false,
     reports: false,
     attendance: false,
@@ -80,6 +82,10 @@ async function seed() {
     await setDoc(doc(f, `publishers/${WEEKEND_ADMIN}`), {
       ...basePublisher,
       roles: { ...basePublisher.roles, weekendSchedule: true },
+    });
+    await setDoc(doc(f, `publishers/${FSM_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, fieldServiceMeetings: true },
     });
     await setDoc(doc(f, `publishers/${ATTENDANCE_ADMIN}`), {
       ...basePublisher,
@@ -121,6 +127,15 @@ async function seed() {
       titles: { 1: 'How Well Do You Know God?' },
       updatedAt: '2026-07-01',
       source: 'S-99_E.pdf',
+    });
+    await setDoc(doc(f, 'fsm_meetings/m1'), {
+      date: '2026-07-11',
+      time: '09:00',
+      location: 'Kingdom Hall',
+      assignment: { publisherIds: [], freeText: '' },
+      recurringId: '',
+      cancelled: false,
+      allAssigneeIds: [],
     });
   });
 }
@@ -554,6 +569,55 @@ describe('public talk titles catalog', () => {
         talkNo: 1,
         allAssigneeIds: [],
       }),
+    );
+  });
+});
+
+describe('field service meetings', () => {
+  it('verified publisher reads meetings but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'fsm_meetings/m1')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'fsm_meetings/m2'), {
+        date: '2026-07-18',
+        time: '09:00',
+      }),
+    );
+  });
+
+  it('unverified user cannot read meetings', async () => {
+    await assertFails(getDoc(doc(db(UNVERIFIED), 'fsm_meetings/m1')));
+  });
+
+  it('fsm admin writes meetings and recurring rules', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(FSM_ADMIN), 'fsm_meetings/m2'), {
+        date: '2026-07-18',
+        time: '09:00',
+        location: 'Kingdom Hall',
+        assignment: { publisherIds: [], freeText: '' },
+        recurringId: '',
+        cancelled: false,
+        allAssigneeIds: [],
+      }),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(FSM_ADMIN), 'fsm_recurring/r1'), {
+        weekday: 6,
+        time: '09:00',
+        location: 'Kingdom Hall',
+        defaultAssignment: { publisherIds: [], freeText: '' },
+        validFrom: '2026-07-01',
+        validUntil: '',
+      }),
+    );
+  });
+
+  it('other section admins cannot write fsm collections', async () => {
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'fsm_meetings/m3'), { date: '2026-07-18' }),
+    );
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'fsm_recurring/r2'), { weekday: 6 }),
     );
   });
 });

@@ -9,6 +9,7 @@ import '../../features/auth/complete_profile_screen.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/events/events_screen.dart';
+import '../../features/field_service_meetings/fsm_screen.dart';
 import '../../features/home/app_shell.dart';
 import '../../features/info_board/info_board_screen.dart';
 import '../../features/lmm_schedule/lmm_screen.dart';
@@ -111,6 +112,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/lmm', builder: (_, _) => const LmmScreen()),
           GoRoute(path: '/weekend', builder: (_, _) => const WeekendScreen()),
           GoRoute(path: '/pw', builder: (_, _) => const PwScreen()),
+          GoRoute(path: '/fsm', builder: (_, _) => const FsmScreen()),
           GoRoute(
               path: '/territories',
               builder: (_, _) => const TerritoriesScreen()),

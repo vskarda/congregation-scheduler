@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/congregation_repository.dart';
+import '../../core/data/fsm_repository.dart';
 import '../../core/data/lmm_repository.dart';
 import '../../core/data/pw_repository.dart';
 import '../../core/data/weekend_repository.dart';
@@ -8,7 +9,7 @@ import '../../core/firebase/firebase_providers.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 
-enum AssignmentSource { lmm, weekend, pw }
+enum AssignmentSource { lmm, weekend, pw, fsm }
 
 /// One row of "my upcoming assignments". [roleKey] is localized by the UI
 /// (part-type names, 'assistant', 'speaker', 'wtReader', 'attendants',
@@ -164,6 +165,17 @@ final myUpcomingAssignmentsProvider =
         detail: slot.location,
         time: slot.startTime,
         endTime: slot.endTime));
+  }
+
+  final meetings = await ref.watch(fsmRepositoryProvider).getAssignedTo(uid);
+  for (final meeting in meetings) {
+    if (meeting.date.compareTo(today) < 0) continue;
+    entries.add(MyAssignmentEntry(
+        source: AssignmentSource.fsm,
+        date: meeting.date,
+        roleKey: 'fsm',
+        detail: meeting.location,
+        time: meeting.time));
   }
 
   entries.sort((a, b) => a.date.compareTo(b.date));

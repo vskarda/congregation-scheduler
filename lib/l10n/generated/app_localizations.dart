@@ -544,6 +544,12 @@ abstract class AppLocalizations {
   /// **'Public witnessing'**
   String get navPublicWitnessing;
 
+  /// No description provided for @navFieldServiceMeetings.
+  ///
+  /// In en, this message translates to:
+  /// **'Meetings for Field Service'**
+  String get navFieldServiceMeetings;
+
   /// No description provided for @navTerritories.
   ///
   /// In en, this message translates to:
@@ -1432,6 +1438,78 @@ abstract class AppLocalizations {
   /// **'Date'**
   String get pwDate;
 
+  /// No description provided for @fsmNoMeetings.
+  ///
+  /// In en, this message translates to:
+  /// **'No meetings for field service this week.'**
+  String get fsmNoMeetings;
+
+  /// No description provided for @fsmAddMeeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Add meeting'**
+  String get fsmAddMeeting;
+
+  /// No description provided for @fsmEditMeeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit meeting'**
+  String get fsmEditMeeting;
+
+  /// No description provided for @fsmDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get fsmDate;
+
+  /// No description provided for @fsmTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get fsmTime;
+
+  /// No description provided for @fsmLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Place'**
+  String get fsmLocation;
+
+  /// No description provided for @fsmConductor.
+  ///
+  /// In en, this message translates to:
+  /// **'Conductor'**
+  String get fsmConductor;
+
+  /// No description provided for @fsmRecurringRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Recurring meetings'**
+  String get fsmRecurringRules;
+
+  /// No description provided for @fsmRecurringAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add recurring meeting'**
+  String get fsmRecurringAdd;
+
+  /// No description provided for @fsmWeekday.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of week'**
+  String get fsmWeekday;
+
+  /// No description provided for @fsmValidFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid from'**
+  String get fsmValidFrom;
+
+  /// No description provided for @fsmValidUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid until (optional)'**
+  String get fsmValidUntil;
+
   /// No description provided for @eventsUpcoming.
   ///
   /// In en, this message translates to:
@@ -1551,6 +1629,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Public witnessing'**
   String get rolePw;
+
+  /// No description provided for @roleFsm.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting for field service'**
+  String get roleFsm;
 
   /// No description provided for @reportSubmit.
   ///
@@ -2031,6 +2115,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Public witnessing'**
   String get qPublicWitnessing;
+
+  /// No description provided for @qMinistryMeetingConductor.
+  ///
+  /// In en, this message translates to:
+  /// **'Ministry meeting conductor'**
+  String get qMinistryMeetingConductor;
 }
 
 class _AppLocalizationsDelegate

@@ -248,6 +248,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navPublicWitnessing => 'Public witnessing';
 
   @override
+  String get navFieldServiceMeetings => 'Meetings for Field Service';
+
+  @override
   String get navTerritories => 'Territories';
 
   @override
@@ -715,6 +718,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pwDate => 'Date';
 
   @override
+  String get fsmNoMeetings => 'No meetings for field service this week.';
+
+  @override
+  String get fsmAddMeeting => 'Add meeting';
+
+  @override
+  String get fsmEditMeeting => 'Edit meeting';
+
+  @override
+  String get fsmDate => 'Date';
+
+  @override
+  String get fsmTime => 'Time';
+
+  @override
+  String get fsmLocation => 'Place';
+
+  @override
+  String get fsmConductor => 'Conductor';
+
+  @override
+  String get fsmRecurringRules => 'Recurring meetings';
+
+  @override
+  String get fsmRecurringAdd => 'Add recurring meeting';
+
+  @override
+  String get fsmWeekday => 'Day of week';
+
+  @override
+  String get fsmValidFrom => 'Valid from';
+
+  @override
+  String get fsmValidUntil => 'Valid until (optional)';
+
+  @override
   String get eventsUpcoming => 'Upcoming events';
 
   @override
@@ -773,6 +812,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rolePw => 'Public witnessing';
+
+  @override
+  String get roleFsm => 'Meeting for field service';
 
   @override
   String get reportSubmit => 'Submit report';
@@ -1026,4 +1068,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qPublicWitnessing => 'Public witnessing';
+
+  @override
+  String get qMinistryMeetingConductor => 'Ministry meeting conductor';
 }
