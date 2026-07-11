@@ -133,6 +133,7 @@
   "reportComments": "Comments",
 
   "s21Export": "Export S-21 (PDF)",
+  "schedulePdfExport": "Monthly overview (PDF)",
   "s21Title": "CONGREGATION'S PUBLISHER RECORD",
   "s21Name": "Name:",
   "s21DateOfBirth": "Date of birth:",

@@ -31,6 +31,20 @@ DateTime parseMonthKey(String key) => DateTime.parse('$key-01');
 DateTime addMonths(DateTime d, int months) =>
     DateTime(d.year, d.month + months, 1);
 
+/// Mondays that fall inside the month of [month]. Advances by calendar days
+/// (not Duration) so a DST shift can't move a Monday midnight to the
+/// previous day.
+List<DateTime> mondaysInMonth(DateTime month) {
+  var m = mondayOf(DateTime(month.year, month.month, 1));
+  if (m.month != month.month) m = DateTime(m.year, m.month, m.day + 7);
+  final mondays = <DateTime>[];
+  while (m.month == month.month) {
+    mondays.add(m);
+    m = DateTime(m.year, m.month, m.day + 7);
+  }
+  return mondays;
+}
+
 /// Service years run September..August; returns the year the service year
 /// ends in (e.g. 2026 for Sep 2025 – Aug 2026).
 int serviceYearOf(DateTime d) => d.month >= 9 ? d.year + 1 : d.year;

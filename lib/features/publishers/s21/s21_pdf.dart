@@ -1,29 +1,13 @@
 import 'dart:typed_data';
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 import '../../../core/l10n/l10n.dart';
 import '../../../core/models/models.dart';
+import '../../../core/pdf/pdf_fonts.dart';
 import '../../../core/utils/dates.dart';
-
-/// Unicode fonts embedded into the PDF; the pdf package's built-in Helvetica
-/// lacks the Latin Extended-A glyphs Czech needs.
-class S21Fonts {
-  const S21Fonts({required this.base, required this.bold});
-
-  final pw.Font base;
-  final pw.Font bold;
-}
-
-Future<S21Fonts> loadS21Fonts() async => S21Fonts(
-      base: pw.Font.ttf(
-          await rootBundle.load('assets/fonts/NotoSans-Regular.ttf')),
-      bold:
-          pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf')),
-    );
 
 /// Builds a one-page PDF replicating the official S-21 (11/23) publisher
 /// record card for one service year, localized to [locale].
@@ -34,7 +18,7 @@ Future<Uint8List> buildS21Pdf({
   required Map<String, MinistryReport?> reportsByMonth,
   required AppLocalizations l10n,
   required String locale,
-  required S21Fonts fonts,
+  required PdfFonts fonts,
 }) async {
   final dateFmt = DateFormat.yMd(locale);
   final monthFmt = DateFormat('LLLL', locale);

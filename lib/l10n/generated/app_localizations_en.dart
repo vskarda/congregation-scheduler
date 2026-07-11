@@ -385,6 +385,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get s21Export => 'Export S-21 (PDF)';
 
   @override
+  String get schedulePdfExport => 'Monthly overview (PDF)';
+
+  @override
   String get s21Title => 'CONGREGATION\'S PUBLISHER RECORD';
 
   @override

@@ -385,6 +385,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get s21Export => 'Exportovat S-21 (PDF)';
 
   @override
+  String get schedulePdfExport => 'Měsíční přehled (PDF)';
+
+  @override
   String get s21Title => 'SBOROVÝ ZÁZNAM ZVĚSTOVATELE';
 
   @override

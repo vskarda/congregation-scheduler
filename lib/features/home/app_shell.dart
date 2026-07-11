@@ -8,6 +8,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/l10n/locale_provider.dart';
+import 'schedule_pdf_button.dart';
 
 class _Destination {
   const _Destination(this.route, this.icon, this.label);
@@ -77,6 +78,10 @@ class AppShell extends ConsumerWidget {
     final appBar = AppBar(
       title: Text(title),
       actions: [
+        if (location == '/lmm' && roles.canEditLmm())
+          const SchedulePdfButton(kind: SchedulePdfKind.lmm),
+        if (location == '/weekend' && roles.canEditWeekend())
+          const SchedulePdfButton(kind: SchedulePdfKind.weekend),
         if (realRoles.any)
           IconButton(
             // Icon shows the action: pencil = enable editing, slash = hide it.

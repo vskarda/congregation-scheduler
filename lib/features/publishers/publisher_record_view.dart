@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/l10n/l10n.dart';
+import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/dates.dart';
 import '../info_board/file_opener/file_opener.dart';
 import 'publishers_providers.dart';
@@ -51,7 +52,7 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
         reportsByMonth: reports,
         l10n: l10n,
         locale: locale,
-        fonts: await loadS21Fonts(),
+        fonts: await loadPdfFonts(),
       );
       await openFileBytes(
         bytes: bytes,

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:congregation_scheduler/core/models/models.dart';
+import 'package:congregation_scheduler/core/pdf/pdf_fonts.dart';
 import 'package:congregation_scheduler/features/publishers/s21/s21_pdf.dart';
 import 'package:congregation_scheduler/l10n/generated/app_localizations.dart';
 import 'package:flutter/widgets.dart';
@@ -11,10 +12,10 @@ import 'package:pdf/widgets.dart' as pw;
 
 // Loads the bundled fonts straight from disk; rootBundle is not available in
 // plain unit tests.
-S21Fonts loadFontsFromDisk() {
+PdfFonts loadFontsFromDisk() {
   ByteData read(String path) =>
       ByteData.sublistView(File(path).readAsBytesSync());
-  return S21Fonts(
+  return PdfFonts(
     base: pw.Font.ttf(read('assets/fonts/NotoSans-Regular.ttf')),
     bold: pw.Font.ttf(read('assets/fonts/NotoSans-Bold.ttf')),
   );

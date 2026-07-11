@@ -27,3 +27,11 @@ String genderLabel(AppLocalizations l10n, Gender gender) => switch (gender) {
       Gender.male => l10n.genderMale,
       Gender.female => l10n.genderFemale,
     };
+
+String lmmSectionLabel(AppLocalizations l10n, LmmSection s) => switch (s) {
+      LmmSection.opening => l10n.sectionOpening,
+      LmmSection.treasures => l10n.sectionTreasures,
+      LmmSection.ministry => l10n.sectionMinistry,
+      LmmSection.living => l10n.sectionLiving,
+      LmmSection.closing => l10n.sectionClosing,
+    };

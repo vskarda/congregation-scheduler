@@ -383,6 +383,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get s21Export => 'S-21\'i Dışa Aktar (PDF)';
 
   @override
+  String get schedulePdfExport => 'Aylık program (PDF)';
+
+  @override
   String get s21Title => 'CEMAAT MÜJDECİ KAYDI';
 
   @override

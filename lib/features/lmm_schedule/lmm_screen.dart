@@ -6,6 +6,7 @@ import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/lmm_repository.dart';
+import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/widgets/assignment_chips.dart';
@@ -217,13 +218,8 @@ class _WeekContent extends ConsumerWidget {
     _ => const Color(0xFF5C6BC0),
   };
 
-  String _sectionLabel(AppLocalizations l10n, LmmSection s) => switch (s) {
-    LmmSection.opening => l10n.sectionOpening,
-    LmmSection.treasures => l10n.sectionTreasures,
-    LmmSection.ministry => l10n.sectionMinistry,
-    LmmSection.living => l10n.sectionLiving,
-    LmmSection.closing => l10n.sectionClosing,
-  };
+  String _sectionLabel(AppLocalizations l10n, LmmSection s) =>
+      lmmSectionLabel(l10n, s);
 
   Future<void> _editSongs(
     BuildContext context,

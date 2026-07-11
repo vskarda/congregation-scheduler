@@ -814,6 +814,12 @@ abstract class AppLocalizations {
   /// **'Export S-21 (PDF)'**
   String get s21Export;
 
+  /// No description provided for @schedulePdfExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly overview (PDF)'**
+  String get schedulePdfExport;
+
   /// No description provided for @s21Title.
   ///
   /// In en, this message translates to:

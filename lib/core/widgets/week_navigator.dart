@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../utils/dates.dart';
 
+/// Monday of the week currently shown by the active [WeekNavigator]; lets
+/// widgets outside the pager (e.g. the app-bar PDF export) know the viewed
+/// week.
+class ViewedWeekNotifier extends Notifier<DateTime> {
+  @override
+  DateTime build() => mondayOf(DateTime.now());
+
+  void set(DateTime monday) => state = monday;
+}
+
+final viewedWeekProvider = NotifierProvider<ViewedWeekNotifier, DateTime>(
+  ViewedWeekNotifier.new,
+);
+
 /// Week-by-week pager shared by all schedules: swipe left/right, arrows, and
 /// a tappable date label that opens a date picker.
-class WeekNavigator extends StatefulWidget {
+class WeekNavigator extends ConsumerStatefulWidget {
   const WeekNavigator({super.key, required this.contentBuilder});
 
   /// Builds the content for one week, identified by its Monday key.
   final Widget Function(BuildContext context, String weekId) contentBuilder;
 
   @override
-  State<WeekNavigator> createState() => _WeekNavigatorState();
+  ConsumerState<WeekNavigator> createState() => _WeekNavigatorState();
 }
 
-class _WeekNavigatorState extends State<WeekNavigator> {
+class _WeekNavigatorState extends ConsumerState<WeekNavigator> {
   static const _center = 5000;
 
   final _controller = PageController(initialPage: _center);
@@ -24,6 +39,16 @@ class _WeekNavigatorState extends State<WeekNavigator> {
 
   DateTime _mondayFor(int page) =>
       _baseMonday.add(Duration(days: 7 * (page - _center)));
+
+  @override
+  void initState() {
+    super.initState();
+    // The pager always mounts at the current week; sync the provider so it
+    // never carries a stale week over from a previously shown schedule.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) ref.read(viewedWeekProvider.notifier).set(_baseMonday);
+    });
+  }
 
   @override
   void dispose() {
@@ -81,7 +106,10 @@ class _WeekNavigatorState extends State<WeekNavigator> {
         Expanded(
           child: PageView.builder(
             controller: _controller,
-            onPageChanged: (page) => setState(() => _page = page),
+            onPageChanged: (page) {
+              setState(() => _page = page);
+              ref.read(viewedWeekProvider.notifier).set(_mondayFor(page));
+            },
             itemBuilder: (context, page) =>
                 widget.contentBuilder(context, dateKey(_mondayFor(page))),
           ),
