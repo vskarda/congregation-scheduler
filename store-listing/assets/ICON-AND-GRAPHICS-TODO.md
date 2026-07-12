@@ -1,45 +1,60 @@
-# App icon & store graphics — TODO
+# App icon & store graphics — DONE
 
-**Blocker for submission.** The app currently ships the stock Flutter
-template icon (the blue Flutter "F" logo) on both platforms — confirmed by
-viewing `ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png`
-and the equivalent `android/app/src/main/res/mipmap-*/ic_launcher.png`
-files. Neither store will reject a submission purely for using a generic
-icon, but shipping the default template icon looks unfinished/untrustworthy
-to reviewers and users, and is worth fixing before a real launch. Designing
-the actual artwork is out of scope for this task (no design brief or
-brand assets were provided) — this file just specifies what's needed.
+**Resolved.** The app no longer ships the stock Flutter template icon. A
+real app icon (calendar + congregation + checkmark on a blue gradient,
+avoiding any official Jehovah's Witnesses/Watch Tower emblems) has been
+generated for every platform, plus the Play Store graphics.
 
-## What to produce
+## Source & regeneration
 
-1. **Master icon**: a single 1024×1024 PNG, no transparency, no rounded
-   corners (both stores apply their own corner mask). Simple, flat,
-   works at very small sizes (down to ~20×20 for iOS settings icons) —
-   avoid fine detail or small text.
-2. Once you have the master icon, regenerate all platform sizes with:
-   ```sh
-   flutter pub add --dev flutter_launcher_icons
-   ```
-   then configure `flutter_launcher_icons.yaml` pointing at the new
-   1024×1024 source and run:
-   ```sh
-   dart run flutter_launcher_icons
-   ```
-   This replaces every file under `android/app/src/main/res/mipmap-*/` and
-   `ios/Runner/Assets.xcassets/AppIcon.appiconset/`.
-3. **Google Play Store icon**: 512×512 PNG, 32-bit with alpha, uploaded
-   separately in Play Console (distinct from the in-app launcher icon
-   asset, though usually the same artwork).
-4. **Google Play feature graphic**: 1024×500 PNG/JPEG, shown at the top of
-   the Play Store listing. Needs its own design (not just the icon scaled
-   up) — e.g. icon + app name + a short tagline on a background.
-5. *(Optional, App Store)* **App Store promotional artwork** — Apple no
-   longer requires a separate feature graphic, but a clean 1024×1024 icon
-   is the only hard requirement there.
+- **Master artwork**: [`../../icon.png`](../../icon.png) at the repo root
+  (611×579, full-bleed blue gradient, opaque).
+- **Generator script**: [`../../scripts/make_icons.py`](../../scripts/make_icons.py)
+  crops the source to a centred square (no distortion — it only trims
+  background), resizes to 1024×1024, and derives the adaptive-icon layers
+  and the store graphics. Re-run with `python scripts/make_icons.py`
+  (needs `pillow` + `numpy`).
+- **Platform icons** are produced by `flutter_launcher_icons` — config in
+  [`../../flutter_launcher_icons.yaml`](../../flutter_launcher_icons.yaml).
+  Regenerate with `dart run flutter_launcher_icons`.
 
-## Suggested direction (not a final design)
+## What's already wired into the app (no console upload needed)
 
-Something evoking scheduling/calendar + community, avoiding any official
-Jehovah's Witnesses/Watch Tower Society logos, emblems, or trade dress
-(per the independence disclaimer in the privacy policy and store
-descriptions) — e.g. a simple calendar-grid or checkmark glyph.
+These are committed in the repo and ship with the build:
+
+- **Android launcher icons** — `android/app/src/main/res/mipmap-*/ic_launcher.png`
+  (legacy) plus an **adaptive icon** (`mipmap-anydpi-v26/ic_launcher.xml`
+  with `drawable-*/ic_launcher_foreground.png` + `..._background.png`). The
+  foreground glyph sits inside the adaptive safe zone, so it isn't clipped
+  by round/squircle launcher masks.
+- **iOS app icon** — every size under
+  `ios/Runner/Assets.xcassets/AppIcon.appiconset/`, including the
+  1024×1024 marketing icon (no alpha, no rounded corners — Apple masks its
+  own). This 1024 icon *is* the App Store icon; Apple pulls it from the
+  build, so there's nothing separate to upload.
+- **Web/PWA icons** — `web/icons/` + `web/favicon.png`, and the theme /
+  background colours in `web/manifest.json` (`#1063B4`).
+
+## What you still upload by hand in the Play Console
+
+Google Play does **not** read these from the build — upload them in the
+Play Console listing:
+
+| Deliverable | File | Play Console field |
+|---|---|---|
+| Store icon (512×512, 32-bit PNG w/ alpha) | [`play-store-icon-512.png`](play-store-icon-512.png) | Store listing → App icon |
+| Feature graphic (1024×500) | [`play-feature-graphic-1024x500.png`](play-feature-graphic-1024x500.png) | Store listing → Graphics → Feature graphic |
+
+Also kept here for reference / re-use:
+
+- [`app-icon-1024.png`](app-icon-1024.png) — the 1024×1024 master (same
+  artwork Apple already gets from the build).
+
+## Notes
+
+- The feature graphic uses the app's own **NotoSans** faces
+  (`assets/fonts/`) and the tagline *"Self-hosted scheduling for your
+  congregation"* — swap the wording in `make_icons.py` if you prefer the
+  full 80-char short description.
+- Screenshots are still outstanding — see
+  [`../screenshots/SHOT-LIST.md`](../screenshots/SHOT-LIST.md).

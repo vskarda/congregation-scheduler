@@ -10,8 +10,12 @@ pipeline already exists — see [`docs/CI-CD.md`](../docs/CI-CD.md).
 
 ## Two blockers found while preparing this — read first
 
-1. **App icon is still the Flutter default template icon** on both
-   platforms. Not fixed in this pass (no design brief given). See
+1. ~~**App icon is still the Flutter default template icon.**~~
+   **RESOLVED.** A real app icon (calendar + congregation + checkmark on a
+   blue gradient) now ships on Android (legacy + adaptive), iOS, and web,
+   generated from [`../icon.png`](../icon.png). The Play Store 512×512 icon
+   and 1024×500 feature graphic are prepared under `assets/` for manual
+   upload in the Play Console. See
    [`assets/ICON-AND-GRAPHICS-TODO.md`](assets/ICON-AND-GRAPHICS-TODO.md).
 2. ~~**No self-service "delete my account" feature.**~~ **RESOLVED.**
    Any signed-in user can now permanently delete their account in-app
@@ -41,7 +45,7 @@ pipeline already exists — see [`docs/CI-CD.md`](../docs/CI-CD.md).
 | [`app-store/app-privacy-questions.md`](app-store/app-privacy-questions.md) | Draft answers for Apple's App Privacy ("nutrition label") |
 | [`app-store/age-rating-questionnaire.md`](app-store/age-rating-questionnaire.md) | Draft answers for Apple's age rating questionnaire |
 | [`screenshots/SHOT-LIST.md`](screenshots/SHOT-LIST.md) | What to capture, in what order, at what pixel sizes |
-| [`assets/ICON-AND-GRAPHICS-TODO.md`](assets/ICON-AND-GRAPHICS-TODO.md) | Icon + Play feature graphic spec (not designed yet) |
+| [`assets/ICON-AND-GRAPHICS-TODO.md`](assets/ICON-AND-GRAPHICS-TODO.md) | Icon + Play feature graphic — **done**; how they were generated + what to upload |
 
 All store-listing text was prepared in **English only** for this first
 pass (confirmed choice) — both consoles let you add Czech/Turkish listings
@@ -54,8 +58,9 @@ UI localization.
    `[` to find them all. Key ones: developer/publisher name, support
    e-mail, "last updated" date on the privacy policy, account-deletion
    process description.
-2. **Design a real app icon** (and Play feature graphic) —
-   `assets/ICON-AND-GRAPHICS-TODO.md`.
+2. **Upload the Play Store graphics** — `assets/play-store-icon-512.png`
+   and `assets/play-feature-graphic-1024x500.png` (the in-app/iOS icons
+   already ship with the build). See `assets/ICON-AND-GRAPHICS-TODO.md`.
 3. **Capture screenshots** per `screenshots/SHOT-LIST.md`, once you have
    an Android device/emulator or iOS simulator available.
 4. **Publish the privacy policy** — enable GitHub Pages for this repo

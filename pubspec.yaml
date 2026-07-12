@@ -78,6 +78,7 @@ dev_dependencies:
   firebase_auth_mocks: ^0.15.2
   # Used by firebase_auth_mocks; imported directly in tests to stub auth errors.
   mock_exceptions: ^0.8.2
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

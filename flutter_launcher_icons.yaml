@@ -1,0 +1,24 @@
+# App launcher icons for Android, iOS and web.
+# Source artwork lives in assets/icon/ (generated from icon.png by
+# scripts/make_icons.py). Regenerate platform icons with:
+#     dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/app_icon.png"
+
+  # Android: legacy square icons + adaptive icon (API 26+).
+  android: true
+  min_sdk_android: 21
+  adaptive_icon_background: "assets/icon/app_icon_background.png"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+
+  # iOS: master has no alpha; keep remove_alpha_ios for safety.
+  ios: true
+  remove_alpha_ios: true
+  background_color_ios: "#1063B4"
+
+  # Web PWA icons + manifest colours.
+  web:
+    generate: true
+    image_path: "assets/icon/app_icon.png"
+    background_color: "#1063B4"
+    theme_color: "#1063B4"
