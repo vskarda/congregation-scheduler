@@ -195,6 +195,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authResetSent => 'Parola sıfırlama e-postası gönderildi.';
 
   @override
+  String get authEnterEmailForReset =>
+      'Önce e-posta adresinizi girin, ardından sıfırlama bağlantısı almak için \"Şifremi unuttum?\" düğmesine dokunun.';
+
+  @override
   String get authNoAccountYet => 'Henüz hesabınız yok mu? Oluşturun';
 
   @override

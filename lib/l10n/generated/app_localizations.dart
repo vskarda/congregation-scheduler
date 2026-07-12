@@ -448,6 +448,12 @@ abstract class AppLocalizations {
   /// **'A password reset e-mail has been sent.'**
   String get authResetSent;
 
+  /// No description provided for @authEnterEmailForReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address first, then tap \"Forgot password?\" to receive a reset link.'**
+  String get authEnterEmailForReset;
+
   /// No description provided for @authNoAccountYet.
   ///
   /// In en, this message translates to:

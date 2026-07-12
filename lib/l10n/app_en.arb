@@ -65,6 +65,7 @@
   "authPasswordsDontMatch": "Passwords do not match",
   "authForgotPassword": "Forgot password?",
   "authResetSent": "A password reset e-mail has been sent.",
+  "authEnterEmailForReset": "Enter your email address first, then tap \"Forgot password?\" to receive a reset link.",
   "authNoAccountYet": "No account yet? Create one",
   "authHaveAccount": "Already have an account? Sign in",
   "authErrorInvalidCredentials": "Wrong e-mail or password.",

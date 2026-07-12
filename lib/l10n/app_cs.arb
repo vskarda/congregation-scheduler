@@ -63,6 +63,7 @@
   "authPasswordsDontMatch": "Hesla se neshodují",
   "authForgotPassword": "Zapomenuté heslo?",
   "authResetSent": "E-mail pro obnovení hesla byl odeslán.",
+  "authEnterEmailForReset": "Nejprve zadejte svou e-mailovou adresu, poté klepněte na „Zapomenuté heslo?“ pro zaslání odkazu k obnovení.",
   "authNoAccountYet": "Ještě nemáte účet? Vytvořte si ho",
   "authHaveAccount": "Už máte účet? Přihlaste se",
   "authErrorInvalidCredentials": "Nesprávný e-mail nebo heslo.",

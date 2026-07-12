@@ -195,6 +195,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authResetSent => 'A password reset e-mail has been sent.';
 
   @override
+  String get authEnterEmailForReset =>
+      'Enter your email address first, then tap \"Forgot password?\" to receive a reset link.';
+
+  @override
   String get authNoAccountYet => 'No account yet? Create one';
 
   @override

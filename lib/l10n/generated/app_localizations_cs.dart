@@ -196,6 +196,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get authResetSent => 'E-mail pro obnovení hesla byl odeslán.';
 
   @override
+  String get authEnterEmailForReset =>
+      'Nejprve zadejte svou e-mailovou adresu, poté klepněte na „Zapomenuté heslo?“ pro zaslání odkazu k obnovení.';
+
+  @override
   String get authNoAccountYet => 'Ještě nemáte účet? Vytvořte si ho';
 
   @override

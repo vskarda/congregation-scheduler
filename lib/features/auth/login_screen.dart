@@ -36,6 +36,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  final _emailFocus = FocusNode();
   bool _busy = false;
   String? _error;
 
@@ -43,6 +44,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void dispose() {
     _emailCtrl.dispose();
     _passwordCtrl.dispose();
+    _emailFocus.dispose();
     super.dispose();
   }
 
@@ -67,7 +69,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _resetPassword() async {
     final l10n = context.l10n;
     final messenger = ScaffoldMessenger.of(context);
-    if (_emailCtrl.text.trim().isEmpty) return;
+    if (_emailCtrl.text.trim().isEmpty) {
+      setState(() => _error = l10n.authEnterEmailForReset);
+      _emailFocus.requestFocus();
+      return;
+    }
     try {
       await ref.read(authServiceProvider).sendPasswordReset(_emailCtrl.text);
       messenger.showSnackBar(SnackBar(content: Text(l10n.authResetSent)));
@@ -92,6 +98,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               children: [
                 TextFormField(
                   controller: _emailCtrl,
+                  focusNode: _emailFocus,
                   keyboardType: TextInputType.emailAddress,
                   autofillHints: const [AutofillHints.email],
                   decoration: InputDecoration(labelText: l10n.authEmail),
@@ -113,9 +120,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 if (_error != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
-                    child: Text(_error!,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.error)),
+                    child: Text(
+                      _error!,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                    ),
                   ),
                 const SizedBox(height: 16),
                 FilledButton(
