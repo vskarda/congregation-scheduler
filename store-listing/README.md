@@ -13,17 +13,18 @@ pipeline already exists — see [`docs/CI-CD.md`](../docs/CI-CD.md).
 1. **App icon is still the Flutter default template icon** on both
    platforms. Not fixed in this pass (no design brief given). See
    [`assets/ICON-AND-GRAPHICS-TODO.md`](assets/ICON-AND-GRAPHICS-TODO.md).
-2. **No self-service "delete my account" feature.** The app only has an
-   admin-side "remove this publisher" action. Apple's App Store Review
-   Guideline 5.1.1(v) requires in-app account deletion for any app that
-   supports account creation — **this will likely get an Apple submission
-   rejected** until it's added. Google Play accepts a web/e-mail-based
-   deletion path instead of in-app, which is easier to satisfy short-term.
-   See the "Gap" notes in
-   [`google-play/data-safety-form.md`](google-play/data-safety-form.md)
-   and section 6 of [`privacy-policy.md`](privacy-policy.md). Decide
-   whether to build this before submitting to Apple, or submit Android
-   first.
+2. ~~**No self-service "delete my account" feature.**~~ **RESOLVED.**
+   Any signed-in user can now permanently delete their account in-app
+   (**My profile → Delete my account**, also reachable from the
+   awaiting-verification and complete-profile screens), satisfying Apple's
+   App Store Review Guideline 5.1.1(v). Deletion re-authenticates with the
+   password, removes the Firebase Auth login plus the profile documents and
+   the user's public-witnessing applications; submitted ministry reports
+   stay stored with the congregation. A sole full-admin is blocked from
+   deleting (it would lock the congregation out) and told to grant another
+   admin first. Note: this needs the updated `firestore.rules` published in
+   the congregation's Firebase project (see
+   [`docs/SETUP-ADMIN.md`](../docs/SETUP-ADMIN.md) step 4).
 
 ## File index
 

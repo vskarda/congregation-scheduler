@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import 'auth_service.dart';
+import 'delete_account.dart';
 import 'login_screen.dart';
 
 /// Shown when an auth account exists without a publisher document
@@ -93,6 +94,7 @@ class _CompleteProfileScreenState
                   onPressed: () => ref.read(firebaseAuthProvider).signOut(),
                   child: Text(l10n.authSignOut),
                 ),
+                const DeleteAccountButton(),
               ],
             ),
           ),

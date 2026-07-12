@@ -39,7 +39,16 @@ class PublisherDetailScreen extends ConsumerWidget {
         context: context,
         builder: (context) => AlertDialog(
           title: Text(l10n.commonConfirmDeleteTitle),
-          content: Text(l10n.pubAdminDeleteConfirm),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.pubAdminDeleteConfirm),
+              const SizedBox(height: 12),
+              Text(l10n.pubAdminDeleteMovedHint,
+                  style: Theme.of(context).textTheme.bodySmall),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -55,6 +64,46 @@ class PublisherDetailScreen extends ConsumerWidget {
       if (confirmed == true) {
         await repo.delete(publisherId);
         if (context.mounted) context.go('/admin/publishers');
+      }
+    }
+
+    // Marking a publisher "moved" archives the record (keeping S-21 history)
+    // and revokes their access by clearing Verified; restoring only clears
+    // the flag (an admin re-enables Verified to grant access again).
+    Future<void> confirmMove() async {
+      if (publisher.moved) {
+        await repo.update(publisher.copyWith(moved: false));
+        return;
+      }
+      if (isSelf) {
+        final ok = await _confirmSelfPrivilegeRemoval(
+          context,
+          title: l10n.pubAdminSelfVerifiedWarningTitle,
+          body: l10n.pubAdminSelfVerifiedWarningBody,
+        );
+        if (!ok) return;
+      }
+      if (!context.mounted) return;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(Icons.local_shipping_outlined, size: 32),
+          title: Text(l10n.pubAdminMoveConfirmTitle),
+          content: Text(l10n.pubAdminMoveConfirmBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.commonCancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.pubAdminMarkMoved),
+            ),
+          ],
+        ),
+      );
+      if (confirmed == true) {
+        await repo.update(publisher.copyWith(moved: true, verified: false));
       }
     }
 
@@ -88,10 +137,27 @@ class PublisherDetailScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            IconButton(
-              tooltip: l10n.commonDelete,
-              onPressed: confirmDelete,
-              icon: const Icon(Icons.delete_outline),
+            PopupMenuButton<String>(
+              onSelected: (v) {
+                switch (v) {
+                  case 'move':
+                    confirmMove();
+                  case 'delete':
+                    confirmDelete();
+                }
+              },
+              itemBuilder: (_) => [
+                PopupMenuItem(
+                  value: 'move',
+                  child: Text(publisher.moved
+                      ? l10n.pubAdminRestoreMoved
+                      : l10n.pubAdminMarkMoved),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Text(l10n.commonDelete),
+                ),
+              ],
             ),
           ],
           bottom: TabBar(

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/publishers_repository.dart';
+import '../../core/data/pw_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/models/models.dart';
 
@@ -23,11 +24,12 @@ class DatabaseNotReadyException implements Exception {
 enum _FounderOutcome { founded, alreadyExists, notReady }
 
 class AuthService {
-  AuthService(this._auth, this._congregations, this._publishers);
+  AuthService(this._auth, this._congregations, this._publishers, this._pw);
 
   final FirebaseAuth _auth;
   final CongregationRepository _congregations;
   final PublishersRepository _publishers;
+  final PwRepository _pw;
 
   Future<void> signIn(String email, String password) =>
       _auth.signInWithEmailAndPassword(email: email.trim(), password: password);
@@ -134,6 +136,35 @@ class AuthService {
         verified: false);
   }
 
+  /// Permanently deletes the signed-in user's account (Apple Guideline
+  /// 5.1.1(v)). The password re-authenticates the (possibly stale) session so
+  /// Firebase permits `user.delete()`; it also fails fast on a wrong password
+  /// before any data is removed.
+  ///
+  /// Order matters: Firestore self-deletes need `request.auth.uid ==
+  /// publisherId`, and the PW rules need the caller to still be a verified
+  /// publisher — so we clear the sub-resources and the publisher doc *before*
+  /// deleting the auth user. Doc deletes are idempotent, so an interrupted
+  /// registration (no publisher doc) is handled too.
+  Future<void> deleteAccount({required String password}) async {
+    final user = _auth.currentUser!;
+    final email = user.email;
+    if (email != null && email.isNotEmpty) {
+      final cred = EmailAuthProvider.credential(email: email, password: password);
+      await user.reauthenticateWithCredential(cred);
+    }
+    final uid = user.uid;
+    // Best-effort: a PW read hiccup must not block account deletion.
+    try {
+      await _pw.deleteAllForPublisher(uid);
+    } on FirebaseException catch (_) {}
+    // Removes publishers/{uid} and its private/profile sub-doc in one batch.
+    try {
+      await _publishers.delete(uid);
+    } on FirebaseException catch (_) {}
+    await user.delete();
+  }
+
   Future<void> _createProfileDocs(
     String uid,
     String email,
@@ -205,4 +236,5 @@ final authServiceProvider = Provider<AuthService>((ref) => AuthService(
       ref.watch(firebaseAuthProvider),
       ref.watch(congregationRepositoryProvider),
       ref.watch(publishersRepositoryProvider),
+      ref.watch(pwRepositoryProvider),
     ));

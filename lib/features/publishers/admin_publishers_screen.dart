@@ -19,6 +19,7 @@ class AdminPublishersScreen extends ConsumerStatefulWidget {
 class _AdminPublishersScreenState
     extends ConsumerState<AdminPublishersScreen> {
   String _filter = '';
+  bool _showMoved = false;
 
   Future<void> _addRecord() async {
     final l10n = context.l10n;
@@ -89,13 +90,19 @@ class _AdminPublishersScreenState
         error: (e, _) =>
             Center(child: Text(l10n.commonErrorDetail(e.toString()))),
         data: (all) {
-          final filtered = _filter.isEmpty
-              ? all
-              : all
-                  .where((p) => p.fullName
-                      .toLowerCase()
-                      .contains(_filter.toLowerCase()))
-                  .toList();
+          final query = _filter.toLowerCase();
+          final hasMoved = all.any((p) => p.moved);
+          final matched = all.where((p) {
+            if (p.moved && !_showMoved) return false;
+            if (query.isEmpty) return true;
+            return p.fullName.toLowerCase().contains(query);
+          });
+          // Active first, moved (dimmed) last; alphabetical order is preserved
+          // within each group by the repository's sort.
+          final filtered = [
+            ...matched.where((p) => !p.moved),
+            ...matched.where((p) => p.moved),
+          ];
           return Column(
             children: [
               Padding(
@@ -120,35 +127,57 @@ class _AdminPublishersScreenState
                   ],
                 ),
               ),
+              if (hasMoved)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 4),
+                    child: FilterChip(
+                      label: Text(l10n.pubAdminShowMoved),
+                      selected: _showMoved,
+                      onSelected: (v) => setState(() => _showMoved = v),
+                    ),
+                  ),
+                ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.only(bottom: 88),
                   itemCount: filtered.length,
                   itemBuilder: (context, i) {
                     final p = filtered[i];
-                    return ListTile(
+                    // Moved is checked first: a moved publisher is also
+                    // unverified, but should read as "moved", not "awaiting".
+                    final tile = ListTile(
                       leading: CircleAvatar(
                         child: Text(p.firstName.isEmpty
                             ? '?'
                             : p.firstName[0].toUpperCase()),
                       ),
                       title: Text(p.listName),
-                      subtitle: !p.verified
-                          ? Text(l10n.pubAdminUnverifiedBadge,
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.error))
-                          : !p.hasAccount
-                              ? Text(l10n.pubAdminNoAccountBadge)
-                              : null,
-                      trailing: !p.verified
-                          ? const Icon(Icons.hourglass_top)
-                          : p.roles.any
-                              ? const Icon(Icons.shield_outlined)
-                              : null,
+                      subtitle: p.moved
+                          ? Text(l10n.pubAdminMovedBadge)
+                          : !p.verified
+                              ? Text(l10n.pubAdminUnverifiedBadge,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .error))
+                              : !p.hasAccount
+                                  ? Text(l10n.pubAdminNoAccountBadge)
+                                  : null,
+                      trailing: p.moved
+                          ? const Icon(Icons.local_shipping_outlined)
+                          : !p.verified
+                              ? const Icon(Icons.hourglass_top)
+                              : p.roles.any
+                                  ? const Icon(Icons.shield_outlined)
+                                  : null,
                       onTap: () =>
                           context.go('/admin/publishers/${p.id}'),
                     );
+                    return p.moved
+                        ? Opacity(opacity: 0.5, child: tile)
+                        : tile;
                   },
                 ),
               ),

@@ -48,14 +48,13 @@ against Play's current definitions when filling in the form.
 | Question | Answer |
 |---|---|
 | Is data encrypted in transit? | Yes (Firestore/Firebase Auth use TLS) |
-| Can users request data deletion? | Yes, in principle — currently via the congregation administrator (see below); note the account-deletion gap |
-| Is there an account-deletion mechanism? | **Gap** — the app currently only has an admin-initiated "remove publisher" action, not individual self-service account deletion. Play's policy accepts a *web-based* deletion path even if not in-app; at minimum, document a request process (e.g. e-mail the developer/administrator) and link it here before submitting. See `store-listing/README.md` blocker list. |
+| Can users request data deletion? | Yes — in-app self-service deletion (see below), plus admin-initiated removal |
+| Is there an account-deletion mechanism? | Yes — any signed-in user can permanently delete their own account in-app under **My profile → Delete my account** (also on the awaiting-verification and complete-profile screens). It removes the login, the personal profile documents and the user's public-witnessing applications; previously submitted ministry reports remain with the congregation. |
 | Do you commit to the Play Families Policy? | Not applicable — app is not designed for or targeted at children |
 
 ## Data deletion request link (required if accounts can be created)
 
-`[PLACEHOLDER]` — point this at either: (a) an in-app deletion flow once
-built, or (b) a short page/e-mail process describing how a user asks their
-administrator (or the developer, for account-level data) to delete their
-account. Do not leave this blank — Play requires it whenever the app
-supports account creation.
+Deletion is available **in-app** (**My profile → Delete my account**), so a
+web URL is not strictly required. If Play's form still demands a link, point
+it at the privacy policy's "Data retention & deletion" section, which
+documents the in-app steps.

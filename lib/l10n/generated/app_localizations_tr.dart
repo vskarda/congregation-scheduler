@@ -235,6 +235,26 @@ class AppLocalizationsTr extends AppLocalizations {
       'Hesabınız oluşturuldu. Cemaatin bilgilerini görebilmeniz için cemaat yöneticisinin hesabınızı doğrulaması gerekiyor.';
 
   @override
+  String get deleteAccountAction => 'Hesabımı sil';
+
+  @override
+  String get deleteAccountWarning =>
+      'Bu, hesabınızı ve kişisel profilinizi (ad, iletişim bilgileri ve giriş) kalıcı olarak siler. Bu işlem geri alınamaz. Gönderdiğiniz raporlar cemaatte saklı kalır.';
+
+  @override
+  String get deleteAccountPasswordLabel => 'Onaylamak için şifrenizi girin';
+
+  @override
+  String get deleteAccountConfirm => 'Hesabı sil';
+
+  @override
+  String get deleteAccountSoleAdminTitle => 'Tek yönetici sizsiniz';
+
+  @override
+  String get deleteAccountSoleAdminBody =>
+      'Cemaatin tek Tam Yöneticisisiniz. Önce başka bir üyeye Tam Yönetici yetkisi verin; aksi halde hesabınızı silmek cemaati yöneticisiz ve erişimi geri getirme imkânı olmadan bırakır.';
+
+  @override
   String get navInfoBoard => 'İlan Panosu';
 
   @override
@@ -454,6 +474,29 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get pubAdminDeleteConfirm =>
       'Bu müjdeci ve özel verileri silinsin mi? Raporları saklanır.';
+
+  @override
+  String get pubAdminDeleteMovedHint =>
+      'Uygulama hesabı varsa, silme işlemi girişini kaldırmaz ve tekrar giriş yapabilir. Ayrılan birini arşivlemek için bunun yerine \"Taşındı olarak işaretle\" seçeneğini kullanın.';
+
+  @override
+  String get pubAdminMarkMoved => 'Taşındı olarak işaretle';
+
+  @override
+  String get pubAdminRestoreMoved => 'Taşınanlardan geri getir';
+
+  @override
+  String get pubAdminMovedBadge => 'Taşındı';
+
+  @override
+  String get pubAdminShowMoved => 'Taşınanları göster';
+
+  @override
+  String get pubAdminMoveConfirmTitle => 'Taşındı olarak işaretlensin mi?';
+
+  @override
+  String get pubAdminMoveConfirmBody =>
+      'Kayıt ve rapor geçmişi korunur, ancak müjdeci arşivlenir: erişimi kaldırılır ve artık programlarda veya rapor listelerinde görünmez. Daha sonra geri getirebilirsiniz.';
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

@@ -93,13 +93,18 @@ service cloud.firestore {
             && request.resource.data.verified == false
             && noRoles(request.resource.data.roles));
 
-      // Self-service edits may not touch privilege fields.
+      // Self-service edits may not touch privilege fields. 'moved' is an
+      // admin-only lifecycle flag (marking someone moved also revokes their
+      // access), so members may not change it on their own record.
       allow update: if hasRole('publishers')
         || (isSignedIn() && request.auth.uid == publisherId
             && !request.resource.data.diff(resource.data).affectedKeys()
-                .hasAny(['verified', 'roles', 'qualifications'].toSet()));
+                .hasAny(['verified', 'roles', 'qualifications', 'moved'].toSet()));
 
-      allow delete: if hasRole('publishers');
+      // Publisher-admins may remove anyone; a signed-in user may delete their
+      // own record (self-service account deletion — Apple Guideline 5.1.1(v)).
+      allow delete: if hasRole('publishers')
+        || (isSignedIn() && request.auth.uid == publisherId);
 
       // Sensitive personal data: self + publisher-admins only.
       match /private/{docId} {

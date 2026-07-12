@@ -90,15 +90,17 @@ apply to data at that layer; see
 Because there is no central server, data retention is controlled entirely
 by your congregation's administrator through their Firebase project:
 
+- You can permanently delete your own account from within the app, at any
+  time, under **My profile → Delete my account** (also available from the
+  awaiting-verification and complete-profile screens before you are
+  verified). This removes your login and your personal profile (name,
+  contact details and other profile fields). Ministry reports you already
+  submitted remain part of the congregation's records.
 - An administrator can remove a publisher record (and that publisher's
   private profile data) from within the app.
 - An administrator can delete data, or the entire Firebase project, at any
   time from the Firebase console — this permanently removes the
   congregation's data.
-- [PLACEHOLDER — update once in-app self-service account deletion ships:
-  describe how an individual user can request deletion of their own
-  account directly from the app, or the web/e-mail process to request it
-  from their administrator in the meantime.]
 
 ## 7. Children's data
 

@@ -113,6 +113,12 @@ abstract class Publisher with _$Publisher {
 
     /// False for records an admin created for members without a login.
     @Default(false) bool hasAccount,
+
+    /// Archived because the publisher moved to another congregation. The
+    /// record (and their S-21 history) is kept, but access is revoked
+    /// (marking moved also clears [verified]) and they drop out of schedule
+    /// pickers and report rosters. Distinct from an unverified/awaiting user.
+    @Default(false) bool moved,
   }) = _Publisher;
 
   factory Publisher.fromJson(Map<String, dynamic> json) =>

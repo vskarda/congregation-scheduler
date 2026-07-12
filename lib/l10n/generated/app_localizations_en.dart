@@ -237,6 +237,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your account was created. An administrator of the congregation now needs to verify it before you can see any congregation information.';
 
   @override
+  String get deleteAccountAction => 'Delete my account';
+
+  @override
+  String get deleteAccountWarning =>
+      'This permanently deletes your account and personal profile (name, contact details and login). This cannot be undone. Your submitted reports remain stored with the congregation.';
+
+  @override
+  String get deleteAccountPasswordLabel => 'Enter your password to confirm';
+
+  @override
+  String get deleteAccountConfirm => 'Delete account';
+
+  @override
+  String get deleteAccountSoleAdminTitle => 'You are the only administrator';
+
+  @override
+  String get deleteAccountSoleAdminBody =>
+      'You are the congregation\'s only Full Administrator. Grant another member Full Admin rights first, otherwise deleting your account would leave the congregation with no administrator and no way to restore access.';
+
+  @override
   String get navInfoBoard => 'Information board';
 
   @override
@@ -456,6 +476,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pubAdminDeleteConfirm =>
       'Delete this publisher and their private data? Their reports stay stored.';
+
+  @override
+  String get pubAdminDeleteMovedHint =>
+      'If they have an app account, deletion does not remove their login and they could sign in again. To archive someone who left, use \"Mark as moved\" instead.';
+
+  @override
+  String get pubAdminMarkMoved => 'Mark as moved';
+
+  @override
+  String get pubAdminRestoreMoved => 'Restore from moved';
+
+  @override
+  String get pubAdminMovedBadge => 'Moved';
+
+  @override
+  String get pubAdminShowMoved => 'Show moved';
+
+  @override
+  String get pubAdminMoveConfirmTitle => 'Mark as moved?';
+
+  @override
+  String get pubAdminMoveConfirmBody =>
+      'The record and report history are kept, but the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.';
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

@@ -273,6 +273,52 @@ describe('privilege escalation', () => {
       }),
     );
   });
+
+  it('publisher cannot mark themselves moved; admin can', async () => {
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        moved: true,
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
+        moved: true,
+        verified: false,
+      }),
+    );
+  });
+});
+
+describe('self-service account deletion', () => {
+  it('a user can delete their own publisher doc and private profile', async () => {
+    await assertSucceeds(
+      deleteDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`)),
+    );
+    await assertSucceeds(
+      deleteDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`)),
+    );
+  });
+
+  it('an unverified user can delete their own publisher doc', async () => {
+    await assertSucceeds(
+      deleteDoc(doc(db(UNVERIFIED), `publishers/${UNVERIFIED}`)),
+    );
+  });
+
+  it('a user cannot delete someone else\'s publisher doc', async () => {
+    await assertFails(
+      deleteDoc(doc(db(VERIFIED), `publishers/${UNVERIFIED}`)),
+    );
+    await assertFails(
+      deleteDoc(doc(db(LMM_ADMIN), `publishers/${VERIFIED}`)),
+    );
+  });
+
+  it('a user can remove their own pw applications', async () => {
+    await assertSucceeds(
+      deleteDoc(doc(db(QUALIFIED), `pw_applications/slot1_${QUALIFIED}`)),
+    );
+  });
 });
 
 describe('founder bootstrap', () => {

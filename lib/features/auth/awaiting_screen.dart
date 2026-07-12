@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
+import 'delete_account.dart';
 
 class AwaitingScreen extends ConsumerWidget {
   const AwaitingScreen({super.key});
@@ -35,6 +36,7 @@ class AwaitingScreen extends ConsumerWidget {
                   icon: const Icon(Icons.logout),
                   label: Text(l10n.authSignOut),
                 ),
+                const DeleteAccountButton(),
               ],
             ),
           ),

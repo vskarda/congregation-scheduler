@@ -237,6 +237,26 @@ class AppLocalizationsCs extends AppLocalizations {
       'Váš účet byl vytvořen. Administrátor sboru ho nyní musí ověřit, teprve potom uvidíte sborové informace.';
 
   @override
+  String get deleteAccountAction => 'Smazat můj účet';
+
+  @override
+  String get deleteAccountWarning =>
+      'Tímto trvale smažete svůj účet a osobní profil (jméno, kontaktní údaje a přihlášení). Tuto akci nelze vrátit zpět. Vaše odevzdané zprávy zůstanou uloženy u sboru.';
+
+  @override
+  String get deleteAccountPasswordLabel => 'Pro potvrzení zadejte heslo';
+
+  @override
+  String get deleteAccountConfirm => 'Smazat účet';
+
+  @override
+  String get deleteAccountSoleAdminTitle => 'Jste jediný administrátor';
+
+  @override
+  String get deleteAccountSoleAdminBody =>
+      'Jste jediný úplný administrátor sboru. Nejprve udělte práva úplného administrátora jinému členovi, jinak by smazáním vašeho účtu zůstal sbor bez administrátora a bez možnosti obnovit přístup.';
+
+  @override
   String get navInfoBoard => 'Informační deska';
 
   @override
@@ -456,6 +476,29 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get pubAdminDeleteConfirm =>
       'Smazat tohoto zvěstovatele a jeho osobní údaje? Jeho zprávy zůstanou uloženy.';
+
+  @override
+  String get pubAdminDeleteMovedHint =>
+      'Pokud má účet v aplikaci, smazání neodstraní jeho přihlášení a mohl by se znovu přihlásit. Pro archivaci někoho, kdo odešel, použijte místo toho „Označit jako přestěhovaného“.';
+
+  @override
+  String get pubAdminMarkMoved => 'Označit jako přestěhovaného';
+
+  @override
+  String get pubAdminRestoreMoved => 'Obnovit z přestěhovaných';
+
+  @override
+  String get pubAdminMovedBadge => 'Přestěhoval se';
+
+  @override
+  String get pubAdminShowMoved => 'Zobrazit přestěhované';
+
+  @override
+  String get pubAdminMoveConfirmTitle => 'Označit jako přestěhovaného?';
+
+  @override
+  String get pubAdminMoveConfirmBody =>
+      'Záznam a historie zpráv zůstanou zachovány, ale zvěstovatel bude archivován: jeho přístup bude odebrán a nebude se objevovat v programech ani v seznamech zpráv. Později ho můžete obnovit.';
 
   @override
   String get pubAdminSelfVerifiedWarningTitle => 'Vypnout vlastní ověření?';

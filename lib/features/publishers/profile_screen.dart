@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
+import '../auth/delete_account.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
 import 'publishers_providers.dart';
@@ -37,6 +38,12 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
               PublisherRecordView(publisherId: me.id),
+              const SizedBox(height: 24),
+              const Divider(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: const DeleteAccountButton(),
+              ),
             ],
           ),
         ),

@@ -105,6 +105,21 @@ class PwRepository {
   Future<void> withdrawApplication(String slotId, String uid) =>
       _applications.doc(PwApplication.docId(slotId, uid)).delete();
 
+  /// Removes every application belonging to [uid] (used when the user deletes
+  /// their own account). The self-read/self-delete rules require the caller to
+  /// still be a verified publisher, so this must run before the publisher doc
+  /// is deleted.
+  Future<void> deleteAllForPublisher(String uid) async {
+    final apps =
+        await _applications.where('publisherId', isEqualTo: uid).get();
+    if (apps.docs.isEmpty) return;
+    final batch = _db.batch();
+    for (final doc in apps.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+  }
+
   /// All applications in a date range. Only PW admins may run this query
   /// (security rules restrict non-admins to their own applications).
   Stream<List<PwApplication>> watchApplicationsInRange(

@@ -1,5 +1,6 @@
 import 'package:congregation_scheduler/core/data/congregation_repository.dart';
 import 'package:congregation_scheduler/core/data/publishers_repository.dart';
+import 'package:congregation_scheduler/core/data/pw_repository.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
 import 'package:congregation_scheduler/features/auth/auth_service.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -33,6 +34,7 @@ void main() {
       auth,
       CongregationRepository(db),
       PublishersRepository(db),
+      PwRepository(db),
     );
   });
 

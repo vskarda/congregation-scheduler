@@ -40,7 +40,9 @@ publishers can see schedules, only you can edit them).
 4. Click **Publish**.
 
 > Re-do this step whenever a new app version ships an updated
-> `firestore.rules` file.
+> `firestore.rules` file. In particular, self-service **"Delete my account"**
+> only works once the current rules are published (they let a user remove
+> their own publisher record).
 
 ## 5. Get the app configuration
 

@@ -93,6 +93,7 @@ _Publisher _$PublisherFromJson(Map<String, dynamic> json) => _Publisher(
       ? const Qualifications()
       : Qualifications.fromJson(json['qualifications'] as Map<String, dynamic>),
   hasAccount: json['hasAccount'] as bool? ?? false,
+  moved: json['moved'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$PublisherToJson(_Publisher instance) =>
@@ -105,6 +106,7 @@ Map<String, dynamic> _$PublisherToJson(_Publisher instance) =>
       'roles': instance.roles.toJson(),
       'qualifications': instance.qualifications.toJson(),
       'hasAccount': instance.hasAccount,
+      'moved': instance.moved,
     };
 
 const _$GenderEnumMap = {

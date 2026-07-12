@@ -520,6 +520,42 @@ abstract class AppLocalizations {
   /// **'Your account was created. An administrator of the congregation now needs to verify it before you can see any congregation information.'**
   String get awaitingBody;
 
+  /// No description provided for @deleteAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteAccountAction;
+
+  /// No description provided for @deleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your account and personal profile (name, contact details and login). This cannot be undone. Your submitted reports remain stored with the congregation.'**
+  String get deleteAccountWarning;
+
+  /// No description provided for @deleteAccountPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get deleteAccountPasswordLabel;
+
+  /// No description provided for @deleteAccountConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountConfirm;
+
+  /// No description provided for @deleteAccountSoleAdminTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the only administrator'**
+  String get deleteAccountSoleAdminTitle;
+
+  /// No description provided for @deleteAccountSoleAdminBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the congregation\'s only Full Administrator. Grant another member Full Admin rights first, otherwise deleting your account would leave the congregation with no administrator and no way to restore access.'**
+  String get deleteAccountSoleAdminBody;
+
   /// No description provided for @navInfoBoard.
   ///
   /// In en, this message translates to:
@@ -951,6 +987,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete this publisher and their private data? Their reports stay stored.'**
   String get pubAdminDeleteConfirm;
+
+  /// No description provided for @pubAdminDeleteMovedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'If they have an app account, deletion does not remove their login and they could sign in again. To archive someone who left, use \"Mark as moved\" instead.'**
+  String get pubAdminDeleteMovedHint;
+
+  /// No description provided for @pubAdminMarkMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as moved'**
+  String get pubAdminMarkMoved;
+
+  /// No description provided for @pubAdminRestoreMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from moved'**
+  String get pubAdminRestoreMoved;
+
+  /// No description provided for @pubAdminMovedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved'**
+  String get pubAdminMovedBadge;
+
+  /// No description provided for @pubAdminShowMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Show moved'**
+  String get pubAdminShowMoved;
+
+  /// No description provided for @pubAdminMoveConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as moved?'**
+  String get pubAdminMoveConfirmTitle;
+
+  /// No description provided for @pubAdminMoveConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The record and report history are kept, but the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.'**
+  String get pubAdminMoveConfirmBody;
 
   /// No description provided for @pubAdminSelfVerifiedWarningTitle.
   ///
