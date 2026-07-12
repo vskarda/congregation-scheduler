@@ -278,6 +278,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navTerritories => 'Obvody';
 
   @override
+  String get navMinistryGroups => 'Skupiny služby';
+
+  @override
   String get navReport => 'Zpráva o službě';
 
   @override
@@ -1010,6 +1013,68 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get terrRemoveAssignment => 'Odebrat přidělení';
+
+  @override
+  String get mgEmpty => 'Zatím žádné skupiny služby.';
+
+  @override
+  String get mgAdd => 'Přidat skupinu';
+
+  @override
+  String get mgEdit => 'Upravit skupinu';
+
+  @override
+  String get mgName => 'Název';
+
+  @override
+  String mgMemberCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count členů',
+      few: '$count členové',
+      one: '1 člen',
+      zero: 'Žádní členové',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mgNoMembers => 'V této skupině zatím nejsou žádní členové.';
+
+  @override
+  String get mgOverseer => 'Dozorce skupiny';
+
+  @override
+  String get mgAssistant => 'Pomocník';
+
+  @override
+  String get mgMakeOverseer => 'Nastavit jako dozorce skupiny';
+
+  @override
+  String get mgMakeAssistant => 'Nastavit jako pomocníka';
+
+  @override
+  String get mgClearRole => 'Odebrat označení dozorce/pomocníka';
+
+  @override
+  String get mgAddMember => 'Přidat člena…';
+
+  @override
+  String get mgNoUnassigned => 'Všichni už jsou v nějaké skupině.';
+
+  @override
+  String get mgRemoveMember => 'Odebrat ze skupiny';
+
+  @override
+  String get mgDeleteConfirm =>
+      'Smazat tuto skupinu? Její členové zůstanou bez skupiny.';
+
+  @override
+  String get mgGroup => 'Skupina služby';
+
+  @override
+  String get mgNoGroup => 'Bez skupiny';
 
   @override
   String get infoEmpty => 'Momentálně žádné informace.';

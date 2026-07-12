@@ -95,11 +95,13 @@ service cloud.firestore {
 
       // Self-service edits may not touch privilege fields. 'moved' is an
       // admin-only lifecycle flag (marking someone moved also revokes their
-      // access), so members may not change it on their own record.
+      // access), so members may not change it on their own record. 'groupId'
+      // (ministry group membership) is likewise assigned by admins only.
       allow update: if hasRole('publishers')
         || (isSignedIn() && request.auth.uid == publisherId
             && !request.resource.data.diff(resource.data).affectedKeys()
-                .hasAny(['verified', 'roles', 'qualifications', 'moved'].toSet()));
+                .hasAny(['verified', 'roles', 'qualifications', 'moved',
+                    'groupId'].toSet()));
 
       // Publisher-admins may remove anyone; a signed-in user may delete their
       // own record (self-service account deletion — Apple Guideline 5.1.1(v)).
@@ -239,6 +241,15 @@ service cloud.firestore {
             && resource.data.publisherId == request.auth.uid
             && request.resource.data.diff(resource.data).affectedKeys()
                 .hasOnly(['returnedDate', 'returnNotes'].toSet()));
+    }
+
+    // ---------- ministry groups ----------
+    // Membership lives on publishers/{uid}.groupId; the group doc stores
+    // only the name and the designated overseer/assistant.
+
+    match /ministry_groups/{groupId} {
+      allow read: if isVerified();
+      allow write: if hasRole('publishers');
     }
 
     // ---------- ministry reports ----------

@@ -40,6 +40,8 @@ class AppShell extends ConsumerWidget {
       _Destination('/fsm', Icons.diversity_3_outlined,
           l10n.navFieldServiceMeetings),
       _Destination('/territories', Icons.map_outlined, l10n.navTerritories),
+      _Destination('/ministry-groups', Icons.group_work_outlined,
+          l10n.navMinistryGroups),
       _Destination('/report', Icons.assignment_turned_in_outlined,
           l10n.navReport),
       _Destination('/profile', Icons.person_outline, l10n.navProfile),

@@ -11,6 +11,7 @@ import {
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -102,7 +103,10 @@ async function seed() {
       ...basePublisher,
       qualifications: { publicWitnessing: true },
     });
-    await setDoc(doc(f, `publishers/${VERIFIED}`), { ...basePublisher });
+    await setDoc(doc(f, `publishers/${VERIFIED}`), {
+      ...basePublisher,
+      groupId: 'g1',
+    });
     await setDoc(doc(f, `publishers/${UNVERIFIED}`), {
       ...basePublisher,
       verified: false,
@@ -123,6 +127,11 @@ async function seed() {
       assignedDate: '2026-06-01',
       returnedDate: '',
       returnNotes: '',
+    });
+    await setDoc(doc(f, 'ministry_groups/g1'), {
+      name: 'Group 1',
+      overseerId: VERIFIED,
+      assistantId: '',
     });
     await setDoc(doc(f, 'reports/2026-06/entries/' + VERIFIED), {
       month: '2026-06',
@@ -763,6 +772,74 @@ describe('territory assignments', () => {
     );
     await assertFails(
       deleteDoc(doc(db(VERIFIED), 'territory_assignments/ta1')),
+    );
+  });
+});
+
+describe('ministry groups', () => {
+  it('verified publisher reads groups but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'ministry_groups/g1')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'ministry_groups/g2'), {
+        name: 'Rogue',
+        overseerId: '',
+        assistantId: '',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), 'ministry_groups/g1'), {
+        overseerId: VERIFIED,
+      }),
+    );
+  });
+
+  it('unverified user cannot read groups', async () => {
+    await assertFails(getDoc(doc(db(UNVERIFIED), 'ministry_groups/g1')));
+  });
+
+  it('publishers-admin manages groups', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(ADMIN), 'ministry_groups/g2'), {
+        name: 'Group 2',
+        overseerId: '',
+        assistantId: '',
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), 'ministry_groups/g1'), { name: 'Renamed' }),
+    );
+    await assertSucceeds(deleteDoc(doc(db(ADMIN), 'ministry_groups/g1')));
+  });
+
+  it('publisher cannot change their own group', async () => {
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        groupId: 'g2',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        groupId: deleteField(),
+      }),
+    );
+    // Full-doc self-save (how the app writes) keeping groupId unchanged is OK.
+    await assertSucceeds(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        ...basePublisher,
+        firstName: 'Changed',
+        groupId: 'g1',
+      }),
+    );
+  });
+
+  it("publishers-admin assigns and clears a publisher's group", async () => {
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), { groupId: 'g2' }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
+        groupId: deleteField(),
+      }),
     );
   });
 });

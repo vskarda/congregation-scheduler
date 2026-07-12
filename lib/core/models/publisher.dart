@@ -119,6 +119,12 @@ abstract class Publisher with _$Publisher {
     /// (marking moved also clears [verified]) and they drop out of schedule
     /// pickers and report rosters. Distinct from an unverified/awaiting user.
     @Default(false) bool moved,
+
+    /// Ministry group membership (ministry_groups doc id); null = no group.
+    /// Admin-assigned only — firestore.rules blocks self-edits of this key.
+    /// includeIfNull keeps the key absent from toJson() so full-doc
+    /// self-saves by ungrouped publishers don't trip the affectedKeys rule.
+    @JsonKey(includeIfNull: false) String? groupId,
   }) = _Publisher;
 
   factory Publisher.fromJson(Map<String, dynamic> json) =>

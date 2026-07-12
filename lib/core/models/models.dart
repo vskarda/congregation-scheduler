@@ -7,6 +7,7 @@ export 'event_item.dart';
 export 'fsm.dart';
 export 'infoboard.dart';
 export 'lmm_week.dart';
+export 'ministry_group.dart';
 export 'publisher.dart';
 export 'pw.dart';
 export 'report.dart';

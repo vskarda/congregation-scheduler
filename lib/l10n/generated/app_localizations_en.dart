@@ -278,6 +278,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navTerritories => 'Territories';
 
   @override
+  String get navMinistryGroups => 'Ministry groups';
+
+  @override
   String get navReport => 'Ministry report';
 
   @override
@@ -1008,6 +1011,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get terrRemoveAssignment => 'Remove assignment';
+
+  @override
+  String get mgEmpty => 'No ministry groups yet.';
+
+  @override
+  String get mgAdd => 'Add group';
+
+  @override
+  String get mgEdit => 'Edit group';
+
+  @override
+  String get mgName => 'Name';
+
+  @override
+  String mgMemberCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count members',
+      one: '1 member',
+      zero: 'No members',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mgNoMembers => 'No members in this group yet.';
+
+  @override
+  String get mgOverseer => 'Group overseer';
+
+  @override
+  String get mgAssistant => 'Assistant';
+
+  @override
+  String get mgMakeOverseer => 'Set as group overseer';
+
+  @override
+  String get mgMakeAssistant => 'Set as assistant';
+
+  @override
+  String get mgClearRole => 'Remove overseer/assistant designation';
+
+  @override
+  String get mgAddMember => 'Add member…';
+
+  @override
+  String get mgNoUnassigned => 'Everyone is already in a group.';
+
+  @override
+  String get mgRemoveMember => 'Remove from group';
+
+  @override
+  String get mgDeleteConfirm =>
+      'Delete this group? Its members will be left without a group.';
+
+  @override
+  String get mgGroup => 'Ministry group';
+
+  @override
+  String get mgNoGroup => 'No group';
 
   @override
   String get infoEmpty => 'No information right now.';

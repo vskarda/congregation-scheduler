@@ -625,7 +625,11 @@ mixin _$Publisher {
 /// record (and their S-21 history) is kept, but access is revoked
 /// (marking moved also clears [verified]) and they drop out of schedule
 /// pickers and report rosters. Distinct from an unverified/awaiting user.
- bool get moved;
+ bool get moved;/// Ministry group membership (ministry_groups doc id); null = no group.
+/// Admin-assigned only — firestore.rules blocks self-edits of this key.
+/// includeIfNull keeps the key absent from toJson() so full-doc
+/// self-saves by ungrouped publishers don't trip the affectedKeys rule.
+@JsonKey(includeIfNull: false) String? get groupId;
 /// Create a copy of Publisher
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -638,16 +642,16 @@ $PublisherCopyWith<Publisher> get copyWith => _$PublisherCopyWithImpl<Publisher>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Publisher&&(identical(other.id, id) || other.id == id)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.status, status) || other.status == status)&&(identical(other.verified, verified) || other.verified == verified)&&(identical(other.roles, roles) || other.roles == roles)&&(identical(other.qualifications, qualifications) || other.qualifications == qualifications)&&(identical(other.hasAccount, hasAccount) || other.hasAccount == hasAccount)&&(identical(other.moved, moved) || other.moved == moved));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Publisher&&(identical(other.id, id) || other.id == id)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.status, status) || other.status == status)&&(identical(other.verified, verified) || other.verified == verified)&&(identical(other.roles, roles) || other.roles == roles)&&(identical(other.qualifications, qualifications) || other.qualifications == qualifications)&&(identical(other.hasAccount, hasAccount) || other.hasAccount == hasAccount)&&(identical(other.moved, moved) || other.moved == moved)&&(identical(other.groupId, groupId) || other.groupId == groupId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,firstName,lastName,gender,status,verified,roles,qualifications,hasAccount,moved);
+int get hashCode => Object.hash(runtimeType,id,firstName,lastName,gender,status,verified,roles,qualifications,hasAccount,moved,groupId);
 
 @override
 String toString() {
-  return 'Publisher(id: $id, firstName: $firstName, lastName: $lastName, gender: $gender, status: $status, verified: $verified, roles: $roles, qualifications: $qualifications, hasAccount: $hasAccount, moved: $moved)';
+  return 'Publisher(id: $id, firstName: $firstName, lastName: $lastName, gender: $gender, status: $status, verified: $verified, roles: $roles, qualifications: $qualifications, hasAccount: $hasAccount, moved: $moved, groupId: $groupId)';
 }
 
 
@@ -658,7 +662,7 @@ abstract mixin class $PublisherCopyWith<$Res>  {
   factory $PublisherCopyWith(Publisher value, $Res Function(Publisher) _then) = _$PublisherCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String firstName, String lastName, Gender gender, PublisherStatus status, bool verified, Roles roles, Qualifications qualifications, bool hasAccount, bool moved
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String firstName, String lastName, Gender gender, PublisherStatus status, bool verified, Roles roles, Qualifications qualifications, bool hasAccount, bool moved,@JsonKey(includeIfNull: false) String? groupId
 });
 
 
@@ -675,7 +679,7 @@ class _$PublisherCopyWithImpl<$Res>
 
 /// Create a copy of Publisher
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? firstName = null,Object? lastName = null,Object? gender = null,Object? status = null,Object? verified = null,Object? roles = null,Object? qualifications = null,Object? hasAccount = null,Object? moved = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? firstName = null,Object? lastName = null,Object? gender = null,Object? status = null,Object? verified = null,Object? roles = null,Object? qualifications = null,Object? hasAccount = null,Object? moved = null,Object? groupId = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,firstName: null == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
@@ -687,7 +691,8 @@ as bool,roles: null == roles ? _self.roles : roles // ignore: cast_nullable_to_n
 as Roles,qualifications: null == qualifications ? _self.qualifications : qualifications // ignore: cast_nullable_to_non_nullable
 as Qualifications,hasAccount: null == hasAccount ? _self.hasAccount : hasAccount // ignore: cast_nullable_to_non_nullable
 as bool,moved: null == moved ? _self.moved : moved // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of Publisher
@@ -790,10 +795,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved, @JsonKey(includeIfNull: false)  String? groupId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Publisher() when $default != null:
-return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved);case _:
+return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved,_that.groupId);case _:
   return orElse();
 
 }
@@ -811,10 +816,10 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved, @JsonKey(includeIfNull: false)  String? groupId)  $default,) {final _that = this;
 switch (_that) {
 case _Publisher():
-return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved);case _:
+return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved,_that.groupId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -831,10 +836,10 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String firstName,  String lastName,  Gender gender,  PublisherStatus status,  bool verified,  Roles roles,  Qualifications qualifications,  bool hasAccount,  bool moved, @JsonKey(includeIfNull: false)  String? groupId)?  $default,) {final _that = this;
 switch (_that) {
 case _Publisher() when $default != null:
-return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved);case _:
+return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.status,_that.verified,_that.roles,_that.qualifications,_that.hasAccount,_that.moved,_that.groupId);case _:
   return null;
 
 }
@@ -846,7 +851,7 @@ return $default(_that.id,_that.firstName,_that.lastName,_that.gender,_that.statu
 @JsonSerializable()
 
 class _Publisher extends Publisher {
-  const _Publisher({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.firstName = '', this.lastName = '', this.gender = Gender.unknown, this.status = PublisherStatus.publisher, this.verified = false, this.roles = const Roles(), this.qualifications = const Qualifications(), this.hasAccount = false, this.moved = false}): super._();
+  const _Publisher({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.firstName = '', this.lastName = '', this.gender = Gender.unknown, this.status = PublisherStatus.publisher, this.verified = false, this.roles = const Roles(), this.qualifications = const Qualifications(), this.hasAccount = false, this.moved = false, @JsonKey(includeIfNull: false) this.groupId}): super._();
   factory _Publisher.fromJson(Map<String, dynamic> json) => _$PublisherFromJson(json);
 
 /// Firestore document id (= auth uid for publishers with accounts).
@@ -865,6 +870,11 @@ class _Publisher extends Publisher {
 /// (marking moved also clears [verified]) and they drop out of schedule
 /// pickers and report rosters. Distinct from an unverified/awaiting user.
 @override@JsonKey() final  bool moved;
+/// Ministry group membership (ministry_groups doc id); null = no group.
+/// Admin-assigned only — firestore.rules blocks self-edits of this key.
+/// includeIfNull keeps the key absent from toJson() so full-doc
+/// self-saves by ungrouped publishers don't trip the affectedKeys rule.
+@override@JsonKey(includeIfNull: false) final  String? groupId;
 
 /// Create a copy of Publisher
 /// with the given fields replaced by the non-null parameter values.
@@ -879,16 +889,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Publisher&&(identical(other.id, id) || other.id == id)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.status, status) || other.status == status)&&(identical(other.verified, verified) || other.verified == verified)&&(identical(other.roles, roles) || other.roles == roles)&&(identical(other.qualifications, qualifications) || other.qualifications == qualifications)&&(identical(other.hasAccount, hasAccount) || other.hasAccount == hasAccount)&&(identical(other.moved, moved) || other.moved == moved));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Publisher&&(identical(other.id, id) || other.id == id)&&(identical(other.firstName, firstName) || other.firstName == firstName)&&(identical(other.lastName, lastName) || other.lastName == lastName)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.status, status) || other.status == status)&&(identical(other.verified, verified) || other.verified == verified)&&(identical(other.roles, roles) || other.roles == roles)&&(identical(other.qualifications, qualifications) || other.qualifications == qualifications)&&(identical(other.hasAccount, hasAccount) || other.hasAccount == hasAccount)&&(identical(other.moved, moved) || other.moved == moved)&&(identical(other.groupId, groupId) || other.groupId == groupId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,firstName,lastName,gender,status,verified,roles,qualifications,hasAccount,moved);
+int get hashCode => Object.hash(runtimeType,id,firstName,lastName,gender,status,verified,roles,qualifications,hasAccount,moved,groupId);
 
 @override
 String toString() {
-  return 'Publisher(id: $id, firstName: $firstName, lastName: $lastName, gender: $gender, status: $status, verified: $verified, roles: $roles, qualifications: $qualifications, hasAccount: $hasAccount, moved: $moved)';
+  return 'Publisher(id: $id, firstName: $firstName, lastName: $lastName, gender: $gender, status: $status, verified: $verified, roles: $roles, qualifications: $qualifications, hasAccount: $hasAccount, moved: $moved, groupId: $groupId)';
 }
 
 
@@ -899,7 +909,7 @@ abstract mixin class _$PublisherCopyWith<$Res> implements $PublisherCopyWith<$Re
   factory _$PublisherCopyWith(_Publisher value, $Res Function(_Publisher) _then) = __$PublisherCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String firstName, String lastName, Gender gender, PublisherStatus status, bool verified, Roles roles, Qualifications qualifications, bool hasAccount, bool moved
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String firstName, String lastName, Gender gender, PublisherStatus status, bool verified, Roles roles, Qualifications qualifications, bool hasAccount, bool moved,@JsonKey(includeIfNull: false) String? groupId
 });
 
 
@@ -916,7 +926,7 @@ class __$PublisherCopyWithImpl<$Res>
 
 /// Create a copy of Publisher
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? firstName = null,Object? lastName = null,Object? gender = null,Object? status = null,Object? verified = null,Object? roles = null,Object? qualifications = null,Object? hasAccount = null,Object? moved = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? firstName = null,Object? lastName = null,Object? gender = null,Object? status = null,Object? verified = null,Object? roles = null,Object? qualifications = null,Object? hasAccount = null,Object? moved = null,Object? groupId = freezed,}) {
   return _then(_Publisher(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,firstName: null == firstName ? _self.firstName : firstName // ignore: cast_nullable_to_non_nullable
@@ -928,7 +938,8 @@ as bool,roles: null == roles ? _self.roles : roles // ignore: cast_nullable_to_n
 as Roles,qualifications: null == qualifications ? _self.qualifications : qualifications // ignore: cast_nullable_to_non_nullable
 as Qualifications,hasAccount: null == hasAccount ? _self.hasAccount : hasAccount // ignore: cast_nullable_to_non_nullable
 as bool,moved: null == moved ? _self.moved : moved // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,groupId: freezed == groupId ? _self.groupId : groupId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

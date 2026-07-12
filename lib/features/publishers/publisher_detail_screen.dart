@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/data/ministry_groups_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
@@ -240,6 +242,8 @@ class _ProfileTab extends ConsumerWidget {
           data: (priv) => ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              _GroupDropdown(publisher: publisher),
+              const SizedBox(height: 12),
               PublisherForm(
                 key: ValueKey('${publisher.id}-admin-form'),
                 publisher: publisher,
@@ -250,6 +254,44 @@ class _ProfileTab extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Ministry group assignment; writes immediately like the Roles/Assign tabs.
+/// Overseer/assistant designations are managed on the Ministry Groups screen.
+class _GroupDropdown extends ConsumerWidget {
+  const _GroupDropdown({required this.publisher});
+
+  final Publisher publisher;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final groups = ref.watch(ministryGroupsProvider).value ?? const [];
+    // A dangling groupId (group deleted while still set on the publisher)
+    // must not assert — fall back to "no group".
+    final value = groups.any((g) => g.id == publisher.groupId)
+        ? publisher.groupId
+        : null;
+    return DropdownButtonFormField<String?>(
+      // FormField state is internal; re-key so stream updates (and the
+      // dangling fallback) are reflected after writes.
+      key: ValueKey('group-${publisher.id}-$value'),
+      initialValue: value,
+      decoration: InputDecoration(labelText: l10n.mgGroup),
+      items: [
+        DropdownMenuItem<String?>(value: null, child: Text(l10n.mgNoGroup)),
+        for (final g in groups)
+          DropdownMenuItem<String?>(value: g.id, child: Text(g.name)),
+      ],
+      onChanged: (id) {
+        final previous =
+            groups.firstWhereOrNull((g) => g.id == publisher.groupId);
+        ref
+            .read(ministryGroupsRepositoryProvider)
+            .setPublisherGroup(publisher, id, previous);
+      },
     );
   }
 }

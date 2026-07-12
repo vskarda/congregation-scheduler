@@ -598,6 +598,12 @@ abstract class AppLocalizations {
   /// **'Territories'**
   String get navTerritories;
 
+  /// No description provided for @navMinistryGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Ministry groups'**
+  String get navMinistryGroups;
+
   /// No description provided for @navReport.
   ///
   /// In en, this message translates to:
@@ -1983,6 +1989,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove assignment'**
   String get terrRemoveAssignment;
+
+  /// No description provided for @mgEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No ministry groups yet.'**
+  String get mgEmpty;
+
+  /// No description provided for @mgAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add group'**
+  String get mgAdd;
+
+  /// No description provided for @mgEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit group'**
+  String get mgEdit;
+
+  /// No description provided for @mgName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get mgName;
+
+  /// No description provided for @mgMemberCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No members} =1{1 member} other{{count} members}}'**
+  String mgMemberCount(int count);
+
+  /// No description provided for @mgNoMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'No members in this group yet.'**
+  String get mgNoMembers;
+
+  /// No description provided for @mgOverseer.
+  ///
+  /// In en, this message translates to:
+  /// **'Group overseer'**
+  String get mgOverseer;
+
+  /// No description provided for @mgAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Assistant'**
+  String get mgAssistant;
+
+  /// No description provided for @mgMakeOverseer.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as group overseer'**
+  String get mgMakeOverseer;
+
+  /// No description provided for @mgMakeAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'Set as assistant'**
+  String get mgMakeAssistant;
+
+  /// No description provided for @mgClearRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove overseer/assistant designation'**
+  String get mgClearRole;
+
+  /// No description provided for @mgAddMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Add member…'**
+  String get mgAddMember;
+
+  /// No description provided for @mgNoUnassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Everyone is already in a group.'**
+  String get mgNoUnassigned;
+
+  /// No description provided for @mgRemoveMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from group'**
+  String get mgRemoveMember;
+
+  /// No description provided for @mgDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this group? Its members will be left without a group.'**
+  String get mgDeleteConfirm;
+
+  /// No description provided for @mgGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Ministry group'**
+  String get mgGroup;
+
+  /// No description provided for @mgNoGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'No group'**
+  String get mgNoGroup;
 
   /// No description provided for @infoEmpty.
   ///

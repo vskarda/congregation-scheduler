@@ -276,6 +276,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navTerritories => 'Sahalar';
 
   @override
+  String get navMinistryGroups => 'Tarla Hizmeti Grupları';
+
+  @override
   String get navReport => 'Tarla Hizmeti Raporu';
 
   @override
@@ -1008,6 +1011,66 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get terrRemoveAssignment => 'Atamayı Kaldır';
+
+  @override
+  String get mgEmpty => 'Henüz tarla hizmeti grubu yok.';
+
+  @override
+  String get mgAdd => 'Grup Ekle';
+
+  @override
+  String get mgEdit => 'Grubu Düzenle';
+
+  @override
+  String get mgName => 'Ad';
+
+  @override
+  String mgMemberCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count üye',
+      one: '1 üye',
+      zero: 'Üye yok',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get mgNoMembers => 'Bu grupta henüz üye yok.';
+
+  @override
+  String get mgOverseer => 'Grup gözetmeni';
+
+  @override
+  String get mgAssistant => 'Yardımcı';
+
+  @override
+  String get mgMakeOverseer => 'Grup gözetmeni olarak ata';
+
+  @override
+  String get mgMakeAssistant => 'Yardımcı olarak ata';
+
+  @override
+  String get mgClearRole => 'Gözetmen/yardımcı atamasını kaldır';
+
+  @override
+  String get mgAddMember => 'Üye ekle…';
+
+  @override
+  String get mgNoUnassigned => 'Herkes zaten bir grupta.';
+
+  @override
+  String get mgRemoveMember => 'Gruptan çıkar';
+
+  @override
+  String get mgDeleteConfirm => 'Bu grup silinsin mi? Üyeleri grupsuz kalır.';
+
+  @override
+  String get mgGroup => 'Tarla hizmeti grubu';
+
+  @override
+  String get mgNoGroup => 'Grup yok';
 
   @override
   String get infoEmpty => 'Şu anda ilan bulunmuyor.';

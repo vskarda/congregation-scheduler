@@ -13,6 +13,7 @@ import '../../features/field_service_meetings/fsm_screen.dart';
 import '../../features/home/app_shell.dart';
 import '../../features/info_board/info_board_screen.dart';
 import '../../features/lmm_schedule/lmm_screen.dart';
+import '../../features/ministry_groups/ministry_groups_screen.dart';
 import '../../features/public_witnessing/pw_screen.dart';
 import '../../features/publishers/admin_publishers_screen.dart';
 import '../../features/publishers/profile_screen.dart';
@@ -116,6 +117,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
               path: '/territories',
               builder: (_, _) => const TerritoriesScreen()),
+          GoRoute(
+              path: '/ministry-groups',
+              builder: (_, _) => const MinistryGroupsScreen()),
           GoRoute(path: '/report', builder: (_, _) => const ReportScreen()),
           GoRoute(path: '/profile', builder: (_, _) => const ProfileScreen()),
           GoRoute(
