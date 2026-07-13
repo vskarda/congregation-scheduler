@@ -22,6 +22,7 @@ import '../../features/reports/admin_reports_screen.dart';
 import '../../features/reports/report_screen.dart';
 import '../../features/s1_report/s1_screen.dart';
 import '../../features/settings/settings_screen.dart';
+import '../../features/setup/setup_guide_screen.dart';
 import '../../features/setup/setup_mode_screen.dart';
 import '../../features/setup/setup_screen.dart';
 import '../../features/territories/territories_screen.dart';
@@ -88,6 +89,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/setup', builder: (_, _) => const SetupScreen()),
       GoRoute(path: '/setup/mode', builder: (_, _) => const SetupModeScreen()),
+      GoRoute(path: '/setup/help', builder: (_, _) => const SetupGuideScreen()),
       GoRoute(path: '/login', builder: (_, _) => const LoginScreen()),
       GoRoute(
         path: '/register',

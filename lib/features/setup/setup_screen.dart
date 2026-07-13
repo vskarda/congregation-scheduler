@@ -110,6 +110,18 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                 icon: const Icon(Icons.qr_code_scanner),
                 label: Text(l10n.setupScanQr),
               ),
+              const SizedBox(height: 24),
+              Text(
+                l10n.setupGuideLinkIntro,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant),
+              ),
+              const SizedBox(height: 8),
+              TextButton.icon(
+                onPressed: () => context.push('/setup/help'),
+                icon: const Icon(Icons.help_outline),
+                label: Text(l10n.setupGuideLinkButton),
+              ),
             ],
           ),
         ),

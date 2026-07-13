@@ -358,6 +358,234 @@ abstract class AppLocalizations {
   /// **'Configuration saved. Close and reopen the app to apply it.'**
   String get setupRestartRequired;
 
+  /// No description provided for @setupGuideLinkIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have a configuration? Create your congregation\'s own free database:'**
+  String get setupGuideLinkIntro;
+
+  /// No description provided for @setupGuideLinkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'How to set up a new congregation'**
+  String get setupGuideLinkButton;
+
+  /// No description provided for @setupGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up a new congregation'**
+  String get setupGuideTitle;
+
+  /// No description provided for @setupGuideIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is self-hosted: your congregation\'s data lives in your own free Google Firebase project that nobody else can access. Setting it up takes about 15 minutes and requires no programming — all you need is a Google account. Follow the steps below on this phone or on a computer.'**
+  String get setupGuideIntro;
+
+  /// No description provided for @setupGuideOpenConsole.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Firebase console'**
+  String get setupGuideOpenConsole;
+
+  /// No description provided for @setupGuideStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Firebase project'**
+  String get setupGuideStep1Title;
+
+  /// No description provided for @setupGuideStep1Body1.
+  ///
+  /// In en, this message translates to:
+  /// **'Open console.firebase.google.com, sign in with your Google account and tap \"Get started by setting up a Firebase project\".'**
+  String get setupGuideStep1Body1;
+
+  /// No description provided for @setupGuideStep1Body2.
+  ///
+  /// In en, this message translates to:
+  /// **'Name the project, e.g. \"congregation-mytown\", accept the terms and continue. If Google Analytics is offered, disable it — it is not needed. Stay on the free Spark plan; the app is designed to never need billing.'**
+  String get setupGuideStep1Body2;
+
+  /// No description provided for @setupGuideStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable e-mail sign-in'**
+  String get setupGuideStep2Title;
+
+  /// No description provided for @setupGuideStep2Body1.
+  ///
+  /// In en, this message translates to:
+  /// **'In the left menu choose Security → Authentication.'**
+  String get setupGuideStep2Body1;
+
+  /// No description provided for @setupGuideStep2Body2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Get started\".'**
+  String get setupGuideStep2Body2;
+
+  /// No description provided for @setupGuideStep2Body3.
+  ///
+  /// In en, this message translates to:
+  /// **'On the \"Sign-in method\" tab choose Email/Password.'**
+  String get setupGuideStep2Body3;
+
+  /// No description provided for @setupGuideStep2Body4.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable the first toggle (leave \"Email link\" off) and tap Save.'**
+  String get setupGuideStep2Body4;
+
+  /// No description provided for @setupGuideStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Create the Firestore database'**
+  String get setupGuideStep3Title;
+
+  /// No description provided for @setupGuideStep3Body1.
+  ///
+  /// In en, this message translates to:
+  /// **'In the left menu choose Databases & Storage → Firestore.'**
+  String get setupGuideStep3Body1;
+
+  /// No description provided for @setupGuideStep3Body2.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Create database\".'**
+  String get setupGuideStep3Body2;
+
+  /// No description provided for @setupGuideStep3Body3.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the Standard edition.'**
+  String get setupGuideStep3Body3;
+
+  /// No description provided for @setupGuideStep3Body4.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a location close to you (e.g. europe-west3 for Central Europe). It cannot be changed later.'**
+  String get setupGuideStep3Body4;
+
+  /// No description provided for @setupGuideStep3Body5.
+  ///
+  /// In en, this message translates to:
+  /// **'Start in production mode…'**
+  String get setupGuideStep3Body5;
+
+  /// No description provided for @setupGuideStep3Body6.
+  ///
+  /// In en, this message translates to:
+  /// **'…and tap Create.'**
+  String get setupGuideStep3Body6;
+
+  /// No description provided for @setupGuideStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Install the security rules'**
+  String get setupGuideStep4Title;
+
+  /// No description provided for @setupGuideStep4Body1.
+  ///
+  /// In en, this message translates to:
+  /// **'The rules decide who may read and write which data (e.g. only verified publishers can see schedules). In the Firestore database open the Rules tab and tap \"Edit rules\".'**
+  String get setupGuideStep4Body1;
+
+  /// No description provided for @setupGuideStep4Body2.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete everything in the editor and paste the copied rules.'**
+  String get setupGuideStep4Body2;
+
+  /// No description provided for @setupGuideStep4Body3.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Publish.'**
+  String get setupGuideStep4Body3;
+
+  /// No description provided for @setupGuideStep4Note.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat this step whenever a new app version ships updated rules.'**
+  String get setupGuideStep4Note;
+
+  /// No description provided for @setupGuideStep5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Get the app configuration'**
+  String get setupGuideStep5Title;
+
+  /// No description provided for @setupGuideStep5Body1.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the gear icon next to \"Project Overview\" (top left) and choose Project settings.'**
+  String get setupGuideStep5Body1;
+
+  /// No description provided for @setupGuideStep5Body2.
+  ///
+  /// In en, this message translates to:
+  /// **'On the General tab scroll down to \"Your apps\" and tap the web icon </>.'**
+  String get setupGuideStep5Body2;
+
+  /// No description provided for @setupGuideStep5Body3.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a nickname, e.g. \"congregation-app\", leave hosting off and tap \"Register app\".'**
+  String get setupGuideStep5Body3;
+
+  /// No description provided for @setupGuideStep5Body4.
+  ///
+  /// In en, this message translates to:
+  /// **'A code block with \"const firebaseConfig = …\" appears. Select and copy just the configuration between the curly braces — including the braces themselves.'**
+  String get setupGuideStep5Body4;
+
+  /// No description provided for @setupGuideStep5Note.
+  ///
+  /// In en, this message translates to:
+  /// **'This configuration is not a secret — it only identifies your project. The data is protected by the security rules from step 4.'**
+  String get setupGuideStep5Note;
+
+  /// No description provided for @setupGuideRulesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Security rules (firestore.rules)'**
+  String get setupGuideRulesTitle;
+
+  /// No description provided for @setupGuideRulesCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy rules'**
+  String get setupGuideRulesCopy;
+
+  /// No description provided for @setupGuideRulesCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules copied to clipboard.'**
+  String get setupGuideRulesCopied;
+
+  /// No description provided for @setupGuideRulesView.
+  ///
+  /// In en, this message translates to:
+  /// **'Show rules text'**
+  String get setupGuideRulesView;
+
+  /// No description provided for @setupGuideRulesLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load the rules text.'**
+  String get setupGuideRulesLoadError;
+
+  /// No description provided for @setupGuideFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Done! Go back, paste the copied configuration and tap Connect. Then choose \"Set up a new congregation\" and register as the first administrator.'**
+  String get setupGuideFinish;
+
+  /// No description provided for @setupGuideBackToConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the connection screen'**
+  String get setupGuideBackToConnect;
+
   /// No description provided for @languageSystem.
   ///
   /// In en, this message translates to:

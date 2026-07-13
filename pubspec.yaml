@@ -96,6 +96,10 @@ flutter:
   assets:
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
+    # Firebase console walkthrough screenshots for the in-app setup guide.
+    - assets/setup_guide/
+    # Shown/copied verbatim in the setup guide; single source of truth.
+    - firestore.rules
 
   # To add assets to your application, add an assets section, like this:
   # assets:

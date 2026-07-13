@@ -150,6 +150,139 @@ class AppLocalizationsCs extends AppLocalizations {
       'Konfigurace byla uložena. Zavřete a znovu otevřete aplikaci, aby se projevila.';
 
   @override
+  String get setupGuideLinkIntro =>
+      'Nemáte konfiguraci? Vytvořte sboru vlastní bezplatnou databázi:';
+
+  @override
+  String get setupGuideLinkButton => 'Jak založit nový sbor';
+
+  @override
+  String get setupGuideTitle => 'Založení nového sboru';
+
+  @override
+  String get setupGuideIntro =>
+      'Aplikace je „self-hosted“: data vašeho sboru jsou uložena ve vašem vlastním bezplatném projektu Google Firebase, ke kterému nemá nikdo jiný přístup. Nastavení zabere asi 15 minut a nevyžaduje žádné programování — stačí vám účet Google. Postupujte podle kroků níže na tomto telefonu nebo na počítači.';
+
+  @override
+  String get setupGuideOpenConsole => 'Otevřít konzoli Firebase';
+
+  @override
+  String get setupGuideStep1Title => 'Vytvořte projekt Firebase';
+
+  @override
+  String get setupGuideStep1Body1 =>
+      'Otevřete console.firebase.google.com, přihlaste se účtem Google a klepněte na „Get started by setting up a Firebase project“.';
+
+  @override
+  String get setupGuideStep1Body2 =>
+      'Pojmenujte projekt, např. „sbor-mestecko“, potvrďte podmínky a pokračujte. Pokud konzole nabídne Google Analytics, vypněte je — nejsou potřeba. Zůstaňte na bezplatném tarifu Spark; aplikace je navržena tak, aby nikdy nepotřebovala placený tarif.';
+
+  @override
+  String get setupGuideStep2Title => 'Zapněte přihlašování e-mailem';
+
+  @override
+  String get setupGuideStep2Body1 =>
+      'V levém menu zvolte Security → Authentication.';
+
+  @override
+  String get setupGuideStep2Body2 => 'Klepněte na „Get started“.';
+
+  @override
+  String get setupGuideStep2Body3 =>
+      'Na kartě „Sign-in method“ zvolte Email/Password.';
+
+  @override
+  String get setupGuideStep2Body4 =>
+      'Zapněte první přepínač („Email link“ nechte vypnutý) a klepněte na Save.';
+
+  @override
+  String get setupGuideStep3Title => 'Vytvořte databázi Firestore';
+
+  @override
+  String get setupGuideStep3Body1 =>
+      'V levém menu zvolte Databases & Storage → Firestore.';
+
+  @override
+  String get setupGuideStep3Body2 => 'Klepněte na „Create database“.';
+
+  @override
+  String get setupGuideStep3Body3 => 'Zvolte edici Standard.';
+
+  @override
+  String get setupGuideStep3Body4 =>
+      'Vyberte umístění blízko vás (např. europe-west3 pro střední Evropu). Později už ho nelze změnit.';
+
+  @override
+  String get setupGuideStep3Body5 =>
+      'Začněte v produkčním režimu („Start in production mode“)…';
+
+  @override
+  String get setupGuideStep3Body6 => '…a klepněte na Create.';
+
+  @override
+  String get setupGuideStep4Title => 'Nahrajte bezpečnostní pravidla';
+
+  @override
+  String get setupGuideStep4Body1 =>
+      'Pravidla určují, kdo smí která data číst a zapisovat (např. rozpisy vidí jen ověření zvěstovatelé). V databázi Firestore otevřete kartu Rules a klepněte na „Edit rules“.';
+
+  @override
+  String get setupGuideStep4Body2 =>
+      'Smažte celý obsah editoru a vložte zkopírovaná pravidla.';
+
+  @override
+  String get setupGuideStep4Body3 => 'Klepněte na Publish.';
+
+  @override
+  String get setupGuideStep4Note =>
+      'Tento krok zopakujte vždy, když nová verze aplikace přinese aktualizovaná pravidla.';
+
+  @override
+  String get setupGuideStep5Title => 'Získejte konfiguraci aplikace';
+
+  @override
+  String get setupGuideStep5Body1 =>
+      'Klepněte na ikonu ozubeného kola vedle „Project Overview“ (vlevo nahoře) a zvolte Project settings.';
+
+  @override
+  String get setupGuideStep5Body2 =>
+      'Na kartě General sjeďte dolů k „Your apps“ a klepněte na webovou ikonu </>.';
+
+  @override
+  String get setupGuideStep5Body3 =>
+      'Zadejte přezdívku, např. „congregation-app“, hosting nechte vypnutý a klepněte na „Register app“.';
+
+  @override
+  String get setupGuideStep5Body4 =>
+      'Zobrazí se blok kódu s „const firebaseConfig = …“. Označte a zkopírujte jen část mezi složenými závorkami — včetně závorek.';
+
+  @override
+  String get setupGuideStep5Note =>
+      'Tato konfigurace není tajná — pouze identifikuje váš projekt. Data chrání bezpečnostní pravidla z kroku 4.';
+
+  @override
+  String get setupGuideRulesTitle => 'Bezpečnostní pravidla (firestore.rules)';
+
+  @override
+  String get setupGuideRulesCopy => 'Zkopírovat pravidla';
+
+  @override
+  String get setupGuideRulesCopied => 'Pravidla zkopírována do schránky.';
+
+  @override
+  String get setupGuideRulesView => 'Zobrazit text pravidel';
+
+  @override
+  String get setupGuideRulesLoadError => 'Text pravidel se nepodařilo načíst.';
+
+  @override
+  String get setupGuideFinish =>
+      'Hotovo! Vraťte se zpět, vložte zkopírovanou konfiguraci a klepněte na Připojit. Poté zvolte „Založit nový sbor“ a zaregistrujte se jako první administrátor.';
+
+  @override
+  String get setupGuideBackToConnect => 'Zpět na připojení';
+
+  @override
   String get languageSystem => 'Jazyk systému';
 
   @override

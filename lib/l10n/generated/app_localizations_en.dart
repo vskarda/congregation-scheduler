@@ -149,6 +149,138 @@ class AppLocalizationsEn extends AppLocalizations {
       'Configuration saved. Close and reopen the app to apply it.';
 
   @override
+  String get setupGuideLinkIntro =>
+      'Don\'t have a configuration? Create your congregation\'s own free database:';
+
+  @override
+  String get setupGuideLinkButton => 'How to set up a new congregation';
+
+  @override
+  String get setupGuideTitle => 'Set up a new congregation';
+
+  @override
+  String get setupGuideIntro =>
+      'This app is self-hosted: your congregation\'s data lives in your own free Google Firebase project that nobody else can access. Setting it up takes about 15 minutes and requires no programming — all you need is a Google account. Follow the steps below on this phone or on a computer.';
+
+  @override
+  String get setupGuideOpenConsole => 'Open Firebase console';
+
+  @override
+  String get setupGuideStep1Title => 'Create a Firebase project';
+
+  @override
+  String get setupGuideStep1Body1 =>
+      'Open console.firebase.google.com, sign in with your Google account and tap \"Get started by setting up a Firebase project\".';
+
+  @override
+  String get setupGuideStep1Body2 =>
+      'Name the project, e.g. \"congregation-mytown\", accept the terms and continue. If Google Analytics is offered, disable it — it is not needed. Stay on the free Spark plan; the app is designed to never need billing.';
+
+  @override
+  String get setupGuideStep2Title => 'Enable e-mail sign-in';
+
+  @override
+  String get setupGuideStep2Body1 =>
+      'In the left menu choose Security → Authentication.';
+
+  @override
+  String get setupGuideStep2Body2 => 'Tap \"Get started\".';
+
+  @override
+  String get setupGuideStep2Body3 =>
+      'On the \"Sign-in method\" tab choose Email/Password.';
+
+  @override
+  String get setupGuideStep2Body4 =>
+      'Enable the first toggle (leave \"Email link\" off) and tap Save.';
+
+  @override
+  String get setupGuideStep3Title => 'Create the Firestore database';
+
+  @override
+  String get setupGuideStep3Body1 =>
+      'In the left menu choose Databases & Storage → Firestore.';
+
+  @override
+  String get setupGuideStep3Body2 => 'Tap \"Create database\".';
+
+  @override
+  String get setupGuideStep3Body3 => 'Choose the Standard edition.';
+
+  @override
+  String get setupGuideStep3Body4 =>
+      'Choose a location close to you (e.g. europe-west3 for Central Europe). It cannot be changed later.';
+
+  @override
+  String get setupGuideStep3Body5 => 'Start in production mode…';
+
+  @override
+  String get setupGuideStep3Body6 => '…and tap Create.';
+
+  @override
+  String get setupGuideStep4Title => 'Install the security rules';
+
+  @override
+  String get setupGuideStep4Body1 =>
+      'The rules decide who may read and write which data (e.g. only verified publishers can see schedules). In the Firestore database open the Rules tab and tap \"Edit rules\".';
+
+  @override
+  String get setupGuideStep4Body2 =>
+      'Delete everything in the editor and paste the copied rules.';
+
+  @override
+  String get setupGuideStep4Body3 => 'Tap Publish.';
+
+  @override
+  String get setupGuideStep4Note =>
+      'Repeat this step whenever a new app version ships updated rules.';
+
+  @override
+  String get setupGuideStep5Title => 'Get the app configuration';
+
+  @override
+  String get setupGuideStep5Body1 =>
+      'Tap the gear icon next to \"Project Overview\" (top left) and choose Project settings.';
+
+  @override
+  String get setupGuideStep5Body2 =>
+      'On the General tab scroll down to \"Your apps\" and tap the web icon </>.';
+
+  @override
+  String get setupGuideStep5Body3 =>
+      'Enter a nickname, e.g. \"congregation-app\", leave hosting off and tap \"Register app\".';
+
+  @override
+  String get setupGuideStep5Body4 =>
+      'A code block with \"const firebaseConfig = …\" appears. Select and copy just the configuration between the curly braces — including the braces themselves.';
+
+  @override
+  String get setupGuideStep5Note =>
+      'This configuration is not a secret — it only identifies your project. The data is protected by the security rules from step 4.';
+
+  @override
+  String get setupGuideRulesTitle => 'Security rules (firestore.rules)';
+
+  @override
+  String get setupGuideRulesCopy => 'Copy rules';
+
+  @override
+  String get setupGuideRulesCopied => 'Rules copied to clipboard.';
+
+  @override
+  String get setupGuideRulesView => 'Show rules text';
+
+  @override
+  String get setupGuideRulesLoadError => 'Could not load the rules text.';
+
+  @override
+  String get setupGuideFinish =>
+      'Done! Go back, paste the copied configuration and tap Connect. Then choose \"Set up a new congregation\" and register as the first administrator.';
+
+  @override
+  String get setupGuideBackToConnect => 'Back to the connection screen';
+
+  @override
   String get languageSystem => 'System language';
 
   @override

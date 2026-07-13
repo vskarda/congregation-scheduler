@@ -149,6 +149,139 @@ class AppLocalizationsTr extends AppLocalizations {
       'Yapılandırma kaydedildi. Uygulamak için uygulamayı kapatıp yeniden açın.';
 
   @override
+  String get setupGuideLinkIntro =>
+      'Yapılandırmanız yok mu? Cemaatiniz için kendi ücretsiz veritabanınızı oluşturun:';
+
+  @override
+  String get setupGuideLinkButton => 'Yeni cemaat nasıl kurulur';
+
+  @override
+  String get setupGuideTitle => 'Yeni cemaat kurulumu';
+
+  @override
+  String get setupGuideIntro =>
+      'Bu uygulama kendi altyapınızda çalışır: cemaatinizin verileri, başka hiç kimsenin erişemeyeceği kendi ücretsiz Google Firebase projenizde saklanır. Kurulum yaklaşık 15 dakika sürer ve programlama gerektirmez — yalnızca bir Google hesabı gerekir. Aşağıdaki adımları bu telefonda veya bilgisayarda izleyin.';
+
+  @override
+  String get setupGuideOpenConsole => 'Firebase konsolunu aç';
+
+  @override
+  String get setupGuideStep1Title => 'Firebase projesi oluşturun';
+
+  @override
+  String get setupGuideStep1Body1 =>
+      'console.firebase.google.com adresini açın, Google hesabınızla giriş yapın ve \"Get started by setting up a Firebase project\" seçeneğine dokunun.';
+
+  @override
+  String get setupGuideStep1Body2 =>
+      'Projeye bir ad verin (ör. \"cemaat-sehrim\"), koşulları kabul edin ve devam edin. Google Analytics önerilirse kapatın — gerekli değildir. Ücretsiz Spark planında kalın; uygulama hiçbir zaman ücretli plan gerektirmeyecek şekilde tasarlanmıştır.';
+
+  @override
+  String get setupGuideStep2Title => 'E-posta ile girişi etkinleştirin';
+
+  @override
+  String get setupGuideStep2Body1 =>
+      'Sol menüden Security → Authentication seçeneğini seçin.';
+
+  @override
+  String get setupGuideStep2Body2 => '\"Get started\" düğmesine dokunun.';
+
+  @override
+  String get setupGuideStep2Body3 =>
+      '\"Sign-in method\" sekmesinde Email/Password seçeneğini seçin.';
+
+  @override
+  String get setupGuideStep2Body4 =>
+      'İlk anahtarı etkinleştirin (\"Email link\" kapalı kalsın) ve Save\'e dokunun.';
+
+  @override
+  String get setupGuideStep3Title => 'Firestore veritabanını oluşturun';
+
+  @override
+  String get setupGuideStep3Body1 =>
+      'Sol menüden Databases & Storage → Firestore seçeneğini seçin.';
+
+  @override
+  String get setupGuideStep3Body2 => '\"Create database\" düğmesine dokunun.';
+
+  @override
+  String get setupGuideStep3Body3 => 'Standard sürümünü seçin.';
+
+  @override
+  String get setupGuideStep3Body4 =>
+      'Size yakın bir konum seçin (ör. Orta Avrupa için europe-west3). Daha sonra değiştirilemez.';
+
+  @override
+  String get setupGuideStep3Body5 =>
+      '\"Start in production mode\" (üretim modu) seçeneğini işaretleyin…';
+
+  @override
+  String get setupGuideStep3Body6 => '…ve Create\'e dokunun.';
+
+  @override
+  String get setupGuideStep4Title => 'Güvenlik kurallarını yükleyin';
+
+  @override
+  String get setupGuideStep4Body1 =>
+      'Kurallar hangi verileri kimin okuyup yazabileceğini belirler (ör. programları yalnızca doğrulanmış müjdeciler görebilir). Firestore veritabanında Rules sekmesini açın ve \"Edit rules\" düğmesine dokunun.';
+
+  @override
+  String get setupGuideStep4Body2 =>
+      'Düzenleyicideki her şeyi silin ve kopyaladığınız kuralları yapıştırın.';
+
+  @override
+  String get setupGuideStep4Body3 => 'Publish düğmesine dokunun.';
+
+  @override
+  String get setupGuideStep4Note =>
+      'Yeni bir uygulama sürümü güncellenmiş kurallar getirdiğinde bu adımı tekrarlayın.';
+
+  @override
+  String get setupGuideStep5Title => 'Uygulama yapılandırmasını alın';
+
+  @override
+  String get setupGuideStep5Body1 =>
+      '\"Project Overview\" yanındaki dişli simgesine (sol üstte) dokunun ve Project settings\'i seçin.';
+
+  @override
+  String get setupGuideStep5Body2 =>
+      'General sekmesinde \"Your apps\" bölümüne inin ve </> web simgesine dokunun.';
+
+  @override
+  String get setupGuideStep5Body3 =>
+      'Bir takma ad girin (ör. \"congregation-app\"), hosting\'i kapalı bırakın ve \"Register app\" düğmesine dokunun.';
+
+  @override
+  String get setupGuideStep5Body4 =>
+      '\"const firebaseConfig = …\" içeren bir kod bloğu görünür. Yalnızca süslü parantezler arasındaki kısmı — parantezler dahil — seçip kopyalayın.';
+
+  @override
+  String get setupGuideStep5Note =>
+      'Bu yapılandırma gizli değildir — yalnızca projenizi tanımlar. Verileri koruyan, 4. adımdaki güvenlik kurallarıdır.';
+
+  @override
+  String get setupGuideRulesTitle => 'Güvenlik kuralları (firestore.rules)';
+
+  @override
+  String get setupGuideRulesCopy => 'Kuralları kopyala';
+
+  @override
+  String get setupGuideRulesCopied => 'Kurallar panoya kopyalandı.';
+
+  @override
+  String get setupGuideRulesView => 'Kural metnini göster';
+
+  @override
+  String get setupGuideRulesLoadError => 'Kural metni yüklenemedi.';
+
+  @override
+  String get setupGuideFinish =>
+      'Bitti! Geri dönün, kopyaladığınız yapılandırmayı yapıştırın ve Bağlan\'a dokunun. Ardından \"Yeni cemaat oluştur\" seçeneğini seçin ve ilk yönetici olarak kaydolun.';
+
+  @override
+  String get setupGuideBackToConnect => 'Bağlantı ekranına dön';
+
+  @override
   String get languageSystem => 'Sistem dili';
 
   @override
