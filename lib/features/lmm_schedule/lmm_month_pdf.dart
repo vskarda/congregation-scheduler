@@ -31,6 +31,7 @@ Future<Uint8List> buildLmmMonthPdf({
   required Map<String, LmmWeek> weeksById,
   required Map<String, Publisher> publishersById,
   required int classCount,
+  required List<CustomAssignment> permanentAssignments,
   required AppLocalizations l10n,
   required String locale,
   required PdfFonts fonts,
@@ -184,8 +185,21 @@ Future<Uint8List> buildLmmMonthPdf({
     widgets.add(supportRow(l10n.supportAttendants, week.attendants));
     widgets.add(supportRow(l10n.supportMicrophones, week.microphones));
     widgets.add(supportRow(l10n.supportAudioVideo, week.audioVideo));
+    // Permanent (every-week) custom assignments: label from the config, the
+    // assignee merged in from this week by id (blank when unassigned).
+    for (final template in permanentAssignments) {
+      final assignment = week.customAssignments
+          .firstWhere(
+            (c) => c.id == template.id,
+            orElse: () => const CustomAssignment(),
+          )
+          .assignment;
+      widgets.add(supportRow(template.label, assignment));
+    }
     for (final custom in week.customAssignments) {
-      widgets.add(supportRow(custom.label, custom.assignment));
+      if (custom.id.isEmpty) {
+        widgets.add(supportRow(custom.label, custom.assignment));
+      }
     }
   }
 

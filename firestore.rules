@@ -172,6 +172,15 @@ service cloud.firestore {
       allow write: if hasRole('weekendSchedule');
     }
 
+    // Per-meeting schedule configuration (e.g. permanent custom assignments).
+    // Doc id names the meeting type; each is writable by that schedule's role
+    // so the same admins who edit the schedule manage its permanent slots.
+    match /schedule_config/{docId} {
+      allow read: if isVerified();
+      allow write: if (docId == 'lmm' && hasRole('lmmSchedule'))
+        || (docId == 'weekend' && hasRole('weekendSchedule'));
+    }
+
     // Public talk title catalog (S-99); readable by all verified users
     // so the weekend talk picker can offer the titles.
     match /public_talks/{docId} {

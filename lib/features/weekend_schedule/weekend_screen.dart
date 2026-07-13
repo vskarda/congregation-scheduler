@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/data/weekend_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -272,28 +273,48 @@ class _WeekContent extends ConsumerWidget {
             ],
           ),
         ),
-        SupportAssignmentsCard(
-          canEdit: canEdit,
-          attendants: week.attendants,
-          microphones: week.microphones,
-          audioVideo: week.audioVideo,
-          customAssignments: week.customAssignments,
-          onChanged: ({
-            attendants,
-            microphones,
-            audioVideo,
-            customAssignments,
-          }) =>
-              _save(
-            ref,
-            week.copyWith(
-              attendants: attendants ?? week.attendants,
-              microphones: microphones ?? week.microphones,
-              audioVideo: audioVideo ?? week.audioVideo,
-              customAssignments:
-                  customAssignments ?? week.customAssignments,
-            ),
-          ),
+        Builder(
+          builder: (context) {
+            final permanent =
+                ref.watch(weekendPermanentAssignmentsProvider).value ??
+                    const [];
+            final configRepo = ref.read(scheduleConfigRepositoryProvider);
+            return SupportAssignmentsCard(
+              canEdit: canEdit,
+              attendants: week.attendants,
+              microphones: week.microphones,
+              audioVideo: week.audioVideo,
+              customAssignments: week.customAssignments,
+              permanentAssignments: permanent,
+              onAddPermanent: (template) => configRepo.saveConfig(
+                ScheduleConfigDoc.weekend,
+                ScheduleConfig(permanentAssignments: [...permanent, template]),
+              ),
+              onRemovePermanent: (id) => configRepo.saveConfig(
+                ScheduleConfigDoc.weekend,
+                ScheduleConfig(
+                  permanentAssignments:
+                      permanent.where((c) => c.id != id).toList(),
+                ),
+              ),
+              onChanged: ({
+                attendants,
+                microphones,
+                audioVideo,
+                customAssignments,
+              }) =>
+                  _save(
+                ref,
+                week.copyWith(
+                  attendants: attendants ?? week.attendants,
+                  microphones: microphones ?? week.microphones,
+                  audioVideo: audioVideo ?? week.audioVideo,
+                  customAssignments:
+                      customAssignments ?? week.customAssignments,
+                ),
+              ),
+            );
+          },
         ),
         const SizedBox(height: 24),
       ],

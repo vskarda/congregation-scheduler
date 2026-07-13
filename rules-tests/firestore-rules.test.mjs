@@ -446,6 +446,40 @@ describe('section roles', () => {
   });
 });
 
+describe('schedule config (permanent custom assignments)', () => {
+  it('verified publishers read config but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'schedule_config/lmm')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'schedule_config/lmm'), {
+        permanentAssignments: [],
+      }),
+    );
+  });
+
+  it('each schedule admin writes only their own config doc', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(LMM_ADMIN), 'schedule_config/lmm'), {
+        permanentAssignments: [{ id: 'a', label: 'Sound' }],
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'schedule_config/weekend'), {
+        permanentAssignments: [],
+      }),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(WEEKEND_ADMIN), 'schedule_config/weekend'), {
+        permanentAssignments: [{ id: 'b', label: 'Zoom host' }],
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(WEEKEND_ADMIN), 'schedule_config/lmm'), {
+        permanentAssignments: [],
+      }),
+    );
+  });
+});
+
 describe('public witnessing slots', () => {
   it('verified publisher reads slots but cannot write', async () => {
     await assertSucceeds(getDoc(doc(db(VERIFIED), 'pw_slots/slot1')));

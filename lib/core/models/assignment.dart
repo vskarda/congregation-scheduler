@@ -28,6 +28,10 @@ abstract class Assignment with _$Assignment {
 @freezed
 abstract class CustomAssignment with _$CustomAssignment {
   const factory CustomAssignment({
+    /// Stable id linking a week's stored assignee to a permanent template
+    /// (see [ScheduleConfig.permanentAssignments]). Empty for one-off,
+    /// this-week-only custom assignments.
+    @Default('') String id,
     @Default('') String label,
     @Default(Assignment()) Assignment assignment,
   }) = _CustomAssignment;

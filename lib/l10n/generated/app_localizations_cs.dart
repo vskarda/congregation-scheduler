@@ -761,6 +761,17 @@ class AppLocalizationsCs extends AppLocalizations {
   String get customLabel => 'Popisek';
 
   @override
+  String get customAssignmentPermanent => 'Trvalý (každý týden)';
+
+  @override
+  String get customAssignmentRemovePermanentTitle => 'Odebrat trvalý úkol';
+
+  @override
+  String customAssignmentRemovePermanentBody(String label) {
+    return 'Odebrat „$label“ z každého týdne?';
+  }
+
+  @override
   String get pickerQualified => 'Schválení';
 
   @override

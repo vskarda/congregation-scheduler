@@ -23,6 +23,7 @@ Map<String, dynamic> _$AssignmentToJson(_Assignment instance) =>
 
 _CustomAssignment _$CustomAssignmentFromJson(Map<String, dynamic> json) =>
     _CustomAssignment(
+      id: json['id'] as String? ?? '',
       label: json['label'] as String? ?? '',
       assignment: json['assignment'] == null
           ? const Assignment()
@@ -31,6 +32,7 @@ _CustomAssignment _$CustomAssignmentFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$CustomAssignmentToJson(_CustomAssignment instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'label': instance.label,
       'assignment': instance.assignment.toJson(),
     };

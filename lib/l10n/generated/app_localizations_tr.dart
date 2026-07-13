@@ -760,6 +760,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get customLabel => 'Etiket';
 
   @override
+  String get customAssignmentPermanent => 'Kalıcı (her hafta)';
+
+  @override
+  String get customAssignmentRemovePermanentTitle => 'Kalıcı görevi kaldır';
+
+  @override
+  String customAssignmentRemovePermanentBody(String label) {
+    return '“$label” her haftadan kaldırılsın mı?';
+  }
+
+  @override
   String get pickerQualified => 'Yeterli';
 
   @override

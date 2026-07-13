@@ -6,6 +6,7 @@ import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/lmm_repository.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -703,12 +704,27 @@ class _SupportCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final permanent =
+        ref.watch(lmmPermanentAssignmentsProvider).value ?? const [];
+    final configRepo = ref.read(scheduleConfigRepositoryProvider);
     return SupportAssignmentsCard(
       canEdit: canEdit,
       attendants: week.attendants,
       microphones: week.microphones,
       audioVideo: week.audioVideo,
       customAssignments: week.customAssignments,
+      permanentAssignments: permanent,
+      onAddPermanent: (template) => configRepo.saveConfig(
+        ScheduleConfigDoc.lmm,
+        ScheduleConfig(permanentAssignments: [...permanent, template]),
+      ),
+      onRemovePermanent: (id) => configRepo.saveConfig(
+        ScheduleConfigDoc.lmm,
+        ScheduleConfig(
+          permanentAssignments:
+              permanent.where((c) => c.id != id).toList(),
+        ),
+      ),
       onChanged: ({attendants, microphones, audioVideo, customAssignments}) =>
           saveLmmWeek(
             ref,
@@ -733,6 +749,9 @@ class SupportAssignmentsCard extends ConsumerWidget {
     required this.audioVideo,
     required this.customAssignments,
     required this.onChanged,
+    this.permanentAssignments = const [],
+    this.onAddPermanent,
+    this.onRemovePermanent,
   });
 
   final bool canEdit;
@@ -747,6 +766,18 @@ class SupportAssignmentsCard extends ConsumerWidget {
     List<CustomAssignment>? customAssignments,
   })
   onChanged;
+
+  /// Congregation-level custom assignments that recur on every week (id +
+  /// label only; the assignee is stored per-week in [customAssignments],
+  /// matched by [CustomAssignment.id]).
+  final List<CustomAssignment> permanentAssignments;
+
+  /// Adds a permanent definition (congregation-level). Required to offer the
+  /// "Permanent" option in the add dialog.
+  final Future<void> Function(CustomAssignment template)? onAddPermanent;
+
+  /// Removes a permanent definition (congregation-level) by id.
+  final Future<void> Function(String id)? onRemovePermanent;
 
   Future<void> _edit(
     BuildContext context, {
@@ -766,53 +797,135 @@ class SupportAssignmentsCard extends ConsumerWidget {
     if (result != null) await save(result);
   }
 
-  Future<void> _addCustom(BuildContext context) async {
+  /// Stores/updates this week's assignee for a permanent slot, matched by id.
+  Future<void> _savePermanentAssignee(
+    CustomAssignment template,
+    Assignment a,
+  ) {
+    final updated = [...customAssignments];
+    final idx = updated.indexWhere((c) => c.id == template.id);
+    final entry = CustomAssignment(
+      id: template.id,
+      label: template.label,
+      assignment: a,
+    );
+    if (idx >= 0) {
+      updated[idx] = entry;
+    } else {
+      updated.add(entry);
+    }
+    return onChanged(customAssignments: updated);
+  }
+
+  Future<void> _confirmRemovePermanent(
+    BuildContext context,
+    CustomAssignment template,
+  ) async {
     final l10n = context.l10n;
-    final ctrl = TextEditingController();
-    final label = await showDialog<String>(
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.customAssignmentAdd),
-        content: TextField(
-          controller: ctrl,
-          autofocus: true,
-          decoration: InputDecoration(labelText: l10n.customLabel),
-        ),
+        title: Text(l10n.customAssignmentRemovePermanentTitle),
+        content: Text(l10n.customAssignmentRemovePermanentBody(template.label)),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(false),
             child: Text(l10n.commonCancel),
           ),
           FilledButton(
-            onPressed: () => Navigator.of(context).pop(ctrl.text.trim()),
-            child: Text(l10n.commonAdd),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonDelete),
           ),
         ],
       ),
     );
-    if (label != null && label.isNotEmpty) {
+    if (confirmed == true) await onRemovePermanent?.call(template.id);
+  }
+
+  Future<void> _addCustom(BuildContext context) async {
+    final l10n = context.l10n;
+    final ctrl = TextEditingController();
+    final canMakePermanent = onAddPermanent != null;
+    var permanent = false;
+    final result = await showDialog<({String label, bool permanent})>(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(l10n.customAssignmentAdd),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: ctrl,
+                autofocus: true,
+                decoration: InputDecoration(labelText: l10n.customLabel),
+              ),
+              if (canMakePermanent)
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  value: permanent,
+                  onChanged: (v) => setState(() => permanent = v),
+                  title: Text(l10n.customAssignmentPermanent),
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(l10n.commonCancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(
+                context,
+              ).pop((label: ctrl.text.trim(), permanent: permanent)),
+              child: Text(l10n.commonAdd),
+            ),
+          ],
+        ),
+      ),
+    );
+    ctrl.dispose();
+    if (result == null || result.label.isEmpty) return;
+    if (result.permanent) {
+      await onAddPermanent?.call(
+        CustomAssignment(id: const Uuid().v4(), label: result.label),
+      );
+    } else {
       await onChanged(
         customAssignments: [
           ...customAssignments,
-          CustomAssignment(label: label),
+          CustomAssignment(label: result.label),
         ],
       );
     }
-    ctrl.dispose();
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
+    final theme = Theme.of(context);
 
     Widget row({
       required String label,
       required Assignment assignment,
       required VoidCallback? onTap,
       VoidCallback? onDelete,
+      bool permanent = false,
     }) => ListTile(
       dense: true,
-      title: Text(label),
+      title: Row(
+        children: [
+          if (permanent) ...[
+            Icon(
+              Icons.push_pin_outlined,
+              size: 14,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(width: 4),
+          ],
+          Flexible(child: Text(label)),
+        ],
+      ),
       subtitle: AssignmentText(assignment),
       onTap: onTap,
       trailing: onDelete != null
@@ -869,31 +982,62 @@ class SupportAssignmentsCard extends ConsumerWidget {
                     save: (a) => onChanged(audioVideo: a),
                   ),
           ),
+          // Permanent (every-week) custom assignments: label from the
+          // congregation config, assignee merged in from this week by id.
+          for (final template in permanentAssignments)
+            () {
+              final assignment = customAssignments
+                  .firstWhere(
+                    (c) => c.id == template.id,
+                    orElse: () => CustomAssignment(id: template.id),
+                  )
+                  .assignment;
+              return row(
+                label: template.label,
+                assignment: assignment,
+                permanent: true,
+                onTap: !canEdit
+                    ? null
+                    : () => _edit(
+                        context,
+                        title: template.label,
+                        initial: assignment,
+                        historyKey: HistoryKeys.custom,
+                        qualifies: (_) => true,
+                        save: (a) => _savePermanentAssignee(template, a),
+                      ),
+                onDelete: !canEdit || onRemovePermanent == null
+                    ? null
+                    : () => _confirmRemovePermanent(context, template),
+              );
+            }(),
+          // One-off custom assignments (this week only): id is empty.
           for (var i = 0; i < customAssignments.length; i++)
-            row(
-              label: customAssignments[i].label,
-              assignment: customAssignments[i].assignment,
-              onTap: !canEdit
-                  ? null
-                  : () => _edit(
-                      context,
-                      title: customAssignments[i].label,
-                      initial: customAssignments[i].assignment,
-                      historyKey: HistoryKeys.custom,
-                      qualifies: (_) => true,
-                      save: (a) {
-                        final updated = [...customAssignments];
-                        updated[i] = updated[i].copyWith(assignment: a);
-                        return onChanged(customAssignments: updated);
+            if (customAssignments[i].id.isEmpty)
+              row(
+                label: customAssignments[i].label,
+                assignment: customAssignments[i].assignment,
+                onTap: !canEdit
+                    ? null
+                    : () => _edit(
+                        context,
+                        title: customAssignments[i].label,
+                        initial: customAssignments[i].assignment,
+                        historyKey: HistoryKeys.custom,
+                        qualifies: (_) => true,
+                        save: (a) {
+                          final updated = [...customAssignments];
+                          updated[i] = updated[i].copyWith(assignment: a);
+                          return onChanged(customAssignments: updated);
+                        },
+                      ),
+                onDelete: !canEdit
+                    ? null
+                    : () {
+                        final updated = [...customAssignments]..removeAt(i);
+                        onChanged(customAssignments: updated);
                       },
-                    ),
-              onDelete: !canEdit
-                  ? null
-                  : () {
-                      final updated = [...customAssignments]..removeAt(i);
-                      onChanged(customAssignments: updated);
-                    },
-            ),
+              ),
           if (canEdit)
             Padding(
               padding: const EdgeInsets.all(8),

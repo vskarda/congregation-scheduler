@@ -108,6 +108,7 @@ void main() {
       weeksById: {'2026-07-06': lmmWeek}, // 13/20/27 have no schedule
       publishersById: publishers,
       classCount: 3,
+      permanentAssignments: const [],
       l10n: lookupAppLocalizations(const Locale('en')),
       locale: 'en',
       fonts: loadFontsFromDisk(),
@@ -123,6 +124,7 @@ void main() {
       weeksById: {'2026-07-06': lmmWeek, '2026-07-13': lmmWeek},
       publishersById: publishers,
       classCount: 1,
+      permanentAssignments: const [],
       l10n: lookupAppLocalizations(const Locale('cs')),
       locale: 'cs',
       fonts: loadFontsFromDisk(),
@@ -137,6 +139,40 @@ void main() {
       weeksById: const {},
       publishersById: const {},
       classCount: 1,
+      permanentAssignments: const [],
+      l10n: lookupAppLocalizations(const Locale('en')),
+      locale: 'en',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('LMM PDF merges permanent custom assignments (assigned + blank)',
+      () async {
+    const permanent = [
+      CustomAssignment(id: 'perm1', label: 'Zoom host'),
+      CustomAssignment(id: 'perm2', label: 'Cleaning group'),
+    ];
+    // perm1 has this-week's assignee stored by id; perm2 is unfilled (blank
+    // row); a one-off (empty id) also renders.
+    final weekWithPermanent = lmmWeek.copyWith(customAssignments: const [
+      CustomAssignment(
+        id: 'perm1',
+        label: 'Zoom host',
+        assignment: Assignment(publisherIds: ['p1']),
+      ),
+      CustomAssignment(
+        label: 'One-off note',
+        assignment: Assignment(freeText: 'note'),
+      ),
+    ]);
+    final bytes = await buildLmmMonthPdf(
+      month: month,
+      mondays: mondays,
+      weeksById: {'2026-07-06': weekWithPermanent},
+      publishersById: publishers,
+      classCount: 1,
+      permanentAssignments: permanent,
       l10n: lookupAppLocalizations(const Locale('en')),
       locale: 'en',
       fonts: loadFontsFromDisk(),
@@ -150,6 +186,7 @@ void main() {
       mondays: mondays,
       weeksById: {'2026-07-06': weekendWeek},
       publishersById: publishers,
+      permanentAssignments: const [],
       l10n: lookupAppLocalizations(const Locale('cs')),
       locale: 'cs',
       fonts: loadFontsFromDisk(),
@@ -164,6 +201,7 @@ void main() {
       mondays: mondays,
       weeksById: const {},
       publishersById: const {},
+      permanentAssignments: const [],
       l10n: lookupAppLocalizations(const Locale('en')),
       locale: 'en',
       fonts: loadFontsFromDisk(),

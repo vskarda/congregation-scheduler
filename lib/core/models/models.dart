@@ -11,6 +11,7 @@ export 'ministry_group.dart';
 export 'publisher.dart';
 export 'pw.dart';
 export 'report.dart';
+export 'schedule_config.dart';
 export 'talk_catalog.dart';
 export 'territory.dart';
 export 'weekend_week.dart';

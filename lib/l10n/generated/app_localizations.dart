@@ -1498,6 +1498,24 @@ abstract class AppLocalizations {
   /// **'Label'**
   String get customLabel;
 
+  /// No description provided for @customAssignmentPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanent (every week)'**
+  String get customAssignmentPermanent;
+
+  /// No description provided for @customAssignmentRemovePermanentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove permanent assignment'**
+  String get customAssignmentRemovePermanentTitle;
+
+  /// No description provided for @customAssignmentRemovePermanentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove \"{label}\" from every week?'**
+  String customAssignmentRemovePermanentBody(String label);
+
   /// No description provided for @pickerQualified.
   ///
   /// In en, this message translates to:

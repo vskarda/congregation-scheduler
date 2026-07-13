@@ -287,7 +287,10 @@ as String,
 /// @nodoc
 mixin _$CustomAssignment {
 
- String get label; Assignment get assignment;
+/// Stable id linking a week's stored assignee to a permanent template
+/// (see [ScheduleConfig.permanentAssignments]). Empty for one-off,
+/// this-week-only custom assignments.
+ String get id; String get label; Assignment get assignment;
 /// Create a copy of CustomAssignment
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -300,16 +303,16 @@ $CustomAssignmentCopyWith<CustomAssignment> get copyWith => _$CustomAssignmentCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CustomAssignment&&(identical(other.label, label) || other.label == label)&&(identical(other.assignment, assignment) || other.assignment == assignment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CustomAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.assignment, assignment) || other.assignment == assignment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,label,assignment);
+int get hashCode => Object.hash(runtimeType,id,label,assignment);
 
 @override
 String toString() {
-  return 'CustomAssignment(label: $label, assignment: $assignment)';
+  return 'CustomAssignment(id: $id, label: $label, assignment: $assignment)';
 }
 
 
@@ -320,7 +323,7 @@ abstract mixin class $CustomAssignmentCopyWith<$Res>  {
   factory $CustomAssignmentCopyWith(CustomAssignment value, $Res Function(CustomAssignment) _then) = _$CustomAssignmentCopyWithImpl;
 @useResult
 $Res call({
- String label, Assignment assignment
+ String id, String label, Assignment assignment
 });
 
 
@@ -337,9 +340,10 @@ class _$CustomAssignmentCopyWithImpl<$Res>
 
 /// Create a copy of CustomAssignment
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? label = null,Object? assignment = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? label = null,Object? assignment = null,}) {
   return _then(_self.copyWith(
-label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,
   ));
@@ -435,10 +439,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String label,  Assignment assignment)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String label,  Assignment assignment)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CustomAssignment() when $default != null:
-return $default(_that.label,_that.assignment);case _:
+return $default(_that.id,_that.label,_that.assignment);case _:
   return orElse();
 
 }
@@ -456,10 +460,10 @@ return $default(_that.label,_that.assignment);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String label,  Assignment assignment)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String label,  Assignment assignment)  $default,) {final _that = this;
 switch (_that) {
 case _CustomAssignment():
-return $default(_that.label,_that.assignment);case _:
+return $default(_that.id,_that.label,_that.assignment);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -476,10 +480,10 @@ return $default(_that.label,_that.assignment);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String label,  Assignment assignment)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String label,  Assignment assignment)?  $default,) {final _that = this;
 switch (_that) {
 case _CustomAssignment() when $default != null:
-return $default(_that.label,_that.assignment);case _:
+return $default(_that.id,_that.label,_that.assignment);case _:
   return null;
 
 }
@@ -491,9 +495,13 @@ return $default(_that.label,_that.assignment);case _:
 @JsonSerializable()
 
 class _CustomAssignment implements CustomAssignment {
-  const _CustomAssignment({this.label = '', this.assignment = const Assignment()});
+  const _CustomAssignment({this.id = '', this.label = '', this.assignment = const Assignment()});
   factory _CustomAssignment.fromJson(Map<String, dynamic> json) => _$CustomAssignmentFromJson(json);
 
+/// Stable id linking a week's stored assignee to a permanent template
+/// (see [ScheduleConfig.permanentAssignments]). Empty for one-off,
+/// this-week-only custom assignments.
+@override@JsonKey() final  String id;
 @override@JsonKey() final  String label;
 @override@JsonKey() final  Assignment assignment;
 
@@ -510,16 +518,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomAssignment&&(identical(other.label, label) || other.label == label)&&(identical(other.assignment, assignment) || other.assignment == assignment));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CustomAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.assignment, assignment) || other.assignment == assignment));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,label,assignment);
+int get hashCode => Object.hash(runtimeType,id,label,assignment);
 
 @override
 String toString() {
-  return 'CustomAssignment(label: $label, assignment: $assignment)';
+  return 'CustomAssignment(id: $id, label: $label, assignment: $assignment)';
 }
 
 
@@ -530,7 +538,7 @@ abstract mixin class _$CustomAssignmentCopyWith<$Res> implements $CustomAssignme
   factory _$CustomAssignmentCopyWith(_CustomAssignment value, $Res Function(_CustomAssignment) _then) = __$CustomAssignmentCopyWithImpl;
 @override @useResult
 $Res call({
- String label, Assignment assignment
+ String id, String label, Assignment assignment
 });
 
 
@@ -547,9 +555,10 @@ class __$CustomAssignmentCopyWithImpl<$Res>
 
 /// Create a copy of CustomAssignment
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? label = null,Object? assignment = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,Object? assignment = null,}) {
   return _then(_CustomAssignment(
-label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,
   ));

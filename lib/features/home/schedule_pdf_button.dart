@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/lmm_repository.dart';
 import '../../core/data/publishers_repository.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/data/weekend_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/pdf/pdf_fonts.dart';
@@ -61,6 +62,8 @@ class _SchedulePdfButtonState extends ConsumerState<SchedulePdfButton> {
                             ?.lmmClassCount ??
                         1)
                     .clamp(1, 3),
+            permanentAssignments:
+                await ref.read(lmmPermanentAssignmentsProvider.future),
             l10n: l10n,
             locale: locale,
             fonts: fonts,
@@ -75,6 +78,8 @@ class _SchedulePdfButtonState extends ConsumerState<SchedulePdfButton> {
                 w.id: w,
             },
             publishersById: byId,
+            permanentAssignments:
+                await ref.read(weekendPermanentAssignmentsProvider.future),
             l10n: l10n,
             locale: locale,
             fonts: fonts,

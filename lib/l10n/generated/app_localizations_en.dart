@@ -761,6 +761,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get customLabel => 'Label';
 
   @override
+  String get customAssignmentPermanent => 'Permanent (every week)';
+
+  @override
+  String get customAssignmentRemovePermanentTitle =>
+      'Remove permanent assignment';
+
+  @override
+  String customAssignmentRemovePermanentBody(String label) {
+    return 'Remove \"$label\" from every week?';
+  }
+
+  @override
   String get pickerQualified => 'Qualified';
 
   @override

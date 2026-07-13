@@ -20,6 +20,7 @@ Future<Uint8List> buildWeekendMonthPdf({
   required List<DateTime> mondays,
   required Map<String, WeekendWeek> weeksById,
   required Map<String, Publisher> publishersById,
+  required List<CustomAssignment> permanentAssignments,
   required AppLocalizations l10n,
   required String locale,
   required PdfFonts fonts,
@@ -94,8 +95,21 @@ Future<Uint8List> buildWeekendMonthPdf({
     widgets.add(assignmentRow(l10n.supportAttendants, week.attendants));
     widgets.add(assignmentRow(l10n.supportMicrophones, week.microphones));
     widgets.add(assignmentRow(l10n.supportAudioVideo, week.audioVideo));
+    // Permanent (every-week) custom assignments: label from the config, the
+    // assignee merged in from this week by id (blank when unassigned).
+    for (final template in permanentAssignments) {
+      final assignment = week.customAssignments
+          .firstWhere(
+            (c) => c.id == template.id,
+            orElse: () => const CustomAssignment(),
+          )
+          .assignment;
+      widgets.add(assignmentRow(template.label, assignment));
+    }
     for (final custom in week.customAssignments) {
-      widgets.add(assignmentRow(custom.label, custom.assignment));
+      if (custom.id.isEmpty) {
+        widgets.add(assignmentRow(custom.label, custom.assignment));
+      }
     }
   }
 
