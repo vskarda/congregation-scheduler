@@ -8,6 +8,8 @@ import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import 'qr_scan_screen.dart';
 
+enum _SetupMessageKind { restartRequired, invalidJson, connectionFailed }
+
 class SetupScreen extends ConsumerStatefulWidget {
   const SetupScreen({super.key});
 
@@ -18,7 +20,8 @@ class SetupScreen extends ConsumerStatefulWidget {
 class _SetupScreenState extends ConsumerState<SetupScreen> {
   final _configCtrl = TextEditingController();
   bool _busy = false;
-  String? _message;
+  _SetupMessageKind? _messageKind;
+  String? _connectionErrorDetail;
 
   @override
   void dispose() {
@@ -27,25 +30,27 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
   }
 
   Future<void> _connect() async {
-    final l10n = context.l10n;
     setState(() {
       _busy = true;
-      _message = null;
+      _messageKind = null;
     });
     try {
       final initialized =
           await FirebaseBootstrap.initializeAndStore(_configCtrl.text);
       if (!mounted) return;
       if (!initialized) {
-        setState(() => _message = l10n.setupRestartRequired);
+        setState(() => _messageKind = _SetupMessageKind.restartRequired);
         return;
       }
       ref.read(firebaseReadyProvider.notifier).markReady();
       context.go('/setup/mode');
     } on FormatException {
-      setState(() => _message = l10n.setupInvalidJson);
+      setState(() => _messageKind = _SetupMessageKind.invalidJson);
     } catch (e) {
-      setState(() => _message = l10n.setupConnectionFailed(e.toString()));
+      setState(() {
+        _messageKind = _SetupMessageKind.connectionFailed;
+        _connectionErrorDetail = e.toString();
+      });
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -63,6 +68,13 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final message = switch (_messageKind) {
+      null => null,
+      _SetupMessageKind.restartRequired => l10n.setupRestartRequired,
+      _SetupMessageKind.invalidJson => l10n.setupInvalidJson,
+      _SetupMessageKind.connectionFailed =>
+        l10n.setupConnectionFailed(_connectionErrorDetail!),
+    };
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.setupTitle),
@@ -88,11 +100,11 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
                   alignLabelWithHint: true,
                 ),
               ),
-              if (_message != null)
+              if (message != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: Text(
-                    _message!,
+                    message,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.error),
                   ),
