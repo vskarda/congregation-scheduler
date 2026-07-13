@@ -7,7 +7,7 @@ import '../../core/data/congregation_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
-import '../../core/l10n/locale_provider.dart';
+import '../../core/l10n/language_menu_button.dart';
 import 'schedule_pdf_button.dart';
 
 class _Destination {
@@ -180,22 +180,7 @@ class _NavPanel extends ConsumerWidget {
           const Divider(height: 1),
           Row(
             children: [
-              PopupMenuButton<String>(
-                icon: const Icon(Icons.language),
-                tooltip: l10n.commonLanguage,
-                onSelected: (v) => ref
-                    .read(localeProvider.notifier)
-                    .set(v == 'system' ? null : Locale(v)),
-                itemBuilder: (_) => [
-                  PopupMenuItem(
-                      value: 'system', child: Text(l10n.languageSystem)),
-                  PopupMenuItem(value: 'cs', child: Text(l10n.languageCzech)),
-                  PopupMenuItem(
-                      value: 'tr', child: Text(l10n.languageTurkish)),
-                  PopupMenuItem(
-                      value: 'en', child: Text(l10n.languageEnglish)),
-                ],
-              ),
+              const LanguageMenuButton(),
               const Spacer(),
               TextButton.icon(
                 onPressed: () => ref.read(firebaseAuthProvider).signOut(),

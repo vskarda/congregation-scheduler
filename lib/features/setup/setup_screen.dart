@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/firebase/firebase_bootstrap.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
+import '../../core/l10n/language_menu_button.dart';
 import 'qr_scan_screen.dart';
 
 class SetupScreen extends ConsumerStatefulWidget {
@@ -63,7 +64,10 @@ class _SetupScreenState extends ConsumerState<SetupScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.setupTitle)),
+      appBar: AppBar(
+        title: Text(l10n.setupTitle),
+        actions: const [LanguageMenuButton()],
+      ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),

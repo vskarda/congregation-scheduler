@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/l10n/l10n.dart';
+import '../../core/l10n/language_menu_button.dart';
 import 'auth_service.dart';
 
 String authErrorMessage(BuildContext context, Object error) {
@@ -86,7 +87,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.authSignIn)),
+      appBar: AppBar(
+        title: Text(l10n.authSignIn),
+        actions: const [LanguageMenuButton()],
+      ),
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 420),
