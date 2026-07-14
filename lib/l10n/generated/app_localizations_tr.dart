@@ -570,6 +570,64 @@ class AppLocalizationsTr extends AppLocalizations {
   String get s21FormCode => 'S-21-T 11/23';
 
   @override
+  String get s21Import => 'S-21 İçe Aktar (PDF)';
+
+  @override
+  String get s21ImportNew => 'Müjdeciyi S-21\'den içe aktar';
+
+  @override
+  String get s21ImportTitle => 'S-21 İçe Aktarma';
+
+  @override
+  String get s21ImportPickFile => 'PDF dosyası seç';
+
+  @override
+  String get s21ImportHint =>
+      'Bir S-21 müjdeci kayıt kartı (PDF) seçin. Karttaki değerler müjdecinin profil alanlarının ve aylık raporlarının yerini alır.';
+
+  @override
+  String get s21ImportNoData => 'Bu dosyada S-21 verisi bulunamadı.';
+
+  @override
+  String s21ImportMonths(int count) {
+    return '$count aylık rapor bulundu';
+  }
+
+  @override
+  String s21ImportNameKept(String name) {
+    return 'Uygulamadaki isim korunur: $name';
+  }
+
+  @override
+  String s21ImportCardName(String name) {
+    return 'Karttaki isim: $name';
+  }
+
+  @override
+  String s21ImportDuplicateName(String name) {
+    return '\"$name\" adında bir müjdeci zaten var.';
+  }
+
+  @override
+  String get s21ImportUseExisting => 'Mevcut kayda içe aktar';
+
+  @override
+  String get s21ImportReplaceTitle => 'Mevcut kayıtlar değiştirilsin mi?';
+
+  @override
+  String get s21ImportReplaceBody =>
+      'Müjdecinin profil alanları ve içe aktarılan hizmet yıllarına ait aylık raporlar bu S-21\'deki değerlerle değiştirilecek. Bu işlem geri alınamaz.';
+
+  @override
+  String get s21ImportSave => 'İçe aktar';
+
+  @override
+  String get s21ImportDone => 'S-21 içe aktarıldı.';
+
+  @override
+  String get s21ImportAssignYear => 'Bu tablonun hizmet yılı';
+
+  @override
   String get pubAdminInvite => 'Davet et';
 
   @override

@@ -572,6 +572,64 @@ class AppLocalizationsCs extends AppLocalizations {
   String get s21FormCode => 'S-21-B 11/23';
 
   @override
+  String get s21Import => 'Importovat S-21 (PDF)';
+
+  @override
+  String get s21ImportNew => 'Importovat zvěstovatele z S-21';
+
+  @override
+  String get s21ImportTitle => 'Import S-21';
+
+  @override
+  String get s21ImportPickFile => 'Vybrat soubor PDF';
+
+  @override
+  String get s21ImportHint =>
+      'Vyberte kartu sborového záznamu zvěstovatele (S-21, PDF). Hodnoty z karty nahradí údaje v profilu zvěstovatele a jeho měsíční zprávy.';
+
+  @override
+  String get s21ImportNoData => 'V souboru nebyla nalezena žádná data S-21.';
+
+  @override
+  String s21ImportMonths(int count) {
+    return 'Nalezeno $count měsíčních zpráv';
+  }
+
+  @override
+  String s21ImportNameKept(String name) {
+    return 'Jméno v aplikaci zůstane zachováno: $name';
+  }
+
+  @override
+  String s21ImportCardName(String name) {
+    return 'Jméno na kartě: $name';
+  }
+
+  @override
+  String s21ImportDuplicateName(String name) {
+    return 'Zvěstovatel se jménem „$name“ již existuje.';
+  }
+
+  @override
+  String get s21ImportUseExisting => 'Importovat do stávajícího záznamu';
+
+  @override
+  String get s21ImportReplaceTitle => 'Nahradit stávající záznamy?';
+
+  @override
+  String get s21ImportReplaceBody =>
+      'Údaje v profilu zvěstovatele a měsíční zprávy za importované služební roky budou nahrazeny hodnotami z tohoto S-21. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get s21ImportSave => 'Importovat';
+
+  @override
+  String get s21ImportDone => 'S-21 importováno.';
+
+  @override
+  String get s21ImportAssignYear => 'Služební rok této tabulky';
+
+  @override
   String get pubAdminInvite => 'Pozvat';
 
   @override

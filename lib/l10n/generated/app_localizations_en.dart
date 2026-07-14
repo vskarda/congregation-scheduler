@@ -571,6 +571,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String get s21FormCode => 'S-21-E 11/23';
 
   @override
+  String get s21Import => 'Import S-21 (PDF)';
+
+  @override
+  String get s21ImportNew => 'Import publisher from S-21';
+
+  @override
+  String get s21ImportTitle => 'Import S-21';
+
+  @override
+  String get s21ImportPickFile => 'Choose PDF file';
+
+  @override
+  String get s21ImportHint =>
+      'Pick an S-21 publisher record card (PDF). The values from the card replace the publisher\'s profile fields and monthly reports.';
+
+  @override
+  String get s21ImportNoData => 'No S-21 data found in this file.';
+
+  @override
+  String s21ImportMonths(int count) {
+    return '$count monthly reports found';
+  }
+
+  @override
+  String s21ImportNameKept(String name) {
+    return 'The name in the app is kept: $name';
+  }
+
+  @override
+  String s21ImportCardName(String name) {
+    return 'Name on the card: $name';
+  }
+
+  @override
+  String s21ImportDuplicateName(String name) {
+    return 'A publisher named \"$name\" already exists.';
+  }
+
+  @override
+  String get s21ImportUseExisting => 'Import into the existing record';
+
+  @override
+  String get s21ImportReplaceTitle => 'Replace existing records?';
+
+  @override
+  String get s21ImportReplaceBody =>
+      'The publisher\'s profile fields and the monthly reports for the imported service years will be replaced with the values from this S-21. This cannot be undone.';
+
+  @override
+  String get s21ImportSave => 'Import';
+
+  @override
+  String get s21ImportDone => 'S-21 imported.';
+
+  @override
+  String get s21ImportAssignYear => 'Service year for this table';
+
+  @override
   String get pubAdminInvite => 'Invite';
 
   @override

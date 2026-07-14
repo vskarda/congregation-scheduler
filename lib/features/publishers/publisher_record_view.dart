@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/dates.dart';
 import '../info_board/file_opener/file_opener.dart';
 import 'publishers_providers.dart';
+import 's21/s21_import_screen.dart';
 import 's21/s21_pdf.dart';
 
 /// Ministry reports of one publisher grouped by service year (Sep–Aug).
@@ -74,6 +76,11 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
     final currentYear = serviceYearOf(DateTime.now());
     final reports = ref.watch(serviceYearReportsProvider(
         (publisherId: widget.publisherId, year: _year)));
+    // Importing writes profile fields and reports, so both roles are needed.
+    final roles = ref.watch(myRolesProvider);
+    final canImport = widget.showS21Export &&
+        roles.canEditPublishers() &&
+        roles.canEditReports();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,6 +91,17 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
               child: Text(l10n.profileRecord,
                   style: Theme.of(context).textTheme.titleMedium),
             ),
+            if (canImport)
+              IconButton(
+                tooltip: l10n.s21Import,
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        S21ImportScreen(publisherId: widget.publisherId),
+                  ),
+                ),
+                icon: const Icon(Icons.upload_file_outlined),
+              ),
             if (widget.showS21Export)
               IconButton(
                 tooltip: l10n.s21Export,

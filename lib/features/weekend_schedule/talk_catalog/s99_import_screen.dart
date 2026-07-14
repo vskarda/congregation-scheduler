@@ -6,8 +6,8 @@ import '../../../core/data/talk_catalog_repository.dart';
 import '../../../core/data/weekend_repository.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/models/models.dart';
+import '../../../core/pdf/pdf_text.dart';
 import '../../../core/utils/dates.dart';
-import 'pdf_text.dart';
 import 's99_parser.dart';
 
 /// "Update Talk Titles from PDF": pick an S-99 form PDF (any language),

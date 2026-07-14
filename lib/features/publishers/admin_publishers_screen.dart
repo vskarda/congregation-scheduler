@@ -7,6 +7,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import 'invite_dialog.dart';
+import 's21/s21_import_screen.dart';
 
 class AdminPublishersScreen extends ConsumerStatefulWidget {
   const AdminPublishersScreen({super.key});
@@ -78,6 +79,10 @@ class _AdminPublishersScreenState
     final publishers = ref.watch(allPublishersProvider);
     final metaName =
         ref.watch(congregationMetaProvider).value?.name ?? '';
+    // S-21 import writes profile fields and reports, so both roles apply.
+    final roles = ref.watch(myRolesProvider);
+    final canImportS21 =
+        roles.canEditPublishers() && roles.canEditReports();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -124,6 +129,16 @@ class _AdminPublishersScreenState
                       onPressed: _addRecord,
                       icon: const Icon(Icons.person_add_alt),
                     ),
+                    if (canImportS21)
+                      IconButton(
+                        tooltip: l10n.s21ImportNew,
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const S21ImportScreen(),
+                          ),
+                        ),
+                        icon: const Icon(Icons.upload_file_outlined),
+                      ),
                   ],
                 ),
               ),

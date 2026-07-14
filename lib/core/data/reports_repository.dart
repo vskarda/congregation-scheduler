@@ -23,6 +23,18 @@ class ReportsRepository {
       .doc(report.publisherId)
       .set(report.toJson());
 
+  /// Batched write of many reports (S-21 import); chunked to stay under the
+  /// 500-operation batch limit.
+  Future<void> submitMany(List<MinistryReport> reports) async {
+    for (var i = 0; i < reports.length; i += 500) {
+      final batch = _db.batch();
+      for (final r in reports.skip(i).take(500)) {
+        batch.set(_entries(r.month).doc(r.publisherId), r.toJson());
+      }
+      await batch.commit();
+    }
+  }
+
   Future<void> delete(String month, String publisherId) =>
       _entries(month).doc(publisherId).delete();
 

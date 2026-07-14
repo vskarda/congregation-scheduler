@@ -1144,6 +1144,102 @@ abstract class AppLocalizations {
   /// **'S-21-E 11/23'**
   String get s21FormCode;
 
+  /// No description provided for @s21Import.
+  ///
+  /// In en, this message translates to:
+  /// **'Import S-21 (PDF)'**
+  String get s21Import;
+
+  /// No description provided for @s21ImportNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Import publisher from S-21'**
+  String get s21ImportNew;
+
+  /// No description provided for @s21ImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import S-21'**
+  String get s21ImportTitle;
+
+  /// No description provided for @s21ImportPickFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose PDF file'**
+  String get s21ImportPickFile;
+
+  /// No description provided for @s21ImportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick an S-21 publisher record card (PDF). The values from the card replace the publisher\'s profile fields and monthly reports.'**
+  String get s21ImportHint;
+
+  /// No description provided for @s21ImportNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No S-21 data found in this file.'**
+  String get s21ImportNoData;
+
+  /// No description provided for @s21ImportMonths.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} monthly reports found'**
+  String s21ImportMonths(int count);
+
+  /// No description provided for @s21ImportNameKept.
+  ///
+  /// In en, this message translates to:
+  /// **'The name in the app is kept: {name}'**
+  String s21ImportNameKept(String name);
+
+  /// No description provided for @s21ImportCardName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name on the card: {name}'**
+  String s21ImportCardName(String name);
+
+  /// No description provided for @s21ImportDuplicateName.
+  ///
+  /// In en, this message translates to:
+  /// **'A publisher named \"{name}\" already exists.'**
+  String s21ImportDuplicateName(String name);
+
+  /// No description provided for @s21ImportUseExisting.
+  ///
+  /// In en, this message translates to:
+  /// **'Import into the existing record'**
+  String get s21ImportUseExisting;
+
+  /// No description provided for @s21ImportReplaceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace existing records?'**
+  String get s21ImportReplaceTitle;
+
+  /// No description provided for @s21ImportReplaceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The publisher\'s profile fields and the monthly reports for the imported service years will be replaced with the values from this S-21. This cannot be undone.'**
+  String get s21ImportReplaceBody;
+
+  /// No description provided for @s21ImportSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get s21ImportSave;
+
+  /// No description provided for @s21ImportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'S-21 imported.'**
+  String get s21ImportDone;
+
+  /// No description provided for @s21ImportAssignYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Service year for this table'**
+  String get s21ImportAssignYear;
+
   /// No description provided for @pubAdminInvite.
   ///
   /// In en, this message translates to:
