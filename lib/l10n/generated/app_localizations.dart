@@ -1294,6 +1294,78 @@ abstract class AppLocalizations {
   /// **'Remove my access'**
   String get pubAdminSelfWarningConfirm;
 
+  /// No description provided for @pubConnectBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is awaiting verification. If an admin already created a publisher record for this person, connect the two: the record\'s history moves onto this account and the duplicate record disappears.'**
+  String get pubConnectBanner;
+
+  /// No description provided for @pubConnectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to existing record'**
+  String get pubConnectAction;
+
+  /// No description provided for @pubConnectNeedsFullAdmin.
+  ///
+  /// In en, this message translates to:
+  /// **'Only a Full Admin can connect records (the migration touches every section\'s data).'**
+  String get pubConnectNeedsFullAdmin;
+
+  /// No description provided for @pubConnectPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to existing record'**
+  String get pubConnectPickTitle;
+
+  /// No description provided for @pubConnectPickHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the record that belongs to {name}.'**
+  String pubConnectPickHint(String name);
+
+  /// No description provided for @pubConnectNoRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no publisher record without an app account to connect.'**
+  String get pubConnectNoRecords;
+
+  /// No description provided for @pubConnectConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect and merge?'**
+  String get pubConnectConfirmTitle;
+
+  /// No description provided for @pubConnectConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The complete history of \"{record}\" — reports, territories and schedule assignments — will be moved to the account of \"{account}\". The account becomes verified and the duplicate record is permanently deleted. This cannot be undone.'**
+  String pubConnectConfirmBody(String record, String account);
+
+  /// No description provided for @pubConnectProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting record…'**
+  String get pubConnectProgressTitle;
+
+  /// No description provided for @pubConnectProgressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Do not close the app while the history is being moved.'**
+  String get pubConnectProgressBody;
+
+  /// No description provided for @pubConnectFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting failed at: {section}. Completed steps are kept — retrying is safe and continues where it stopped.'**
+  String pubConnectFailed(String section);
+
+  /// No description provided for @pubConnectSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Record connected — its history now belongs to this account.'**
+  String get pubConnectSuccess;
+
   /// No description provided for @roleFullAdmin.
   ///
   /// In en, this message translates to:

@@ -91,6 +91,42 @@ class PwRepository {
         .toList();
   }
 
+  /// Rewrites every reference to [fromId] onto [toId] in slots (including
+  /// cancelled ones, so no stale id lingers) and recurring rules' default
+  /// assignments; used when connecting an admin-created record to a
+  /// registered account. Idempotent. Applications need no migration — a
+  /// record without an account cannot have applied.
+  Future<void> replaceAssigneeInAll(String fromId, String toId) async {
+    final slots =
+        await _slots.where('allAssigneeIds', arrayContains: fromId).get();
+    // Firestore caps a WriteBatch at 500 operations.
+    for (var i = 0; i < slots.docs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in slots.docs.skip(i).take(400)) {
+        batch.set(doc.reference,
+            _slotFromDoc(doc).replaceAssignee(fromId, toId).toJson());
+      }
+      await batch.commit();
+    }
+    // Rules carry no allAssigneeIds index — scan all (the list is tiny).
+    final rules = await _recurring.get();
+    final batch = _db.batch();
+    var dirty = false;
+    for (final doc in rules.docs) {
+      final rule = _ruleFromDoc(doc);
+      if (!rule.defaultAssignment.contains(fromId)) continue;
+      batch.set(
+          doc.reference,
+          rule
+              .copyWith(
+                  defaultAssignment:
+                      rule.defaultAssignment.replaceAssignee(fromId, toId))
+              .toJson());
+      dirty = true;
+    }
+    if (dirty) await batch.commit();
+  }
+
   /// Applies [uid] for [slot]. Idempotent thanks to the deterministic doc id;
   /// works for virtual (not yet materialized) slots too, whose ids are
   /// equally deterministic.

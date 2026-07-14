@@ -8,6 +8,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import 'connect_record_dialog.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
 import 'publishers_providers.dart';
@@ -242,6 +243,10 @@ class _ProfileTab extends ConsumerWidget {
           data: (priv) => ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              if (publisher.hasAccount && !publisher.verified) ...[
+                _ConnectRecordCard(publisher: publisher),
+                const SizedBox(height: 12),
+              ],
               _GroupDropdown(publisher: publisher),
               const SizedBox(height: 12),
               PublisherForm(
@@ -252,6 +257,56 @@ class _ProfileTab extends ConsumerWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Offered on awaiting (self-registered, unverified) accounts: connect them
+/// to an admin-created record so its history moves onto this account. The
+/// migration writes across every role-gated collection, so only a full
+/// admin may run it; others see the explanation with a disabled button.
+class _ConnectRecordCard extends ConsumerWidget {
+  const _ConnectRecordCard({required this.publisher});
+
+  final Publisher publisher;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final isFullAdmin = ref.watch(myRolesProvider).fullAdmin;
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.link),
+                const SizedBox(width: 12),
+                Expanded(child: Text(l10n.pubConnectBanner)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: FilledButton.tonalIcon(
+                onPressed: isFullAdmin
+                    ? () => showConnectRecordFlow(context, ref, publisher)
+                    : null,
+                icon: const Icon(Icons.link, size: 18),
+                label: Text(l10n.pubConnectAction),
+              ),
+            ),
+            if (!isFullAdmin)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(l10n.pubConnectNeedsFullAdmin,
+                    style: Theme.of(context).textTheme.bodySmall),
+              ),
+          ],
         ),
       ),
     );

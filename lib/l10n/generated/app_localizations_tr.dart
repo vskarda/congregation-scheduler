@@ -654,6 +654,53 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminSelfWarningConfirm => 'Erişimimi kaldır';
 
   @override
+  String get pubConnectBanner =>
+      'Bu hesap doğrulama bekliyor. Bir yönetici bu kişi için zaten bir müjdeci kaydı oluşturduysa ikisini bağlayın: kaydın geçmişi bu hesaba taşınır ve yinelenen kayıt kaldırılır.';
+
+  @override
+  String get pubConnectAction => 'Mevcut kayda bağla';
+
+  @override
+  String get pubConnectNeedsFullAdmin =>
+      'Kayıtları yalnızca Tam Yönetici bağlayabilir (taşıma tüm bölümlerin verilerine dokunur).';
+
+  @override
+  String get pubConnectPickTitle => 'Mevcut kayda bağla';
+
+  @override
+  String pubConnectPickHint(String name) {
+    return '$name adlı kişiye ait kaydı seçin.';
+  }
+
+  @override
+  String get pubConnectNoRecords =>
+      'Bağlanacak, uygulama hesabı olmayan bir müjdeci kaydı yok.';
+
+  @override
+  String get pubConnectConfirmTitle => 'Bağlanıp birleştirilsin mi?';
+
+  @override
+  String pubConnectConfirmBody(String record, String account) {
+    return '\"$record\" kaydının tüm geçmişi — raporlar, sahalar ve program görevleri — \"$account\" hesabına taşınacak. Hesap doğrulanır ve yinelenen kayıt kalıcı olarak silinir. Bu işlem geri alınamaz.';
+  }
+
+  @override
+  String get pubConnectProgressTitle => 'Kayıt bağlanıyor…';
+
+  @override
+  String get pubConnectProgressBody =>
+      'Geçmiş taşınırken uygulamayı kapatmayın.';
+
+  @override
+  String pubConnectFailed(String section) {
+    return 'Bağlama şu bölümde başarısız oldu: $section. Tamamlanan adımlar korunur — yeniden denemek güvenlidir ve kaldığı yerden devam eder.';
+  }
+
+  @override
+  String get pubConnectSuccess =>
+      'Kayıt bağlandı — geçmişi artık bu hesaba ait.';
+
+  @override
   String get roleFullAdmin => 'Tam Yönetici';
 
   @override

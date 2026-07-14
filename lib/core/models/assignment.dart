@@ -22,6 +22,20 @@ abstract class Assignment with _$Assignment {
   bool get isNotEmpty => !isEmpty;
 
   bool contains(String publisherId) => publisherIds.contains(publisherId);
+
+  /// Rewrites [from] to [to] in [publisherIds], keeping order and dropping
+  /// the duplicate if [to] was already assigned. Returns `this` unchanged
+  /// when [from] is absent. Used when connecting an admin-created record to
+  /// a registered account (the record's random doc id becomes the auth uid).
+  Assignment replaceAssignee(String from, String to) {
+    if (!publisherIds.contains(from)) return this;
+    final ids = <String>[];
+    for (final id in publisherIds) {
+      final mapped = id == from ? to : id;
+      if (!ids.contains(mapped)) ids.add(mapped);
+    }
+    return copyWith(publisherIds: ids);
+  }
 }
 
 /// A named, admin-defined extra assignment slot ("Custom label field").

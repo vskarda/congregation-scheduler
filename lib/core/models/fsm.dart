@@ -58,4 +58,9 @@ abstract class FsmMeeting with _$FsmMeeting {
 
   FsmMeeting withRecomputedAssignees() => copyWith(
       allAssigneeIds: assignment.publisherIds.toSet().toList()..sort());
+
+  /// Rewrites publisher id [from] to [to] and recomputes [allAssigneeIds].
+  FsmMeeting replaceAssignee(String from, String to) =>
+      copyWith(assignment: assignment.replaceAssignee(from, to))
+          .withRecomputedAssignees();
 }

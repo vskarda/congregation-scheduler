@@ -27,6 +27,11 @@ class PublishersRepository {
       .snapshots()
       .map((doc) => doc.data() == null ? null : _fromDoc(doc));
 
+  Future<Publisher?> getOne(String id) async {
+    final doc = await _col.doc(id).get();
+    return doc.data() == null ? null : _fromDoc(doc);
+  }
+
   /// Create with a fixed id (auth uid at self-registration).
   Future<void> createWithId(String id, Publisher publisher) =>
       _col.doc(id).set(publisher.toJson());
@@ -55,6 +60,12 @@ class PublishersRepository {
         final data = doc.data();
         return data == null ? null : PublisherPrivate.fromJson(data);
       });
+
+  Future<PublisherPrivate?> getPrivate(String publisherId) async {
+    final doc = await _privateDoc(publisherId).get();
+    final data = doc.data();
+    return data == null ? null : PublisherPrivate.fromJson(data);
+  }
 
   Future<void> setPrivate(String publisherId, PublisherPrivate data) =>
       _privateDoc(publisherId).set(data.toJson());

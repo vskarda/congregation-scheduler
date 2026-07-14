@@ -76,6 +76,32 @@ class MinistryGroupsRepository {
     }
     await batch.commit();
   }
+
+  /// Rewrites overseer/assistant designations from [fromId] to [toId]; used
+  /// when connecting an admin-created record to a registered account.
+  /// (Group membership itself lives on publishers/{uid}.groupId and moves
+  /// with the merged publisher doc.) Idempotent.
+  Future<void> replaceDesignations(String fromId, String toId) async {
+    final snap = await _col.get();
+    final batch = _db.batch();
+    var dirty = false;
+    for (final doc in snap.docs) {
+      final group = _fromDoc(doc);
+      if (group.overseerId != fromId && group.assistantId != fromId) continue;
+      batch.set(
+          _col.doc(group.id),
+          group
+              .copyWith(
+                overseerId:
+                    group.overseerId == fromId ? toId : group.overseerId,
+                assistantId:
+                    group.assistantId == fromId ? toId : group.assistantId,
+              )
+              .toJson());
+      dirty = true;
+    }
+    if (dirty) await batch.commit();
+  }
 }
 
 final ministryGroupsRepositoryProvider = Provider<MinistryGroupsRepository>(

@@ -67,6 +67,17 @@ abstract class LmmPart with _$LmmPart {
         3 => copyWith(assistant3: a),
         _ => copyWith(assistant: a),
       };
+
+  /// Rewrites every occurrence of publisher id [from] to [to] in all
+  /// assignment/assistant slots (see [Assignment.replaceAssignee]).
+  LmmPart replaceAssignee(String from, String to) => copyWith(
+        assignment: assignment.replaceAssignee(from, to),
+        assistant: assistant.replaceAssignee(from, to),
+        assignment2: assignment2.replaceAssignee(from, to),
+        assistant2: assistant2.replaceAssignee(from, to),
+        assignment3: assignment3.replaceAssignee(from, to),
+        assistant3: assistant3.replaceAssignee(from, to),
+      );
 }
 
 /// Life and Ministry Meeting week document, keyed by the Monday (yyyy-MM-dd).
@@ -116,4 +127,18 @@ abstract class LmmWeek with _$LmmWeek {
     };
     return copyWith(allAssigneeIds: ids.toList()..sort());
   }
+
+  /// Rewrites every occurrence of publisher id [from] to [to] across the
+  /// whole week and recomputes [allAssigneeIds]. Used when connecting an
+  /// admin-created record to a registered account.
+  LmmWeek replaceAssignee(String from, String to) => copyWith(
+        parts: [for (final p in parts) p.replaceAssignee(from, to)],
+        attendants: attendants.replaceAssignee(from, to),
+        microphones: microphones.replaceAssignee(from, to),
+        audioVideo: audioVideo.replaceAssignee(from, to),
+        customAssignments: [
+          for (final c in customAssignments)
+            c.copyWith(assignment: c.assignment.replaceAssignee(from, to)),
+        ],
+      ).withRecomputedAssignees();
 }

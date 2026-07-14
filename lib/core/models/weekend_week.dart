@@ -48,4 +48,24 @@ abstract class WeekendWeek with _$WeekendWeek {
     };
     return copyWith(allAssigneeIds: ids.toList()..sort());
   }
+
+  /// Rewrites every occurrence of publisher id [from] to [to] across the
+  /// whole week and recomputes [allAssigneeIds]. Used when connecting an
+  /// admin-created record to a registered account.
+  WeekendWeek replaceAssignee(String from, String to) => copyWith(
+        speaker: speaker.replaceAssignee(from, to),
+        chairman: chairman.replaceAssignee(from, to),
+        wtReader: wtReader.replaceAssignee(from, to),
+        customFields: [
+          for (final c in customFields)
+            c.copyWith(assignment: c.assignment.replaceAssignee(from, to)),
+        ],
+        attendants: attendants.replaceAssignee(from, to),
+        microphones: microphones.replaceAssignee(from, to),
+        audioVideo: audioVideo.replaceAssignee(from, to),
+        customAssignments: [
+          for (final c in customAssignments)
+            c.copyWith(assignment: c.assignment.replaceAssignee(from, to)),
+        ],
+      ).withRecomputedAssignees();
 }

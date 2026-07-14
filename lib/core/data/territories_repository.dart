@@ -91,6 +91,21 @@ class TerritoriesRepository {
 
   Future<void> deleteAssignment(String assignmentId) =>
       _assignments.doc(assignmentId).delete();
+
+  /// Rewrites every assignment of [fromId] onto [toId]; used when connecting
+  /// an admin-created record to a registered account. Idempotent.
+  Future<void> reassignPublisher(String fromId, String toId) async {
+    final snap =
+        await _assignments.where('publisherId', isEqualTo: fromId).get();
+    // Firestore caps a WriteBatch at 500 operations.
+    for (var i = 0; i < snap.docs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in snap.docs.skip(i).take(400)) {
+        batch.update(doc.reference, {'publisherId': toId});
+      }
+      await batch.commit();
+    }
+  }
 }
 
 final territoriesRepositoryProvider = Provider<TerritoriesRepository>(

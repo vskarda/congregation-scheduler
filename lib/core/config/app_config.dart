@@ -26,4 +26,10 @@ abstract final class AppConfig {
 
   /// How much schedule history feeds the "least recently assigned" ordering.
   static const int pickerHistoryMonths = 18;
+
+  /// How many service years of report entries are migrated when an
+  /// admin-created record is connected to a registered account. Report
+  /// entries carry the publisher id only in their doc id (no queryable
+  /// field), so the migration probes month keys over this bounded window.
+  static const int connectReportsHistoryYears = 10;
 }

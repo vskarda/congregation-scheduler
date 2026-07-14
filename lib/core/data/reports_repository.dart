@@ -47,6 +47,25 @@ class ReportsRepository {
     }));
     return result;
   }
+
+  /// Moves report entries from [fromId] to [toId] for every month in
+  /// [months] (report ids are `reports/{month}/entries/{publisherId}`, so a
+  /// rename means copy + delete). A month where [toId] already has an entry
+  /// keeps it; the [fromId] duplicate is dropped. Idempotent — used when
+  /// connecting an admin-created record to a registered account.
+  Future<void> migratePublisherId(
+      String fromId, String toId, List<String> months) async {
+    await Future.wait(months.map((month) async {
+      final fromRef = _entries(month).doc(fromId);
+      final data = (await fromRef.get()).data();
+      if (data == null) return;
+      final toRef = _entries(month).doc(toId);
+      final batch = _db.batch();
+      if ((await toRef.get()).data() == null) batch.set(toRef, data);
+      batch.delete(fromRef);
+      await batch.commit();
+    }));
+  }
 }
 
 final reportsRepositoryProvider = Provider<ReportsRepository>(

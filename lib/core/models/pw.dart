@@ -60,6 +60,11 @@ abstract class PwSlot with _$PwSlot {
 
   PwSlot withRecomputedAssignees() => copyWith(
       allAssigneeIds: assignment.publisherIds.toSet().toList()..sort());
+
+  /// Rewrites publisher id [from] to [to] and recomputes [allAssigneeIds].
+  PwSlot replaceAssignee(String from, String to) =>
+      copyWith(assignment: assignment.replaceAssignee(from, to))
+          .withRecomputedAssignees();
 }
 
 /// A publisher's application (volunteering) for one [PwSlot], stored at

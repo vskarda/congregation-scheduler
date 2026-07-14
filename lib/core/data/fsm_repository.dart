@@ -77,6 +77,41 @@ class FsmRepository {
         .toList();
   }
 
+  /// Rewrites every reference to [fromId] onto [toId] in meetings (including
+  /// cancelled ones, so no stale id lingers) and recurring rules' default
+  /// assignments; used when connecting an admin-created record to a
+  /// registered account. Idempotent.
+  Future<void> replaceAssigneeInAll(String fromId, String toId) async {
+    final meetings =
+        await _meetings.where('allAssigneeIds', arrayContains: fromId).get();
+    // Firestore caps a WriteBatch at 500 operations.
+    for (var i = 0; i < meetings.docs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in meetings.docs.skip(i).take(400)) {
+        batch.set(doc.reference,
+            _meetingFromDoc(doc).replaceAssignee(fromId, toId).toJson());
+      }
+      await batch.commit();
+    }
+    // Rules carry no allAssigneeIds index — scan all (the list is tiny).
+    final rules = await _recurring.get();
+    final batch = _db.batch();
+    var dirty = false;
+    for (final doc in rules.docs) {
+      final rule = _ruleFromDoc(doc);
+      if (!rule.defaultAssignment.contains(fromId)) continue;
+      batch.set(
+          doc.reference,
+          rule
+              .copyWith(
+                  defaultAssignment:
+                      rule.defaultAssignment.replaceAssignee(fromId, toId))
+              .toJson());
+      dirty = true;
+    }
+    if (dirty) await batch.commit();
+  }
+
   Stream<List<FsmRecurring>> watchRecurring() =>
       _recurring.snapshots().map((snap) {
         final list = snap.docs.map(_ruleFromDoc).toList();

@@ -655,6 +655,53 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pubAdminSelfWarningConfirm => 'Odebrat si přístup';
 
   @override
+  String get pubConnectBanner =>
+      'Tento účet čeká na ověření. Pokud už administrátor pro tuto osobu vytvořil záznam zvěstovatele, propojte je: historie záznamu se přesune na tento účet a duplicitní záznam zmizí.';
+
+  @override
+  String get pubConnectAction => 'Propojit se stávajícím záznamem';
+
+  @override
+  String get pubConnectNeedsFullAdmin =>
+      'Záznamy může propojit pouze hlavní administrátor (migrace zasahuje do dat všech sekcí).';
+
+  @override
+  String get pubConnectPickTitle => 'Propojit se stávajícím záznamem';
+
+  @override
+  String pubConnectPickHint(String name) {
+    return 'Vyberte záznam, který patří osobě $name.';
+  }
+
+  @override
+  String get pubConnectNoRecords =>
+      'Není žádný záznam zvěstovatele bez účtu v aplikaci, který by šlo propojit.';
+
+  @override
+  String get pubConnectConfirmTitle => 'Propojit a sloučit?';
+
+  @override
+  String pubConnectConfirmBody(String record, String account) {
+    return 'Kompletní historie záznamu „$record“ — zprávy, obvody a úkoly v programech — se přesune na účet „$account“. Účet bude ověřen a duplicitní záznam trvale smazán. Tuto akci nelze vrátit zpět.';
+  }
+
+  @override
+  String get pubConnectProgressTitle => 'Propojování záznamu…';
+
+  @override
+  String get pubConnectProgressBody =>
+      'Během přesunu historie nezavírejte aplikaci.';
+
+  @override
+  String pubConnectFailed(String section) {
+    return 'Propojování selhalo v části: $section. Dokončené kroky zůstávají — opakování je bezpečné a naváže tam, kde skončilo.';
+  }
+
+  @override
+  String get pubConnectSuccess =>
+      'Záznam propojen — jeho historie nyní patří k tomuto účtu.';
+
+  @override
   String get roleFullAdmin => 'Hlavní administrátor';
 
   @override

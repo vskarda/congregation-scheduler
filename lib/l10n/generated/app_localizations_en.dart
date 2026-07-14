@@ -655,6 +655,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pubAdminSelfWarningConfirm => 'Remove my access';
 
   @override
+  String get pubConnectBanner =>
+      'This account is awaiting verification. If an admin already created a publisher record for this person, connect the two: the record\'s history moves onto this account and the duplicate record disappears.';
+
+  @override
+  String get pubConnectAction => 'Connect to existing record';
+
+  @override
+  String get pubConnectNeedsFullAdmin =>
+      'Only a Full Admin can connect records (the migration touches every section\'s data).';
+
+  @override
+  String get pubConnectPickTitle => 'Connect to existing record';
+
+  @override
+  String pubConnectPickHint(String name) {
+    return 'Select the record that belongs to $name.';
+  }
+
+  @override
+  String get pubConnectNoRecords =>
+      'There is no publisher record without an app account to connect.';
+
+  @override
+  String get pubConnectConfirmTitle => 'Connect and merge?';
+
+  @override
+  String pubConnectConfirmBody(String record, String account) {
+    return 'The complete history of \"$record\" — reports, territories and schedule assignments — will be moved to the account of \"$account\". The account becomes verified and the duplicate record is permanently deleted. This cannot be undone.';
+  }
+
+  @override
+  String get pubConnectProgressTitle => 'Connecting record…';
+
+  @override
+  String get pubConnectProgressBody =>
+      'Do not close the app while the history is being moved.';
+
+  @override
+  String pubConnectFailed(String section) {
+    return 'Connecting failed at: $section. Completed steps are kept — retrying is safe and continues where it stopped.';
+  }
+
+  @override
+  String get pubConnectSuccess =>
+      'Record connected — its history now belongs to this account.';
+
+  @override
   String get roleFullAdmin => 'Full administrator';
 
   @override

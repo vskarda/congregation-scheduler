@@ -71,6 +71,21 @@ class WeekendRepository {
         await _col.where('allAssigneeIds', arrayContains: uid).get();
     return snap.docs.map(_fromDoc).toList();
   }
+
+  /// Rewrites every reference to [fromId] onto [toId] across all weeks; used
+  /// when connecting an admin-created record to a registered account.
+  /// Idempotent (a re-run finds no weeks mentioning [fromId]).
+  Future<void> replaceAssigneeInAll(String fromId, String toId) async {
+    final weeks = await getAssignedTo(fromId);
+    // Firestore caps a WriteBatch at 500 operations.
+    for (var i = 0; i < weeks.length; i += 400) {
+      final batch = _db.batch();
+      for (final w in weeks.skip(i).take(400)) {
+        batch.set(_col.doc(w.id), w.replaceAssignee(fromId, toId).toJson());
+      }
+      await batch.commit();
+    }
+  }
 }
 
 final weekendRepositoryProvider = Provider<WeekendRepository>(
