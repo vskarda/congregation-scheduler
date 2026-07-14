@@ -2236,6 +2236,101 @@ abstract class AppLocalizations {
   /// **'Remove assignment'**
   String get terrRemoveAssignment;
 
+  /// No description provided for @terrImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import territories'**
+  String get terrImportTitle;
+
+  /// No description provided for @terrImportPasteHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste rows from Excel or Google Sheets. Columns: name, number, map link, notes — only name is required.'**
+  String get terrImportPasteHint;
+
+  /// No description provided for @terrImportPreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get terrImportPreview;
+
+  /// No description provided for @terrImportPickFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose CSV file'**
+  String get terrImportPickFile;
+
+  /// No description provided for @terrImportSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{total} rows: {newCount} new, {duplicates} existing, {invalid} invalid'**
+  String terrImportSummary(
+    int total,
+    int newCount,
+    int duplicates,
+    int invalid,
+  );
+
+  /// No description provided for @terrImportUpdateExisting.
+  ///
+  /// In en, this message translates to:
+  /// **'Update existing territories (matched by number) instead of skipping'**
+  String get terrImportUpdateExisting;
+
+  /// No description provided for @terrImportBadgeNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get terrImportBadgeNew;
+
+  /// No description provided for @terrImportBadgeSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get terrImportBadgeSkip;
+
+  /// No description provided for @terrImportBadgeUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get terrImportBadgeUpdate;
+
+  /// No description provided for @terrImportBadgeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Missing name'**
+  String get terrImportBadgeInvalid;
+
+  /// No description provided for @terrImportBadgeDupRow.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate row'**
+  String get terrImportBadgeDupRow;
+
+  /// No description provided for @terrImportLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Line {line}'**
+  String terrImportLine(int line);
+
+  /// No description provided for @terrImportSave.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Import 1 territory} other{Import {count} territories}}'**
+  String terrImportSave(int count);
+
+  /// No description provided for @terrImportDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported {created} new, updated {updated}.'**
+  String terrImportDone(int created, int updated);
+
+  /// No description provided for @terrImportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No rows found in the input.'**
+  String get terrImportEmpty;
+
   /// No description provided for @mgEmpty.
   ///
   /// In en, this message translates to:

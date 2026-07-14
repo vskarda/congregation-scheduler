@@ -1159,6 +1159,73 @@ class AppLocalizationsCs extends AppLocalizations {
   String get terrRemoveAssignment => 'Odebrat přidělení';
 
   @override
+  String get terrImportTitle => 'Import obvodů';
+
+  @override
+  String get terrImportPasteHint =>
+      'Vložte řádky z Excelu nebo Tabulek Google. Sloupce: název, číslo, odkaz na mapu, poznámky — povinný je jen název.';
+
+  @override
+  String get terrImportPreview => 'Náhled';
+
+  @override
+  String get terrImportPickFile => 'Vybrat soubor CSV';
+
+  @override
+  String terrImportSummary(
+    int total,
+    int newCount,
+    int duplicates,
+    int invalid,
+  ) {
+    return '$total řádků: $newCount nových, $duplicates existujících, $invalid neplatných';
+  }
+
+  @override
+  String get terrImportUpdateExisting =>
+      'Aktualizovat existující obvody (podle čísla) místo přeskočení';
+
+  @override
+  String get terrImportBadgeNew => 'Nový';
+
+  @override
+  String get terrImportBadgeSkip => 'Přeskočí se';
+
+  @override
+  String get terrImportBadgeUpdate => 'Aktualizuje se';
+
+  @override
+  String get terrImportBadgeInvalid => 'Chybí název';
+
+  @override
+  String get terrImportBadgeDupRow => 'Duplicitní řádek';
+
+  @override
+  String terrImportLine(int line) {
+    return 'Řádek $line';
+  }
+
+  @override
+  String terrImportSave(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Importovat $count obvodů',
+      few: 'Importovat $count obvody',
+      one: 'Importovat 1 obvod',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String terrImportDone(int created, int updated) {
+    return 'Importováno: $created nových, $updated aktualizováno.';
+  }
+
+  @override
+  String get terrImportEmpty => 'Ve vstupu nebyly nalezeny žádné řádky.';
+
+  @override
   String get mgEmpty => 'Zatím žádné skupiny služby.';
 
   @override

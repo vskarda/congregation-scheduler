@@ -8,6 +8,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
+import '../territories/territory_import_screen.dart';
 import 'schedule_pdf_button.dart';
 
 class _Destination {
@@ -84,6 +85,13 @@ class AppShell extends ConsumerWidget {
           const SchedulePdfButton(kind: SchedulePdfKind.lmm),
         if (location == '/weekend' && roles.canEditWeekend())
           const SchedulePdfButton(kind: SchedulePdfKind.weekend),
+        if (location == '/territories' && roles.canEditTerritories())
+          IconButton(
+            icon: const Icon(Icons.upload_file_outlined),
+            tooltip: l10n.terrImportTitle,
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const TerritoryImportScreen())),
+          ),
         if (realRoles.any)
           IconButton(
             // Icon shows the action: pencil = enable editing, slash = hide it.

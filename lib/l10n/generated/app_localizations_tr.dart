@@ -1157,6 +1157,72 @@ class AppLocalizationsTr extends AppLocalizations {
   String get terrRemoveAssignment => 'Atamayı Kaldır';
 
   @override
+  String get terrImportTitle => 'Sahaları içe aktar';
+
+  @override
+  String get terrImportPasteHint =>
+      'Excel veya Google E-Tablolar\'dan satırları yapıştırın. Sütunlar: ad, numara, harita bağlantısı, notlar — yalnızca ad zorunludur.';
+
+  @override
+  String get terrImportPreview => 'Önizleme';
+
+  @override
+  String get terrImportPickFile => 'CSV dosyası seç';
+
+  @override
+  String terrImportSummary(
+    int total,
+    int newCount,
+    int duplicates,
+    int invalid,
+  ) {
+    return '$total satır: $newCount yeni, $duplicates mevcut, $invalid geçersiz';
+  }
+
+  @override
+  String get terrImportUpdateExisting =>
+      'Mevcut sahaları atlamak yerine güncelle (numaraya göre eşleşir)';
+
+  @override
+  String get terrImportBadgeNew => 'Yeni';
+
+  @override
+  String get terrImportBadgeSkip => 'Atlanacak';
+
+  @override
+  String get terrImportBadgeUpdate => 'Güncellenecek';
+
+  @override
+  String get terrImportBadgeInvalid => 'Ad eksik';
+
+  @override
+  String get terrImportBadgeDupRow => 'Yinelenen satır';
+
+  @override
+  String terrImportLine(int line) {
+    return 'Satır $line';
+  }
+
+  @override
+  String terrImportSave(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count sahayı içe aktar',
+      one: '1 sahayı içe aktar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String terrImportDone(int created, int updated) {
+    return '$created yeni eklendi, $updated güncellendi.';
+  }
+
+  @override
+  String get terrImportEmpty => 'Girdide satır bulunamadı.';
+
+  @override
   String get mgEmpty => 'Henüz tarla hizmeti grubu yok.';
 
   @override

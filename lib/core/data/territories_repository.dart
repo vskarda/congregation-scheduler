@@ -43,6 +43,20 @@ class TerritoriesRepository {
     }
   }
 
+  /// Bulk save: territories with an empty id are created, the rest overwrite
+  /// their existing doc (which keeps assignment history — assignments
+  /// reference the doc id). Firestore caps a WriteBatch at 500 operations.
+  Future<void> saveTerritories(List<Territory> territories) async {
+    for (var i = 0; i < territories.length; i += 400) {
+      final batch = _db.batch();
+      for (final t in territories.skip(i).take(400)) {
+        final ref = t.id.isEmpty ? _territories.doc() : _territories.doc(t.id);
+        batch.set(ref, t.toJson());
+      }
+      await batch.commit();
+    }
+  }
+
   Future<void> deleteTerritory(String id) => _territories.doc(id).delete();
 
   /// Admin view: every assignment ever (stats need history).

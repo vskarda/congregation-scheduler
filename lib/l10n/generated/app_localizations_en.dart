@@ -1157,6 +1157,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get terrRemoveAssignment => 'Remove assignment';
 
   @override
+  String get terrImportTitle => 'Import territories';
+
+  @override
+  String get terrImportPasteHint =>
+      'Paste rows from Excel or Google Sheets. Columns: name, number, map link, notes — only name is required.';
+
+  @override
+  String get terrImportPreview => 'Preview';
+
+  @override
+  String get terrImportPickFile => 'Choose CSV file';
+
+  @override
+  String terrImportSummary(
+    int total,
+    int newCount,
+    int duplicates,
+    int invalid,
+  ) {
+    return '$total rows: $newCount new, $duplicates existing, $invalid invalid';
+  }
+
+  @override
+  String get terrImportUpdateExisting =>
+      'Update existing territories (matched by number) instead of skipping';
+
+  @override
+  String get terrImportBadgeNew => 'New';
+
+  @override
+  String get terrImportBadgeSkip => 'Skip';
+
+  @override
+  String get terrImportBadgeUpdate => 'Update';
+
+  @override
+  String get terrImportBadgeInvalid => 'Missing name';
+
+  @override
+  String get terrImportBadgeDupRow => 'Duplicate row';
+
+  @override
+  String terrImportLine(int line) {
+    return 'Line $line';
+  }
+
+  @override
+  String terrImportSave(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Import $count territories',
+      one: 'Import 1 territory',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String terrImportDone(int created, int updated) {
+    return 'Imported $created new, updated $updated.';
+  }
+
+  @override
+  String get terrImportEmpty => 'No rows found in the input.';
+
+  @override
   String get mgEmpty => 'No ministry groups yet.';
 
   @override
