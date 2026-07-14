@@ -93,11 +93,21 @@ class InfoboardRepository {
     for (var i = 0; i < meta.chunkCount; i++) {
       final chunk =
           await _files.doc(fileId).collection('chunks').doc(i.toString()).get();
-      final blob = chunk.data()?['data'] as Blob?;
-      if (blob == null) throw StateError('missing chunk $i');
-      builder.add(blob.bytes);
+      final bytes = _chunkBytes(chunk.data()?['data']);
+      if (bytes == null) throw StateError('missing chunk $i');
+      builder.add(bytes);
     }
     return builder.takeBytes();
+  }
+
+  /// Chunk payloads are normally Firestore [Blob]s, but files uploaded via an
+  /// older web SDK stored them as a plain int array. Accept both so those
+  /// legacy files still open — on iOS the array surfaces as `List<dynamic>`
+  /// and the old `as Blob` cast threw.
+  static Uint8List? _chunkBytes(Object? raw) {
+    if (raw is Blob) return raw.bytes;
+    if (raw is List) return Uint8List.fromList(raw.cast<int>());
+    return null;
   }
 
   Future<void> deleteFile(String fileId) async {
