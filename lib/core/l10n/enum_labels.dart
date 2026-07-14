@@ -3,6 +3,7 @@ import 'l10n.dart';
 
 String statusLabel(AppLocalizations l10n, PublisherStatus status) =>
     switch (status) {
+      PublisherStatus.none => l10n.statusNone,
       PublisherStatus.publisher => l10n.statusPublisher,
       PublisherStatus.auxiliaryPioneer => l10n.statusAuxPioneer,
       PublisherStatus.regularPioneer => l10n.statusRegPioneer,

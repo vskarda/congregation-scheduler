@@ -136,7 +136,8 @@ abstract class Publisher with _$Publisher {
   /// "Surname Name" for sorted lists.
   String get listName => lastName.isEmpty ? firstName : '$lastName $firstName';
 
-  bool get isPioneer => status != PublisherStatus.publisher;
+  bool get isPioneer =>
+      status != PublisherStatus.publisher && status != PublisherStatus.none;
 }
 
 /// Sensitive personal data, stored at publishers/{uid}/private/profile and

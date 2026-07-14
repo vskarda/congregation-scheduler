@@ -482,6 +482,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileStatus => 'Service status';
 
   @override
+  String get statusNone => '-';
+
+  @override
   String get statusPublisher => 'Publisher';
 
   @override

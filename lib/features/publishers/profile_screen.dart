@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
+import '../../core/models/models.dart';
 import '../auth/delete_account.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
@@ -36,8 +37,10 @@ class ProfileScreen extends ConsumerWidget {
                 publisher: me,
                 private: priv,
               ),
-              const SizedBox(height: 24),
-              PublisherRecordView(publisherId: me.id),
+              if (me.status != PublisherStatus.none) ...[
+                const SizedBox(height: 24),
+                PublisherRecordView(publisherId: me.id),
+              ],
               const SizedBox(height: 24),
               const Divider(),
               Align(

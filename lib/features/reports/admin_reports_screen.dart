@@ -66,7 +66,9 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final publishers = ref.watch(allPublishersProvider).value ?? const [];
+    final publishers = (ref.watch(allPublishersProvider).value ?? const [])
+        .where((p) => p.status != PublisherStatus.none)
+        .toList();
     final reportsAsync = ref.watch(monthReportsProvider(_month));
     final locale = Localizations.localeOf(context).toString();
     final monthFmt = DateFormat.yMMMM(locale);

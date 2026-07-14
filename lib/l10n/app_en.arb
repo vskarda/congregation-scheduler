@@ -158,6 +158,7 @@
   "hopeOtherSheep": "Other sheep",
   "hopeAnointed": "Anointed",
   "profileStatus": "Service status",
+  "statusNone": "-",
   "statusPublisher": "Publisher",
   "statusAuxPioneer": "Auxiliary pioneer",
   "statusRegPioneer": "Regular pioneer",

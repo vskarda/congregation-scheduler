@@ -97,11 +97,17 @@ service cloud.firestore {
       // admin-only lifecycle flag (marking someone moved also revokes their
       // access), so members may not change it on their own record. 'groupId'
       // (ministry group membership) is likewise assigned by admins only.
+      // status 'none' ("-" / not a publisher) is admin-only in both
+      // directions, same as appointment below; members may still freely
+      // switch among the other status values.
       allow update: if hasRole('publishers')
         || (isSignedIn() && request.auth.uid == publisherId
             && !request.resource.data.diff(resource.data).affectedKeys()
                 .hasAny(['verified', 'roles', 'qualifications', 'moved',
-                    'groupId'].toSet()));
+                    'groupId'].toSet())
+            && (request.resource.data.status == resource.data.status
+                || (request.resource.data.status != 'none'
+                    && resource.data.status != 'none')));
 
       // Publisher-admins may remove anyone; a signed-in user may delete their
       // own record (self-service account deletion — Apple Guideline 5.1.1(v)).

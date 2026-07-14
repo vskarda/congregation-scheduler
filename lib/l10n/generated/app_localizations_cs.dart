@@ -483,6 +483,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get profileStatus => 'Služební postavení';
 
   @override
+  String get statusNone => '-';
+
+  @override
   String get statusPublisher => 'Zvěstovatel';
 
   @override

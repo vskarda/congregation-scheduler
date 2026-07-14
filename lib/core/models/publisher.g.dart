@@ -118,6 +118,7 @@ const _$GenderEnumMap = {
 };
 
 const _$PublisherStatusEnumMap = {
+  PublisherStatus.none: 'none',
   PublisherStatus.publisher: 'publisher',
   PublisherStatus.auxiliaryPioneer: 'auxPioneer',
   PublisherStatus.regularPioneer: 'regPioneer',

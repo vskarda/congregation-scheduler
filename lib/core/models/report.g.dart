@@ -38,6 +38,7 @@ Map<String, dynamic> _$MinistryReportToJson(_MinistryReport instance) =>
     };
 
 const _$PublisherStatusEnumMap = {
+  PublisherStatus.none: 'none',
   PublisherStatus.publisher: 'publisher',
   PublisherStatus.auxiliaryPioneer: 'auxPioneer',
   PublisherStatus.regularPioneer: 'regPioneer',

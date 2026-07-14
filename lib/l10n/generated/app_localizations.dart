@@ -970,6 +970,12 @@ abstract class AppLocalizations {
   /// **'Service status'**
   String get profileStatus;
 
+  /// No description provided for @statusNone.
+  ///
+  /// In en, this message translates to:
+  /// **'-'**
+  String get statusNone;
+
   /// No description provided for @statusPublisher.
   ///
   /// In en, this message translates to:

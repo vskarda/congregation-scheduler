@@ -10,6 +10,8 @@ enum Gender {
 }
 
 enum PublisherStatus {
+  @JsonValue('none')
+  none,
   @JsonValue('publisher')
   publisher,
   @JsonValue('auxPioneer')

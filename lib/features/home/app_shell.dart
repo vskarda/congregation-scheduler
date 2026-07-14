@@ -8,6 +8,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
+import '../../core/models/models.dart';
 import '../territories/territory_import_screen.dart';
 import 'schedule_pdf_button.dart';
 
@@ -31,6 +32,7 @@ class AppShell extends ConsumerWidget {
     final roles = ref.watch(effectiveRolesProvider);
     final realRoles = ref.watch(myRolesProvider);
     final hideAdmin = ref.watch(hideAdminUiProvider);
+    final me = ref.watch(myPublisherProvider).value;
 
     final main = <_Destination>[
       _Destination('/', Icons.campaign_outlined, l10n.navInfoBoard),
@@ -43,8 +45,9 @@ class AppShell extends ConsumerWidget {
       _Destination('/territories', Icons.map_outlined, l10n.navTerritories),
       _Destination('/ministry-groups', Icons.group_work_outlined,
           l10n.navMinistryGroups),
-      _Destination('/report', Icons.assignment_turned_in_outlined,
-          l10n.navReport),
+      if (me?.status != PublisherStatus.none)
+        _Destination('/report', Icons.assignment_turned_in_outlined,
+            l10n.navReport),
       _Destination('/profile', Icons.person_outline, l10n.navProfile),
     ];
     final admin = <_Destination>[

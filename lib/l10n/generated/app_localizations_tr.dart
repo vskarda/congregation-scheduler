@@ -481,6 +481,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileStatus => 'Hizmet durumu';
 
   @override
+  String get statusNone => '-';
+
+  @override
   String get statusPublisher => 'Müjdeci';
 
   @override

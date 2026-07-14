@@ -216,11 +216,22 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
             initialValue: _status,
             decoration: InputDecoration(labelText: l10n.profileStatus),
             items: [
+              // The "-" (not a publisher) status is admin-only, mirroring
+              // Appointment. A self-edit with status already "-" must still
+              // render it (as the sole, disabled item) rather than omitting
+              // it and crashing the dropdown.
               for (final s in PublisherStatus.values)
-                DropdownMenuItem(value: s, child: Text(statusLabel(l10n, s))),
+                if (widget.showAppointment ||
+                    (s == PublisherStatus.none) ==
+                        (_status == PublisherStatus.none))
+                  DropdownMenuItem(
+                      value: s, child: Text(statusLabel(l10n, s))),
             ],
-            onChanged: (s) =>
-                setState(() => _status = s ?? PublisherStatus.publisher),
+            onChanged: widget.showAppointment ||
+                    _status != PublisherStatus.none
+                ? (s) =>
+                    setState(() => _status = s ?? PublisherStatus.publisher)
+                : null,
           ),
           const SizedBox(height: 12),
           if (widget.showAppointment) ...[
