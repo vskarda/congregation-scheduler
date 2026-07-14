@@ -83,13 +83,17 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                             month: _month,
                             statusAtMonth: me.status),
                     isPioneer: me.isPioneer,
+                    showAuxiliaryPioneer:
+                        me.status == PublisherStatus.publisher ||
+                            me.status == PublisherStatus.auxiliaryPioneer,
                     onSubmit: (report) async {
+                      // statusAtMonth comes from the form (aux tick) for
+                      // publishers/aux pioneers; for permanent pioneers the
+                      // form preserves the initial snapshot.
                       await ref.read(reportsRepositoryProvider).submit(
                             report.copyWith(
                               publisherId: me.id,
                               month: _month,
-                              statusAtMonth:
-                                  existing?.statusAtMonth ?? me.status,
                               submittedAt: DateTime.now(),
                               enteredBy: 'self',
                             ),

@@ -3,10 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/data/publishers_repository.dart';
+import '../../core/data/reports_repository.dart';
+import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
+import '../../core/models/models.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/dates.dart';
 import '../info_board/file_opener/file_opener.dart';
+import '../reports/report_form.dart';
 import 'publishers_providers.dart';
 import 's21/s21_import_screen.dart';
 import 's21/s21_pdf.dart';
@@ -70,6 +74,56 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
     }
   }
 
+  /// Admin-only: edit (or create) one month's report from the record overview.
+  /// Reuses the shared [ReportForm]; the aux tick is offered only when the
+  /// publisher's standing status is Publisher or Auxiliary pioneer.
+  Future<void> _editMonth(
+      Publisher publisher, String month, MinistryReport? existing) async {
+    final l10n = context.l10n;
+    final locale = Localizations.localeOf(context).toString();
+    final adminUid = ref.read(currentUidProvider) ?? 'admin';
+    final showAux = publisher.status == PublisherStatus.publisher ||
+        publisher.status == PublisherStatus.auxiliaryPioneer;
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(DateFormat.yMMM(locale).format(parseMonthKey(month))),
+        content: SizedBox(
+          width: 400,
+          child: SingleChildScrollView(
+            child: ReportForm(
+              initial: existing ??
+                  MinistryReport(
+                      publisherId: publisher.id,
+                      month: month,
+                      statusAtMonth: publisher.status),
+              isPioneer: true,
+              showAuxiliaryPioneer: showAux,
+              submitLabel: l10n.commonSave,
+              onSubmit: (report) async {
+                await ref.read(reportsRepositoryProvider).submit(
+                      report.copyWith(
+                        publisherId: publisher.id,
+                        month: month,
+                        submittedAt: DateTime.now(),
+                        enteredBy:
+                            existing?.enteredBy == 'self' ? 'self' : adminUid,
+                      ),
+                    );
+                // FutureProvider — refresh the table after the write.
+                ref.invalidate(serviceYearReportsProvider(
+                    (publisherId: widget.publisherId, year: _year)));
+                if (dialogContext.mounted) {
+                  Navigator.of(dialogContext).pop();
+                }
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -81,6 +135,11 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
     final canImport = widget.showS21Export &&
         roles.canEditPublishers() &&
         roles.canEditReports();
+    // Editing a month's report only needs the reports role (firestore.rules);
+    // the record tab (showS21Export) is the admin context. The publisher doc
+    // supplies the standing status that drives the aux tick.
+    final canEdit = widget.showS21Export && roles.canEditReports();
+    final publisher = ref.watch(publisherProvider(widget.publisherId)).value;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,35 +197,49 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
                   columnSpacing: 24,
+                  // Rows are made tappable (admins) via onSelectChanged;
+                  // suppress the leading selection-checkbox column.
+                  showCheckboxColumn: false,
                   columns: [
                     DataColumn(label: Text(l10n.reportMonth)),
                     DataColumn(label: Text(l10n.reportParticipated)),
                     DataColumn(label: Text(l10n.reportStudies)),
+                    DataColumn(label: Text(l10n.statusAuxPioneer)),
                     DataColumn(label: Text(l10n.reportHours)),
                     DataColumn(label: Text(l10n.reportCredit)),
                     DataColumn(label: Text(l10n.reportComments)),
                   ],
                   rows: [
                     for (final month in serviceYearMonths(_year))
-                      DataRow(cells: [
-                        DataCell(
-                            Text(monthFmt.format(parseMonthKey(month)))),
-                        DataCell(byMonth[month] == null
-                            ? const Text('—')
-                            : Icon(
-                                byMonth[month]!.participated
-                                    ? Icons.check
-                                    : Icons.close,
-                                size: 18,
-                              )),
-                        DataCell(Text(
-                            byMonth[month]?.bibleStudies?.toString() ?? '')),
-                        DataCell(
-                            Text(byMonth[month]?.hours?.toString() ?? '')),
-                        DataCell(Text(
-                            byMonth[month]?.creditHours?.toString() ?? '')),
-                        DataCell(Text(byMonth[month]?.comments ?? '')),
-                      ]),
+                      DataRow(
+                        onSelectChanged: (canEdit && publisher != null)
+                            ? (_) =>
+                                _editMonth(publisher, month, byMonth[month])
+                            : null,
+                        cells: [
+                          DataCell(
+                              Text(monthFmt.format(parseMonthKey(month)))),
+                          DataCell(byMonth[month] == null
+                              ? const Text('—')
+                              : Icon(
+                                  byMonth[month]!.participated
+                                      ? Icons.check
+                                      : Icons.close,
+                                  size: 18,
+                                )),
+                          DataCell(Text(
+                              byMonth[month]?.bibleStudies?.toString() ?? '')),
+                          DataCell(byMonth[month]?.statusAtMonth ==
+                                  PublisherStatus.auxiliaryPioneer
+                              ? const Icon(Icons.check, size: 18)
+                              : const SizedBox()),
+                          DataCell(
+                              Text(byMonth[month]?.hours?.toString() ?? '')),
+                          DataCell(Text(
+                              byMonth[month]?.creditHours?.toString() ?? '')),
+                          DataCell(Text(byMonth[month]?.comments ?? '')),
+                        ],
+                      ),
                   ],
                 ),
               ),

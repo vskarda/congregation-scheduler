@@ -12,6 +12,7 @@ class ReportForm extends StatefulWidget {
     required this.isPioneer,
     required this.onSubmit,
     this.submitLabel,
+    this.showAuxiliaryPioneer = false,
   });
 
   final MinistryReport initial;
@@ -22,12 +23,23 @@ class ReportForm extends StatefulWidget {
   final Future<void> Function(MinistryReport) onSubmit;
   final String? submitLabel;
 
+  /// Whether to offer the per-month "auxiliary pioneer" tick. Only shown when
+  /// the publisher's standing status is Publisher or Auxiliary pioneer — a
+  /// regular publisher may auxiliary-pioneer for a single month. It is hidden
+  /// for permanent pioneers (regular/special/field missionary), whose status
+  /// is fixed. The tick is stored as [MinistryReport.statusAtMonth]
+  /// (auxiliaryPioneer vs. publisher), the app-wide source of truth for the
+  /// S-1 group breakdown and the S-21 aux column.
+  final bool showAuxiliaryPioneer;
+
   @override
   State<ReportForm> createState() => _ReportFormState();
 }
 
 class _ReportFormState extends State<ReportForm> {
   late bool _participated = widget.initial.participated;
+  late bool _aux =
+      widget.initial.statusAtMonth == PublisherStatus.auxiliaryPioneer;
   late final _studies = TextEditingController(
       text: widget.initial.bibleStudies?.toString() ?? '');
   late final _hours =
@@ -37,6 +49,12 @@ class _ReportFormState extends State<ReportForm> {
   late final _comments =
       TextEditingController(text: widget.initial.comments);
   bool _busy = false;
+
+  /// Hours/credit apply to standing pioneers and to a publisher who ticks
+  /// auxiliary pioneer for this month. Drives both field visibility and
+  /// whether those values are persisted.
+  bool get _effectivePioneer =>
+      widget.isPioneer || (widget.showAuxiliaryPioneer && _aux);
 
   @override
   void dispose() {
@@ -53,9 +71,17 @@ class _ReportFormState extends State<ReportForm> {
       await widget.onSubmit(widget.initial.copyWith(
         participated: _participated,
         bibleStudies: int.tryParse(_studies.text.trim()),
-        hours: int.tryParse(_hours.text.trim()),
-        creditHours: int.tryParse(_credit.text.trim()),
+        hours: _effectivePioneer ? int.tryParse(_hours.text.trim()) : null,
+        creditHours:
+            _effectivePioneer ? int.tryParse(_credit.text.trim()) : null,
         comments: _comments.text.trim(),
+        // The aux tick owns the publisher/auxiliaryPioneer distinction; for
+        // permanent pioneers (tick hidden) the snapshot is left untouched.
+        statusAtMonth: widget.showAuxiliaryPioneer
+            ? (_aux
+                ? PublisherStatus.auxiliaryPioneer
+                : PublisherStatus.publisher)
+            : widget.initial.statusAtMonth,
       ));
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -75,13 +101,20 @@ class _ReportFormState extends State<ReportForm> {
           title: Text(l10n.reportParticipated),
           controlAffinity: ListTileControlAffinity.leading,
         ),
+        if (widget.showAuxiliaryPioneer)
+          CheckboxListTile(
+            value: _aux,
+            onChanged: (v) => setState(() => _aux = v ?? false),
+            title: Text(l10n.statusAuxPioneer),
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
         const SizedBox(height: 8),
         TextField(
           controller: _studies,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(labelText: l10n.reportStudies),
         ),
-        if (widget.isPioneer) ...[
+        if (_effectivePioneer) ...[
           const SizedBox(height: 12),
           TextField(
             controller: _hours,

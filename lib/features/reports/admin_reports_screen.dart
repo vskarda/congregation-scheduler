@@ -39,14 +39,16 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                       month: _month,
                       statusAtMonth: publisher.status),
               isPioneer: true,
+              showAuxiliaryPioneer:
+                  publisher.status == PublisherStatus.publisher ||
+                      publisher.status == PublisherStatus.auxiliaryPioneer,
               submitLabel: l10n.commonSave,
               onSubmit: (report) async {
+                // statusAtMonth (aux tick) is owned by the form.
                 await ref.read(reportsRepositoryProvider).submit(
                       report.copyWith(
                         publisherId: publisher.id,
                         month: _month,
-                        statusAtMonth:
-                            existing?.statusAtMonth ?? publisher.status,
                         submittedAt: DateTime.now(),
                         enteredBy:
                             existing?.enteredBy == 'self' ? 'self' : adminUid,
@@ -126,6 +128,9 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                       ? null
                       : [
                           if (report.participated) '✓',
+                          if (report.statusAtMonth ==
+                              PublisherStatus.auxiliaryPioneer)
+                            l10n.statusAuxPioneer,
                           if (report.bibleStudies != null)
                             '${l10n.reportStudies}: ${report.bibleStudies}',
                           if (report.hours != null)
