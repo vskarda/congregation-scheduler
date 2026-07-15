@@ -38,6 +38,17 @@ abstract final class FirebaseBootstrap {
     }
   }
 
+  /// Invite QR codes wrap the config: {"firebaseConfig": {...}, ...}. Unwraps
+  /// to any depth so an already mis-nested stored/scanned value (see
+  /// [initializeAndStore]) still parses instead of failing outright.
+  static Map<String, dynamic> _unwrapEnvelope(Map<String, dynamic> raw) {
+    var current = raw;
+    while (current['firebaseConfig'] is Map) {
+      current = (current['firebaseConfig'] as Map).cast<String, dynamic>();
+    }
+    return current;
+  }
+
   static FirebaseOptions? parseOptions(String jsonText) {
     Object? raw;
     try {
@@ -46,10 +57,7 @@ abstract final class FirebaseBootstrap {
       return null;
     }
     if (raw is! Map<String, dynamic>) return null;
-    // Invite QR codes wrap the config: {"firebaseConfig": {...}, ...}.
-    if (raw['firebaseConfig'] is Map) {
-      raw = (raw['firebaseConfig'] as Map).cast<String, dynamic>();
-    }
+    raw = _unwrapEnvelope(raw);
     final apiKey = raw['apiKey'];
     final appId = raw['appId'];
     final projectId = raw['projectId'];
@@ -117,9 +125,14 @@ abstract final class FirebaseBootstrap {
     if (normalized == null || options == null) {
       throw const FormatException('invalid firebase config');
     }
+    // Input may be a bare console config or an invite QR envelope
+    // ({"firebaseConfig": {...}, "congregationName": ...}); always persist the
+    // flat form so an invite generated from this device never double-wraps.
+    final flat = jsonEncode(_unwrapEnvelope(
+        (jsonDecode(normalized) as Map).cast<String, dynamic>()));
     if (Firebase.apps.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(prefsKey, normalized);
+      await prefs.setString(prefsKey, flat);
       return false;
     }
     await Firebase.initializeApp(options: options);
@@ -136,13 +149,28 @@ abstract final class FirebaseBootstrap {
     }
     isInitialized = true;
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(prefsKey, normalized);
+    await prefs.setString(prefsKey, flat);
     return true;
   }
 
+  /// Returns the stored config, flattening it first if it still holds an
+  /// invite envelope from before this self-heal existed (see
+  /// [initializeAndStore]), and persisting the fix so it only happens once.
   static Future<String?> storedConfig() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(prefsKey);
+    final stored = prefs.getString(prefsKey);
+    if (stored == null) return null;
+    Object? decoded;
+    try {
+      decoded = jsonDecode(stored);
+    } on FormatException {
+      return stored;
+    }
+    if (decoded is! Map<String, dynamic>) return stored;
+    if (decoded['firebaseConfig'] is! Map) return stored;
+    final flat = jsonEncode(_unwrapEnvelope(decoded));
+    await prefs.setString(prefsKey, flat);
+    return flat;
   }
 
   /// Removing the config requires an app restart to take effect (the default
