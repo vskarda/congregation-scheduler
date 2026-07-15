@@ -452,6 +452,12 @@
   "terrImportDone": "Imported {created} new, updated {updated}.",
   "@terrImportDone": {"placeholders": {"created": {"type": "int"}, "updated": {"type": "int"}}},
   "terrImportEmpty": "No rows found in the input.",
+  "terrDeleteConfirm": "Delete this territory? This can't be undone.",
+  "terrSortByTerritory": "Territory",
+  "terrSortByPublisher": "Publisher",
+  "terrSortByDate": "Date assigned",
+  "terrHistoryOngoing": "Current",
+  "terrHistoryEmpty": "No assignment history yet.",
 
   "mgEmpty": "No ministry groups yet.",
   "mgAdd": "Add group",

@@ -1331,6 +1331,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get terrImportEmpty => 'No rows found in the input.';
 
   @override
+  String get terrDeleteConfirm =>
+      'Delete this territory? This can\'t be undone.';
+
+  @override
+  String get terrSortByTerritory => 'Territory';
+
+  @override
+  String get terrSortByPublisher => 'Publisher';
+
+  @override
+  String get terrSortByDate => 'Date assigned';
+
+  @override
+  String get terrHistoryOngoing => 'Current';
+
+  @override
+  String get terrHistoryEmpty => 'No assignment history yet.';
+
+  @override
   String get mgEmpty => 'No ministry groups yet.';
 
   @override

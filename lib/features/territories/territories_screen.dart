@@ -220,8 +220,28 @@ class _StatsSectionState extends ConsumerState<_StatsSection> {
   }
 }
 
-class _AllTerritoriesSection extends ConsumerWidget {
+typedef _TerritoryRow = ({
+  Territory territory,
+  TerritoryAssignment? current,
+  Publisher? holder,
+});
+
+enum _TerritorySort { territory, publisher, date }
+
+class _AllTerritoriesSection extends ConsumerStatefulWidget {
   const _AllTerritoriesSection();
+
+  @override
+  ConsumerState<_AllTerritoriesSection> createState() =>
+      _AllTerritoriesSectionState();
+}
+
+class _AllTerritoriesSectionState
+    extends ConsumerState<_AllTerritoriesSection> {
+  String _filter = '';
+  _TerritorySort _sortField = _TerritorySort.territory;
+  bool _sortAscending = true;
+  final Set<String> _expandedIds = {};
 
   Future<void> _assign(
       BuildContext context, WidgetRef ref, Territory territory) async {
@@ -251,8 +271,56 @@ class _AllTerritoriesSection extends ConsumerWidget {
     }
   }
 
+  void _toggleSort(_TerritorySort field) {
+    setState(() {
+      if (_sortField == field) {
+        _sortAscending = !_sortAscending;
+      } else {
+        _sortField = field;
+        _sortAscending = true;
+      }
+    });
+  }
+
+  int _compareRows(_TerritoryRow a, _TerritoryRow b) {
+    switch (_sortField) {
+      case _TerritorySort.territory:
+        final byName = a.territory.name
+            .toLowerCase()
+            .compareTo(b.territory.name.toLowerCase());
+        final result =
+            byName != 0 ? byName : a.territory.number.compareTo(b.territory.number);
+        return _sortAscending ? result : -result;
+      case _TerritorySort.publisher:
+        if (a.holder == null && b.holder == null) return 0;
+        if (a.holder == null) return 1;
+        if (b.holder == null) return -1;
+        final result = a.holder!.fullName
+            .toLowerCase()
+            .compareTo(b.holder!.fullName.toLowerCase());
+        return _sortAscending ? result : -result;
+      case _TerritorySort.date:
+        final ad = a.current?.assignedDate ?? '';
+        final bd = b.current?.assignedDate ?? '';
+        if (ad.isEmpty && bd.isEmpty) return 0;
+        if (ad.isEmpty) return 1;
+        if (bd.isEmpty) return -1;
+        final result = ad.compareTo(bd);
+        return _sortAscending ? result : -result;
+    }
+  }
+
+  Widget _sortChip(String label, _TerritorySort field) {
+    final selected = _sortField == field;
+    return ChoiceChip(
+      label: Text(selected ? '$label ${_sortAscending ? '▲' : '▼'}' : label),
+      selected: selected,
+      onSelected: (_) => _toggleSort(field),
+    );
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final territories = ref.watch(territoriesProvider).value ?? const [];
     final assignments =
@@ -260,6 +328,28 @@ class _AllTerritoriesSection extends ConsumerWidget {
     final byId = ref.watch(publishersByIdProvider);
     final locale = Localizations.localeOf(context).toString();
     final dateFmt = DateFormat.yMMMd(locale);
+
+    final rows = <_TerritoryRow>[];
+    for (final territory in territories) {
+      final current = assignments.firstWhereOrNull(
+          (a) => a.territoryId == territory.id && a.isOpen);
+      rows.add((
+        territory: territory,
+        current: current,
+        holder: current == null ? null : byId[current.publisherId],
+      ));
+    }
+
+    final query = _filter.trim().toLowerCase();
+    final filtered = query.isEmpty
+        ? rows
+        : rows.where((r) {
+            final holderName = r.holder?.fullName.toLowerCase() ?? '';
+            return r.territory.name.toLowerCase().contains(query) ||
+                r.territory.number.toLowerCase().contains(query) ||
+                holderName.contains(query);
+          }).toList();
+    filtered.sort(_compareRows);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,78 +359,188 @@ class _AllTerritoriesSection extends ConsumerWidget {
           child: Text(l10n.terrAll,
               style: Theme.of(context).textTheme.titleMedium),
         ),
-        for (final territory in territories)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: l10n.commonSearch,
+              prefixIcon: const Icon(Icons.search),
+            ),
+            onChanged: (v) => setState(() => _filter = v),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+          child: Wrap(
+            spacing: 8,
+            children: [
+              _sortChip(l10n.terrSortByTerritory, _TerritorySort.territory),
+              _sortChip(l10n.terrSortByPublisher, _TerritorySort.publisher),
+              _sortChip(l10n.terrSortByDate, _TerritorySort.date),
+            ],
+          ),
+        ),
+        for (final row in filtered)
           Builder(builder: (context) {
-            final current = assignments
-                .firstWhereOrNull(
-                    (a) => a.territoryId == territory.id && a.isOpen);
-            final holder =
-                current == null ? null : byId[current.publisherId];
+            final territory = row.territory;
+            final current = row.current;
+            final holder = row.holder;
+            final expanded = _expandedIds.contains(territory.id);
+            final history = assignments
+                .where((a) => a.territoryId == territory.id)
+                .toList();
             return Card(
-              child: ListTile(
-                title: Text(_territoryLabel(territory)),
-                subtitle: current == null
-                    ? Text(l10n.terrFree)
-                    : Text(l10n.terrHolder(
-                        holder?.fullName ?? '…',
-                        current.assignedDate.isEmpty
-                            ? '—'
-                            : dateFmt.format(
-                                parseDateKey(current.assignedDate)))),
-                leading: territory.mapUrl.isNotEmpty
-                    ? IconButton(
-                        tooltip: l10n.terrMap,
-                        icon: const Icon(Icons.map_outlined),
-                        onPressed: () => _openMap(territory.mapUrl),
-                      )
-                    : const Icon(Icons.map_outlined, color: Colors.grey),
-                trailing: PopupMenuButton<String>(
-                  onSelected: (v) async {
-                    final repo = ref.read(territoriesRepositoryProvider);
-                    switch (v) {
-                      case 'assign':
-                        await _assign(context, ref, territory);
-                      case 'return':
-                        if (current != null) {
-                          await repo.returnTerritory(
-                              current.id, dateKey(DateTime.now()), '');
-                        }
-                      case 'removeAssignment':
-                        if (current != null) {
-                          await repo.deleteAssignment(current.id);
-                        }
-                      case 'edit':
-                        if (context.mounted) {
-                          await _showTerritoryDialog(context, ref,
-                              existing: territory);
-                        }
-                      case 'delete':
-                        await repo.deleteTerritory(territory.id);
-                    }
-                  },
-                  itemBuilder: (_) => [
-                    if (current == null)
-                      PopupMenuItem(
-                          value: 'assign',
-                          child: Text(l10n.terrAssignTo)),
-                    if (current != null)
-                      PopupMenuItem(
-                          value: 'return', child: Text(l10n.terrReturn)),
-                    if (current != null)
-                      PopupMenuItem(
-                          value: 'removeAssignment',
-                          child: Text(l10n.terrRemoveAssignment)),
-                    PopupMenuItem(
-                        value: 'edit', child: Text(l10n.terrEdit)),
-                    PopupMenuItem(
-                        value: 'delete', child: Text(l10n.commonDelete)),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () => setState(() {
+                      if (expanded) {
+                        _expandedIds.remove(territory.id);
+                      } else {
+                        _expandedIds.add(territory.id);
+                      }
+                    }),
+                    title: Text(_territoryLabel(territory)),
+                    subtitle: current == null
+                        ? Text(l10n.terrFree)
+                        : Text(l10n.terrHolder(
+                            holder?.fullName ?? '…',
+                            current.assignedDate.isEmpty
+                                ? '—'
+                                : dateFmt.format(
+                                    parseDateKey(current.assignedDate)))),
+                    leading: territory.mapUrl.isNotEmpty
+                        ? IconButton(
+                            tooltip: l10n.terrMap,
+                            icon: const Icon(Icons.map_outlined),
+                            onPressed: () => _openMap(territory.mapUrl),
+                          )
+                        : const Icon(Icons.map_outlined, color: Colors.grey),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        PopupMenuButton<String>(
+                          onSelected: (v) async {
+                            final repo =
+                                ref.read(territoriesRepositoryProvider);
+                            switch (v) {
+                              case 'assign':
+                                await _assign(context, ref, territory);
+                              case 'return':
+                                if (current != null) {
+                                  await repo.returnTerritory(
+                                      current.id, dateKey(DateTime.now()), '');
+                                }
+                              case 'removeAssignment':
+                                if (current != null) {
+                                  await repo.deleteAssignment(current.id);
+                                }
+                              case 'edit':
+                                if (context.mounted) {
+                                  await _showTerritoryDialog(context, ref,
+                                      existing: territory);
+                                }
+                              case 'delete':
+                                if (context.mounted) {
+                                  await _confirmDeleteTerritory(
+                                      context, ref, territory);
+                                }
+                            }
+                          },
+                          itemBuilder: (_) => [
+                            if (current == null)
+                              PopupMenuItem(
+                                  value: 'assign',
+                                  child: Text(l10n.terrAssignTo)),
+                            if (current != null)
+                              PopupMenuItem(
+                                  value: 'return',
+                                  child: Text(l10n.terrReturn)),
+                            if (current != null)
+                              PopupMenuItem(
+                                  value: 'removeAssignment',
+                                  child: Text(l10n.terrRemoveAssignment)),
+                            PopupMenuItem(
+                                value: 'edit', child: Text(l10n.terrEdit)),
+                            PopupMenuItem(
+                                value: 'delete',
+                                child: Text(l10n.commonDelete)),
+                          ],
+                        ),
+                        Icon(expanded
+                            ? Icons.expand_less
+                            : Icons.expand_more),
+                      ],
+                    ),
+                  ),
+                  if (expanded)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      child: history.isEmpty
+                          ? Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(l10n.terrHistoryEmpty,
+                                  style:
+                                      Theme.of(context).textTheme.bodySmall),
+                            )
+                          : Column(
+                              children: [
+                                const Divider(height: 1),
+                                for (final a in history)
+                                  ListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                        byId[a.publisherId]?.fullName ?? '…'),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${a.assignedDate.isEmpty ? '—' : dateFmt.format(parseDateKey(a.assignedDate))}'
+                                          ' – '
+                                          '${a.isOpen ? l10n.terrHistoryOngoing : (a.returnedDate.isEmpty ? '—' : dateFmt.format(parseDateKey(a.returnedDate)))}',
+                                        ),
+                                        if (a.returnNotes.isNotEmpty)
+                                          Text(a.returnNotes,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                    ),
+                ],
               ),
             );
           }),
       ],
     );
+  }
+}
+
+Future<void> _confirmDeleteTerritory(
+    BuildContext context, WidgetRef ref, Territory territory) async {
+  final l10n = context.l10n;
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.commonConfirmDeleteTitle),
+      content: Text(l10n.terrDeleteConfirm),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel)),
+        FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonDelete)),
+      ],
+    ),
+  );
+  if (confirmed == true) {
+    await ref.read(territoriesRepositoryProvider).deleteTerritory(territory.id);
   }
 }
 

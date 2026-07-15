@@ -1334,6 +1334,25 @@ class AppLocalizationsCs extends AppLocalizations {
   String get terrImportEmpty => 'Ve vstupu nebyly nalezeny žádné řádky.';
 
   @override
+  String get terrDeleteConfirm =>
+      'Smazat tento obvod? Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get terrSortByTerritory => 'Obvod';
+
+  @override
+  String get terrSortByPublisher => 'Zvěstovatel';
+
+  @override
+  String get terrSortByDate => 'Datum přidělení';
+
+  @override
+  String get terrHistoryOngoing => 'Aktuální';
+
+  @override
+  String get terrHistoryEmpty => 'Zatím žádná historie přidělení.';
+
+  @override
   String get mgEmpty => 'Zatím žádné skupiny služby.';
 
   @override

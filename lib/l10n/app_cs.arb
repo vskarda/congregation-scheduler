@@ -428,6 +428,12 @@
   "terrImportSave": "{count, plural, =1{Importovat 1 obvod} few{Importovat {count} obvody} other{Importovat {count} obvodů}}",
   "terrImportDone": "Importováno: {created} nových, {updated} aktualizováno.",
   "terrImportEmpty": "Ve vstupu nebyly nalezeny žádné řádky.",
+  "terrDeleteConfirm": "Smazat tento obvod? Tuto akci nelze vrátit zpět.",
+  "terrSortByTerritory": "Obvod",
+  "terrSortByPublisher": "Zvěstovatel",
+  "terrSortByDate": "Datum přidělení",
+  "terrHistoryOngoing": "Aktuální",
+  "terrHistoryEmpty": "Zatím žádná historie přidělení.",
 
   "mgEmpty": "Zatím žádné skupiny služby.",
   "mgAdd": "Přidat skupinu",

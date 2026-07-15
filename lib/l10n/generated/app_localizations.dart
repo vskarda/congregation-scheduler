@@ -2505,6 +2505,42 @@ abstract class AppLocalizations {
   /// **'No rows found in the input.'**
   String get terrImportEmpty;
 
+  /// No description provided for @terrDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this territory? This can\'t be undone.'**
+  String get terrDeleteConfirm;
+
+  /// No description provided for @terrSortByTerritory.
+  ///
+  /// In en, this message translates to:
+  /// **'Territory'**
+  String get terrSortByTerritory;
+
+  /// No description provided for @terrSortByPublisher.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher'**
+  String get terrSortByPublisher;
+
+  /// No description provided for @terrSortByDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date assigned'**
+  String get terrSortByDate;
+
+  /// No description provided for @terrHistoryOngoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get terrHistoryOngoing;
+
+  /// No description provided for @terrHistoryEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No assignment history yet.'**
+  String get terrHistoryEmpty;
+
   /// No description provided for @mgEmpty.
   ///
   /// In en, this message translates to:
