@@ -107,6 +107,12 @@ abstract class Publisher with _$Publisher {
     @Default('') String lastName,
     @Default(Gender.unknown) Gender gender,
     @Default(PublisherStatus.publisher) PublisherStatus status,
+
+    /// Elder / ministerial-servant appointment, denormalized from the private
+    /// profile ([PublisherPrivate.appointment]) so the admin roster can filter
+    /// and badge by it without loading every private doc. Admin-set only
+    /// (firestore.rules blocks self-edits, same as [status] 'none').
+    @Default(Appointment.none) Appointment appointment,
     @Default(false) bool verified,
     @Default(Roles()) Roles roles,
     @Default(Qualifications()) Qualifications qualifications,

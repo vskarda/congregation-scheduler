@@ -691,6 +691,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pubAdminShowMoved => 'Zobrazit přestěhované';
 
   @override
+  String get pubFilterPioneers => 'Průkopníci';
+
+  @override
+  String get pubFilterHasRights => 'Má práva';
+
+  @override
+  String get pubFilterAnyGroup => 'Všechny skupiny';
+
+  @override
+  String get pubFilterClear => 'Vymazat';
+
+  @override
   String get pubAdminMoveConfirmTitle => 'Označit jako přestěhovaného?';
 
   @override

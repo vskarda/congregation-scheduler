@@ -21,6 +21,11 @@ abstract class CongregationMeta with _$CongregationMeta {
     @Default(1) int lmmClassCount,
     @Default(DateTime.sunday) int weekendWeekday,
     @Default('10:00') String weekendTime,
+
+    /// One-time marker: elder/MS appointments have been copied from each
+    /// private profile onto the public publisher doc. Set by the client
+    /// backfill (full admin only) so it runs at most once per congregation.
+    @Default(false) bool appointmentBackfilled,
   }) = _CongregationMeta;
 
   factory CongregationMeta.fromJson(Map<String, dynamic> json) =>

@@ -689,6 +689,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminShowMoved => 'Taşınanları göster';
 
   @override
+  String get pubFilterPioneers => 'Öncüler';
+
+  @override
+  String get pubFilterHasRights => 'Yetki sahibi';
+
+  @override
+  String get pubFilterAnyGroup => 'Tüm gruplar';
+
+  @override
+  String get pubFilterClear => 'Temizle';
+
+  @override
   String get pubAdminMoveConfirmTitle => 'Taşındı olarak işaretlensin mi?';
 
   @override

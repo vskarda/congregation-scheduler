@@ -1354,6 +1354,30 @@ abstract class AppLocalizations {
   /// **'Show moved'**
   String get pubAdminShowMoved;
 
+  /// No description provided for @pubFilterPioneers.
+  ///
+  /// In en, this message translates to:
+  /// **'Pioneers'**
+  String get pubFilterPioneers;
+
+  /// No description provided for @pubFilterHasRights.
+  ///
+  /// In en, this message translates to:
+  /// **'Has rights'**
+  String get pubFilterHasRights;
+
+  /// No description provided for @pubFilterAnyGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Any group'**
+  String get pubFilterAnyGroup;
+
+  /// No description provided for @pubFilterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get pubFilterClear;
+
   /// No description provided for @pubAdminMoveConfirmTitle.
   ///
   /// In en, this message translates to:

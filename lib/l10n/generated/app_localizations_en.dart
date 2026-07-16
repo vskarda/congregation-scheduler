@@ -690,6 +690,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pubAdminShowMoved => 'Show moved';
 
   @override
+  String get pubFilterPioneers => 'Pioneers';
+
+  @override
+  String get pubFilterHasRights => 'Has rights';
+
+  @override
+  String get pubFilterAnyGroup => 'Any group';
+
+  @override
+  String get pubFilterClear => 'Clear';
+
+  @override
   String get pubAdminMoveConfirmTitle => 'Mark as moved?';
 
   @override

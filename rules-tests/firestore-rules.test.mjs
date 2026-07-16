@@ -270,15 +270,51 @@ describe('privilege escalation', () => {
     );
   });
 
-  it('publishers-admin can verify and grant roles', async () => {
+  it('publishers-admin can verify but not grant roles', async () => {
     await assertSucceeds(
       updateDoc(doc(db(ADMIN), `publishers/${UNVERIFIED}`), {
         verified: true,
       }),
     );
-    await assertSucceeds(
+    // Granting rights is full-admin only.
+    await assertFails(
       updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
         'roles.lmmSchedule': true,
+      }),
+    );
+  });
+
+  it('full admin can grant roles', async () => {
+    await assertSucceeds(
+      updateDoc(doc(db(FULL_ADMIN), `publishers/${VERIFIED}`), {
+        'roles.lmmSchedule': true,
+      }),
+    );
+  });
+
+  it('appointment on the public doc is admin-set only', async () => {
+    // A member cannot appoint themselves elder on their public doc.
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        appointment: 'elder',
+      }),
+    );
+    // A publishers-admin may (denormalized from the private profile).
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
+        appointment: 'elder',
+      }),
+    );
+  });
+
+  it('member may keep appointment unchanged on self-save', async () => {
+    // The client rewrites the full doc, so a legacy doc without the field
+    // gains appointment:'none'; that must be allowed as long as it stays
+    // 'none' (get() with a default tolerates the absent field).
+    await assertSucceeds(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        firstName: 'Renamed',
+        appointment: 'none',
       }),
     );
   });

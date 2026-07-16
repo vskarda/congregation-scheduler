@@ -91,20 +91,31 @@ service cloud.firestore {
             && request.resource.data.verified == true)
         || (isSignedIn() && request.auth.uid == publisherId
             && request.resource.data.verified == false
-            && noRoles(request.resource.data.roles));
+            && noRoles(request.resource.data.roles)
+            && request.resource.data.get('appointment', 'none') == 'none');
 
-      // Self-service edits may not touch privilege fields. 'moved' is an
-      // admin-only lifecycle flag (marking someone moved also revokes their
-      // access), so members may not change it on their own record. 'groupId'
-      // (ministry group membership) is likewise assigned by admins only.
-      // status 'none' ("-" / not a publisher) is admin-only in both
-      // directions, same as appointment below; members may still freely
-      // switch among the other status values.
-      allow update: if hasRole('publishers')
+      // Granting/removing rights ('roles') is restricted to full admins; a
+      // limited publisher-admin may manage everyone else's fields but not their
+      // rights. Self-service edits may not touch privilege fields at all.
+      // 'moved' is an admin-only lifecycle flag (marking someone moved also
+      // revokes their access), so members may not change it on their own
+      // record. 'groupId' (ministry group membership) is likewise assigned by
+      // admins only. 'appointment' (elder/MS) is denormalized here from the
+      // private profile and admin-set only: members may keep it unchanged
+      // (get() with a default tolerates legacy docs the client rewrites in
+      // full) but not change it. status 'none' ("-" / not a publisher) is
+      // admin-only in both directions; members may still freely switch among
+      // the other status values.
+      allow update: if (hasRole('publishers')
+            && (hasRole('fullAdmin')
+                || !request.resource.data.diff(resource.data).affectedKeys()
+                    .hasAny(['roles'].toSet())))
         || (isSignedIn() && request.auth.uid == publisherId
             && !request.resource.data.diff(resource.data).affectedKeys()
                 .hasAny(['verified', 'roles', 'qualifications', 'moved',
                     'groupId'].toSet())
+            && request.resource.data.get('appointment', 'none')
+                == resource.data.get('appointment', 'none')
             && (request.resource.data.status == resource.data.status
                 || (request.resource.data.status != 'none'
                     && resource.data.status != 'none')));

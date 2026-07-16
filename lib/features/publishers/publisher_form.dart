@@ -107,6 +107,10 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
         lastName: _lastName.text.trim(),
         gender: _gender,
         status: _status,
+        // Mirror the admin-set appointment onto the public doc so the roster
+        // can filter/badge by it. Only the admin form edits appointment; on the
+        // self profile copyWith leaves the existing public value untouched.
+        appointment: widget.showAppointment ? _appointment : widget.publisher.appointment,
       ));
       await repo.setPrivate(
         widget.publisher.id,

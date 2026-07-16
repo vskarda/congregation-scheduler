@@ -36,6 +36,9 @@ class PublisherDetailScreen extends ConsumerWidget {
 
     final repo = ref.read(publishersRepositoryProvider);
     final isSelf = ref.watch(currentUidProvider) == publisher.id;
+    // Viewing/editing rights is full-admin only (matches _ConnectRecordCard and
+    // the backend rule); limited publishers-admins don't see the Rights tab.
+    final isFullAdmin = ref.watch(myRolesProvider).fullAdmin;
 
     Future<void> confirmDelete() async {
       final confirmed = await showDialog<bool>(
@@ -110,8 +113,27 @@ class PublisherDetailScreen extends ConsumerWidget {
       }
     }
 
+    final tabs = <Tab>[
+      Tab(text: l10n.pubAdminTabProfile),
+      if (isFullAdmin) Tab(text: l10n.pubAdminTabRoles),
+      Tab(text: l10n.pubAdminTabAssign),
+      Tab(text: l10n.pubAdminTabRecord),
+    ];
+    final views = <Widget>[
+      _ProfileTab(publisher: publisher),
+      if (isFullAdmin) _RolesTab(publisher: publisher, isSelf: isSelf),
+      _AssignTab(publisher: publisher),
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: PublisherRecordView(
+          publisherId: publisherId,
+          showS21Export: true,
+        ),
+      ),
+    ];
+
     return DefaultTabController(
-      length: 4,
+      length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -163,29 +185,9 @@ class PublisherDetailScreen extends ConsumerWidget {
               ],
             ),
           ],
-          bottom: TabBar(
-            tabs: [
-              Tab(text: l10n.pubAdminTabProfile),
-              Tab(text: l10n.pubAdminTabRoles),
-              Tab(text: l10n.pubAdminTabAssign),
-              Tab(text: l10n.pubAdminTabRecord),
-            ],
-          ),
+          bottom: TabBar(tabs: tabs),
         ),
-        body: TabBarView(
-          children: [
-            _ProfileTab(publisher: publisher),
-            _RolesTab(publisher: publisher, isSelf: isSelf),
-            _AssignTab(publisher: publisher),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: PublisherRecordView(
-                publisherId: publisherId,
-                showS21Export: true,
-              ),
-            ),
-          ],
-        ),
+        body: TabBarView(children: views),
       ),
     );
   }

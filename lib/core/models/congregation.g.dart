@@ -16,6 +16,7 @@ _CongregationMeta _$CongregationMetaFromJson(Map<String, dynamic> json) =>
       weekendWeekday:
           (json['weekendWeekday'] as num?)?.toInt() ?? DateTime.sunday,
       weekendTime: json['weekendTime'] as String? ?? '10:00',
+      appointmentBackfilled: json['appointmentBackfilled'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$CongregationMetaToJson(_CongregationMeta instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$CongregationMetaToJson(_CongregationMeta instance) =>
       'lmmClassCount': instance.lmmClassCount,
       'weekendWeekday': instance.weekendWeekday,
       'weekendTime': instance.weekendTime,
+      'appointmentBackfilled': instance.appointmentBackfilled,
     };

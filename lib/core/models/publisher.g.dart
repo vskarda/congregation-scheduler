@@ -85,6 +85,9 @@ _Publisher _$PublisherFromJson(Map<String, dynamic> json) => _Publisher(
   status:
       $enumDecodeNullable(_$PublisherStatusEnumMap, json['status']) ??
       PublisherStatus.publisher,
+  appointment:
+      $enumDecodeNullable(_$AppointmentEnumMap, json['appointment']) ??
+      Appointment.none,
   verified: json['verified'] as bool? ?? false,
   roles: json['roles'] == null
       ? const Roles()
@@ -103,6 +106,7 @@ Map<String, dynamic> _$PublisherToJson(_Publisher instance) =>
       'lastName': instance.lastName,
       'gender': _$GenderEnumMap[instance.gender]!,
       'status': _$PublisherStatusEnumMap[instance.status]!,
+      'appointment': _$AppointmentEnumMap[instance.appointment]!,
       'verified': instance.verified,
       'roles': instance.roles.toJson(),
       'qualifications': instance.qualifications.toJson(),
@@ -124,6 +128,12 @@ const _$PublisherStatusEnumMap = {
   PublisherStatus.regularPioneer: 'regPioneer',
   PublisherStatus.specialPioneer: 'specialPioneer',
   PublisherStatus.fieldMissionary: 'fieldMissionary',
+};
+
+const _$AppointmentEnumMap = {
+  Appointment.none: 'none',
+  Appointment.ministerialServant: 'ministerialServant',
+  Appointment.elder: 'elder',
 };
 
 _PublisherPrivate _$PublisherPrivateFromJson(Map<String, dynamic> json) =>
@@ -155,10 +165,4 @@ Map<String, dynamic> _$PublisherPrivateToJson(_PublisherPrivate instance) =>
 const _$HopeEnumMap = {
   Hope.otherSheep: 'otherSheep',
   Hope.anointed: 'anointed',
-};
-
-const _$AppointmentEnumMap = {
-  Appointment.none: 'none',
-  Appointment.ministerialServant: 'ministerialServant',
-  Appointment.elder: 'elder',
 };
