@@ -23,44 +23,152 @@ class FsmRecurringScreen extends ConsumerWidget {
     String weekdayName(int weekday) => DateFormat.EEEE(locale)
         .format(DateTime(2026, 6, weekday));
 
+    final error = Theme.of(context).colorScheme.error;
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.fsmRecurringRules)),
+      appBar: AppBar(
+        title: Text(l10n.fsmRecurringRules),
+        actions: [
+          IconButton(
+            tooltip: l10n.fsmRemoveAllFutureAction,
+            icon: Icon(Icons.delete_sweep_outlined, color: error),
+            onPressed: () => _confirmDeleteAllFuture(context, ref),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         tooltip: l10n.fsmRecurringAdd,
         onPressed: () => _showRuleDialog(context, ref),
         child: const Icon(Icons.add),
       ),
-      body: rules.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) =>
-            Center(child: Text(l10n.commonErrorDetail(e.toString()))),
-        data: (list) => ListView(
-          children: [
-            for (final rule in list)
-              Card(
-                child: ListTile(
-                  title: Text('${weekdayName(rule.weekday)}  ${rule.time}'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (rule.location.isNotEmpty) Text(rule.location),
-                      AssignmentText(rule.defaultAssignment),
-                    ],
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            color: Theme.of(context).colorScheme.errorContainer,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                Icon(Icons.warning_amber_rounded,
+                    color: Theme.of(context).colorScheme.onErrorContainer,
+                    size: 20),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    l10n.fsmRemoveAllFutureWarning,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onErrorContainer),
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    onPressed: () async {
-                      await ref
-                          .read(fsmRepositoryProvider)
-                          .deleteRecurring(rule.id);
-                    },
-                  ),
-                  onTap: () => _showRuleDialog(context, ref, existing: rule),
                 ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: rules.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) =>
+                  Center(child: Text(l10n.commonErrorDetail(e.toString()))),
+              data: (list) => ListView(
+                children: [
+                  for (final rule in list)
+                    Card(
+                      child: ListTile(
+                        title:
+                            Text('${weekdayName(rule.weekday)}  ${rule.time}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (rule.location.isNotEmpty) Text(rule.location),
+                            AssignmentText(rule.defaultAssignment),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () =>
+                              _confirmDeleteRule(context, ref, rule),
+                        ),
+                        onTap: () =>
+                            _showRuleDialog(context, ref, existing: rule),
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Future<void> _confirmDeleteRule(
+      BuildContext context, WidgetRef ref, FsmRecurring rule) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.commonConfirmDeleteTitle),
+        content: Text(l10n.fsmRecurringDeleteConfirm),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.commonCancel)),
+          FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.commonDelete)),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await ref.read(fsmRepositoryProvider).deleteRecurring(rule.id);
+      ref.invalidate(assignmentHistoryProvider);
+    }
+  }
+
+  Future<void> _confirmDeleteAllFuture(
+      BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final error = Theme.of(context).colorScheme.error;
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        var busy = false;
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            icon: Icon(Icons.warning_amber_rounded, color: error, size: 32),
+            title: Text(l10n.fsmRemoveAllFutureTitle),
+            content: Text(l10n.fsmRemoveAllFutureBody),
+            actions: [
+              TextButton(
+                onPressed: busy ? null : () => Navigator.of(context).pop(),
+                child: Text(l10n.commonCancel),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  backgroundColor: error,
+                  foregroundColor: Theme.of(context).colorScheme.onError,
+                ),
+                onPressed: busy
+                    ? null
+                    : () async {
+                        setState(() => busy = true);
+                        await ref
+                            .read(fsmRepositoryProvider)
+                            .deleteAllFutureMeetings();
+                        ref.invalidate(assignmentHistoryProvider);
+                        if (context.mounted) Navigator.of(context).pop();
+                      },
+                child: busy
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(l10n.fsmRemoveAllFutureConfirm),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

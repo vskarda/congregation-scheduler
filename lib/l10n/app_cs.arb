@@ -351,6 +351,12 @@
   "fsmWeekday": "Den v týdnu",
   "fsmValidFrom": "Platí od",
   "fsmValidUntil": "Platí do (nepovinné)",
+  "fsmRecurringDeleteConfirm": "Smazat tuto opakovanou schůzku? Budou odstraněny i všechny její budoucí schůzky. Tuto akci nelze vrátit zpět.",
+  "fsmRemoveAllFutureAction": "Odstranit všechny budoucí schůzky",
+  "fsmRemoveAllFutureWarning": "Odstranění všech budoucích schůzek smaže každou nadcházející jednorázovou i opakovanou schůzku a nelze to vrátit zpět.",
+  "fsmRemoveAllFutureTitle": "Odstranit všechny budoucí schůzky?",
+  "fsmRemoveAllFutureBody": "Tímto se smažou všechny nadcházející jednorázové i opakované schůzky pro službu a odstraní se všechna pravidla opakovaných schůzek, aby se znovu neobnovily. Minulé schůzky zůstanou zachovány. Tuto akci nelze vrátit zpět.",
+  "fsmRemoveAllFutureConfirm": "Odstranit vše",
 
   "eventsUpcoming": "Nadcházející události",
   "eventsNone": "Žádné nadcházející události.",

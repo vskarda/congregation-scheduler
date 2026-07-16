@@ -1,5 +1,6 @@
 import 'package:congregation_scheduler/core/data/fsm_repository.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -125,6 +126,109 @@ void main() {
       final merged =
           FsmRepository.mergeWithRules(const [], [limited], monday, until);
       expect(merged, isEmpty);
+    });
+  });
+
+  group('FsmRepository.deleteRecurring', () {
+    late FakeFirebaseFirestore db;
+    late FsmRepository repo;
+    final today = DateTime(2026, 7, 16);
+
+    setUp(() {
+      db = FakeFirebaseFirestore();
+      repo = FsmRepository(db);
+    });
+
+    test('deletes the rule and only its own future instances', () async {
+      await db.collection('fsm_recurring').doc('r1').set(
+          const FsmRecurring(weekday: DateTime.thursday).toJson());
+      await db
+          .collection('fsm_meetings')
+          .doc('r1_2026-07-09')
+          .set({'date': '2026-07-09', 'recurringId': 'r1'}); // past, kept
+      await db
+          .collection('fsm_meetings')
+          .doc('r1_2026-07-23')
+          .set({'date': '2026-07-23', 'recurringId': 'r1'}); // future, removed
+      await db.collection('fsm_meetings').doc('other_2026-08-01').set(
+          {'date': '2026-08-01', 'recurringId': 'other'}); // other rule
+
+      await repo.deleteRecurring('r1', now: today);
+
+      expect((await db.collection('fsm_recurring').doc('r1').get()).exists,
+          isFalse);
+      expect(
+          (await db.collection('fsm_meetings').doc('r1_2026-07-09').get())
+              .exists,
+          isTrue);
+      expect(
+          (await db.collection('fsm_meetings').doc('r1_2026-07-23').get())
+              .exists,
+          isFalse);
+      expect(
+          (await db.collection('fsm_meetings').doc('other_2026-08-01').get())
+              .exists,
+          isTrue);
+    });
+  });
+
+  group('FsmRepository.deleteAllFutureMeetings', () {
+    late FakeFirebaseFirestore db;
+    late FsmRepository repo;
+    final today = DateTime(2026, 7, 16);
+
+    setUp(() {
+      db = FakeFirebaseFirestore();
+      repo = FsmRepository(db);
+    });
+
+    test('deletes every future meeting (one-off and recurring) and every rule',
+        () async {
+      await db.collection('fsm_recurring').doc('r1').set(
+          const FsmRecurring(weekday: DateTime.thursday).toJson());
+      await db
+          .collection('fsm_meetings')
+          .doc('r1_2026-07-09')
+          .set({'date': '2026-07-09', 'recurringId': 'r1'}); // past
+      await db
+          .collection('fsm_meetings')
+          .doc('r1_2026-07-23')
+          .set({'date': '2026-07-23', 'recurringId': 'r1'}); // future, rule
+      await db.collection('fsm_meetings').doc('oneoff-past').set(
+          {'date': '2026-07-01', 'recurringId': ''}); // past one-off
+      await db.collection('fsm_meetings').doc('oneoff-future').set(
+          {'date': '2026-07-20', 'recurringId': ''}); // future one-off
+      // Orphan: recurringId points at a rule that no longer exists.
+      await db.collection('fsm_meetings').doc('orphan_2026-08-01').set(
+          {'date': '2026-08-01', 'recurringId': 'gone'});
+
+      await repo.deleteAllFutureMeetings(now: today);
+
+      expect((await db.collection('fsm_recurring').doc('r1').get()).exists,
+          isFalse);
+      expect(
+          (await db.collection('fsm_meetings').doc('r1_2026-07-09').get())
+              .exists,
+          isTrue);
+      expect(
+          (await db.collection('fsm_meetings').doc('r1_2026-07-23').get())
+              .exists,
+          isFalse);
+      expect(
+          (await db.collection('fsm_meetings').doc('oneoff-past').get())
+              .exists,
+          isTrue);
+      expect(
+          (await db.collection('fsm_meetings').doc('oneoff-future').get())
+              .exists,
+          isFalse);
+      expect(
+          (await db
+                  .collection('fsm_meetings')
+                  .doc('orphan_2026-08-01')
+                  .get())
+              .exists,
+          isFalse);
     });
   });
 }

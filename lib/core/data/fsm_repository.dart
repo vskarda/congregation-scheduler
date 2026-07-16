@@ -131,8 +131,54 @@ class FsmRepository {
     return rule.id;
   }
 
-  Future<void> deleteRecurring(String ruleId) =>
-      _recurring.doc(ruleId).delete();
+  /// Deletes the rule and its own future instances (past instances are kept
+  /// for history, matching [deleteMeeting]'s preservation philosophy). Past
+  /// instances stay orphaned by design; only future ones would otherwise
+  /// linger forever in the weekly overview with no rule left to manage them.
+  Future<void> deleteRecurring(String ruleId, {DateTime? now}) async {
+    await _recurring.doc(ruleId).delete();
+    final todayKey = dateKey(now ?? DateTime.now());
+    final existing =
+        await _meetings.where('recurringId', isEqualTo: ruleId).get();
+    final futureDocs = existing.docs.where((d) {
+      final date = d.data()['date'] as String?;
+      return date != null && date.compareTo(todayKey) >= 0;
+    }).toList();
+    for (var i = 0; i < futureDocs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in futureDocs.skip(i).take(400)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
+  }
+
+  /// Deletes every future concrete meeting (one-off and recurring-generated)
+  /// and every recurring rule, so nothing regenerates. Past meetings are kept
+  /// for history/reporting. Used by the "remove all future meetings" reset
+  /// action, which also sweeps up instances orphaned by a rule that was
+  /// already deleted via the old, non-cleaning [deleteRecurring].
+  Future<void> deleteAllFutureMeetings({DateTime? now}) async {
+    final todayKey = dateKey(now ?? DateTime.now());
+    final futureMeetings =
+        await _meetings.where('date', isGreaterThanOrEqualTo: todayKey).get();
+    for (var i = 0; i < futureMeetings.docs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in futureMeetings.docs.skip(i).take(400)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
+
+    final rules = await _recurring.get();
+    for (var i = 0; i < rules.docs.length; i += 400) {
+      final batch = _db.batch();
+      for (final doc in rules.docs.skip(i).take(400)) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+    }
+  }
 
   /// Creates missing concrete meetings for [rule] from today until
   /// [AppConfig.fsmMaterializeMonthsAhead] months ahead. Meeting ids are

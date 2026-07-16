@@ -366,6 +366,12 @@
   "fsmWeekday": "Day of week",
   "fsmValidFrom": "Valid from",
   "fsmValidUntil": "Valid until (optional)",
+  "fsmRecurringDeleteConfirm": "Delete this recurring meeting? Its future meetings will be removed too. This can't be undone.",
+  "fsmRemoveAllFutureAction": "Remove all future meetings",
+  "fsmRemoveAllFutureWarning": "Removing all future meetings deletes every upcoming one-time and recurring meeting and cannot be undone.",
+  "fsmRemoveAllFutureTitle": "Remove all future meetings?",
+  "fsmRemoveAllFutureBody": "This deletes every upcoming one-time and recurring Ministry meeting, and removes all recurring meeting rules so none regenerate. Past meetings are kept. This can't be undone.",
+  "fsmRemoveAllFutureConfirm": "Remove all",
 
   "eventsUpcoming": "Upcoming events",
   "eventsNone": "No upcoming events.",
