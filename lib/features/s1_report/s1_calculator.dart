@@ -62,8 +62,8 @@ S1Result computeS1({
 
   int? average(MeetingType type) {
     final totals = monthAttendance
-        .where((e) => e.meetingType == type)
-        .map((e) => e.total)
+        .where((e) => e.meetingType == type && e.hasData)
+        .map((e) => e.resolvedTotal)
         .toList();
     if (totals.isEmpty) return null;
     return (totals.reduce((a, b) => a + b) / totals.length).round();

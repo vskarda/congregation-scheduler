@@ -9,14 +9,19 @@ import '../../core/data/congregation_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
+import 'attendance_form.dart';
+import 'attendance_history_card.dart';
+
+/// First day of the oldest month in the rolling 24-month history window.
+String attendanceHistoryStart() =>
+    '${monthKey(addMonths(DateTime.now(), -23))}-01';
 
 final attendanceEntriesProvider =
     StreamProvider<List<AttendanceEntry>>((ref) {
-  final from = monthKey(addMonths(DateTime.now(), -12));
   final to = dateKey(DateTime.now().add(const Duration(days: 7)));
   return ref
       .watch(attendanceRepositoryProvider)
-      .watchRange('$from-01', to);
+      .watchRange(attendanceHistoryStart(), to);
 });
 
 /// Most recent occurrence (<= today) of a weekly meeting held on [weekday].
@@ -44,7 +49,11 @@ class AttendanceScreen extends ConsumerWidget {
         children: [
           if (canEdit) _AddAttendanceCard(entries: entries),
           _OverviewCard(entries: entries),
-          _RecentCard(entries: entries, canEdit: canEdit),
+          AttendanceHistoryCard(
+            entries: entries,
+            canEdit: canEdit,
+            fromDate: attendanceHistoryStart(),
+          ),
         ],
       ),
     );
@@ -64,15 +73,6 @@ class _AddAttendanceCard extends ConsumerStatefulWidget {
 class _AddAttendanceCardState extends ConsumerState<_AddAttendanceCard> {
   MeetingType? _type;
   String? _date;
-  final _inPerson = TextEditingController();
-  final _online = TextEditingController();
-
-  @override
-  void dispose() {
-    _inPerson.dispose();
-    _online.dispose();
-    super.dispose();
-  }
 
   /// Preselect the meeting closest to today ("present meeting").
   (MeetingType, String) _presentMeeting(CongregationMeta meta) {
@@ -97,21 +97,6 @@ class _AddAttendanceCardState extends ConsumerState<_AddAttendanceCard> {
     final existing = widget.entries
         .where((e) => e.date == date && e.meetingType == type)
         .firstOrNull;
-
-    Future<void> save() async {
-      await ref.read(attendanceRepositoryProvider).upsert(AttendanceEntry(
-            date: date,
-            meetingType: type,
-            inPerson: int.tryParse(_inPerson.text.trim()) ?? 0,
-            online: int.tryParse(_online.text.trim()) ?? 0,
-          ));
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(l10n.attSaved)));
-        _inPerson.clear();
-        _online.clear();
-      }
-    }
 
     return Card(
       child: Padding(
@@ -145,10 +130,7 @@ class _AddAttendanceCardState extends ConsumerState<_AddAttendanceCard> {
               dense: true,
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.pwDate),
-              subtitle: Text(date +
-                  (existing != null
-                      ? '   (${l10n.attTotal}: ${existing.total})'
-                      : '')),
+              subtitle: Text(date),
               onTap: () async {
                 final picked = await showDatePicker(
                   context: context,
@@ -161,29 +143,19 @@ class _AddAttendanceCardState extends ConsumerState<_AddAttendanceCard> {
                 }
               },
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _inPerson,
-                    keyboardType: TextInputType.number,
-                    decoration:
-                        InputDecoration(labelText: l10n.attInPerson),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextField(
-                    controller: _online,
-                    keyboardType: TextInputType.number,
-                    decoration:
-                        InputDecoration(labelText: l10n.attOnline),
-                  ),
-                ),
-              ],
+            // Keyed so switching meeting resets (and prefills) the counts.
+            AttendanceForm(
+              key: ValueKey('$date|${type.name}'),
+              initial: existing ??
+                  AttendanceEntry(date: date, meetingType: type),
+              onSubmit: (entry) async {
+                await ref.read(attendanceRepositoryProvider).upsert(entry);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.attSaved)));
+                }
+              },
             ),
-            const SizedBox(height: 12),
-            FilledButton(onPressed: save, child: Text(l10n.commonSave)),
           ],
         ),
       ),
@@ -205,14 +177,18 @@ class _OverviewCard extends StatelessWidget {
     // month -> type -> totals (in-person + online always combined).
     final byMonth = <String, Map<MeetingType, List<int>>>{};
     for (final e in entries) {
-      if (e.date.length < 7) continue;
+      if (e.date.length < 7 || !e.hasData) continue;
       final month = e.date.substring(0, 7);
       byMonth
           .putIfAbsent(month, () => {})
           .putIfAbsent(e.meetingType, () => [])
-          .add(e.total);
+          .add(e.resolvedTotal);
     }
-    final months = byMonth.keys.toList()..sort((a, b) => b.compareTo(a));
+    // The provider spans 24 months for the history card; keep the averages
+    // table at the last 12.
+    final months = byMonth.keys.toList()
+      ..sort((a, b) => b.compareTo(a));
+    final shownMonths = months.take(12).toList();
 
     String avg(String month, MeetingType type) {
       final totals = byMonth[month]?[type];
@@ -246,7 +222,7 @@ class _OverviewCard extends StatelessWidget {
                   Text(l10n.attMeetingWeekend,
                       style: Theme.of(context).textTheme.labelMedium),
                 ]),
-                for (final month in months)
+                for (final month in shownMonths)
                   TableRow(children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -265,45 +241,3 @@ class _OverviewCard extends StatelessWidget {
   }
 }
 
-class _RecentCard extends ConsumerWidget {
-  const _RecentCard({required this.entries, required this.canEdit});
-
-  final List<AttendanceEntry> entries;
-  final bool canEdit;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = context.l10n;
-    final recent = entries.take(12).toList();
-    if (recent.isEmpty) return const SizedBox.shrink();
-
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
-            child: Text(l10n.attRecent,
-                style: Theme.of(context).textTheme.titleMedium),
-          ),
-          for (final e in recent)
-            ListTile(
-              dense: true,
-              title: Text(
-                  '${e.date}  ·  ${e.meetingType == MeetingType.lmm ? l10n.attMeetingLmm : l10n.attMeetingWeekend}'),
-              subtitle: Text(
-                  '${l10n.attTotal}: ${e.total}  (${l10n.attInPerson}: ${e.inPerson}, ${l10n.attOnline}: ${e.online})'),
-              trailing: canEdit
-                  ? IconButton(
-                      icon: const Icon(Icons.delete_outline, size: 18),
-                      onPressed: () => ref
-                          .read(attendanceRepositoryProvider)
-                          .delete(e.id),
-                    )
-                  : null,
-            ),
-        ],
-      ),
-    );
-  }
-}

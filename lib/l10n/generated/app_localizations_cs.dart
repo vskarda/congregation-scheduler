@@ -1191,7 +1191,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get attOverview => 'Měsíční průměry';
 
   @override
-  String get attRecent => 'Poslední shromáždění';
+  String get attHistory => 'Minulá shromáždění';
+
+  @override
+  String get attNotFilled => 'Nezaznamenáno';
+
+  @override
+  String get attMismatch => 'Počty nesouhlasí.';
+
+  @override
+  String attRecordedOf(int filled, int expected) {
+    return '$filled/$expected zaznamenáno';
+  }
 
   @override
   String get attSaved => 'Návštěvnost uložena.';

@@ -75,4 +75,23 @@ void main() {
     expect(result.regularPioneers.hours, 50);
     expect(result.regularPioneers.studies, 3);
   });
+
+  test('attendance averages use stored totals and skip empty entries', () {
+    final result = computeS1(
+      monthReports: const [],
+      lastSixMonths: const [],
+      monthAttendance: const [
+        // Total-only historical record.
+        AttendanceEntry(
+            date: '2026-06-02', meetingType: MeetingType.lmm, total: 50),
+        AttendanceEntry(
+            date: '2026-06-09', meetingType: MeetingType.lmm, inPerson: 42,
+            online: 8),
+        // No counts entered -> must not drag the average down.
+        AttendanceEntry(date: '2026-06-16', meetingType: MeetingType.lmm),
+      ],
+    );
+    expect(result.avgMidweekAttendance, 50);
+    expect(result.avgWeekendAttendance, isNull);
+  });
 }

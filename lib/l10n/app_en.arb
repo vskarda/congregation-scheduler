@@ -406,7 +406,11 @@
   "attMeetingLmm": "Life and Ministry",
   "attMeetingWeekend": "Weekend meeting",
   "attOverview": "Monthly averages",
-  "attRecent": "Recent meetings",
+  "attHistory": "Past meetings",
+  "attNotFilled": "Not recorded",
+  "attMismatch": "The numbers don't add up.",
+  "attRecordedOf": "{filled}/{expected} recorded",
+  "@attRecordedOf": {"placeholders": {"filled": {"type": "int"}, "expected": {"type": "int"}}},
   "attSaved": "Attendance saved.",
 
   "terrMine": "My territories",

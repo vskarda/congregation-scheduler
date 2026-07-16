@@ -2266,11 +2266,29 @@ abstract class AppLocalizations {
   /// **'Monthly averages'**
   String get attOverview;
 
-  /// No description provided for @attRecent.
+  /// No description provided for @attHistory.
   ///
   /// In en, this message translates to:
-  /// **'Recent meetings'**
-  String get attRecent;
+  /// **'Past meetings'**
+  String get attHistory;
+
+  /// No description provided for @attNotFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'Not recorded'**
+  String get attNotFilled;
+
+  /// No description provided for @attMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'The numbers don\'t add up.'**
+  String get attMismatch;
+
+  /// No description provided for @attRecordedOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{filled}/{expected} recorded'**
+  String attRecordedOf(int filled, int expected);
 
   /// No description provided for @attSaved.
   ///

@@ -16,7 +16,9 @@ T _$identity<T>(T value) => value;
 mixin _$AttendanceEntry {
 
 @JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd
- String get date; MeetingType get meetingType; int get inPerson; int get online;
+ String get date; MeetingType get meetingType;@JsonKey(includeIfNull: false) int? get inPerson;@JsonKey(includeIfNull: false) int? get online;/// Stored explicitly (not derived) so a total-only record is possible;
+/// legacy docs lack this field and fall back to inPerson + online.
+@JsonKey(includeIfNull: false) int? get total;
 /// Create a copy of AttendanceEntry
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +31,16 @@ $AttendanceEntryCopyWith<AttendanceEntry> get copyWith => _$AttendanceEntryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.meetingType, meetingType) || other.meetingType == meetingType)&&(identical(other.inPerson, inPerson) || other.inPerson == inPerson)&&(identical(other.online, online) || other.online == online));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AttendanceEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.meetingType, meetingType) || other.meetingType == meetingType)&&(identical(other.inPerson, inPerson) || other.inPerson == inPerson)&&(identical(other.online, online) || other.online == online)&&(identical(other.total, total) || other.total == total));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,meetingType,inPerson,online);
+int get hashCode => Object.hash(runtimeType,id,date,meetingType,inPerson,online,total);
 
 @override
 String toString() {
-  return 'AttendanceEntry(id: $id, date: $date, meetingType: $meetingType, inPerson: $inPerson, online: $online)';
+  return 'AttendanceEntry(id: $id, date: $date, meetingType: $meetingType, inPerson: $inPerson, online: $online, total: $total)';
 }
 
 
@@ -49,7 +51,7 @@ abstract mixin class $AttendanceEntryCopyWith<$Res>  {
   factory $AttendanceEntryCopyWith(AttendanceEntry value, $Res Function(AttendanceEntry) _then) = _$AttendanceEntryCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, MeetingType meetingType, int inPerson, int online
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, MeetingType meetingType,@JsonKey(includeIfNull: false) int? inPerson,@JsonKey(includeIfNull: false) int? online,@JsonKey(includeIfNull: false) int? total
 });
 
 
@@ -66,14 +68,15 @@ class _$AttendanceEntryCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceEntry
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? meetingType = null,Object? inPerson = null,Object? online = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? meetingType = null,Object? inPerson = freezed,Object? online = freezed,Object? total = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,meetingType: null == meetingType ? _self.meetingType : meetingType // ignore: cast_nullable_to_non_nullable
-as MeetingType,inPerson: null == inPerson ? _self.inPerson : inPerson // ignore: cast_nullable_to_non_nullable
-as int,online: null == online ? _self.online : online // ignore: cast_nullable_to_non_nullable
-as int,
+as MeetingType,inPerson: freezed == inPerson ? _self.inPerson : inPerson // ignore: cast_nullable_to_non_nullable
+as int?,online: freezed == online ? _self.online : online // ignore: cast_nullable_to_non_nullable
+as int?,total: freezed == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 
@@ -158,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType,  int inPerson,  int online)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType, @JsonKey(includeIfNull: false)  int? inPerson, @JsonKey(includeIfNull: false)  int? online, @JsonKey(includeIfNull: false)  int? total)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AttendanceEntry() when $default != null:
-return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online);case _:
+return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online,_that.total);case _:
   return orElse();
 
 }
@@ -179,10 +182,10 @@ return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.onlin
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType,  int inPerson,  int online)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType, @JsonKey(includeIfNull: false)  int? inPerson, @JsonKey(includeIfNull: false)  int? online, @JsonKey(includeIfNull: false)  int? total)  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceEntry():
-return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online);case _:
+return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online,_that.total);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +202,10 @@ return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.onlin
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType,  int inPerson,  int online)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  MeetingType meetingType, @JsonKey(includeIfNull: false)  int? inPerson, @JsonKey(includeIfNull: false)  int? online, @JsonKey(includeIfNull: false)  int? total)?  $default,) {final _that = this;
 switch (_that) {
 case _AttendanceEntry() when $default != null:
-return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online);case _:
+return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.online,_that.total);case _:
   return null;
 
 }
@@ -214,15 +217,18 @@ return $default(_that.id,_that.date,_that.meetingType,_that.inPerson,_that.onlin
 @JsonSerializable()
 
 class _AttendanceEntry extends AttendanceEntry {
-  const _AttendanceEntry({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.meetingType = MeetingType.lmm, this.inPerson = 0, this.online = 0}): super._();
+  const _AttendanceEntry({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.meetingType = MeetingType.lmm, @JsonKey(includeIfNull: false) this.inPerson, @JsonKey(includeIfNull: false) this.online, @JsonKey(includeIfNull: false) this.total}): super._();
   factory _AttendanceEntry.fromJson(Map<String, dynamic> json) => _$AttendanceEntryFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
 /// yyyy-MM-dd
 @override@JsonKey() final  String date;
 @override@JsonKey() final  MeetingType meetingType;
-@override@JsonKey() final  int inPerson;
-@override@JsonKey() final  int online;
+@override@JsonKey(includeIfNull: false) final  int? inPerson;
+@override@JsonKey(includeIfNull: false) final  int? online;
+/// Stored explicitly (not derived) so a total-only record is possible;
+/// legacy docs lack this field and fall back to inPerson + online.
+@override@JsonKey(includeIfNull: false) final  int? total;
 
 /// Create a copy of AttendanceEntry
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.meetingType, meetingType) || other.meetingType == meetingType)&&(identical(other.inPerson, inPerson) || other.inPerson == inPerson)&&(identical(other.online, online) || other.online == online));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AttendanceEntry&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.meetingType, meetingType) || other.meetingType == meetingType)&&(identical(other.inPerson, inPerson) || other.inPerson == inPerson)&&(identical(other.online, online) || other.online == online)&&(identical(other.total, total) || other.total == total));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,meetingType,inPerson,online);
+int get hashCode => Object.hash(runtimeType,id,date,meetingType,inPerson,online,total);
 
 @override
 String toString() {
-  return 'AttendanceEntry(id: $id, date: $date, meetingType: $meetingType, inPerson: $inPerson, online: $online)';
+  return 'AttendanceEntry(id: $id, date: $date, meetingType: $meetingType, inPerson: $inPerson, online: $online, total: $total)';
 }
 
 
@@ -257,7 +263,7 @@ abstract mixin class _$AttendanceEntryCopyWith<$Res> implements $AttendanceEntry
   factory _$AttendanceEntryCopyWith(_AttendanceEntry value, $Res Function(_AttendanceEntry) _then) = __$AttendanceEntryCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, MeetingType meetingType, int inPerson, int online
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, MeetingType meetingType,@JsonKey(includeIfNull: false) int? inPerson,@JsonKey(includeIfNull: false) int? online,@JsonKey(includeIfNull: false) int? total
 });
 
 
@@ -274,14 +280,15 @@ class __$AttendanceEntryCopyWithImpl<$Res>
 
 /// Create a copy of AttendanceEntry
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? meetingType = null,Object? inPerson = null,Object? online = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? meetingType = null,Object? inPerson = freezed,Object? online = freezed,Object? total = freezed,}) {
   return _then(_AttendanceEntry(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,meetingType: null == meetingType ? _self.meetingType : meetingType // ignore: cast_nullable_to_non_nullable
-as MeetingType,inPerson: null == inPerson ? _self.inPerson : inPerson // ignore: cast_nullable_to_non_nullable
-as int,online: null == online ? _self.online : online // ignore: cast_nullable_to_non_nullable
-as int,
+as MeetingType,inPerson: freezed == inPerson ? _self.inPerson : inPerson // ignore: cast_nullable_to_non_nullable
+as int?,online: freezed == online ? _self.online : online // ignore: cast_nullable_to_non_nullable
+as int?,total: freezed == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
+as int?,
   ));
 }
 

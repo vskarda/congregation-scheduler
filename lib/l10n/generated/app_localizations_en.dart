@@ -1189,7 +1189,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attOverview => 'Monthly averages';
 
   @override
-  String get attRecent => 'Recent meetings';
+  String get attHistory => 'Past meetings';
+
+  @override
+  String get attNotFilled => 'Not recorded';
+
+  @override
+  String get attMismatch => 'The numbers don\'t add up.';
+
+  @override
+  String attRecordedOf(int filled, int expected) {
+    return '$filled/$expected recorded';
+  }
 
   @override
   String get attSaved => 'Attendance saved.';

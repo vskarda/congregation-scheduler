@@ -388,7 +388,10 @@
   "attMeetingLmm": "Život a služba",
   "attMeetingWeekend": "Víkendové shromáždění",
   "attOverview": "Měsíční průměry",
-  "attRecent": "Poslední shromáždění",
+  "attHistory": "Minulá shromáždění",
+  "attNotFilled": "Nezaznamenáno",
+  "attMismatch": "Počty nesouhlasí.",
+  "attRecordedOf": "{filled}/{expected} zaznamenáno",
   "attSaved": "Návštěvnost uložena.",
 
   "terrMine": "Moje obvody",

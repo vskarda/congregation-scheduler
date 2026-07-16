@@ -1189,7 +1189,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get attOverview => 'Aylık Ortalamalar';
 
   @override
-  String get attRecent => 'Son İbadetler';
+  String get attHistory => 'Geçmiş İbadetler';
+
+  @override
+  String get attNotFilled => 'Kaydedilmedi';
+
+  @override
+  String get attMismatch => 'Sayılar tutarsız.';
+
+  @override
+  String attRecordedOf(int filled, int expected) {
+    return '$filled/$expected kaydedildi';
+  }
 
   @override
   String get attSaved => 'Katılım kaydedildi.';
