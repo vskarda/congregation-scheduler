@@ -8,8 +8,10 @@ import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/events_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/notifications/reminder_settings_provider.dart';
 import '../../core/utils/dates.dart';
 import 'my_assignments_provider.dart';
+import 'reminder_settings_dialog.dart';
 
 String eventTypeLabel(AppLocalizations l10n, EventType type) => switch (type) {
   EventType.convention => l10n.eventTypeConvention,
@@ -68,17 +70,6 @@ const _meetingDuration = Duration(minutes: 105);
 /// Meetings for field service are short; only their start time is stored.
 const _fsmDuration = Duration(minutes: 15);
 
-DateTime _combineDateAndTime(DateTime day, String hhMm) {
-  final parts = hhMm.split(':');
-  return DateTime(
-    day.year,
-    day.month,
-    day.day,
-    int.parse(parts[0]),
-    int.parse(parts[1]),
-  );
-}
-
 Event eventCalendarEvent(AppLocalizations l10n, EventItem event) {
   final start = parseDateKey(event.dateFrom);
   final lastDay = event.dateTo.isNotEmpty ? parseDateKey(event.dateTo) : start;
@@ -95,9 +86,9 @@ Event eventCalendarEvent(AppLocalizations l10n, EventItem event) {
 
 Event assignmentCalendarEvent(AppLocalizations l10n, MyAssignmentEntry entry) {
   final day = parseDateKey(entry.date);
-  final start = _combineDateAndTime(day, entry.time!);
+  final start = combineDateAndTime(day, entry.time!);
   final end = entry.endTime != null
-      ? _combineDateAndTime(day, entry.endTime!)
+      ? combineDateAndTime(day, entry.endTime!)
       : start.add(
           entry.source == AssignmentSource.fsm
               ? _fsmDuration
@@ -230,9 +221,25 @@ class EventsScreen extends ConsumerWidget {
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
-            child: Text(
-              l10n.myAssignments,
-              style: Theme.of(context).textTheme.titleMedium,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.myAssignments,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                if (!kIsWeb)
+                  IconButton(
+                    icon: Icon(
+                      ref.watch(reminderSettingsProvider).enabled
+                          ? Icons.notifications_active_outlined
+                          : Icons.notifications_none_outlined,
+                    ),
+                    tooltip: l10n.remindersTitle,
+                    onPressed: () => showReminderSettingsDialog(context, ref),
+                  ),
+              ],
             ),
           ),
           mineAsync.when(

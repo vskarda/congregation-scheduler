@@ -15,6 +15,19 @@ DateTime? tryParseDateKey(String? key) {
 
 DateTime parseDateKey(String key) => DateTime.parse(key);
 
+/// Combines a date-only [day] with an `HH:mm` [hhMm] time into a local
+/// [DateTime]. Used for calendar export and scheduling assignment reminders.
+DateTime combineDateAndTime(DateTime day, String hhMm) {
+  final parts = hhMm.split(':');
+  return DateTime(
+    day.year,
+    day.month,
+    day.day,
+    int.parse(parts[0]),
+    int.parse(parts[1]),
+  );
+}
+
 /// Monday 00:00 of the week containing [d].
 DateTime mondayOf(DateTime d) {
   final day = DateTime(d.year, d.month, d.day);

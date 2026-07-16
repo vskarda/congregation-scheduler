@@ -60,6 +60,10 @@ dependencies:
   pdf: ^3.11.3
   pdfrx: ^2.4.7
   web: ^1.1.1
+  # Local assignment reminders (mobile only; guarded by kIsWeb elsewhere).
+  flutter_local_notifications: ^19.4.0
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
 
 dev_dependencies:
   flutter_test:
