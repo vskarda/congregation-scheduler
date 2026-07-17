@@ -637,20 +637,27 @@ class _PartTile extends ConsumerWidget {
             ),
           AssignmentText(assignment),
           if (showAssistant)
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '${l10n.partAssistant}: ',
-                  style: theme.textTheme.bodySmall,
-                ),
-                Flexible(
-                  child: AssignmentText(
-                    assistantAssignment,
+            // Tapping the assistant line assigns the assistant directly, so
+            // admins don't have to open the overflow menu first.
+            InkWell(
+              onTap: canEdit
+                  ? () => _assign(context, ref, assistant: true)
+                  : null,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${l10n.partAssistant}: ',
                     style: theme.textTheme.bodySmall,
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: AssignmentText(
+                      assistantAssignment,
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              ),
             ),
         ],
       ),
