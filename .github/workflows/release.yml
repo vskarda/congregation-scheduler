@@ -133,6 +133,7 @@ jobs:
             build/app/outputs/flutter-apk/app-release.apk
 
       - name: Upload AAB to Google Play
+        id: play_upload
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
@@ -142,6 +143,36 @@ jobs:
           # Production releases go up as a draft to be reviewed/rolled out by a
           # human in the Play Console. Other tracks publish immediately.
           status: ${{ github.event.inputs.play_track == 'production' && 'draft' || 'completed' }}
+
+      # The r0adkll action prints a generic "Unknown error occurred." whenever the
+      # Play Publishing API returns an error it can't read a message from. For a
+      # brand-new app that's almost always the missing one-time MANUAL first upload
+      # (the API can't bootstrap a new app / push its first bundle). Translate the
+      # opaque failure into actionable guidance instead of a mystery red X.
+      - name: Explain Play upload failure
+        if: failure() && steps.play_upload.outcome == 'failure'
+        run: |
+          echo "::error title=Google Play upload failed::Play Publishing API rejected the upload — see the log for the likely cause."
+          cat <<'EOF'
+          The Play Developer API cannot create a new app or push its very first
+          bundle. For a brand-new app you must do a one-time MANUAL upload first:
+
+            1. Download app-release.aab from this run's Artifacts (or the GitHub
+               Release this job just created).
+            2. Play Console -> your app -> Testing -> Internal testing ->
+               Create new release -> upload that AAB manually, and complete any
+               required declarations (content rating, data safety, target
+               audience, app access).
+            3. Roll it out to Internal testing once.
+            4. Re-run this Release workflow — API uploads work from then on.
+
+          If the manual first upload is already done, check instead:
+            - PLAY_SERVICE_ACCOUNT_JSON secret is set and the service account has
+              "Release to testing tracks" (or Admin) access in Play Console.
+            - The app is out of "Draft" state when uploading with status=completed.
+
+          See docs/CI-CD.md sections 3.2 and 6.
+          EOF
 
   # --------------------------------------------------------------------------
   # iOS  ->  App Store Connect / TestFlight

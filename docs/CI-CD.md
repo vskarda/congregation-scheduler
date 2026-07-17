@@ -221,7 +221,13 @@ Recommended first runs:
 ## 6. Gotchas / notes
 
 - **Android first upload** must be done manually once (§3.2) — the API cannot
-  create the app listing.
+  create the app listing. **Symptom if you skip it:** the "Upload AAB to Google
+  Play" step fails with a bare `Error: Unknown error occurred.` — that's the
+  r0adkll action's generic fallback for a Play API error it can't read a message
+  from, and for a new app it almost always means this manual first upload is
+  still pending. The workflow's "Explain Play upload failure" step spells this
+  out in the run log. The AAB to upload manually is attached to the failed run
+  (Artifacts) and to the GitHub Release it created just before the Play step.
 - **iOS "Processing" + compliance**: the app declares
   `ITSAppUsesNonExemptEncryption = false` in `Info.plist`, so TestFlight won't
   prompt for export compliance. The first build may still need you to accept
