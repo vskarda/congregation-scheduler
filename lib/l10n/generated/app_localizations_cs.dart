@@ -530,6 +530,12 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get recordTotalHours => 'Hodiny celkem';
+
+  @override
+  String get recordAverageHours => 'Měsíční průměr';
+
+  @override
   String get reportMonth => 'Měsíc';
 
   @override

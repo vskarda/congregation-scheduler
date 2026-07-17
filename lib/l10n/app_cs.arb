@@ -171,6 +171,9 @@
   "profileRecord": "Záznam zvěstovatele",
   "serviceYear": "Služební rok {year}",
 
+  "recordTotalHours": "Hodiny celkem",
+  "recordAverageHours": "Měsíční průměr",
+
   "reportMonth": "Měsíc",
   "reportParticipated": "Podílel(a) se na službě",
   "reportStudies": "Biblická studia",

@@ -528,6 +528,12 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get recordTotalHours => 'Toplam saat';
+
+  @override
+  String get recordAverageHours => 'Aylık ortalama';
+
+  @override
   String get reportMonth => 'Ay';
 
   @override

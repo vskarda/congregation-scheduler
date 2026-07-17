@@ -175,6 +175,9 @@
   "serviceYear": "Service year {year}",
   "@serviceYear": {"placeholders": {"year": {"type": "int"}}},
 
+  "recordTotalHours": "Total hours",
+  "recordAverageHours": "Monthly average",
+
   "reportMonth": "Month",
   "reportParticipated": "Shared in the ministry",
   "reportStudies": "Bible studies",

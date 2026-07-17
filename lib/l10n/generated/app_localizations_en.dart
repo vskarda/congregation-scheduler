@@ -529,6 +529,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get recordTotalHours => 'Total hours';
+
+  @override
+  String get recordAverageHours => 'Monthly average';
+
+  @override
   String get reportMonth => 'Month';
 
   @override

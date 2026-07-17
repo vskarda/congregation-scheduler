@@ -1060,6 +1060,18 @@ abstract class AppLocalizations {
   /// **'Service year {year}'**
   String serviceYear(int year);
 
+  /// No description provided for @recordTotalHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Total hours'**
+  String get recordTotalHours;
+
+  /// No description provided for @recordAverageHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly average'**
+  String get recordAverageHours;
+
   /// No description provided for @reportMonth.
   ///
   /// In en, this message translates to:

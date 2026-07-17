@@ -191,7 +191,7 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
           data: (byMonth) {
             final locale = Localizations.localeOf(context).toString();
             final monthFmt = DateFormat.yMMM(locale);
-            return Card(
+            final table = Card(
               margin: EdgeInsets.zero,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
@@ -244,9 +244,63 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
                 ),
               ),
             );
+            // Regular pioneers get a service-year rollup of field-service +
+            // credit hours (MinistryReport.totalHours), averaged over the
+            // months that actually have a report.
+            if (publisher?.status != PublisherStatus.regularPioneer) {
+              return table;
+            }
+            final reported =
+                byMonth.values.whereType<MinistryReport>().toList();
+            final totalHours =
+                reported.fold<int>(0, (sum, r) => sum + r.totalHours);
+            final avgHours = reported.isEmpty
+                ? 0
+                : (totalHours / reported.length).round();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                table,
+                const SizedBox(height: 12),
+                _HoursSummary(total: totalHours, average: avgHours),
+              ],
+            );
           },
         ),
       ],
+    );
+  }
+}
+
+/// Service-year hours rollup shown under a regular pioneer's report table.
+class _HoursSummary extends StatelessWidget {
+  const _HoursSummary({required this.total, required this.average});
+
+  final int total;
+  final int average;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    Widget stat(String value, String label) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(value, style: theme.textTheme.titleLarge),
+            Text(label, style: theme.textTheme.bodySmall),
+          ],
+        );
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Expanded(child: stat('$total', l10n.recordTotalHours)),
+            Expanded(child: stat('$average', l10n.recordAverageHours)),
+          ],
+        ),
+      ),
     );
   }
 }
