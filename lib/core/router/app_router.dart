@@ -10,6 +10,7 @@ import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/events/events_screen.dart';
 import '../../features/field_service_meetings/fsm_screen.dart';
+import '../../features/help/help_screen.dart';
 import '../../features/home/app_shell.dart';
 import '../../features/info_board/info_board_screen.dart';
 import '../../features/lmm_schedule/lmm_screen.dart';
@@ -125,6 +126,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               builder: (_, _) => const MinistryGroupsScreen()),
           GoRoute(path: '/report', builder: (_, _) => const ReportScreen()),
           GoRoute(path: '/profile', builder: (_, _) => const ProfileScreen()),
+          GoRoute(path: '/help', builder: (_, _) => const HelpScreen()),
           GoRoute(
               path: '/admin/publishers',
               builder: (_, _) => const AdminPublishersScreen()),

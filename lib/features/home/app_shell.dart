@@ -50,6 +50,7 @@ class AppShell extends ConsumerWidget {
         _Destination('/report', Icons.assignment_turned_in_outlined,
             l10n.navReport),
       _Destination('/profile', Icons.person_outline, l10n.navProfile),
+      _Destination('/help', Icons.help_outline, l10n.navHelp),
     ];
     final admin = <_Destination>[
       if (roles.canEditPublishers())
