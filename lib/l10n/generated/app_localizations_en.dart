@@ -1674,6 +1674,63 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsWeekendMeeting => 'Weekend meeting (day and time)';
 
   @override
+  String get settingsBackupSection => 'Backup & restore';
+
+  @override
+  String get settingsBackupDescription =>
+      'Download a full copy of your congregation\'s data, or restore it from a backup file. Use this to recover from an accidental deletion or a bad edit.';
+
+  @override
+  String get settingsExportData => 'Export all data';
+
+  @override
+  String get settingsImportData => 'Restore from backup…';
+
+  @override
+  String backupExportSuccess(int count) {
+    return 'Backup downloaded ($count records).';
+  }
+
+  @override
+  String get backupImportTitle => 'Restore from backup';
+
+  @override
+  String get backupImportPick => 'Choose backup file…';
+
+  @override
+  String get backupImportEmpty =>
+      'Choose a backup file to preview its contents.';
+
+  @override
+  String get backupImportContents => 'Contents';
+
+  @override
+  String backupImportFrom(String name, String date) {
+    return 'Backup of $name · $date';
+  }
+
+  @override
+  String get backupImportWarning =>
+      'Restoring overwrites current records that share an ID with the versions in this backup. Records added since the backup are kept. This cannot be undone.';
+
+  @override
+  String get backupImportConfirm => 'Restore this backup';
+
+  @override
+  String backupImportSuccess(int count) {
+    return 'Restored $count records.';
+  }
+
+  @override
+  String backupImportPartial(int count, String collections) {
+    return 'Restored $count records. Could not restore: $collections.';
+  }
+
+  @override
+  String get backupInvalidFile =>
+      'This file is not a valid congregation backup.';
+
+  @override
   String get qSupportSection => 'Meeting support and other';
 
   @override

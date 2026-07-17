@@ -295,6 +295,14 @@ service cloud.firestore {
       }
     }
 
+    // Collection-group read over report entries, used by the backup export to
+    // enumerate all months at once (the reports/{month} parent docs are never
+    // written, so they cannot be listed). 'entries' only exists under reports
+    // in this schema; report-admins may read all entries anyway.
+    match /{path=**}/entries/{publisherId} {
+      allow read: if hasRole('reports');
+    }
+
     // ---------- meeting attendance ----------
 
     match /attendance/{entryId} {

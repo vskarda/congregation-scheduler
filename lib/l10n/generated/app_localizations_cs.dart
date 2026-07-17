@@ -1678,6 +1678,62 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsWeekendMeeting => 'Víkendové shromáždění (den a čas)';
 
   @override
+  String get settingsBackupSection => 'Záloha a obnovení';
+
+  @override
+  String get settingsBackupDescription =>
+      'Stáhněte si úplnou kopii dat sboru nebo je obnovte ze záložního souboru. Použijte k obnově po nechtěném smazání nebo chybné úpravě.';
+
+  @override
+  String get settingsExportData => 'Exportovat všechna data';
+
+  @override
+  String get settingsImportData => 'Obnovit ze zálohy…';
+
+  @override
+  String backupExportSuccess(int count) {
+    return 'Záloha stažena ($count záznamů).';
+  }
+
+  @override
+  String get backupImportTitle => 'Obnovení ze zálohy';
+
+  @override
+  String get backupImportPick => 'Vybrat soubor zálohy…';
+
+  @override
+  String get backupImportEmpty =>
+      'Vyberte soubor zálohy pro zobrazení jeho obsahu.';
+
+  @override
+  String get backupImportContents => 'Obsah';
+
+  @override
+  String backupImportFrom(String name, String date) {
+    return 'Záloha sboru $name · $date';
+  }
+
+  @override
+  String get backupImportWarning =>
+      'Obnovení přepíše stávající záznamy se stejným ID verzemi z této zálohy. Záznamy přidané po vytvoření zálohy zůstanou zachovány. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get backupImportConfirm => 'Obnovit tuto zálohu';
+
+  @override
+  String backupImportSuccess(int count) {
+    return 'Obnoveno $count záznamů.';
+  }
+
+  @override
+  String backupImportPartial(int count, String collections) {
+    return 'Obnoveno $count záznamů. Nepodařilo se obnovit: $collections.';
+  }
+
+  @override
+  String get backupInvalidFile => 'Tento soubor není platná záloha sboru.';
+
+  @override
   String get qSupportSection => 'Podpora shromáždění a další';
 
   @override

@@ -1674,6 +1674,62 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsWeekendMeeting => 'Hafta sonu ibadeti (gün ve saat)';
 
   @override
+  String get settingsBackupSection => 'Yedekleme ve geri yükleme';
+
+  @override
+  String get settingsBackupDescription =>
+      'Cemaat verilerinin tam bir kopyasını indirin veya bir yedek dosyasından geri yükleyin. Yanlışlıkla yapılan bir silme ya da hatalı düzenlemeden kurtulmak için kullanın.';
+
+  @override
+  String get settingsExportData => 'Tüm verileri dışa aktar';
+
+  @override
+  String get settingsImportData => 'Yedekten geri yükle…';
+
+  @override
+  String backupExportSuccess(int count) {
+    return 'Yedek indirildi ($count kayıt).';
+  }
+
+  @override
+  String get backupImportTitle => 'Yedekten geri yükle';
+
+  @override
+  String get backupImportPick => 'Yedek dosyası seç…';
+
+  @override
+  String get backupImportEmpty =>
+      'İçeriğini önizlemek için bir yedek dosyası seçin.';
+
+  @override
+  String get backupImportContents => 'İçerik';
+
+  @override
+  String backupImportFrom(String name, String date) {
+    return '$name yedeği · $date';
+  }
+
+  @override
+  String get backupImportWarning =>
+      'Geri yükleme, aynı kimliğe sahip mevcut kayıtları bu yedekteki sürümlerle değiştirir. Yedekten sonra eklenen kayıtlar korunur. Bu işlem geri alınamaz.';
+
+  @override
+  String get backupImportConfirm => 'Bu yedeği geri yükle';
+
+  @override
+  String backupImportSuccess(int count) {
+    return '$count kayıt geri yüklendi.';
+  }
+
+  @override
+  String backupImportPartial(int count, String collections) {
+    return '$count kayıt geri yüklendi. Geri yüklenemeyenler: $collections.';
+  }
+
+  @override
+  String get backupInvalidFile => 'Bu dosya geçerli bir cemaat yedeği değil.';
+
+  @override
   String get qSupportSection => 'İbadet desteği ve diğer';
 
   @override

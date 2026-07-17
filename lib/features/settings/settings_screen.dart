@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +9,9 @@ import '../../core/data/congregation_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import 'backup/backup_download.dart';
+import 'backup/backup_import_screen.dart';
+import 'backup/backup_service.dart';
 
 /// Full-admin congregation settings: name + regular meeting days/times.
 class SettingsScreen extends ConsumerWidget {
@@ -79,6 +85,35 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
       }
       await ref.read(congregationRepositoryProvider).updateMeta(meta);
       messenger.showSnackBar(SnackBar(content: Text(l10n.profileSaved)));
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _exportBackup() async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    setState(() => _busy = true);
+    try {
+      final name = _name.text.trim().isEmpty ? _meta.name : _name.text.trim();
+      final backup =
+          await ref.read(backupServiceProvider).exportAll(congregationName: name);
+      final json = const JsonEncoder.withIndent('  ').convert(backup);
+      final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      await saveBytesToFile(
+        bytes: Uint8List.fromList(utf8.encode(json)),
+        name: 'congregation-backup-$date.json',
+        mimeType: 'application/json',
+      );
+      final total =
+          backupDocCounts(backup).values.fold<int>(0, (a, b) => a + b);
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.backupExportSuccess(total))),
+      );
     } catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))),
@@ -167,6 +202,37 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
             FilledButton(
               onPressed: _busy ? null : _save,
               child: Text(l10n.commonSave),
+            ),
+            const SizedBox(height: 32),
+            const Divider(),
+            const SizedBox(height: 8),
+            Text(
+              l10n.settingsBackupSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 12),
+              child: Text(
+                l10n.settingsBackupDescription,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            OutlinedButton.icon(
+              onPressed: _busy ? null : _exportBackup,
+              icon: const Icon(Icons.download_outlined),
+              label: Text(l10n.settingsExportData),
+            ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _busy
+                  ? null
+                  : () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const BackupImportScreen(),
+                        ),
+                      ),
+              icon: const Icon(Icons.upload_outlined),
+              label: Text(l10n.settingsImportData),
             ),
           ],
         ),

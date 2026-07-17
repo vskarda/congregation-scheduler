@@ -10,6 +10,7 @@ import {
 } from '@firebase/rules-unit-testing';
 import {
   collection,
+  collectionGroup,
   deleteDoc,
   deleteField,
   doc,
@@ -816,6 +817,14 @@ describe('reports', () => {
         participated: true,
       }),
     );
+  });
+
+  // The backup export enumerates all report months at once with a
+  // collection-group query; only report-admins may run it.
+  it('reports-admin runs the entries collection-group query, others cannot', async () => {
+    await assertSucceeds(getDocs(collectionGroup(db(ADMIN), 'entries')));
+    await assertSucceeds(getDocs(collectionGroup(db(FULL_ADMIN), 'entries')));
+    await assertFails(getDocs(collectionGroup(db(VERIFIED), 'entries')));
   });
 });
 

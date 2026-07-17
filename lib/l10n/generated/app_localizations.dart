@@ -3135,6 +3135,96 @@ abstract class AppLocalizations {
   /// **'Weekend meeting (day and time)'**
   String get settingsWeekendMeeting;
 
+  /// No description provided for @settingsBackupSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & restore'**
+  String get settingsBackupSection;
+
+  /// No description provided for @settingsBackupDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a full copy of your congregation\'s data, or restore it from a backup file. Use this to recover from an accidental deletion or a bad edit.'**
+  String get settingsBackupDescription;
+
+  /// No description provided for @settingsExportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Export all data'**
+  String get settingsExportData;
+
+  /// No description provided for @settingsImportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup…'**
+  String get settingsImportData;
+
+  /// No description provided for @backupExportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup downloaded ({count} records).'**
+  String backupExportSuccess(int count);
+
+  /// No description provided for @backupImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup'**
+  String get backupImportTitle;
+
+  /// No description provided for @backupImportPick.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose backup file…'**
+  String get backupImportPick;
+
+  /// No description provided for @backupImportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a backup file to preview its contents.'**
+  String get backupImportEmpty;
+
+  /// No description provided for @backupImportContents.
+  ///
+  /// In en, this message translates to:
+  /// **'Contents'**
+  String get backupImportContents;
+
+  /// No description provided for @backupImportFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup of {name} · {date}'**
+  String backupImportFrom(String name, String date);
+
+  /// No description provided for @backupImportWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring overwrites current records that share an ID with the versions in this backup. Records added since the backup are kept. This cannot be undone.'**
+  String get backupImportWarning;
+
+  /// No description provided for @backupImportConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore this backup'**
+  String get backupImportConfirm;
+
+  /// No description provided for @backupImportSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored {count} records.'**
+  String backupImportSuccess(int count);
+
+  /// No description provided for @backupImportPartial.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored {count} records. Could not restore: {collections}.'**
+  String backupImportPartial(int count, String collections);
+
+  /// No description provided for @backupInvalidFile.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is not a valid congregation backup.'**
+  String get backupInvalidFile;
+
   /// No description provided for @qSupportSection.
   ///
   /// In en, this message translates to:
