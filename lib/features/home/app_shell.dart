@@ -9,6 +9,7 @@ import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
+import '../../core/theme/theme_mode_button.dart';
 import '../territories/territory_import_screen.dart';
 import 'schedule_pdf_button.dart';
 
@@ -195,6 +196,7 @@ class _NavPanel extends ConsumerWidget {
           Row(
             children: [
               const LanguageMenuButton(),
+              const ThemeModeButton(),
               const Spacer(),
               TextButton.icon(
                 onPressed: () => ref.read(firebaseAuthProvider).signOut(),

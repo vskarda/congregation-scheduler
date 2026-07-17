@@ -293,6 +293,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageTurkish => 'Türkçe';
 
   @override
+  String get themeSystem => 'System';
+
+  @override
+  String get themeLight => 'Light';
+
+  @override
+  String get themeDark => 'Dark';
+
+  @override
+  String themeTooltip(String mode) {
+    return 'Theme: $mode';
+  }
+
+  @override
   String get profileCompleteTitle => 'Complete your profile';
 
   @override

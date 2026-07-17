@@ -90,6 +90,11 @@
   "languageCzech": "Čeština",
   "languageTurkish": "Türkçe",
 
+  "themeSystem": "Systém",
+  "themeLight": "Světlý",
+  "themeDark": "Tmavý",
+  "themeTooltip": "Motiv: {mode}",
+
   "profileCompleteTitle": "Dokončení profilu",
   "profileCompleteBody": "Váš účet existuje, ale chybí profil. Zadejte své jméno pro dokončení registrace.",
 

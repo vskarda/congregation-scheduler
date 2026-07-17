@@ -92,6 +92,12 @@
   "languageCzech": "Čeština",
   "languageTurkish": "Türkçe",
 
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeTooltip": "Theme: {mode}",
+  "@themeTooltip": {"placeholders": {"mode": {"type": "String"}}},
+
   "profileCompleteTitle": "Complete your profile",
   "profileCompleteBody": "Your account exists but the profile is missing. Enter your name to finish registration.",
 

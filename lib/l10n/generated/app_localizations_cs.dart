@@ -295,6 +295,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get languageTurkish => 'Türkçe';
 
   @override
+  String get themeSystem => 'Systém';
+
+  @override
+  String get themeLight => 'Světlý';
+
+  @override
+  String get themeDark => 'Tmavý';
+
+  @override
+  String themeTooltip(String mode) {
+    return 'Motiv: $mode';
+  }
+
+  @override
   String get profileCompleteTitle => 'Dokončení profilu';
 
   @override
