@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import 'tie_icon.dart';
 
 /// Compact role badges shown in the publisher roster trailing area: elder/MS
 /// appointment, pioneer type, and admin rights. Language-neutral icons with
@@ -21,15 +22,16 @@ class PublisherBadges extends StatelessWidget {
     final badges = <Widget>[];
 
     switch (publisher.appointment) {
+      // Elder = solid tie; ministerial servant = outlined tie.
       case Appointment.elder:
-        badges.add(_Badge(
-          icon: Icons.stars,
+        badges.add(_TieBadge(
+          filled: true,
           color: scheme.primary,
           tooltip: appointmentLabel(l10n, Appointment.elder),
         ));
       case Appointment.ministerialServant:
-        badges.add(_Badge(
-          icon: Icons.star_border,
+        badges.add(_TieBadge(
+          filled: false,
           color: scheme.primary,
           tooltip: appointmentLabel(l10n, Appointment.ministerialServant),
         ));
@@ -89,6 +91,27 @@ class _Badge extends StatelessWidget {
     return Tooltip(
       message: tooltip,
       child: Icon(icon, size: 18, color: color),
+    );
+  }
+}
+
+/// Appointment badge using the custom [TieIcon] (filled = elder, outline = MS).
+class _TieBadge extends StatelessWidget {
+  const _TieBadge({
+    required this.filled,
+    required this.color,
+    required this.tooltip,
+  });
+
+  final bool filled;
+  final Color color;
+  final String tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: TieIcon(filled: filled, color: color, size: 18),
     );
   }
 }
