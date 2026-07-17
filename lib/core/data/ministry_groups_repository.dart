@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
+import '../utils/collation.dart';
 import 'publishers_repository.dart';
 
 class MinistryGroupsRepository {
@@ -21,8 +22,7 @@ class MinistryGroupsRepository {
 
   Stream<List<MinistryGroup>> watchAll() => _col.snapshots().map((snap) {
         final list = snap.docs.map(_fromDoc).toList();
-        list.sort(
-            (a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+        list.sort((a, b) => collate(a.name, b.name));
         return list;
       });
 

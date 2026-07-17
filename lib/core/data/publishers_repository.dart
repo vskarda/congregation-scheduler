@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
+import '../utils/collation.dart';
 
 class PublishersRepository {
   PublishersRepository(this._db);
@@ -17,8 +18,7 @@ class PublishersRepository {
 
   Stream<List<Publisher>> watchAll() => _col.snapshots().map((snap) {
         final list = snap.docs.map(_fromDoc).toList();
-        list.sort((a, b) =>
-            a.listName.toLowerCase().compareTo(b.listName.toLowerCase()));
+        list.sort((a, b) => collate(a.listName, b.listName));
         return list;
       });
 

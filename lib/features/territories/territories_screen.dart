@@ -9,6 +9,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/data/territories_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/collation.dart';
 import '../../core/utils/dates.dart';
 
 class TerritoriesScreen extends ConsumerWidget {
@@ -285,9 +286,7 @@ class _AllTerritoriesSectionState
   int _compareRows(_TerritoryRow a, _TerritoryRow b) {
     switch (_sortField) {
       case _TerritorySort.territory:
-        final byName = a.territory.name
-            .toLowerCase()
-            .compareTo(b.territory.name.toLowerCase());
+        final byName = collate(a.territory.name, b.territory.name);
         final result =
             byName != 0 ? byName : a.territory.number.compareTo(b.territory.number);
         return _sortAscending ? result : -result;
@@ -295,9 +294,7 @@ class _AllTerritoriesSectionState
         if (a.holder == null && b.holder == null) return 0;
         if (a.holder == null) return 1;
         if (b.holder == null) return -1;
-        final result = a.holder!.fullName
-            .toLowerCase()
-            .compareTo(b.holder!.fullName.toLowerCase());
+        final result = collate(a.holder!.fullName, b.holder!.fullName);
         return _sortAscending ? result : -result;
       case _TerritorySort.date:
         final ad = a.current?.assignedDate ?? '';

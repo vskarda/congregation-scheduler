@@ -7,6 +7,7 @@ import '../../core/data/ministry_groups_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/collation.dart';
 
 class MinistryGroupsScreen extends ConsumerWidget {
   const MinistryGroupsScreen({super.key});
@@ -72,7 +73,7 @@ class _GroupTile extends ConsumerWidget {
     final sorted = members.sorted((a, b) {
       final byRank = rank(a).compareTo(rank(b));
       if (byRank != 0) return byRank;
-      return a.listName.toLowerCase().compareTo(b.listName.toLowerCase());
+      return collate(a.listName, b.listName);
     });
 
     String? badge(Publisher p) => p.id == group.overseerId

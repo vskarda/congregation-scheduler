@@ -6,6 +6,7 @@ import '../data/assignment_history.dart';
 import '../data/publishers_repository.dart';
 import '../l10n/l10n.dart';
 import '../models/models.dart';
+import '../utils/collation.dart';
 import '../utils/dates.dart';
 
 /// Opens the assignment editor dialog. Returns the new [Assignment], or null
@@ -133,9 +134,7 @@ class _AssignmentEditorDialogState
             final db = history[b.id] ?? '';
             final byDate = da.compareTo(db);
             if (byDate != 0) return byDate;
-            return a.listName
-                .toLowerCase()
-                .compareTo(b.listName.toLowerCase());
+            return collate(a.listName, b.listName);
           });
       case _Mode.all:
         visible = publishers.where((p) => p.verified).toList();
