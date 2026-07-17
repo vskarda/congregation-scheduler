@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/numeric_input.dart';
 import 'attendance_auto_calc.dart';
 
 /// Shared attendance count form: used by the quick-add card and by the
@@ -108,7 +109,7 @@ class _AttendanceFormState extends State<AttendanceForm> {
     Widget field(AttendanceField f, String label) => Expanded(
           child: TextField(
             controller: _controllerFor(f),
-            keyboardType: TextInputType.number,
+            keyboardType: numericKeyboardType,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(labelText: label),
             onChanged: (_) => _onEdited(f),

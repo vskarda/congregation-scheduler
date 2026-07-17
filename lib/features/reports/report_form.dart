@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/numeric_input.dart';
 
 /// Shared ministry-report form: used by the publisher's own submit screen
 /// and by the admin's enter-on-behalf dialog.
@@ -111,20 +113,23 @@ class _ReportFormState extends State<ReportForm> {
         const SizedBox(height: 8),
         TextField(
           controller: _studies,
-          keyboardType: TextInputType.number,
+          keyboardType: numericKeyboardType,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           decoration: InputDecoration(labelText: l10n.reportStudies),
         ),
         if (_effectivePioneer) ...[
           const SizedBox(height: 12),
           TextField(
             controller: _hours,
-            keyboardType: TextInputType.number,
+            keyboardType: numericKeyboardType,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(labelText: l10n.reportHours),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _credit,
-            keyboardType: TextInputType.number,
+            keyboardType: numericKeyboardType,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: InputDecoration(labelText: l10n.reportCredit),
           ),
         ],

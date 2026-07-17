@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,6 +11,7 @@ import '../../core/data/schedule_config_repository.dart';
 import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
@@ -488,7 +490,8 @@ Future<LmmPart?> showLmmPartDialog(
             const SizedBox(height: 12),
             TextField(
               controller: durationCtrl,
-              keyboardType: TextInputType.number,
+              keyboardType: numericKeyboardType,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(labelText: l10n.partDuration),
             ),
           ],

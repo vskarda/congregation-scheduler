@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/notifications/assignment_reminder_service.dart';
 import '../../core/notifications/reminder_settings_provider.dart';
+import '../../core/utils/numeric_input.dart';
 
 /// Opens the assignment-reminders settings dialog (mobile only; the caller
 /// hides the entry point on web).
@@ -159,7 +160,7 @@ class _ReminderRowState extends State<_ReminderRow> {
             width: 64,
             child: TextField(
               controller: _controller,
-              keyboardType: TextInputType.number,
+              keyboardType: numericKeyboardType,
               textAlign: TextAlign.center,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
