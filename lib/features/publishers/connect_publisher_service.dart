@@ -126,13 +126,29 @@ class ConnectPublisherService {
 
     final recordPrivate =
         await publishers.getPrivate(recordId) ?? const PublisherPrivate();
-    final accountEmail = (await publishers.getPrivate(accountUid))?.email;
+    final accountPrivate =
+        await publishers.getPrivate(accountUid) ?? const PublisherPrivate();
+    // The record is authoritative, but every field it leaves blank falls back
+    // to the account, so personal data entered on the account before the
+    // connect (e.g. birth/baptism dates) is preserved instead of wiped. The
+    // login e-mail is the one field the account always wins (auth identity).
+    String pick(String r, String a) => r.isNotEmpty ? r : a;
     await publishers.setPrivate(
         accountUid,
-        recordPrivate.copyWith(
-          email: (accountEmail != null && accountEmail.isNotEmpty)
-              ? accountEmail
-              : recordPrivate.email,
+        PublisherPrivate(
+          email: pick(accountPrivate.email, recordPrivate.email),
+          phone: pick(recordPrivate.phone, accountPrivate.phone),
+          address: pick(recordPrivate.address, accountPrivate.address),
+          birthDate: pick(recordPrivate.birthDate, accountPrivate.birthDate),
+          baptismDate:
+              pick(recordPrivate.baptismDate, accountPrivate.baptismDate),
+          hope: recordPrivate.hope != Hope.otherSheep
+              ? recordPrivate.hope
+              : accountPrivate.hope,
+          // Kept in sync with the denormalized public appointment on `merged`.
+          appointment: merged.appointment,
+          emergencyNote:
+              pick(recordPrivate.emergencyNote, accountPrivate.emergencyNote),
         ));
 
     // Delete last: the record stays the source of truth until every

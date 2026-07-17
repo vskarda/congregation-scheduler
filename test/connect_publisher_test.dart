@@ -221,6 +221,27 @@ void main() {
     expect(frule['defaultAssignment']['publisherIds'], [uid]);
   });
 
+  test('preserves account private data the record lacks; record wins conflicts',
+      () async {
+    // Birth date entered on the account before connecting; the record has no
+    // birth date but does have a phone that must win the conflict.
+    await publishers.setPrivate(
+        uid,
+        const PublisherPrivate(
+          email: 'jana@example.com',
+          birthDate: '1990-03-15',
+          phone: 'account-phone',
+        ));
+
+    await service.connect(recordId: recordId, accountUid: uid, now: now);
+
+    final private = (await publishers.getPrivate(uid))!;
+    expect(private.birthDate, '1990-03-15'); // kept from account
+    expect(private.baptismDate, '2000-05-01'); // from record
+    expect(private.phone, '+420 777 000 000'); // record wins the conflict
+    expect(private.email, 'jana@example.com'); // account login identity
+  });
+
   test('works when the account was already verified (retry path)', () async {
     final account = await publishers.getOne(uid);
     await publishers.update(account!.copyWith(verified: true));
