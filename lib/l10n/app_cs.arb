@@ -260,6 +260,7 @@
   "pubConnectFailed": "Propojování selhalo v části: {section}. Dokončené kroky zůstávají — opakování je bezpečné a naváže tam, kde skončilo.",
   "pubConnectSuccess": "Záznam propojen — jeho historie nyní patří k tomuto účtu.",
   "roleFullAdmin": "Hlavní administrátor",
+  "roleRecordAttendance": "Zapsat návštěvnost",
 
   "weekNoSchedule": "Pro tento týden zatím není žádný program.",
   "weekCreateEmpty": "Vytvořit prázdný týden",

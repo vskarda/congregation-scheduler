@@ -164,6 +164,7 @@ class ConnectPublisherService {
         territories: a.territories || b.territories,
         reports: a.reports || b.reports,
         attendance: a.attendance || b.attendance,
+        recordAttendance: a.recordAttendance || b.recordAttendance,
         publishers: a.publishers || b.publishers,
         fullAdmin: a.fullAdmin || b.fullAdmin,
       );

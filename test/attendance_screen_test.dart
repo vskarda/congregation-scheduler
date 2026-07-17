@@ -16,16 +16,17 @@ import 'package:intl/intl.dart';
 /// (fill in, edit, delete via the row dialog).
 void main() {
   // Bypasses the auth gate; defaults are LMM Tuesday, weekend Sunday.
-  overrides(FakeFirebaseFirestore db) => [
+  overrides(FakeFirebaseFirestore db, {Roles roles = const Roles(fullAdmin: true)}) => [
         firestoreProvider.overrideWithValue(db),
-        effectiveRolesProvider
-            .overrideWithValue(const Roles(fullAdmin: true)),
+        effectiveRolesProvider.overrideWithValue(roles),
         congregationMetaProvider
             .overrideWith((ref) => Stream.value(const CongregationMeta())),
       ];
 
-  Widget wrapScreen(FakeFirebaseFirestore db) => ProviderScope(
-        overrides: overrides(db),
+  Widget wrapScreen(FakeFirebaseFirestore db,
+          {Roles roles = const Roles(fullAdmin: true)}) =>
+      ProviderScope(
+        overrides: overrides(db, roles: roles),
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -195,5 +196,30 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(AlertDialog), findsNothing);
     expect((await db.collection('attendance').doc(id).get()).exists, isFalse);
+  });
+
+  testWidgets(
+      'record-attendance-only role sees just the record form, not the overview or history',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await tester.pumpWidget(
+        wrapScreen(db, roles: const Roles(recordAttendance: true)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Record attendance'), findsOneWidget);
+    expect(find.text('Monthly averages'), findsNothing);
+    expect(find.text('Past meetings'), findsNothing);
+  });
+
+  testWidgets('full attendance role sees the record form, overview, and history',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await tester
+        .pumpWidget(wrapScreen(db, roles: const Roles(attendance: true)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Record attendance'), findsOneWidget);
+    expect(find.text('Monthly averages'), findsOneWidget);
+    expect(find.text('Past meetings'), findsOneWidget);
   });
 }

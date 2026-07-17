@@ -298,8 +298,8 @@ service cloud.firestore {
     // ---------- meeting attendance ----------
 
     match /attendance/{entryId} {
-      allow read: if hasRole('attendance');
-      allow write: if hasRole('attendance');
+      allow read: if hasRole('attendance') || hasRole('recordAttendance');
+      allow write: if hasRole('attendance') || hasRole('recordAttendance');
     }
   }
 }

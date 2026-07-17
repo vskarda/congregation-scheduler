@@ -800,6 +800,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get roleFullAdmin => 'Tam Yönetici';
 
   @override
+  String get roleRecordAttendance => 'Katılım Kaydet';
+
+  @override
   String get weekNoSchedule => 'Bu hafta için henüz program yok.';
 
   @override

@@ -31,6 +31,7 @@ const LMM_ADMIN = 'lmm-admin-uid';
 const WEEKEND_ADMIN = 'weekend-admin-uid';
 const FSM_ADMIN = 'fsm-admin-uid';
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
+const RECORD_ATTENDANCE_ADMIN = 'record-attendance-admin-uid';
 const PW_ADMIN = 'pw-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
@@ -54,6 +55,7 @@ const basePublisher = {
     territories: false,
     reports: false,
     attendance: false,
+    recordAttendance: false,
     publishers: false,
     fullAdmin: false,
   },
@@ -94,6 +96,10 @@ async function seed() {
     await setDoc(doc(f, `publishers/${ATTENDANCE_ADMIN}`), {
       ...basePublisher,
       roles: { ...basePublisher.roles, attendance: true },
+    });
+    await setDoc(doc(f, `publishers/${RECORD_ATTENDANCE_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, recordAttendance: true },
     });
     await setDoc(doc(f, `publishers/${PW_ADMIN}`), {
       ...basePublisher,
@@ -1019,6 +1025,20 @@ describe('attendance', () => {
     );
     await assertSucceeds(
       setDoc(doc(db(ATTENDANCE_ADMIN), 'attendance/2026-07-05_weekend'), {
+        date: '2026-07-05',
+        meetingType: 'weekend',
+        inPerson: 40,
+        online: 5,
+      }),
+    );
+  });
+
+  it('record-attendance-only publisher can read and write entries', async () => {
+    await assertSucceeds(
+      getDoc(doc(db(RECORD_ATTENDANCE_ADMIN), 'attendance/2026-06-01_weekend')),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(RECORD_ATTENDANCE_ADMIN), 'attendance/2026-07-05_weekend'), {
         date: '2026-07-05',
         meetingType: 'weekend',
         inPerson: 40,

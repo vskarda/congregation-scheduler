@@ -801,6 +801,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get roleFullAdmin => 'Hlavní administrátor';
 
   @override
+  String get roleRecordAttendance => 'Zapsat návštěvnost';
+
+  @override
   String get weekNoSchedule => 'Pro tento týden zatím není žádný program.';
 
   @override

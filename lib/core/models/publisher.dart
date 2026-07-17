@@ -20,6 +20,7 @@ abstract class Roles with _$Roles {
     @Default(false) bool territories,
     @Default(false) bool reports,
     @Default(false) bool attendance,
+    @Default(false) bool recordAttendance,
     @Default(false) bool publishers,
     @Default(false) bool fullAdmin,
   }) = _Roles;
@@ -36,6 +37,7 @@ abstract class Roles with _$Roles {
       territories ||
       reports ||
       attendance ||
+      recordAttendance ||
       publishers ||
       fullAdmin;
 
@@ -48,6 +50,10 @@ abstract class Roles with _$Roles {
   bool canEditTerritories() => territories || fullAdmin;
   bool canEditReports() => reports || fullAdmin;
   bool canEditAttendance() => attendance || fullAdmin;
+
+  /// Full attendance right, or the narrower record-only right that just
+  /// grants the record form (no monthly averages / history).
+  bool canRecordAttendance() => recordAttendance || canEditAttendance();
   bool canEditPublishers() => publishers || fullAdmin;
 }
 

@@ -16,6 +16,7 @@ _Roles _$RolesFromJson(Map<String, dynamic> json) => _Roles(
   territories: json['territories'] as bool? ?? false,
   reports: json['reports'] as bool? ?? false,
   attendance: json['attendance'] as bool? ?? false,
+  recordAttendance: json['recordAttendance'] as bool? ?? false,
   publishers: json['publishers'] as bool? ?? false,
   fullAdmin: json['fullAdmin'] as bool? ?? false,
 );
@@ -30,6 +31,7 @@ Map<String, dynamic> _$RolesToJson(_Roles instance) => <String, dynamic>{
   'territories': instance.territories,
   'reports': instance.reports,
   'attendance': instance.attendance,
+  'recordAttendance': instance.recordAttendance,
   'publishers': instance.publishers,
   'fullAdmin': instance.fullAdmin,
 };

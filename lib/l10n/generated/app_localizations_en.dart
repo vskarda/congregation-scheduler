@@ -801,6 +801,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roleFullAdmin => 'Full administrator';
 
   @override
+  String get roleRecordAttendance => 'Record attendance';
+
+  @override
   String get weekNoSchedule => 'No schedule for this week yet.';
 
   @override

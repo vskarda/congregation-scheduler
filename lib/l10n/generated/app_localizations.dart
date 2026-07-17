@@ -1540,6 +1540,12 @@ abstract class AppLocalizations {
   /// **'Full administrator'**
   String get roleFullAdmin;
 
+  /// No description provided for @roleRecordAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Record attendance'**
+  String get roleRecordAttendance;
+
   /// No description provided for @weekNoSchedule.
   ///
   /// In en, this message translates to:

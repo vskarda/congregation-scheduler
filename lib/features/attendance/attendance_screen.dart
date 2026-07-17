@@ -25,7 +25,9 @@ class AttendanceScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final canEdit = ref.watch(effectiveRolesProvider).canEditAttendance();
+    final roles = ref.watch(effectiveRolesProvider);
+    final canEditFull = roles.canEditAttendance();
+    final canRecord = roles.canRecordAttendance();
     final entriesAsync = ref.watch(attendanceEntriesProvider);
 
     return entriesAsync.when(
@@ -35,13 +37,14 @@ class AttendanceScreen extends ConsumerWidget {
       data: (entries) => ListView(
         padding: const EdgeInsets.all(12),
         children: [
-          if (canEdit) _AddAttendanceCard(entries: entries),
-          _OverviewCard(entries: entries),
-          AttendanceHistoryCard(
-            entries: entries,
-            canEdit: canEdit,
-            fromDate: attendanceHistoryStart(),
-          ),
+          if (canRecord) _AddAttendanceCard(entries: entries),
+          if (canEditFull) _OverviewCard(entries: entries),
+          if (canEditFull)
+            AttendanceHistoryCard(
+              entries: entries,
+              canEdit: canEditFull,
+              fromDate: attendanceHistoryStart(),
+            ),
         ],
       ),
     );

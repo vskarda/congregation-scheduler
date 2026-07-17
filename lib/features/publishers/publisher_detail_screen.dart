@@ -425,6 +425,12 @@ class _RolesTab extends ConsumerWidget {
         false,
       ),
       (
+        l10n.roleRecordAttendance,
+        roles.recordAttendance,
+        (v) => roles.copyWith(recordAttendance: v),
+        false,
+      ),
+      (
         l10n.navPublishersAdmin,
         roles.publishers,
         (v) => roles.copyWith(publishers: v),
