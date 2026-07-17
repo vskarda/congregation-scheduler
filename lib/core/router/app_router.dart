@@ -25,6 +25,7 @@ import '../../features/settings/settings_screen.dart';
 import '../../features/setup/setup_guide_screen.dart';
 import '../../features/setup/setup_mode_screen.dart';
 import '../../features/setup/setup_screen.dart';
+import '../../features/statistics/statistics_screen.dart';
 import '../../features/territories/territories_screen.dart';
 import '../../features/weekend_schedule/talk_catalog/talk_catalog_screen.dart';
 import '../../features/weekend_schedule/weekend_screen.dart';
@@ -137,6 +138,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
               path: '/admin/talks',
               builder: (_, _) => const TalkCatalogScreen()),
+          GoRoute(
+              path: '/admin/statistics',
+              builder: (_, _) => const StatisticsScreen()),
           GoRoute(
               path: '/admin/settings',
               builder: (_, _) => const SettingsScreen()),

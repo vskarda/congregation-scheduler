@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
+import '../utils/dates.dart';
 
 class AttendanceRepository {
   AttendanceRepository(this._db);
@@ -44,3 +45,17 @@ class AttendanceRepository {
 
 final attendanceRepositoryProvider = Provider<AttendanceRepository>(
     (ref) => AttendanceRepository(ref.watch(firestoreProvider)));
+
+/// First day of the oldest month in the rolling 24-month history window.
+String attendanceHistoryStart() =>
+    '${monthKey(addMonths(DateTime.now(), -23))}-01';
+
+/// The rolling 24-month attendance history, shared by the attendance and
+/// statistics screens.
+final attendanceEntriesProvider =
+    StreamProvider<List<AttendanceEntry>>((ref) {
+  final to = dateKey(DateTime.now().add(const Duration(days: 7)));
+  return ref
+      .watch(attendanceRepositoryProvider)
+      .watchRange(attendanceHistoryStart(), to);
+});

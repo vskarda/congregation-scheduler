@@ -441,6 +441,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navSettings => 'Nastavení sboru';
 
   @override
+  String get navStatistics => 'Statistiky';
+
+  @override
   String get adminToggleHide => 'Skrýt možnosti správce';
 
   @override
@@ -1272,6 +1275,82 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get attSaved => 'Návštěvnost uložena.';
+
+  @override
+  String get statMembershipTitle => 'Složení sboru';
+
+  @override
+  String get statTotalMembers => 'Členů';
+
+  @override
+  String get statPioneers => 'Průkopníků';
+
+  @override
+  String get statAgeTitle => 'Věkové rozložení';
+
+  @override
+  String get statAgeAverage => 'Průměrný věk';
+
+  @override
+  String statAgeKnownDetail(int known, int total) {
+    return 'Vychází z $known z $total známých dat narození';
+  }
+
+  @override
+  String get statAgeUnder18 => 'Do 18 let';
+
+  @override
+  String get statAgeUnknown => 'Neznámý';
+
+  @override
+  String get statAttendanceTitle => 'Návštěvnost shromáždění';
+
+  @override
+  String get statAvg3Months => 'průměr za 3 měs.';
+
+  @override
+  String get statAvg12Months => 'průměr za 12 měs.';
+
+  @override
+  String get statFieldServiceTitle => 'Kazatelská služba';
+
+  @override
+  String statServiceYear(String year) {
+    return 'Služební rok $year';
+  }
+
+  @override
+  String get statReportsSubmitted => 'Odevzdaných zpráv';
+
+  @override
+  String get statParticipated => 'Podíleli se na službě';
+
+  @override
+  String get statPioneerHours => 'Hodiny průkopníků';
+
+  @override
+  String get statPublisherHours => 'Hodiny zvěstovatelů';
+
+  @override
+  String get statUsageTitle => 'Používání aplikace';
+
+  @override
+  String get statWithAccount => 'S účtem v aplikaci';
+
+  @override
+  String get statSelfReported => 'Samostatně odeslané zprávy (minulý měsíc)';
+
+  @override
+  String get statAwaiting => 'Čeká na ověření';
+
+  @override
+  String get statFullAdmins => 'Plných správců';
+
+  @override
+  String get statSectionAdmins => 'Správců sekcí';
+
+  @override
+  String get statNoData => 'Zatím žádná data';
 
   @override
   String get terrMine => 'Moje obvody';

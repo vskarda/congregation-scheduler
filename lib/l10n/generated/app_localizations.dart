@@ -886,6 +886,12 @@ abstract class AppLocalizations {
   /// **'Congregation settings'**
   String get navSettings;
 
+  /// No description provided for @navStatistics.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get navStatistics;
+
   /// No description provided for @adminToggleHide.
   ///
   /// In en, this message translates to:
@@ -2415,6 +2421,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Attendance saved.'**
   String get attSaved;
+
+  /// No description provided for @statMembershipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Membership'**
+  String get statMembershipTitle;
+
+  /// No description provided for @statTotalMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get statTotalMembers;
+
+  /// No description provided for @statPioneers.
+  ///
+  /// In en, this message translates to:
+  /// **'Pioneers'**
+  String get statPioneers;
+
+  /// No description provided for @statAgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Age distribution'**
+  String get statAgeTitle;
+
+  /// No description provided for @statAgeAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average age'**
+  String get statAgeAverage;
+
+  /// No description provided for @statAgeKnownDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Based on {known} of {total} known birth dates'**
+  String statAgeKnownDetail(int known, int total);
+
+  /// No description provided for @statAgeUnder18.
+  ///
+  /// In en, this message translates to:
+  /// **'Under 18'**
+  String get statAgeUnder18;
+
+  /// No description provided for @statAgeUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get statAgeUnknown;
+
+  /// No description provided for @statAttendanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting attendance'**
+  String get statAttendanceTitle;
+
+  /// No description provided for @statAvg3Months.
+  ///
+  /// In en, this message translates to:
+  /// **'3-month avg.'**
+  String get statAvg3Months;
+
+  /// No description provided for @statAvg12Months.
+  ///
+  /// In en, this message translates to:
+  /// **'12-month avg.'**
+  String get statAvg12Months;
+
+  /// No description provided for @statFieldServiceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Field service'**
+  String get statFieldServiceTitle;
+
+  /// No description provided for @statServiceYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Service year {year}'**
+  String statServiceYear(String year);
+
+  /// No description provided for @statReportsSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Reports submitted'**
+  String get statReportsSubmitted;
+
+  /// No description provided for @statParticipated.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared in the ministry'**
+  String get statParticipated;
+
+  /// No description provided for @statPioneerHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Pioneer hours'**
+  String get statPioneerHours;
+
+  /// No description provided for @statPublisherHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher hours'**
+  String get statPublisherHours;
+
+  /// No description provided for @statUsageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App usage'**
+  String get statUsageTitle;
+
+  /// No description provided for @statWithAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'With app account'**
+  String get statWithAccount;
+
+  /// No description provided for @statSelfReported.
+  ///
+  /// In en, this message translates to:
+  /// **'Self-submitted reports (last month)'**
+  String get statSelfReported;
+
+  /// No description provided for @statAwaiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting verification'**
+  String get statAwaiting;
+
+  /// No description provided for @statFullAdmins.
+  ///
+  /// In en, this message translates to:
+  /// **'Full admins'**
+  String get statFullAdmins;
+
+  /// No description provided for @statSectionAdmins.
+  ///
+  /// In en, this message translates to:
+  /// **'Section admins'**
+  String get statSectionAdmins;
+
+  /// No description provided for @statNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No data yet'**
+  String get statNoData;
 
   /// No description provided for @terrMine.
   ///

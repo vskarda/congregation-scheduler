@@ -440,6 +440,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Congregation settings';
 
   @override
+  String get navStatistics => 'Statistics';
+
+  @override
   String get adminToggleHide => 'Hide admin options';
 
   @override
@@ -1270,6 +1273,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get attSaved => 'Attendance saved.';
+
+  @override
+  String get statMembershipTitle => 'Membership';
+
+  @override
+  String get statTotalMembers => 'Members';
+
+  @override
+  String get statPioneers => 'Pioneers';
+
+  @override
+  String get statAgeTitle => 'Age distribution';
+
+  @override
+  String get statAgeAverage => 'Average age';
+
+  @override
+  String statAgeKnownDetail(int known, int total) {
+    return 'Based on $known of $total known birth dates';
+  }
+
+  @override
+  String get statAgeUnder18 => 'Under 18';
+
+  @override
+  String get statAgeUnknown => 'Unknown';
+
+  @override
+  String get statAttendanceTitle => 'Meeting attendance';
+
+  @override
+  String get statAvg3Months => '3-month avg.';
+
+  @override
+  String get statAvg12Months => '12-month avg.';
+
+  @override
+  String get statFieldServiceTitle => 'Field service';
+
+  @override
+  String statServiceYear(String year) {
+    return 'Service year $year';
+  }
+
+  @override
+  String get statReportsSubmitted => 'Reports submitted';
+
+  @override
+  String get statParticipated => 'Shared in the ministry';
+
+  @override
+  String get statPioneerHours => 'Pioneer hours';
+
+  @override
+  String get statPublisherHours => 'Publisher hours';
+
+  @override
+  String get statUsageTitle => 'App usage';
+
+  @override
+  String get statWithAccount => 'With app account';
+
+  @override
+  String get statSelfReported => 'Self-submitted reports (last month)';
+
+  @override
+  String get statAwaiting => 'Awaiting verification';
+
+  @override
+  String get statFullAdmins => 'Full admins';
+
+  @override
+  String get statSectionAdmins => 'Section admins';
+
+  @override
+  String get statNoData => 'No data yet';
 
   @override
   String get terrMine => 'My territories';

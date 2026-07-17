@@ -12,18 +12,6 @@ import '../../core/utils/dates.dart';
 import 'attendance_form.dart';
 import 'attendance_history_card.dart';
 
-/// First day of the oldest month in the rolling 24-month history window.
-String attendanceHistoryStart() =>
-    '${monthKey(addMonths(DateTime.now(), -23))}-01';
-
-final attendanceEntriesProvider =
-    StreamProvider<List<AttendanceEntry>>((ref) {
-  final to = dateKey(DateTime.now().add(const Duration(days: 7)));
-  return ref
-      .watch(attendanceRepositoryProvider)
-      .watchRange(attendanceHistoryStart(), to);
-});
-
 /// Most recent occurrence (<= today) of a weekly meeting held on [weekday].
 DateTime lastOccurrence(int weekday, DateTime today) {
   final diff = (today.weekday - weekday) % 7;

@@ -67,6 +67,9 @@ class AppShell extends ConsumerWidget {
             l10n.navTalks),
       if (roles.fullAdmin)
         _Destination(
+            '/admin/statistics', Icons.insights_outlined, l10n.navStatistics),
+      if (roles.fullAdmin)
+        _Destination(
             '/admin/settings', Icons.settings_outlined, l10n.navSettings),
     ];
 

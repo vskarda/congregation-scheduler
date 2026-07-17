@@ -439,6 +439,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navSettings => 'Cemaat Ayarları';
 
   @override
+  String get navStatistics => 'İstatistikler';
+
+  @override
   String get adminToggleHide => 'Yönetici seçeneklerini gizle';
 
   @override
@@ -1271,6 +1274,82 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get attSaved => 'Katılım kaydedildi.';
+
+  @override
+  String get statMembershipTitle => 'Cemaat üyeleri';
+
+  @override
+  String get statTotalMembers => 'Üye';
+
+  @override
+  String get statPioneers => 'Öncü';
+
+  @override
+  String get statAgeTitle => 'Yaş dağılımı';
+
+  @override
+  String get statAgeAverage => 'Ortalama yaş';
+
+  @override
+  String statAgeKnownDetail(int known, int total) {
+    return '$total üyeden $known bilinen doğum tarihine dayanır';
+  }
+
+  @override
+  String get statAgeUnder18 => '18 yaş altı';
+
+  @override
+  String get statAgeUnknown => 'Bilinmiyor';
+
+  @override
+  String get statAttendanceTitle => 'İbadet katılımı';
+
+  @override
+  String get statAvg3Months => '3 aylık ort.';
+
+  @override
+  String get statAvg12Months => '12 aylık ort.';
+
+  @override
+  String get statFieldServiceTitle => 'Tarla hizmeti';
+
+  @override
+  String statServiceYear(String year) {
+    return 'Hizmet Yılı $year';
+  }
+
+  @override
+  String get statReportsSubmitted => 'Gönderilen raporlar';
+
+  @override
+  String get statParticipated => 'Hizmete katıldı';
+
+  @override
+  String get statPioneerHours => 'Öncü saatleri';
+
+  @override
+  String get statPublisherHours => 'Müjdeci saatleri';
+
+  @override
+  String get statUsageTitle => 'Uygulama kullanımı';
+
+  @override
+  String get statWithAccount => 'Uygulama hesabı olan';
+
+  @override
+  String get statSelfReported => 'Kendi gönderilen raporlar (geçen ay)';
+
+  @override
+  String get statAwaiting => 'Doğrulama bekleyen';
+
+  @override
+  String get statFullAdmins => 'Tam yönetici';
+
+  @override
+  String get statSectionAdmins => 'Bölüm yöneticisi';
+
+  @override
+  String get statNoData => 'Henüz veri yok';
 
   @override
   String get terrMine => 'Sahalarım';
