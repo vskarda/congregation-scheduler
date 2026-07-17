@@ -70,10 +70,18 @@ class _ReportFormState extends State<ReportForm> {
   Future<void> _submit() async {
     setState(() => _busy = true);
     try {
+      final studies = int.tryParse(_studies.text.trim());
+      final hours =
+          _effectivePioneer ? int.tryParse(_hours.text.trim()) : null;
+      // If hours or Bible studies are reported, the publisher clearly shared
+      // in the ministry — tick it automatically even if they forgot to.
+      // (Credit hours alone don't count; see MinistryReport.sharedInMinistry.)
+      final participated =
+          _participated || (studies ?? 0) > 0 || (hours ?? 0) > 0;
       await widget.onSubmit(widget.initial.copyWith(
-        participated: _participated,
-        bibleStudies: int.tryParse(_studies.text.trim()),
-        hours: _effectivePioneer ? int.tryParse(_hours.text.trim()) : null,
+        participated: participated,
+        bibleStudies: studies,
+        hours: hours,
         creditHours:
             _effectivePioneer ? int.tryParse(_credit.text.trim()) : null,
         comments: _comments.text.trim(),

@@ -38,6 +38,7 @@ void main() {
 
   Finder auxTick() => find.widgetWithText(CheckboxListTile, auxLabel);
   Finder hoursField() => find.widgetWithText(TextField, hoursLabel);
+  Finder creditField() => find.widgetWithText(TextField, 'Credit hours');
 
   testWidgets('publisher can mark a month as auxiliary pioneer', (tester) async {
     MinistryReport? out;
@@ -162,5 +163,68 @@ void main() {
 
     expect(out!.statusAtMonth, PublisherStatus.publisher);
     expect(out!.hours, isNull);
+  });
+
+  testWidgets('reporting hours auto-marks participation when the tick is '
+      'forgotten', (tester) async {
+    MinistryReport? out;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: ReportForm(
+            initial: const MinistryReport(
+                month: '2025-09',
+                statusAtMonth: PublisherStatus.regularPioneer),
+            isPioneer: true,
+            showAuxiliaryPioneer: false,
+            onSubmit: (r) async => out = r,
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    // Enter hours but never tick "Shared in the ministry".
+    await tester.enterText(hoursField(), '40');
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
+
+    expect(out!.hours, 40);
+    expect(out!.participated, isTrue);
+    expect(out!.sharedInMinistry, isTrue);
+  });
+
+  testWidgets('credit hours alone do not mark participation', (tester) async {
+    MinistryReport? out;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: ReportForm(
+            initial: const MinistryReport(
+                month: '2025-09',
+                statusAtMonth: PublisherStatus.regularPioneer),
+            isPioneer: true,
+            showAuxiliaryPioneer: false,
+            onSubmit: (r) async => out = r,
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(creditField(), '15');
+    await tester.tap(find.byType(FilledButton));
+    await tester.pumpAndSettle();
+
+    expect(out!.creditHours, 15);
+    expect(out!.participated, isFalse);
+    // An empty report for overview purposes — only credit was entered.
+    expect(out!.sharedInMinistry, isFalse);
   });
 }

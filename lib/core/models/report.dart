@@ -42,4 +42,11 @@ abstract class MinistryReport with _$MinistryReport {
       _$MinistryReportFromJson(json);
 
   int get totalHours => (hours ?? 0) + (creditHours ?? 0);
+
+  /// Whether the publisher actually shared in the ministry this month: either
+  /// they ticked participation, or they reported field-service hours or Bible
+  /// studies. A report with only a note and/or credit hours does NOT count —
+  /// it is flagged as an empty report on the overview.
+  bool get sharedInMinistry =>
+      participated || (bibleStudies ?? 0) > 0 || (hours ?? 0) > 0;
 }

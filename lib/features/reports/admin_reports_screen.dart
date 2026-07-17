@@ -139,17 +139,19 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                             '${l10n.reportCredit}: ${report.creditHours}',
                           if (report.comments.isNotEmpty) report.comments,
                         ].join('  ·  ');
+                  // Three states: no report (grey ring), a report where the
+                  // publisher shared in the ministry (green tick), or an empty
+                  // report — nothing but maybe a note/credit hours (red cross).
+                  final (icon, iconColor) = report == null
+                      ? (Icons.radio_button_unchecked,
+                          Theme.of(context).disabledColor)
+                      : report.sharedInMinistry
+                          ? (Icons.check_circle, Colors.green)
+                          : (Icons.cancel,
+                              Theme.of(context).colorScheme.error);
                   return ListTile(
                     dense: true,
-                    leading: Icon(
-                      report == null
-                          ? Icons.radio_button_unchecked
-                          : Icons.check_circle,
-                      color: report == null
-                          ? Theme.of(context).disabledColor
-                          : Colors.green,
-                      size: 20,
-                    ),
+                    leading: Icon(icon, color: iconColor, size: 20),
                     title: Text(p.listName),
                     subtitle: summary == null
                         ? Text(l10n.reportMissing,
