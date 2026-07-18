@@ -24,11 +24,6 @@ class HelpScreen extends ConsumerWidget {
           children: [
             _SectionHeader(l10n.helpPublisherSection),
             _HelpTopic(
-              icon: Icons.sync_outlined,
-              title: l10n.helpDataDelayTitle,
-              body: l10n.helpDataDelayBody,
-            ),
-            _HelpTopic(
               icon: Icons.event_available_outlined,
               title: l10n.helpCalendarTitle,
               body: l10n.helpCalendarBody,
@@ -56,6 +51,12 @@ class HelpScreen extends ConsumerWidget {
             if (roles.any) ...[
               const Divider(height: 32),
               _SectionHeader(l10n.helpAdminSection),
+              _HelpTopic(
+                icon: Icons.sync_outlined,
+                title: l10n.helpDataDelayTitle,
+                body: l10n.helpDataDelayBody,
+                highlighted: true,
+              ),
               _HelpTopic(
                 icon: Icons.edit_off_outlined,
                 title: l10n.helpAdminToggleTitle,
@@ -127,17 +128,25 @@ class _HelpTopic extends StatelessWidget {
     required this.title,
     required this.body,
     this.action,
+    this.highlighted = false,
   });
 
   final IconData icon;
   final String title;
   final String body;
   final Widget? action;
+  final bool highlighted;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final iconColor = highlighted
+        ? theme.colorScheme.onTertiaryContainer
+        : theme.colorScheme.primary;
+    final textColor =
+        highlighted ? theme.colorScheme.onTertiaryContainer : null;
     return Card(
+      color: highlighted ? theme.colorScheme.tertiaryContainer : null,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -145,15 +154,23 @@ class _HelpTopic extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: theme.colorScheme.primary),
+                Icon(icon, color: iconColor),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(title, style: theme.textTheme.titleSmall),
+                  child: Text(
+                    title,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: textColor,
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            Text(body, style: theme.textTheme.bodyMedium),
+            Text(
+              body,
+              style: theme.textTheme.bodyMedium?.copyWith(color: textColor),
+            ),
             if (action != null) ...[
               const SizedBox(height: 12),
               action!,
