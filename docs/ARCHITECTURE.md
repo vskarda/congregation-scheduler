@@ -39,7 +39,9 @@ core/          bootstrap, config, theme, l10n, shared widgets
   no config → `/setup`; signed out → `/login`; unverified → `/awaiting`;
   admin routes additionally check the role flags on the own publisher doc.
 - **i18n**: ARB files (`app_en.arb`, `app_cs.arb`, `app_tr.arb`), `flutter
-  gen-l10n`.
+  gen-l10n`. JW terminology is copied verbatim from the official forms in
+  `example-forms/` — see [ADDING-A-LANGUAGE.md](ADDING-A-LANGUAGE.md) for the
+  full procedure (also covers the per-language parser keyword lists).
 
 ## Key domain decisions
 

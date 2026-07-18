@@ -33,11 +33,11 @@ const _csWeek = '''
 <p>PÍSEŇ 1 a modlitba</p>
 <h2>POKLADY Z BOŽÍHO SLOVA</h2>
 <p>1. Jehova žehná svému králi (10 min.)</p>
-<p>2. Duchovní perly (10 min.)</p>
+<p>2. Hledání duchovních drahokamů (10 min.)</p>
 <p>3. Čtení Bible (4 min.)</p>
-<h2>ROZVÍJEJME SE VE SLUŽBĚ</h2>
+<h2>ZLEPŠUJ SE VE SLUŽBĚ</h2>
 <p>4. Zahájení rozhovoru (3 min.)</p>
-<h2>KŘESŤANSKÝ ŽIVOT</h2>
+<h2>ŽIVOT KŘESŤANA</h2>
 <p>PÍSEŇ 22</p>
 <p>5. Sborové studium Bible (30 min.)</p>
 <p>PÍSEŇ 33 a modlitba</p>

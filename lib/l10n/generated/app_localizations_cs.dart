@@ -410,7 +410,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get navEvents => 'Události';
 
   @override
-  String get navLmm => 'Život a služba';
+  String get navLmm => 'Shromáždění v týdnu';
 
   @override
   String get navWeekend => 'Víkendové shromáždění';
@@ -506,7 +506,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get helpPdfExportBody =>
-      'Na obrazovkách Život a služba a Víkendové shromáždění mají editoři rozpisů v horní liště ikonu PDF, která vyexportuje měsíční rozpis k tisku nebo sdílení.';
+      'Na obrazovkách Shromáždění v týdnu a Víkendové shromáždění mají editoři rozpisů v horní liště ikonu PDF, která vyexportuje měsíční rozpis k tisku nebo sdílení.';
 
   @override
   String get helpGoogleMyMapsTitle => 'Mapy obvodů v Google My Maps';
@@ -668,6 +668,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Měsíční přehled (PDF)';
+
+  @override
+  String get lmmScheduleTitle => 'Program shromáždění v týdnu';
 
   @override
   String get s21Title => 'KARTA SBOROVÉHO ZVĚSTOVATELE';
@@ -929,10 +932,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get sectionTreasures => 'POKLADY Z BOŽÍHO SLOVA';
 
   @override
-  String get sectionMinistry => 'ROZVÍJEJME SE VE SLUŽBĚ';
+  String get sectionMinistry => 'ZLEPŠUJ SE VE SLUŽBĚ';
 
   @override
-  String get sectionLiving => 'KŘESŤANSKÝ ŽIVOT';
+  String get sectionLiving => 'ŽIVOT KŘESŤANA';
 
   @override
   String get sectionClosing => 'Závěr';
@@ -947,7 +950,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get partClosingPrayer => 'Závěrečná modlitba';
 
   @override
-  String get partGems => 'Duchovní perly';
+  String get partGems => 'Hledání duchovních drahokamů';
 
   @override
   String get partBibleReading => 'Čtení Bible';
@@ -959,7 +962,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get partCbsReader => 'Čtenář';
 
   @override
-  String get partAssistant => 'Pomocník';
+  String get partAssistant => 'Partner';
 
   @override
   String partMinutes(int min) {
@@ -971,7 +974,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String lmmClassN(int index) {
-    return 'Třída $index';
+    return '$index. sál';
   }
 
   @override
@@ -1333,7 +1336,7 @@ class AppLocalizationsCs extends AppLocalizations {
       'Oznámení před vašimi sborovými úkoly';
 
   @override
-  String get roleAssistant => 'Pomocník';
+  String get roleAssistant => 'Partner';
 
   @override
   String get rolePw => 'Veřejné svědectví';
@@ -1378,7 +1381,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get attTotal => 'Celkem';
 
   @override
-  String get attMeetingLmm => 'Život a služba';
+  String get attMeetingLmm => 'Shromáždění v týdnu';
 
   @override
   String get attMeetingWeekend => 'Víkendové shromáždění';
@@ -1739,13 +1742,13 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get s1Active =>
-      'Všichni aktivní zvěstovatelé (podali zprávu alespoň jednou za posledních 6 měsíců)';
+      'Činní zvěstovatelé (podali zprávu alespoň jednou za posledních 6 měsíců)';
 
   @override
-  String get s1AvgMid => 'Průměrná návštěvnost — shromáždění v týdnu';
+  String get s1AvgMid => 'Průměrná návštěvnost shromáždění v týdnu';
 
   @override
-  String get s1AvgWeekend => 'Průměrná návštěvnost — víkendové shromáždění';
+  String get s1AvgWeekend => 'Průměrná návštěvnost shromáždění o víkendu';
 
   @override
   String get s1Publishers => 'Zvěstovatelé';
@@ -1754,10 +1757,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get s1AuxPioneers => 'Pomocní průkopníci';
 
   @override
-  String get s1RegPioneers => 'Stálí průkopníci';
+  String get s1RegPioneers => 'Pravidelní průkopníci';
 
   @override
-  String get s1Count => 'Počet';
+  String get s1Count => 'Počet těch, kdo podali zprávu';
 
   @override
   String get s1Studies => 'Biblická studia';
@@ -1767,7 +1770,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get s1Note =>
-      'Pomocní, stálí a zvláštní průkopníci se nepočítají do skupiny Zvěstovatelé; zvláštní průkopníci nejsou zahrnuti v žádné skupině.';
+      'Pomocní, pravidelní a zvláštní průkopníci se nepočítají do skupiny Zvěstovatelé; zvláštní průkopníci nejsou zahrnuti v žádné skupině.';
 
   @override
   String get settingsName => 'Název sboru';
@@ -1776,7 +1779,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get settingsLmmMeeting => 'Shromáždění v týdnu (den a čas)';
 
   @override
-  String get settingsLmmClassCount => 'Počet tříd (shromáždění v týdnu)';
+  String get settingsLmmClassCount => 'Počet sálů (shromáždění v týdnu)';
 
   @override
   String get settingsWeekendMeeting => 'Víkendové shromáždění (den a čas)';
@@ -1841,7 +1844,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get qSupportSection => 'Podpora shromáždění a další';
 
   @override
-  String get qChairman => 'Předsedající (Život a služba)';
+  String get qChairman => 'Předsedající (shromáždění v týdnu)';
 
   @override
   String get qPrayer => 'Modlitba';
@@ -1850,7 +1853,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get qTreasures => 'Poklady z Božího slova';
 
   @override
-  String get qGems => 'Duchovní perly';
+  String get qGems => 'Hledání duchovních drahokamů';
 
   @override
   String get qBibleReading => 'Čtení Bible';
@@ -1859,7 +1862,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get qFieldMinistry => 'Studentské úkoly (služba)';
 
   @override
-  String get qLiving => 'Křesťanský život';
+  String get qLiving => 'Život křesťana';
 
   @override
   String get qCbsConductor => 'Vedoucí sborového studia Bible';

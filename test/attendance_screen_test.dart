@@ -131,7 +131,7 @@ void main() {
     expect(find.text('Total: 50'), findsOneWidget);
 
     // Fill in an unrecorded meeting: two counts derive the total.
-    final row = find.text('$tapDate  ·  Life and Ministry');
+    final row = find.text('$tapDate  ·  Midweek meeting');
     await tester.ensureVisible(row);
     await tester.tap(row);
     await tester.pumpAndSettle();
@@ -185,7 +185,7 @@ void main() {
     await tester.tap(monthTitle);
     await tester.pumpAndSettle();
 
-    final row = find.text('$date  ·  Life and Ministry');
+    final row = find.text('$date  ·  Midweek meeting');
     await tester.ensureVisible(row);
     await tester.tap(row);
     await tester.pumpAndSettle();

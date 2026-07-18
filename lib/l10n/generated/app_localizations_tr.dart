@@ -408,7 +408,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get navEvents => 'Etkinlikler';
 
   @override
-  String get navLmm => 'Hayatımız ve Hizmetimiz';
+  String get navLmm => 'Hafta İçi İbadeti';
 
   @override
   String get navWeekend => 'Hafta Sonu İbadeti';
@@ -504,7 +504,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get helpPdfExportBody =>
-      'Hayatımız ve Hizmetimiz ile Hafta Sonu İbadeti ekranlarında, program editörleri üst çubukta aylık programı yazdırmak veya paylaşmak için dışa aktaran bir PDF simgesi görür.';
+      'Hafta İçi İbadeti ile Hafta Sonu İbadeti ekranlarında, program editörleri üst çubukta aylık programı yazdırmak veya paylaşmak için dışa aktaran bir PDF simgesi görür.';
 
   @override
   String get helpGoogleMyMapsTitle => 'Google My Maps ile saha haritaları';
@@ -651,7 +651,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportParticipated => 'Hizmete katıldı';
 
   @override
-  String get reportStudies => 'Kutsal Kitap İncelemeleri';
+  String get reportStudies => 'Kutsal Kitap Tetkiki';
 
   @override
   String get reportHours => 'Saat';
@@ -667,6 +667,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Aylık program (PDF)';
+
+  @override
+  String get lmmScheduleTitle => 'Hafta İçi İbadeti Programı';
 
   @override
   String get s21Title => 'CEMAAT MÜJDECİ KAYIT KARTI';
@@ -929,16 +932,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get sectionTreasures => 'TANRI’NIN SÖZÜNDEKİ HAZİNELER';
 
   @override
-  String get sectionMinistry => 'TARLA HİZMETİNDE KENİDİNİZİ GELİŞTİRİN';
+  String get sectionMinistry => 'TARLA HİZMETİNDE KENDİNİZİ GELİŞTİRİN';
 
   @override
-  String get sectionLiving => 'HIRİSTİYAN OLARAK YAŞAM TARZIMIZ';
+  String get sectionLiving => 'HIRİSTİYANLAR OLARAK YAŞAM TARZIMIZ';
 
   @override
   String get sectionClosing => 'Kapanış';
 
   @override
-  String get partChairman => 'Başkanlik eden';
+  String get partChairman => 'Başkanlık Eden';
 
   @override
   String get partOpeningPrayer => 'Açılış Duası';
@@ -967,11 +970,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get lmmClassMain => 'Ana salon';
+  String get lmmClassMain => 'Ana Salon';
 
   @override
   String lmmClassN(int index) {
-    return 'Sınıf $index';
+    return '$index. Salon';
   }
 
   @override
@@ -1067,7 +1070,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get weekendSpeaker => 'Konuşmacı';
 
   @override
-  String get weekendChairmanLabel => 'Başkanlik eden';
+  String get weekendChairmanLabel => 'Başkanlık Eden';
 
   @override
   String get weekendWtReader => 'Gözcü Kulesi Okuyucusu';
@@ -1736,31 +1739,31 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get s1Active =>
-      'Tüm etkin müjdeciler (son 6 ayda en az bir kez rapor verenler)';
+      'Faal Müjdeciler (son 6 ayda en az bir kez rapor verenler)';
 
   @override
-  String get s1AvgMid => 'Ortalama Katılım — Hafta İçi İbadeti';
+  String get s1AvgMid => 'Hafta İçi İbadetine Ortalama Katılım';
 
   @override
-  String get s1AvgWeekend => 'Ortalama Katılım — Hafta Sonu İbadeti';
+  String get s1AvgWeekend => 'Hafta Sonu İbadetine Ortalama Katılım';
 
   @override
   String get s1Publishers => 'Müjdeciler';
 
   @override
-  String get s1AuxPioneers => 'Öncü Yardımcılar';
+  String get s1AuxPioneers => 'Öncü Yardımcıları';
 
   @override
   String get s1RegPioneers => 'Daimi Öncüler';
 
   @override
-  String get s1Count => 'Sayı';
+  String get s1Count => 'Rapor Sayısı';
 
   @override
-  String get s1Studies => 'Kutsal Kitap İncelemeleri';
+  String get s1Studies => 'Kutsal Kitap Tetkiki';
 
   @override
-  String get s1Hours => 'Saatler (toplam)';
+  String get s1Hours => 'Saat (toplam)';
 
   @override
   String get s1Note =>
@@ -1773,7 +1776,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsLmmMeeting => 'Hafta içi ibadeti (gün ve saat)';
 
   @override
-  String get settingsLmmClassCount => 'Hafta içi ibadet sınıf sayısı';
+  String get settingsLmmClassCount => 'Hafta içi ibadeti salon sayısı';
 
   @override
   String get settingsWeekendMeeting => 'Hafta sonu ibadeti (gün ve saat)';
@@ -1838,7 +1841,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qSupportSection => 'İbadet desteği ve diğer';
 
   @override
-  String get qChairman => 'Başkanlik eden (hafta içi)';
+  String get qChairman => 'Başkanlık Eden (hafta içi)';
 
   @override
   String get qPrayer => 'Dua';
@@ -1847,7 +1850,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qTreasures => 'Tanrı\'nın Sözündeki Hazineler';
 
   @override
-  String get qGems => 'Ruhi hazineler';
+  String get qGems => 'Ruhi Hazineler';
 
   @override
   String get qBibleReading => 'Kutsal Kitap okuması';
@@ -1868,7 +1871,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qPublicTalk => 'Halka yönelik konuşma';
 
   @override
-  String get qWeekendChairman => 'Başkanlik eden (hafta sonu)';
+  String get qWeekendChairman => 'Başkanlık Eden (hafta sonu)';
 
   @override
   String get qWtReader => 'Gözcü Kulesi okuyucusu';

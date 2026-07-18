@@ -409,7 +409,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navEvents => 'Events';
 
   @override
-  String get navLmm => 'Life and Ministry';
+  String get navLmm => 'Midweek meeting';
 
   @override
   String get navWeekend => 'Weekend meeting';
@@ -505,7 +505,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get helpPdfExportBody =>
-      'On the Life and Ministry and Weekend meeting screens, schedule editors have a PDF icon in the top bar that exports the month\'s schedule for printing or sharing.';
+      'On the Midweek meeting and Weekend meeting screens, schedule editors have a PDF icon in the top bar that exports the month\'s schedule for printing or sharing.';
 
   @override
   String get helpGoogleMyMapsTitle => 'Territory maps with Google My Maps';
@@ -667,6 +667,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Monthly overview (PDF)';
+
+  @override
+  String get lmmScheduleTitle => 'Midweek Meeting Schedule';
 
   @override
   String get s21Title => 'CONGREGATION’S PUBLISHER RECORD';
@@ -926,7 +929,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sectionOpening => 'Opening';
 
   @override
-  String get sectionTreasures => 'TREASURES FROM GOD\'S WORD';
+  String get sectionTreasures => 'TREASURES FROM GOD’S WORD';
 
   @override
   String get sectionMinistry => 'APPLY YOURSELF TO THE FIELD MINISTRY';
@@ -947,10 +950,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get partClosingPrayer => 'Closing prayer';
 
   @override
-  String get partGems => 'Spiritual gems';
+  String get partGems => 'Spiritual Gems';
 
   @override
-  String get partBibleReading => 'Bible reading';
+  String get partBibleReading => 'Bible Reading';
 
   @override
   String get partCbs => 'Congregation Bible Study';
@@ -967,7 +970,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get lmmClassMain => 'Main hall';
+  String get lmmClassMain => 'Main Hall';
 
   @override
   String lmmClassN(int index) {
@@ -1376,7 +1379,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attTotal => 'Total';
 
   @override
-  String get attMeetingLmm => 'Life and Ministry';
+  String get attMeetingLmm => 'Midweek meeting';
 
   @override
   String get attMeetingWeekend => 'Weekend meeting';
@@ -1735,25 +1738,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get s1Active =>
-      'All active publishers (reported at least once in the last 6 months)';
+      'Active Publishers (reported at least once in the last 6 months)';
 
   @override
-  String get s1AvgMid => 'Average attendance — midweek meeting';
+  String get s1AvgMid => 'Average Midweek Meeting Attendance';
 
   @override
-  String get s1AvgWeekend => 'Average attendance — weekend meeting';
+  String get s1AvgWeekend => 'Average Weekend Meeting Attendance';
 
   @override
   String get s1Publishers => 'Publishers';
 
   @override
-  String get s1AuxPioneers => 'Auxiliary pioneers';
+  String get s1AuxPioneers => 'Auxiliary Pioneers';
 
   @override
-  String get s1RegPioneers => 'Regular pioneers';
+  String get s1RegPioneers => 'Regular Pioneers';
 
   @override
-  String get s1Count => 'Number of';
+  String get s1Count => 'Number of Reports';
 
   @override
   String get s1Studies => 'Bible studies';
@@ -1844,13 +1847,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get qPrayer => 'Prayer';
 
   @override
-  String get qTreasures => 'Treasures from God\'s Word';
+  String get qTreasures => 'Treasures From God’s Word';
 
   @override
-  String get qGems => 'Spiritual gems';
+  String get qGems => 'Spiritual Gems';
 
   @override
-  String get qBibleReading => 'Bible reading';
+  String get qBibleReading => 'Bible Reading';
 
   @override
   String get qFieldMinistry => 'Student assignments (ministry)';

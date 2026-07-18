@@ -122,7 +122,7 @@ Future<Uint8List> buildLmmMonthPdf({
   // Flat widget list so MultiPage can break pages between rows; a whole week
   // wrapped in one Column could overflow a page and fail to lay out.
   final widgets = <pw.Widget>[
-    pw.Text('${l10n.navLmm} — ${monthFmt.format(month)}',
+    pw.Text('${l10n.lmmScheduleTitle} — ${monthFmt.format(month)}',
         style: pw.TextStyle(fontSize: 15, fontWeight: pw.FontWeight.bold)),
     pw.SizedBox(height: 10),
   ];

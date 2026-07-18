@@ -304,6 +304,7 @@ abstract final class MwbParser {
       };
       if (section == LmmSection.treasures) {
         if (titleUpper.contains('SPIRITUAL GEMS') ||
+            titleUpper.contains('DUCHOVNÍCH DRAHOKAMŮ') ||
             titleUpper.contains('DUCHOVNÍ PERLY') ||
             titleUpper.contains('RUHSAL HAZINELER') ||
             titleUpper.contains('RUHI HAZINELER')) {
@@ -405,6 +406,7 @@ abstract final class MwbParser {
       return LmmSection.ministry;
     }
     if (upper.contains('LIVING AS CHRISTIANS') ||
+        upper.contains('ŽIVOT KŘESŤANA') ||
         upper.contains('KŘESŤANSKÝ ŽIVOT') ||
         upper.contains('HIRISTIYANLAR OLARAK') ||
         upper.contains('HIRISTIYANCA YAŞAM')) {

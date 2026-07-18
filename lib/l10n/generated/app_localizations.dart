@@ -823,7 +823,7 @@ abstract class AppLocalizations {
   /// No description provided for @navLmm.
   ///
   /// In en, this message translates to:
-  /// **'Life and Ministry'**
+  /// **'Midweek meeting'**
   String get navLmm;
 
   /// No description provided for @navWeekend.
@@ -1003,7 +1003,7 @@ abstract class AppLocalizations {
   /// No description provided for @helpPdfExportBody.
   ///
   /// In en, this message translates to:
-  /// **'On the Life and Ministry and Weekend meeting screens, schedule editors have a PDF icon in the top bar that exports the month\'s schedule for printing or sharing.'**
+  /// **'On the Midweek meeting and Weekend meeting screens, schedule editors have a PDF icon in the top bar that exports the month\'s schedule for printing or sharing.'**
   String get helpPdfExportBody;
 
   /// No description provided for @helpGoogleMyMapsTitle.
@@ -1311,6 +1311,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Monthly overview (PDF)'**
   String get schedulePdfExport;
+
+  /// No description provided for @lmmScheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Midweek Meeting Schedule'**
+  String get lmmScheduleTitle;
 
   /// No description provided for @s21Title.
   ///
@@ -1765,7 +1771,7 @@ abstract class AppLocalizations {
   /// No description provided for @sectionTreasures.
   ///
   /// In en, this message translates to:
-  /// **'TREASURES FROM GOD\'S WORD'**
+  /// **'TREASURES FROM GOD’S WORD'**
   String get sectionTreasures;
 
   /// No description provided for @sectionMinistry.
@@ -1807,13 +1813,13 @@ abstract class AppLocalizations {
   /// No description provided for @partGems.
   ///
   /// In en, this message translates to:
-  /// **'Spiritual gems'**
+  /// **'Spiritual Gems'**
   String get partGems;
 
   /// No description provided for @partBibleReading.
   ///
   /// In en, this message translates to:
-  /// **'Bible reading'**
+  /// **'Bible Reading'**
   String get partBibleReading;
 
   /// No description provided for @partCbs.
@@ -1843,7 +1849,7 @@ abstract class AppLocalizations {
   /// No description provided for @lmmClassMain.
   ///
   /// In en, this message translates to:
-  /// **'Main hall'**
+  /// **'Main Hall'**
   String get lmmClassMain;
 
   /// No description provided for @lmmClassN.
@@ -2599,7 +2605,7 @@ abstract class AppLocalizations {
   /// No description provided for @attMeetingLmm.
   ///
   /// In en, this message translates to:
-  /// **'Life and Ministry'**
+  /// **'Midweek meeting'**
   String get attMeetingLmm;
 
   /// No description provided for @attMeetingWeekend.
@@ -3234,19 +3240,19 @@ abstract class AppLocalizations {
   /// No description provided for @s1Active.
   ///
   /// In en, this message translates to:
-  /// **'All active publishers (reported at least once in the last 6 months)'**
+  /// **'Active Publishers (reported at least once in the last 6 months)'**
   String get s1Active;
 
   /// No description provided for @s1AvgMid.
   ///
   /// In en, this message translates to:
-  /// **'Average attendance — midweek meeting'**
+  /// **'Average Midweek Meeting Attendance'**
   String get s1AvgMid;
 
   /// No description provided for @s1AvgWeekend.
   ///
   /// In en, this message translates to:
-  /// **'Average attendance — weekend meeting'**
+  /// **'Average Weekend Meeting Attendance'**
   String get s1AvgWeekend;
 
   /// No description provided for @s1Publishers.
@@ -3258,19 +3264,19 @@ abstract class AppLocalizations {
   /// No description provided for @s1AuxPioneers.
   ///
   /// In en, this message translates to:
-  /// **'Auxiliary pioneers'**
+  /// **'Auxiliary Pioneers'**
   String get s1AuxPioneers;
 
   /// No description provided for @s1RegPioneers.
   ///
   /// In en, this message translates to:
-  /// **'Regular pioneers'**
+  /// **'Regular Pioneers'**
   String get s1RegPioneers;
 
   /// No description provided for @s1Count.
   ///
   /// In en, this message translates to:
-  /// **'Number of'**
+  /// **'Number of Reports'**
   String get s1Count;
 
   /// No description provided for @s1Studies.
@@ -3426,19 +3432,19 @@ abstract class AppLocalizations {
   /// No description provided for @qTreasures.
   ///
   /// In en, this message translates to:
-  /// **'Treasures from God\'s Word'**
+  /// **'Treasures From God’s Word'**
   String get qTreasures;
 
   /// No description provided for @qGems.
   ///
   /// In en, this message translates to:
-  /// **'Spiritual gems'**
+  /// **'Spiritual Gems'**
   String get qGems;
 
   /// No description provided for @qBibleReading.
   ///
   /// In en, this message translates to:
-  /// **'Bible reading'**
+  /// **'Bible Reading'**
   String get qBibleReading;
 
   /// No description provided for @qFieldMinistry.
