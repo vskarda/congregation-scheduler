@@ -191,6 +191,26 @@ void main() {
       expect(dec.comments, 'Kredit: 10');
     });
 
+    test('app export splits hours and credit back apart on re-import', () {
+      // The app's export puts only field-service hours in the Hours column
+      // and leads Remarks with a "Credit: n" note; re-importing such a card
+      // must not fold the credit back into hours.
+      final r = parseS21Import('''
+CONGREGATION’S PUBLISHER RECORD
+Name: Ann Smith
+Service Year 2026 Shared in Ministry Bible Studies Auxiliary Pioneer Hours Remarks
+September X 2 X 50 Credit: 5 — Memorial campaign
+Total 50
+''');
+      final sep = r.years.single.rows.single;
+      expect(sep.participated, isTrue);
+      expect(sep.bibleStudies, 2);
+      expect(sep.auxPioneer, isTrue);
+      expect(sep.hours, 50); // not 55 — credit stays out of the Hours column
+      expect(sep.creditHours, 5);
+      expect(sep.comments, 'Credit: 5 — Memorial campaign');
+    });
+
     test('decomposed official Turkish labels still match', () {
       // The official S-21-TK text layer splits diacritics into stray marks.
       final r = parseS21Import('''

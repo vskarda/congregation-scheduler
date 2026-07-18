@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -8,6 +9,20 @@ import '../../../core/l10n/l10n.dart';
 import '../../../core/models/models.dart';
 import '../../../core/pdf/pdf_fonts.dart';
 import '../../../core/utils/dates.dart';
+
+/// Remarks column text: a "Credit: 12" note when credit hours were reported,
+/// followed by the month's own comment from the record. The note's wording is
+/// what the S-21 import parser looks for, so exported cards re-import with
+/// hours and credit split back apart.
+@visibleForTesting
+String s21RemarksText(MinistryReport? report, AppLocalizations l10n) {
+  if (report == null) return '';
+  final credit = report.creditHours ?? 0;
+  return [
+    if (credit > 0) l10n.s21Credit(credit),
+    report.comments,
+  ].where((s) => s.isNotEmpty).join(' — ');
+}
 
 /// Builds a one-page PDF replicating the official S-21 (11/23) publisher
 /// record card for one service year, localized to [locale].
@@ -30,9 +45,11 @@ Future<Uint8List> buildS21Pdf({
 
   final hope = private?.hope ?? Hope.otherSheep;
   final appointment = private?.appointment ?? Appointment.none;
+  // The official card's Hours column carries field-service hours only;
+  // credit hours appear as a note in Remarks (see [s21RemarksText]).
   final totalHours = reportsByMonth.values
       .whereType<MinistryReport>()
-      .fold<int>(0, (sum, r) => sum + r.totalHours);
+      .fold<int>(0, (sum, r) => sum + (r.hours ?? 0));
 
   pw.Widget checkbox(bool checked, String label) => pw.Row(
         mainAxisSize: pw.MainAxisSize.min,
@@ -193,11 +210,11 @@ Future<Uint8List> buildS21Pdf({
                   boxCell(reportsByMonth[month]?.statusAtMonth ==
                       PublisherStatus.auxiliaryPioneer),
                   textCell(
-                      (reportsByMonth[month]?.totalHours ?? 0) == 0
+                      (reportsByMonth[month]?.hours ?? 0) == 0
                           ? ''
-                          : reportsByMonth[month]!.totalHours.toString(),
+                          : reportsByMonth[month]!.hours.toString(),
                       align: pw.TextAlign.center),
-                  textCell(reportsByMonth[month]?.comments ?? ''),
+                  textCell(s21RemarksText(reportsByMonth[month], l10n)),
                 ]),
               pw.TableRow(children: [
                 textCell(''),

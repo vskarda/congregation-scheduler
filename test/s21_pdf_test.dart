@@ -90,4 +90,40 @@ void main() {
     );
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
   });
+
+  group('s21RemarksText', () {
+    final en = lookupAppLocalizations(const Locale('en'));
+    final cs = lookupAppLocalizations(const Locale('cs'));
+    final tr = lookupAppLocalizations(const Locale('tr'));
+
+    test('empty without a report', () {
+      expect(s21RemarksText(null, en), '');
+    });
+
+    test('comment only', () {
+      expect(
+        s21RemarksText(const MinistryReport(comments: 'Memorial'), en),
+        'Memorial',
+      );
+    });
+
+    test('credit only, localized', () {
+      const r = MinistryReport(creditHours: 12);
+      expect(s21RemarksText(r, en), 'Credit: 12');
+      expect(s21RemarksText(r, cs), 'Kredit: 12');
+      expect(s21RemarksText(r, tr), 'Kredi: 12');
+    });
+
+    test('credit comes first, then the record comment', () {
+      expect(
+        s21RemarksText(
+            const MinistryReport(comments: 'Memorial', creditHours: 5), en),
+        'Credit: 5 — Memorial',
+      );
+    });
+
+    test('zero credit hours adds no note', () {
+      expect(s21RemarksText(const MinistryReport(creditHours: 0), en), '');
+    });
+  });
 }

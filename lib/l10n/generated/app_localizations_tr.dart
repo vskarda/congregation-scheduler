@@ -601,22 +601,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get statusPublisher => 'Müjdeci';
 
   @override
-  String get statusAuxPioneer => 'Öncü Yardımcı';
+  String get statusAuxPioneer => 'Öncü Yardımcısı';
 
   @override
-  String get statusRegPioneer => 'Daimi Öncü';
+  String get statusRegPioneer => 'Daimi öncü';
 
   @override
-  String get statusSpecialPioneer => 'Özel Öncü';
+  String get statusSpecialPioneer => 'Özel öncü';
 
   @override
-  String get statusFieldMissionary => 'Görevli Vaiz';
+  String get statusFieldMissionary => 'Görevli vaiz';
 
   @override
   String get profileAppointment => 'Tayin';
 
   @override
-  String get appointmentMinisterialServant => 'Hizmet Görevlisi';
+  String get appointmentMinisterialServant => 'Hizmet görevlisi';
 
   @override
   String get appointmentElder => 'İhtiyar';
@@ -669,10 +669,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get schedulePdfExport => 'Aylık program (PDF)';
 
   @override
-  String get s21Title => 'CEMAAT MÜJDECİ KAYDI';
+  String get s21Title => 'CEMAAT MÜJDECİ KAYIT KARTI';
 
   @override
-  String get s21Name => 'Adı:';
+  String get s21Name => 'İsim:';
 
   @override
   String get s21DateOfBirth => 'Doğum tarihi:';
@@ -681,16 +681,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get s21DateOfBaptism => 'Vaftiz tarihi:';
 
   @override
-  String get s21HoursHeader => 'Saatler (Öncü veya Saha Misyoneriyse)';
+  String get s21HoursHeader => 'Saat (Eğer öncü ya da görevli vaiz ise)';
 
   @override
-  String get s21Remarks => 'Notlar';
+  String get s21Remarks => 'Açıklamalar';
 
   @override
   String get s21Total => 'Toplam';
 
   @override
-  String get s21FormCode => 'S-21-T 11/23';
+  String get s21FormCode => 'S-21-TK 11/23';
+
+  @override
+  String s21Credit(int hours) {
+    return 'Kredi: $hours';
+  }
 
   @override
   String get s21Import => 'S-21 İçe Aktar (PDF)';

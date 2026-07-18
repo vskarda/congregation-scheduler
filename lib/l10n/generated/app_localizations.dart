@@ -1183,7 +1183,7 @@ abstract class AppLocalizations {
   /// No description provided for @statusAuxPioneer.
   ///
   /// In en, this message translates to:
-  /// **'Auxiliary pioneer'**
+  /// **'Auxiliary Pioneer'**
   String get statusAuxPioneer;
 
   /// No description provided for @statusRegPioneer.
@@ -1249,7 +1249,7 @@ abstract class AppLocalizations {
   /// No description provided for @serviceYear.
   ///
   /// In en, this message translates to:
-  /// **'Service year {year}'**
+  /// **'Service Year {year}'**
   String serviceYear(int year);
 
   /// No description provided for @recordTotalHours.
@@ -1273,13 +1273,13 @@ abstract class AppLocalizations {
   /// No description provided for @reportParticipated.
   ///
   /// In en, this message translates to:
-  /// **'Shared in the ministry'**
+  /// **'Shared in Ministry'**
   String get reportParticipated;
 
   /// No description provided for @reportStudies.
   ///
   /// In en, this message translates to:
-  /// **'Bible studies'**
+  /// **'Bible Studies'**
   String get reportStudies;
 
   /// No description provided for @reportHours.
@@ -1315,7 +1315,7 @@ abstract class AppLocalizations {
   /// No description provided for @s21Title.
   ///
   /// In en, this message translates to:
-  /// **'CONGREGATION\'S PUBLISHER RECORD'**
+  /// **'CONGREGATION’S PUBLISHER RECORD'**
   String get s21Title;
 
   /// No description provided for @s21Name.
@@ -1359,6 +1359,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'S-21-E 11/23'**
   String get s21FormCode;
+
+  /// No description provided for @s21Credit.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit: {hours}'**
+  String s21Credit(int hours);
 
   /// No description provided for @s21Import.
   ///

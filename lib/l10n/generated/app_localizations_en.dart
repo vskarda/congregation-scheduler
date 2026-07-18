@@ -601,7 +601,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusPublisher => 'Publisher';
 
   @override
-  String get statusAuxPioneer => 'Auxiliary pioneer';
+  String get statusAuxPioneer => 'Auxiliary Pioneer';
 
   @override
   String get statusRegPioneer => 'Regular pioneer';
@@ -635,7 +635,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String serviceYear(int year) {
-    return 'Service year $year';
+    return 'Service Year $year';
   }
 
   @override
@@ -648,10 +648,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportMonth => 'Month';
 
   @override
-  String get reportParticipated => 'Shared in the ministry';
+  String get reportParticipated => 'Shared in Ministry';
 
   @override
-  String get reportStudies => 'Bible studies';
+  String get reportStudies => 'Bible Studies';
 
   @override
   String get reportHours => 'Hours';
@@ -669,7 +669,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get schedulePdfExport => 'Monthly overview (PDF)';
 
   @override
-  String get s21Title => 'CONGREGATION\'S PUBLISHER RECORD';
+  String get s21Title => 'CONGREGATION’S PUBLISHER RECORD';
 
   @override
   String get s21Name => 'Name:';
@@ -691,6 +691,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get s21FormCode => 'S-21-E 11/23';
+
+  @override
+  String s21Credit(int hours) {
+    return 'Credit: $hours';
+  }
 
   @override
   String get s21Import => 'Import S-21 (PDF)';

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   // English labels used by the finders below.
-  const auxLabel = 'Auxiliary pioneer';
+  const auxLabel = 'Auxiliary Pioneer';
   const hoursLabel = 'Hours';
 
   Future<MinistryReport?> pumpForm(
@@ -187,7 +187,7 @@ void main() {
     ));
     await tester.pumpAndSettle();
 
-    // Enter hours but never tick "Shared in the ministry".
+    // Enter hours but never tick "Shared in Ministry".
     await tester.enterText(hoursField(), '40');
     await tester.tap(find.byType(FilledButton));
     await tester.pumpAndSettle();

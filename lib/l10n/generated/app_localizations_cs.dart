@@ -587,7 +587,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get profileHope => 'Naděje';
 
   @override
-  String get hopeOtherSheep => 'Jiné ovce';
+  String get hopeOtherSheep => 'Jiná ovce';
 
   @override
   String get hopeAnointed => 'Pomazaný';
@@ -605,7 +605,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get statusAuxPioneer => 'Pomocný průkopník';
 
   @override
-  String get statusRegPioneer => 'Stálý průkopník';
+  String get statusRegPioneer => 'Pravidelný průkopník';
 
   @override
   String get statusSpecialPioneer => 'Zvláštní průkopník';
@@ -649,7 +649,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reportMonth => 'Měsíc';
 
   @override
-  String get reportParticipated => 'Podílel(a) se na službě';
+  String get reportParticipated => 'Byl/a ve službě';
 
   @override
   String get reportStudies => 'Biblická studia';
@@ -670,7 +670,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get schedulePdfExport => 'Měsíční přehled (PDF)';
 
   @override
-  String get s21Title => 'SBOROVÝ ZÁZNAM ZVĚSTOVATELE';
+  String get s21Title => 'KARTA SBOROVÉHO ZVĚSTOVATELE';
 
   @override
   String get s21Name => 'Jméno:';
@@ -682,7 +682,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get s21DateOfBaptism => 'Datum křtu:';
 
   @override
-  String get s21HoursHeader => 'Hodiny (u průkopníků a misionářů)';
+  String get s21HoursHeader => 'Hodiny (pokud je průkopník nebo misionář)';
 
   @override
   String get s21Remarks => 'Poznámky';
@@ -692,6 +692,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get s21FormCode => 'S-21-B 11/23';
+
+  @override
+  String s21Credit(int hours) {
+    return 'Kredit: $hours';
+  }
 
   @override
   String get s21Import => 'Importovat S-21 (PDF)';
