@@ -210,6 +210,7 @@ class FsmRepository {
         date: date,
         time: rule.time,
         location: rule.location,
+        note: rule.note,
         assignment: rule.defaultAssignment,
         recurringId: rule.id,
       ).withRecomputedAssignees();
@@ -262,6 +263,7 @@ class FsmRepository {
           date: date,
           time: rule.time,
           location: rule.location,
+          note: rule.note,
           assignment: rule.defaultAssignment,
           recurringId: rule.id,
         ).withRecomputedAssignees());

@@ -51,6 +51,28 @@ final lmmSelectedClassProvider =
 String lmmClassLabel(AppLocalizations l10n, int classIndex) =>
     classIndex == 1 ? l10n.lmmClassMain : l10n.lmmClassN(classIndex);
 
+/// A ministry-section student part whose workbook title marks it as the
+/// "Talk" assignment (EN "Talk", CS "Proslov", TR "Konuşma"). This talk is
+/// delivered by a brother to the class, so it has no assistant and only male
+/// publishers with the student-assignments qualification are qualified.
+///
+/// Detection is by title keyword because the imported workbook parts carry no
+/// dedicated part type (all ministry student parts are [LmmPartType.fieldMinistry]).
+/// Add languages by extending [_talkTitleKeywords].
+const _talkTitleKeywords = ['talk', 'proslov', 'konuşma'];
+
+bool isStudentTalk(LmmPart part) {
+  if (part.section != LmmSection.ministry) return false;
+  final title = part.title.toLowerCase();
+  return _talkTitleKeywords.any(title.contains);
+}
+
+/// Publisher predicate for a student part's main assignment slot: a Talk needs
+/// a qualified brother; any other ministry part keeps the type's default.
+bool Function(Publisher) lmmStudentQualifier(LmmPart part) => isStudentTalk(part)
+    ? (p) => p.qualifications.fieldMinistry && p.gender == Gender.male
+    : (p) => p.qualifications.forLmmPartType(part.type);
+
 String lmmPartDefaultLabel(AppLocalizations l10n, LmmPart part) {
   if (part.title.isNotEmpty) return part.title;
   return switch (part.type) {
@@ -567,9 +589,9 @@ class _PartTile extends ConsumerWidget {
       historyKey: assistant
           ? HistoryKeys.lmmAssistant
           : HistoryKeys.lmmPart(part.type),
-      qualifies: (p) => assistant
-          ? p.qualifications.fieldMinistry
-          : p.qualifications.forLmmPartType(part.type),
+      qualifies: assistant
+          ? (p) => p.qualifications.fieldMinistry
+          : lmmStudentQualifier(part),
     );
     if (result == null) return;
     final updated = assistant
@@ -617,10 +639,13 @@ class _PartTile extends ConsumerWidget {
     final l10n = context.l10n;
     final theme = Theme.of(context);
     final isMinistryPart = part.type == LmmPartType.fieldMinistry;
+    // Talks are given by a single brother to the class, so they take no
+    // assistant (student demonstrations do).
+    final hasAssistant = isMinistryPart && !isStudentTalk(part);
     final assignment = part.assignmentFor(_effectiveClass);
     final assistantAssignment = part.assistantFor(_effectiveClass);
     final showAssistant =
-        isMinistryPart && (canEdit || assistantAssignment.isNotEmpty);
+        hasAssistant && (canEdit || assistantAssignment.isNotEmpty);
 
     return ListTile(
       dense: true,
@@ -689,7 +714,7 @@ class _PartTile extends ConsumerWidget {
               },
               itemBuilder: (_) => [
                 PopupMenuItem(value: 'assign', child: Text(l10n.commonEdit)),
-                if (isMinistryPart)
+                if (hasAssistant)
                   PopupMenuItem(
                     value: 'assistant',
                     child: Text(l10n.partAssistant),

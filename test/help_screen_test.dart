@@ -39,8 +39,34 @@ void main() {
     expect(find.text(en.helpRemindersTitle), findsOneWidget);
     expect(find.text(en.helpHighlightTitle), findsOneWidget);
     expect(find.text(en.helpTerritoryMapTitle), findsOneWidget);
+    // Applying for public witnessing is a publisher tip, always shown.
+    expect(find.text(en.helpPwApplyTitle), findsOneWidget);
     expect(find.text(en.helpAdminSection), findsNothing);
     expect(find.text(en.helpGoogleMyMapsTitle), findsNothing);
+    // Admin-only tips stay hidden for a plain publisher.
+    expect(find.text(en.helpPwAssignTitle), findsNothing);
+    expect(find.text(en.helpS21Title), findsNothing);
+    expect(find.text(en.helpS99Title), findsNothing);
+  });
+
+  testWidgets('admin tips are gated by the matching role', (tester) async {
+    enlarge(tester);
+
+    await tester.pumpWidget(wrap(const Roles(publicWitnessing: true)));
+    await tester.pumpAndSettle();
+    expect(find.text(en.helpPwAssignTitle), findsOneWidget);
+    expect(find.text(en.helpS21Title), findsNothing);
+    expect(find.text(en.helpS99Title), findsNothing);
+
+    await tester.pumpWidget(wrap(const Roles(publishers: true)));
+    await tester.pumpAndSettle();
+    expect(find.text(en.helpS21Title), findsOneWidget);
+    expect(find.text(en.helpPwAssignTitle), findsNothing);
+
+    await tester.pumpWidget(wrap(const Roles(weekendSchedule: true)));
+    await tester.pumpAndSettle();
+    expect(find.text(en.helpS99Title), findsOneWidget);
+    expect(find.text(en.helpS21Title), findsNothing);
   });
 
   testWidgets('territory admin sees the Google My Maps topic',

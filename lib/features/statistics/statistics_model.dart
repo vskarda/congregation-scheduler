@@ -6,11 +6,11 @@ import '../../core/models/models.dart';
 /// private profiles, reports, attendance) — no telemetry is collected.
 /// Publishers marked [Publisher.moved] are excluded from every figure.
 
-/// Publishers on the active roster: not moved away. Records with status
-/// 'none' stay in [total] (they are members the congregation tracks) but are
-/// excluded from publisher/pioneer counts, mirroring the S-1 rules.
+/// Publishers on the active roster: not moved away and an actual publisher.
+/// Records with status 'none' ("-") are people the congregation tracks but
+/// who are not publishers, so they are excluded from every statistic.
 List<Publisher> activeRoster(List<Publisher> all) =>
-    all.where((p) => !p.moved).toList();
+    all.where((p) => !p.moved && p.status != PublisherStatus.none).toList();
 
 // ---------------------------------------------------------------------------
 // Membership & pioneers
@@ -28,11 +28,11 @@ class MembershipStats {
     required this.ungrouped,
   });
 
-  /// Everyone on the active roster (including status 'none').
+  /// Everyone on the active roster — all publishers and pioneers together
+  /// (status 'none' is excluded from the roster entirely).
   final int total;
 
-  /// Count per status, only statuses that occur (status 'none' included
-  /// under its own key so the card can show it as "not a publisher").
+  /// Count per status, only statuses that occur.
   final Map<PublisherStatus, int> byStatus;
 
   /// All pioneer statuses combined ([Publisher.isPioneer]).

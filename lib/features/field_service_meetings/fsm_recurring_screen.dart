@@ -80,6 +80,10 @@ class FsmRecurringScreen extends ConsumerWidget {
                           children: [
                             if (rule.location.isNotEmpty) Text(rule.location),
                             AssignmentText(rule.defaultAssignment),
+                            if (rule.note.isNotEmpty)
+                              Text(rule.note,
+                                  style:
+                                      Theme.of(context).textTheme.bodySmall),
                           ],
                         ),
                         trailing: IconButton(
@@ -182,6 +186,7 @@ class FsmRecurringScreen extends ConsumerWidget {
     var rule = existing ??
         FsmRecurring(validFrom: dateKey(DateTime.now()));
     final locationCtrl = TextEditingController(text: rule.location);
+    final noteCtrl = TextEditingController(text: rule.note);
 
     final saved = await showDialog<bool>(
       context: context,
@@ -252,6 +257,11 @@ class FsmRecurringScreen extends ConsumerWidget {
                       decoration:
                           InputDecoration(labelText: l10n.fsmLocation),
                     ),
+                    TextField(
+                      controller: noteCtrl,
+                      maxLines: 2,
+                      decoration: InputDecoration(labelText: l10n.fsmNote),
+                    ),
                     ListTile(
                       dense: true,
                       title: Text(l10n.fsmValidFrom),
@@ -304,12 +314,15 @@ class FsmRecurringScreen extends ConsumerWidget {
     );
     if (saved == true) {
       final repo = ref.read(fsmRepositoryProvider);
-      final finalRule =
-          rule.copyWith(location: locationCtrl.text.trim());
+      final finalRule = rule.copyWith(
+        location: locationCtrl.text.trim(),
+        note: noteCtrl.text.trim(),
+      );
       final id = await repo.saveRecurring(finalRule);
       await repo.materializeRule(finalRule.copyWith(id: id));
       ref.invalidate(assignmentHistoryProvider);
     }
     locationCtrl.dispose();
+    noteCtrl.dispose();
   }
 }

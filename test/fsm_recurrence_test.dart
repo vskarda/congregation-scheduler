@@ -50,6 +50,7 @@ void main() {
       weekday: DateTime.saturday, // 2026-07-11
       time: '09:00',
       location: 'Kingdom Hall',
+      note: 'Bring the carts',
       defaultAssignment: Assignment(publisherIds: ['p1']),
     );
 
@@ -62,6 +63,7 @@ void main() {
       expect(meeting.date, '2026-07-11');
       expect(meeting.time, '09:00');
       expect(meeting.location, 'Kingdom Hall');
+      expect(meeting.note, 'Bring the carts');
       expect(meeting.recurringId, 'r1');
       expect(meeting.assignment.publisherIds, ['p1']);
       expect(meeting.allAssigneeIds, ['p1']);

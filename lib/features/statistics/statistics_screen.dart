@@ -186,14 +186,14 @@ Widget _asyncCard<T>(
 class _MembershipCard extends ConsumerWidget {
   const _MembershipCard();
 
-  /// Display order: publishers first, then pioneer statuses, 'none' last.
+  /// Display order: publishers first, then pioneer statuses. Status 'none'
+  /// ("-") is not on the roster, so it never appears here.
   static const _statusOrder = [
     PublisherStatus.publisher,
     PublisherStatus.auxiliaryPioneer,
     PublisherStatus.regularPioneer,
     PublisherStatus.specialPioneer,
     PublisherStatus.fieldMissionary,
-    PublisherStatus.none,
   ];
 
   @override

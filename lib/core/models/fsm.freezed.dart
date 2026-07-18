@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$FsmRecurring {
 
 @JsonKey(includeFromJson: false, includeToJson: false) String get id;/// DateTime.monday..sunday (1..7)
- int get weekday; String get time; String get location; Assignment get defaultAssignment;/// yyyy-MM-dd
+ int get weekday; String get time; String get location; String get note; Assignment get defaultAssignment;/// yyyy-MM-dd
  String get validFrom; String get validUntil;
 /// Create a copy of FsmRecurring
 /// with the given fields replaced by the non-null parameter values.
@@ -30,16 +30,16 @@ $FsmRecurringCopyWith<FsmRecurring> get copyWith => _$FsmRecurringCopyWithImpl<F
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmRecurring&&(identical(other.id, id) || other.id == id)&&(identical(other.weekday, weekday) || other.weekday == weekday)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.defaultAssignment, defaultAssignment) || other.defaultAssignment == defaultAssignment)&&(identical(other.validFrom, validFrom) || other.validFrom == validFrom)&&(identical(other.validUntil, validUntil) || other.validUntil == validUntil));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmRecurring&&(identical(other.id, id) || other.id == id)&&(identical(other.weekday, weekday) || other.weekday == weekday)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.defaultAssignment, defaultAssignment) || other.defaultAssignment == defaultAssignment)&&(identical(other.validFrom, validFrom) || other.validFrom == validFrom)&&(identical(other.validUntil, validUntil) || other.validUntil == validUntil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,weekday,time,location,defaultAssignment,validFrom,validUntil);
+int get hashCode => Object.hash(runtimeType,id,weekday,time,location,note,defaultAssignment,validFrom,validUntil);
 
 @override
 String toString() {
-  return 'FsmRecurring(id: $id, weekday: $weekday, time: $time, location: $location, defaultAssignment: $defaultAssignment, validFrom: $validFrom, validUntil: $validUntil)';
+  return 'FsmRecurring(id: $id, weekday: $weekday, time: $time, location: $location, note: $note, defaultAssignment: $defaultAssignment, validFrom: $validFrom, validUntil: $validUntil)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $FsmRecurringCopyWith<$Res>  {
   factory $FsmRecurringCopyWith(FsmRecurring value, $Res Function(FsmRecurring) _then) = _$FsmRecurringCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, int weekday, String time, String location, Assignment defaultAssignment, String validFrom, String validUntil
+@JsonKey(includeFromJson: false, includeToJson: false) String id, int weekday, String time, String location, String note, Assignment defaultAssignment, String validFrom, String validUntil
 });
 
 
@@ -67,12 +67,13 @@ class _$FsmRecurringCopyWithImpl<$Res>
 
 /// Create a copy of FsmRecurring
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? weekday = null,Object? time = null,Object? location = null,Object? defaultAssignment = null,Object? validFrom = null,Object? validUntil = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? weekday = null,Object? time = null,Object? location = null,Object? note = null,Object? defaultAssignment = null,Object? validFrom = null,Object? validUntil = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,weekday: null == weekday ? _self.weekday : weekday // ignore: cast_nullable_to_non_nullable
 as int,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,defaultAssignment: null == defaultAssignment ? _self.defaultAssignment : defaultAssignment // ignore: cast_nullable_to_non_nullable
 as Assignment,validFrom: null == validFrom ? _self.validFrom : validFrom // ignore: cast_nullable_to_non_nullable
 as String,validUntil: null == validUntil ? _self.validUntil : validUntil // ignore: cast_nullable_to_non_nullable
@@ -170,10 +171,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  Assignment defaultAssignment,  String validFrom,  String validUntil)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  String note,  Assignment defaultAssignment,  String validFrom,  String validUntil)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FsmRecurring() when $default != null:
-return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
+return $default(_that.id,_that.weekday,_that.time,_that.location,_that.note,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
   return orElse();
 
 }
@@ -191,10 +192,10 @@ return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAs
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  Assignment defaultAssignment,  String validFrom,  String validUntil)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  String note,  Assignment defaultAssignment,  String validFrom,  String validUntil)  $default,) {final _that = this;
 switch (_that) {
 case _FsmRecurring():
-return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
+return $default(_that.id,_that.weekday,_that.time,_that.location,_that.note,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -211,10 +212,10 @@ return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAs
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  Assignment defaultAssignment,  String validFrom,  String validUntil)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  int weekday,  String time,  String location,  String note,  Assignment defaultAssignment,  String validFrom,  String validUntil)?  $default,) {final _that = this;
 switch (_that) {
 case _FsmRecurring() when $default != null:
-return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
+return $default(_that.id,_that.weekday,_that.time,_that.location,_that.note,_that.defaultAssignment,_that.validFrom,_that.validUntil);case _:
   return null;
 
 }
@@ -226,7 +227,7 @@ return $default(_that.id,_that.weekday,_that.time,_that.location,_that.defaultAs
 @JsonSerializable()
 
 class _FsmRecurring implements FsmRecurring {
-  const _FsmRecurring({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.weekday = DateTime.saturday, this.time = '09:00', this.location = '', this.defaultAssignment = const Assignment(), this.validFrom = '', this.validUntil = ''});
+  const _FsmRecurring({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.weekday = DateTime.saturday, this.time = '09:00', this.location = '', this.note = '', this.defaultAssignment = const Assignment(), this.validFrom = '', this.validUntil = ''});
   factory _FsmRecurring.fromJson(Map<String, dynamic> json) => _$FsmRecurringFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
@@ -234,6 +235,7 @@ class _FsmRecurring implements FsmRecurring {
 @override@JsonKey() final  int weekday;
 @override@JsonKey() final  String time;
 @override@JsonKey() final  String location;
+@override@JsonKey() final  String note;
 @override@JsonKey() final  Assignment defaultAssignment;
 /// yyyy-MM-dd
 @override@JsonKey() final  String validFrom;
@@ -252,16 +254,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmRecurring&&(identical(other.id, id) || other.id == id)&&(identical(other.weekday, weekday) || other.weekday == weekday)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.defaultAssignment, defaultAssignment) || other.defaultAssignment == defaultAssignment)&&(identical(other.validFrom, validFrom) || other.validFrom == validFrom)&&(identical(other.validUntil, validUntil) || other.validUntil == validUntil));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmRecurring&&(identical(other.id, id) || other.id == id)&&(identical(other.weekday, weekday) || other.weekday == weekday)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.defaultAssignment, defaultAssignment) || other.defaultAssignment == defaultAssignment)&&(identical(other.validFrom, validFrom) || other.validFrom == validFrom)&&(identical(other.validUntil, validUntil) || other.validUntil == validUntil));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,weekday,time,location,defaultAssignment,validFrom,validUntil);
+int get hashCode => Object.hash(runtimeType,id,weekday,time,location,note,defaultAssignment,validFrom,validUntil);
 
 @override
 String toString() {
-  return 'FsmRecurring(id: $id, weekday: $weekday, time: $time, location: $location, defaultAssignment: $defaultAssignment, validFrom: $validFrom, validUntil: $validUntil)';
+  return 'FsmRecurring(id: $id, weekday: $weekday, time: $time, location: $location, note: $note, defaultAssignment: $defaultAssignment, validFrom: $validFrom, validUntil: $validUntil)';
 }
 
 
@@ -272,7 +274,7 @@ abstract mixin class _$FsmRecurringCopyWith<$Res> implements $FsmRecurringCopyWi
   factory _$FsmRecurringCopyWith(_FsmRecurring value, $Res Function(_FsmRecurring) _then) = __$FsmRecurringCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, int weekday, String time, String location, Assignment defaultAssignment, String validFrom, String validUntil
+@JsonKey(includeFromJson: false, includeToJson: false) String id, int weekday, String time, String location, String note, Assignment defaultAssignment, String validFrom, String validUntil
 });
 
 
@@ -289,12 +291,13 @@ class __$FsmRecurringCopyWithImpl<$Res>
 
 /// Create a copy of FsmRecurring
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? weekday = null,Object? time = null,Object? location = null,Object? defaultAssignment = null,Object? validFrom = null,Object? validUntil = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? weekday = null,Object? time = null,Object? location = null,Object? note = null,Object? defaultAssignment = null,Object? validFrom = null,Object? validUntil = null,}) {
   return _then(_FsmRecurring(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,weekday: null == weekday ? _self.weekday : weekday // ignore: cast_nullable_to_non_nullable
 as int,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,defaultAssignment: null == defaultAssignment ? _self.defaultAssignment : defaultAssignment // ignore: cast_nullable_to_non_nullable
 as Assignment,validFrom: null == validFrom ? _self.validFrom : validFrom // ignore: cast_nullable_to_non_nullable
 as String,validUntil: null == validUntil ? _self.validUntil : validUntil // ignore: cast_nullable_to_non_nullable
@@ -319,7 +322,7 @@ $AssignmentCopyWith<$Res> get defaultAssignment {
 mixin _$FsmMeeting {
 
 @JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd
- String get date; String get time; String get location; Assignment get assignment;/// Set when this meeting was generated from a recurring rule.
+ String get date; String get time; String get location; String get note; Assignment get assignment;/// Set when this meeting was generated from a recurring rule.
  String get recurringId;/// A "deleted" recurring instance is kept as cancelled so the
 /// materializer doesn't recreate it.
  bool get cancelled; List<String> get allAssigneeIds;
@@ -335,16 +338,16 @@ $FsmMeetingCopyWith<FsmMeeting> get copyWith => _$FsmMeetingCopyWithImpl<FsmMeet
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,time,location,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
 
 @override
 String toString() {
-  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -355,7 +358,7 @@ abstract mixin class $FsmMeetingCopyWith<$Res>  {
   factory $FsmMeetingCopyWith(FsmMeeting value, $Res Function(FsmMeeting) _then) = _$FsmMeetingCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -372,12 +375,13 @@ class _$FsmMeetingCopyWithImpl<$Res>
 
 /// Create a copy of FsmMeeting
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
 as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
@@ -476,10 +480,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FsmMeeting() when $default != null:
-return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
   return orElse();
 
 }
@@ -497,10 +501,10 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
 switch (_that) {
 case _FsmMeeting():
-return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -517,10 +521,10 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
 switch (_that) {
 case _FsmMeeting() when $default != null:
-return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
   return null;
 
 }
@@ -532,7 +536,7 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.assignment,_
 @JsonSerializable()
 
 class _FsmMeeting extends FsmMeeting {
-  const _FsmMeeting({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.time = '09:00', this.location = '', this.assignment = const Assignment(), this.recurringId = '', this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _allAssigneeIds = allAssigneeIds,super._();
+  const _FsmMeeting({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.time = '09:00', this.location = '', this.note = '', this.assignment = const Assignment(), this.recurringId = '', this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _allAssigneeIds = allAssigneeIds,super._();
   factory _FsmMeeting.fromJson(Map<String, dynamic> json) => _$FsmMeetingFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
@@ -540,6 +544,7 @@ class _FsmMeeting extends FsmMeeting {
 @override@JsonKey() final  String date;
 @override@JsonKey() final  String time;
 @override@JsonKey() final  String location;
+@override@JsonKey() final  String note;
 @override@JsonKey() final  Assignment assignment;
 /// Set when this meeting was generated from a recurring rule.
 @override@JsonKey() final  String recurringId;
@@ -567,16 +572,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,time,location,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
 
 @override
 String toString() {
-  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -587,7 +592,7 @@ abstract mixin class _$FsmMeetingCopyWith<$Res> implements $FsmMeetingCopyWith<$
   factory _$FsmMeetingCopyWith(_FsmMeeting value, $Res Function(_FsmMeeting) _then) = __$FsmMeetingCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -604,12 +609,13 @@ class __$FsmMeetingCopyWithImpl<$Res>
 
 /// Create a copy of FsmMeeting
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_FsmMeeting(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
 as String,time: null == time ? _self.time : time // ignore: cast_nullable_to_non_nullable
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
 as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable

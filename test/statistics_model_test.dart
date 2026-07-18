@@ -28,7 +28,8 @@ Publisher publisher(
 
 void main() {
   group('computeMembership', () {
-    test('counts statuses, appointments, gender and excludes moved', () {
+    test('counts statuses, appointments, gender; excludes moved and status "-"',
+        () {
       final stats = computeMembership([
         publisher('a',
             gender: Gender.male, appointment: Appointment.elder),
@@ -41,7 +42,7 @@ void main() {
             appointment: Appointment.ministerialServant,
             gender: Gender.male,
             groupId: 'g1'),
-        publisher('d', status: PublisherStatus.none),
+        publisher('d', status: PublisherStatus.none), // "-" -> excluded
         publisher('e', moved: true), // moved away -> excluded everywhere
         // Stale groupId (group deleted) counts as ungrouped.
         publisher('f', groupId: 'gone'),
@@ -50,18 +51,20 @@ void main() {
         MinistryGroup(id: 'g2', name: 'Group 2'),
       ]);
 
-      expect(stats.total, 5);
+      // 'd' (status "-") and 'e' (moved) drop out; total is all publishers
+      // and pioneers together.
+      expect(stats.total, 4);
       expect(stats.byStatus[PublisherStatus.publisher], 2);
       expect(stats.byStatus[PublisherStatus.regularPioneer], 1);
       expect(stats.byStatus[PublisherStatus.auxiliaryPioneer], 1);
-      expect(stats.byStatus[PublisherStatus.none], 1);
+      expect(stats.byStatus.containsKey(PublisherStatus.none), isFalse);
       expect(stats.pioneers, 2);
       expect(stats.elders, 1);
       expect(stats.ministerialServants, 1);
       expect(stats.byGender[Gender.male], 2);
       expect(stats.byGender[Gender.female], 1);
       expect(stats.groupSizes, {'Group 1': 2, 'Group 2': 0});
-      expect(stats.ungrouped, 3); // a, d, f
+      expect(stats.ungrouped, 2); // a, f
     });
 
     test('empty roster yields zeros', () {

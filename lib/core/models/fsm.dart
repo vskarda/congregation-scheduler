@@ -18,6 +18,7 @@ abstract class FsmRecurring with _$FsmRecurring {
     @Default(DateTime.saturday) int weekday,
     @Default('09:00') String time,
     @Default('') String location,
+    @Default('') String note,
     @Default(Assignment()) Assignment defaultAssignment,
 
     /// yyyy-MM-dd
@@ -42,6 +43,7 @@ abstract class FsmMeeting with _$FsmMeeting {
     @Default('') String date,
     @Default('09:00') String time,
     @Default('') String location,
+    @Default('') String note,
     @Default(Assignment()) Assignment assignment,
 
     /// Set when this meeting was generated from a recurring rule.

@@ -24,6 +24,11 @@ class HelpScreen extends ConsumerWidget {
           children: [
             _SectionHeader(l10n.helpPublisherSection),
             _HelpTopic(
+              icon: Icons.sync_outlined,
+              title: l10n.helpDataDelayTitle,
+              body: l10n.helpDataDelayBody,
+            ),
+            _HelpTopic(
               icon: Icons.event_available_outlined,
               title: l10n.helpCalendarTitle,
               body: l10n.helpCalendarBody,
@@ -43,6 +48,11 @@ class HelpScreen extends ConsumerWidget {
               title: l10n.helpTerritoryMapTitle,
               body: l10n.helpTerritoryMapBody,
             ),
+            _HelpTopic(
+              icon: Icons.front_hand_outlined,
+              title: l10n.helpPwApplyTitle,
+              body: l10n.helpPwApplyBody,
+            ),
             if (roles.any) ...[
               const Divider(height: 32),
               _SectionHeader(l10n.helpAdminSection),
@@ -57,13 +67,29 @@ class HelpScreen extends ConsumerWidget {
                   title: l10n.helpPdfExportTitle,
                   body: l10n.helpPdfExportBody,
                 ),
+              if (roles.canEditPublicWitnessing())
+                _HelpTopic(
+                  icon: Icons.groups_outlined,
+                  title: l10n.helpPwAssignTitle,
+                  body: l10n.helpPwAssignBody,
+                ),
+              if (roles.canEditPublishers())
+                _HelpTopic(
+                  icon: Icons.picture_as_pdf_outlined,
+                  title: l10n.helpS21Title,
+                  body: l10n.helpS21Body,
+                ),
+              if (roles.canEditWeekend())
+                _HelpTopic(
+                  icon: Icons.picture_as_pdf_outlined,
+                  title: l10n.helpS99Title,
+                  body: l10n.helpS99Body,
+                ),
               if (roles.canEditTerritories())
                 _HelpTopic(
                   icon: Icons.map_outlined,
                   title: l10n.helpGoogleMyMapsTitle,
-                  body:
-                      '${l10n.helpGoogleMyMapsBody}\n\n'
-                      '${l10n.helpGoogleMyMapsPropagationNote}',
+                  body: l10n.helpGoogleMyMapsBody,
                   action: OutlinedButton.icon(
                     onPressed: () => launchUrl(
                       Uri.parse(_googleMyMapsGuideUrl),

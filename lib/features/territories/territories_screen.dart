@@ -103,10 +103,17 @@ class _MyTerritoriesSection extends ConsumerWidget {
           Card(
             child: ListTile(
               title: Text(_territoryLabel(byId[assignment.territoryId])),
-              subtitle: Text(l10n.terrAssignedOn(assignment
-                      .assignedDate.isEmpty
-                  ? '—'
-                  : dateFmt.format(parseDateKey(assignment.assignedDate)))),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.terrAssignedOn(assignment.assignedDate.isEmpty
+                      ? '—'
+                      : dateFmt.format(parseDateKey(assignment.assignedDate)))),
+                  if ((byId[assignment.territoryId]?.notes ?? '').isNotEmpty)
+                    Text(byId[assignment.territoryId]!.notes,
+                        style: Theme.of(context).textTheme.bodySmall),
+                ],
+              ),
               leading: (byId[assignment.territoryId]?.mapUrl ?? '')
                       .isNotEmpty
                   ? IconButton(
@@ -473,14 +480,19 @@ class _AllTerritoriesSectionState
                   if (expanded)
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                      child: history.isEmpty
-                          ? Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(l10n.terrHistoryEmpty,
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall),
-                            )
-                          : Column(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (territory.notes.isNotEmpty) ...[
+                            Text('${l10n.terrNotes}: ${territory.notes}',
+                                style: Theme.of(context).textTheme.bodySmall),
+                            const SizedBox(height: 8),
+                          ],
+                          if (history.isEmpty)
+                            Text(l10n.terrHistoryEmpty,
+                                style: Theme.of(context).textTheme.bodySmall)
+                          else
+                            Column(
                               children: [
                                 const Divider(height: 1),
                                 for (final a in history)
@@ -508,6 +520,8 @@ class _AllTerritoriesSectionState
                                   ),
                               ],
                             ),
+                        ],
+                      ),
                     ),
                 ],
               ),

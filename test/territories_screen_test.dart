@@ -13,12 +13,12 @@ import 'package:flutter_test/flutter_test.dart';
 /// search+sort controls, and tap-to-expand assignment history.
 void main() {
   Future<void> seedTerritory(FakeFirebaseFirestore db, String id,
-      {required String name, required String number}) {
+      {required String name, required String number, String notes = ''}) {
     return db.collection('territories').doc(id).set({
       'name': name,
       'number': number,
       'mapUrl': '',
-      'notes': '',
+      'notes': notes,
     });
   }
 
@@ -177,5 +177,22 @@ void main() {
     await tester.tap(find.text('1 — Alpha'));
     await tester.pumpAndSettle();
     expect(find.text('Finished early'), findsNothing);
+  });
+
+  testWidgets('territory note shows only when the details are rolled down',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await seedTerritory(db, 't1',
+        name: 'Alpha', number: '1', notes: 'Locked gate on Main St');
+
+    await tester.pumpWidget(wrap(db, const []));
+    await tester.pumpAndSettle();
+
+    // Collapsed: the note is not shown next to the territory row.
+    expect(find.textContaining('Locked gate on Main St'), findsNothing);
+
+    await tester.tap(find.text('1 — Alpha'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Locked gate on Main St'), findsOneWidget);
   });
 }

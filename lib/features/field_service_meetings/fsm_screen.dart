@@ -139,7 +139,15 @@ class _FsmWeekView extends ConsumerWidget {
                     ],
                   ),
                   title: Text('${meeting.time}  ${meeting.location}'),
-                  subtitle: AssignmentText(meeting.assignment),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AssignmentText(meeting.assignment),
+                      if (meeting.note.isNotEmpty)
+                        Text(meeting.note,
+                            style: Theme.of(context).textTheme.bodySmall),
+                    ],
+                  ),
                   trailing: canEdit
                       ? IconButton(
                           icon: const Icon(Icons.delete_outline),
@@ -167,6 +175,7 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
   final l10n = context.l10n;
   var meeting = existing ?? FsmMeeting(date: dateKey(DateTime.now()));
   final locationCtrl = TextEditingController(text: meeting.location);
+  final noteCtrl = TextEditingController(text: meeting.note);
 
   final saved = await showDialog<bool>(
     context: context,
@@ -204,7 +213,8 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
               existing == null ? l10n.fsmAddMeeting : l10n.fsmEditMeeting),
           content: SizedBox(
             width: 360,
-            child: Column(
+            child: SingleChildScrollView(
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 ListTile(
@@ -222,6 +232,11 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
                 TextField(
                   controller: locationCtrl,
                   decoration: InputDecoration(labelText: l10n.fsmLocation),
+                ),
+                TextField(
+                  controller: noteCtrl,
+                  maxLines: 2,
+                  decoration: InputDecoration(labelText: l10n.fsmNote),
                 ),
                 const SizedBox(height: 8),
                 ListTile(
@@ -246,6 +261,7 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
                 ),
               ],
             ),
+            ),
           ),
           actions: [
             TextButton(
@@ -260,10 +276,12 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
     ),
   );
   if (saved == true) {
-    await ref
-        .read(fsmRepositoryProvider)
-        .saveMeeting(meeting.copyWith(location: locationCtrl.text.trim()));
+    await ref.read(fsmRepositoryProvider).saveMeeting(meeting.copyWith(
+          location: locationCtrl.text.trim(),
+          note: noteCtrl.text.trim(),
+        ));
     ref.invalidate(assignmentHistoryProvider);
   }
   locationCtrl.dispose();
+  noteCtrl.dispose();
 }
