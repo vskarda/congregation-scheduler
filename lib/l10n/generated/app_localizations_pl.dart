@@ -1180,6 +1180,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get songLabel => 'Pieśń';
 
   @override
+  String get songsSearchHint => 'Szukaj pieśni…';
+
+  @override
   String get songsEmpty =>
       'Brak jeszcze listy pieśni. Zaktualizuj ją z oficjalnej strony.';
 

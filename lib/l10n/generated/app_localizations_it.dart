@@ -1188,6 +1188,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get songLabel => 'Cantico';
 
   @override
+  String get songsSearchHint => 'Cerca cantici…';
+
+  @override
   String get songsEmpty =>
       'Ancora nessun elenco di cantici. Aggiornalo dal sito ufficiale.';
 

@@ -376,6 +376,7 @@
   "talksEditTitle": "主題を編集",
 
   "songLabel": "歌",
+  "songsSearchHint": "歌を検索…",
   "songsEmpty": "歌のリストがまだありません。公式サイトから更新してください。",
   "songsUpdateFromWeb": "公式サイトから歌のリストを更新",
   "songsUpdateDone": "歌のリストを更新しました: {count}曲。",

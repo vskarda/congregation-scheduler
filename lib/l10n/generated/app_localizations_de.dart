@@ -1191,6 +1191,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get songLabel => 'Lied';
 
   @override
+  String get songsSearchHint => 'Lieder suchen…';
+
+  @override
   String get songsEmpty =>
       'Noch keine Liederliste. Aktualisiere sie von der offiziellen Website.';
 

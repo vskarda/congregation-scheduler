@@ -1158,6 +1158,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get songLabel => '歌';
 
   @override
+  String get songsSearchHint => '歌を検索…';
+
+  @override
   String get songsEmpty => '歌のリストがまだありません。公式サイトから更新してください。';
 
   @override

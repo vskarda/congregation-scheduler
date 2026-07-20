@@ -1181,6 +1181,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get songLabel => 'Píseň';
 
   @override
+  String get songsSearchHint => 'Hledat píseň…';
+
+  @override
   String get songsEmpty =>
       'Zatím žádný seznam písní. Aktualizujte jej z oficiálního webu.';
 

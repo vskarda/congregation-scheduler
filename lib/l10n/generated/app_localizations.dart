@@ -2244,6 +2244,12 @@ abstract class AppLocalizations {
   /// **'Song'**
   String get songLabel;
 
+  /// No description provided for @songsSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search songs…'**
+  String get songsSearchHint;
+
   /// No description provided for @songsEmpty.
   ///
   /// In en, this message translates to:

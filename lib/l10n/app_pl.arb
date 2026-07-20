@@ -376,6 +376,7 @@
   "talksEditTitle": "Edytuj temat",
 
   "songLabel": "Pieśń",
+  "songsSearchHint": "Szukaj pieśni…",
   "songsEmpty": "Brak jeszcze listy pieśni. Zaktualizuj ją z oficjalnej strony.",
   "songsUpdateFromWeb": "Zaktualizuj listę pieśni z oficjalnej strony",
   "songsUpdateDone": "Zaktualizowano listę pieśni: {count} pieśni.",

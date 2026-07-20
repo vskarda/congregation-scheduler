@@ -376,6 +376,7 @@
   "talksEditTitle": "Modifier le titre",
 
   "songLabel": "Cantique",
+  "songsSearchHint": "Rechercher des cantiques…",
   "songsEmpty": "Aucune liste de cantiques pour l'instant. Mets-la à jour depuis le site officiel.",
   "songsUpdateFromWeb": "Mettre à jour la liste des cantiques depuis le site officiel",
   "songsUpdateDone": "Liste des cantiques mise à jour : {count} cantiques.",

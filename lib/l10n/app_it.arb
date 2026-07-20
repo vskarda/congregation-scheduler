@@ -376,6 +376,7 @@
   "talksEditTitle": "Modifica titolo",
 
   "songLabel": "Cantico",
+  "songsSearchHint": "Cerca cantici…",
   "songsEmpty": "Ancora nessun elenco di cantici. Aggiornalo dal sito ufficiale.",
   "songsUpdateFromWeb": "Aggiorna l'elenco dei cantici dal sito ufficiale",
   "songsUpdateDone": "Elenco dei cantici aggiornato: {count} cantici.",

@@ -1180,6 +1180,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get songLabel => 'İlahi';
 
   @override
+  String get songsSearchHint => 'İlahileri ara…';
+
+  @override
   String get songsEmpty =>
       'Henüz ilahi listesi yok. Resmî web sitesinden güncelleyin.';
 

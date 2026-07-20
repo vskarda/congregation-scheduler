@@ -397,6 +397,7 @@
   "talksEditTitle": "Edit title",
 
   "songLabel": "Song",
+  "songsSearchHint": "Search songs…",
   "songsEmpty": "No song list yet. Update it from the official web.",
   "songsUpdateFromWeb": "Update song list from official web",
   "songsUpdateDone": "Song list updated: {count} songs.",

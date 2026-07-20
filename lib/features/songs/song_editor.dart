@@ -150,7 +150,7 @@ class _SongEditorDialogState extends ConsumerState<_SongEditorDialog> {
                           children: [
                             TextField(
                               decoration: InputDecoration(
-                                labelText: l10n.talksSearchHint,
+                                labelText: l10n.songsSearchHint,
                                 prefixIcon: const Icon(Icons.search),
                                 isDense: true,
                               ),

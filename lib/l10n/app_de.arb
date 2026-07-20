@@ -376,6 +376,7 @@
   "talksEditTitle": "Thema bearbeiten",
 
   "songLabel": "Lied",
+  "songsSearchHint": "Lieder suchen…",
   "songsEmpty": "Noch keine Liederliste. Aktualisiere sie von der offiziellen Website.",
   "songsUpdateFromWeb": "Liederliste von der offiziellen Website aktualisieren",
   "songsUpdateDone": "Liederliste aktualisiert: {count} Lieder.",

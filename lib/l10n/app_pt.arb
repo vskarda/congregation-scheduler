@@ -376,6 +376,7 @@
   "talksEditTitle": "Editar tema",
 
   "songLabel": "Cântico",
+  "songsSearchHint": "Pesquisar cânticos…",
   "songsEmpty": "Ainda não há lista de cânticos. Atualize-a pelo site oficial.",
   "songsUpdateFromWeb": "Atualizar a lista de cânticos pelo site oficial",
   "songsUpdateDone": "Lista de cânticos atualizada: {count} cânticos.",

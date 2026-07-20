@@ -381,6 +381,7 @@
   "talksEditTitle": "Upravit námět",
 
   "songLabel": "Píseň",
+  "songsSearchHint": "Hledat píseň…",
   "songsEmpty": "Zatím žádný seznam písní. Aktualizujte jej z oficiálního webu.",
   "songsUpdateFromWeb": "Aktualizovat seznam písní z oficiálního webu",
   "songsUpdateDone": "Seznam písní aktualizován: {count} písní.",
