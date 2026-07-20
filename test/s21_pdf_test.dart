@@ -18,6 +18,7 @@ PdfFonts loadFontsFromDisk() {
   return PdfFonts(
     base: pw.Font.ttf(read('assets/fonts/NotoSans-Regular.ttf')),
     bold: pw.Font.ttf(read('assets/fonts/NotoSans-Bold.ttf')),
+    fallback: [pw.Font.ttf(read('assets/fonts/NotoSansJP-Regular.ttf'))],
   );
 }
 
@@ -86,6 +87,90 @@ void main() {
       reportsByMonth: reports,
       l10n: lookupAppLocalizations(const Locale('es')),
       locale: 'es',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds an Italian S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('it')),
+      locale: 'it',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds a French S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('fr')),
+      locale: 'fr',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds a Portuguese S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('pt')),
+      locale: 'pt',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds a Polish S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('pl')),
+      locale: 'pl',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds a German S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('de')),
+      locale: 'de',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('builds a Japanese S-21 PDF with CJK glyphs', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('ja')),
+      locale: 'ja',
       fonts: loadFontsFromDisk(),
     );
     expect(bytes.length, greaterThan(1000));

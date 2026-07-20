@@ -78,6 +78,108 @@ const _esWeek = '''
 </body></html>
 ''';
 
+const _itWeek = '''
+<html><body>
+<h1>6-12 LUGLIO | SALMO 45</h1>
+<p>CANTICO 1 e preghiera</p>
+<h2>TESORI DELLA PAROLA DI DIO</h2>
+<p>1. Geova benedice il suo Re (10 min)</p>
+<p>2. Gemme spirituali (10 min)</p>
+<p>3. Lettura biblica (4 min)</p>
+<h2>EFFICACI NEL MINISTERO</h2>
+<p>4. Iniziare una conversazione (3 min)</p>
+<h2>VITA CRISTIANA</h2>
+<p>CANTICO 22</p>
+<p>5. Studio biblico di congregazione (30 min)</p>
+<p>CANTICO 33 e preghiera</p>
+</body></html>
+''';
+
+const _frWeek = '''
+<html><body>
+<h1>6-12 JUILLET | PSAUME 45</h1>
+<p>CANTIQUE 1 et prière</p>
+<h2>JOYAUX DE LA PAROLE DE DIEU</h2>
+<p>1. Jéhovah bénit son Roi (10 min)</p>
+<p>2. Perles spirituelles (10 min)</p>
+<p>3. Lecture de la Bible (4 min)</p>
+<h2>APPLIQUE-TOI AU MINISTÈRE</h2>
+<p>4. Comment entamer une conversation (3 min)</p>
+<h2>VIE CHRÉTIENNE</h2>
+<p>CANTIQUE 22</p>
+<p>5. Étude biblique de l'assemblée (30 min)</p>
+<p>CANTIQUE 33 et prière</p>
+</body></html>
+''';
+
+const _ptWeek = '''
+<html><body>
+<h1>6-12 DE JULHO | SALMO 45</h1>
+<p>CÂNTICO 1 e oração</p>
+<h2>TESOUROS DA PALAVRA DE DEUS</h2>
+<p>1. Jeová abençoa o seu Rei (10 min)</p>
+<p>2. Joias espirituais (10 min)</p>
+<p>3. Leitura da Bíblia (4 min)</p>
+<h2>FAÇA SEU MELHOR NO MINISTÉRIO</h2>
+<p>4. Iniciando conversas (3 min)</p>
+<h2>NOSSA VIDA CRISTÃ</h2>
+<p>CÂNTICO 22</p>
+<p>5. Estudo bíblico de congregação (30 min)</p>
+<p>CÂNTICO 33 e oração</p>
+</body></html>
+''';
+
+const _plWeek = '''
+<html><body>
+<h1>6-12 LIPCA | PSALM 45</h1>
+<p>PIEŚŃ 1 i modlitwa</p>
+<h2>SKARBY ZE SŁOWA BOŻEGO</h2>
+<p>1. Jehowa błogosławi swojego Króla (10 min)</p>
+<p>2. Duchowe skarby (10 min)</p>
+<p>3. Czytanie Biblii (4 min)</p>
+<h2>ULEPSZAJMY SWOJĄ SŁUŻBĘ</h2>
+<p>4. Rozpoczynanie rozmów (3 min)</p>
+<h2>CHRZEŚCIJAŃSKI TRYB ŻYCIA</h2>
+<p>PIEŚŃ 22</p>
+<p>5. Zborowe studium Biblii (30 min)</p>
+<p>PIEŚŃ 33 i modlitwa</p>
+</body></html>
+''';
+
+const _deWeek = '''
+<html><body>
+<h1>6.–12. JULI | PSALM 45</h1>
+<p>LIED Nr. 1 und Gebet</p>
+<h2>SCHÄTZE AUS GOTTES WORT</h2>
+<p>1. Jehova segnet seinen König (10 Min.)</p>
+<p>2. Nach geistigen Schätzen graben (10 Min.)</p>
+<p>3. Bibellesung (4 Min.)</p>
+<h2>UNS IM DIENST VERBESSERN</h2>
+<p>4. Ein Gespräch beginnen (3 Min.)</p>
+<h2>UNSER LEBEN ALS CHRIST</h2>
+<p>LIED Nr. 22</p>
+<p>5. Versammlungsbibelstudium (30 Min.)</p>
+<p>LIED Nr. 33 und Gebet</p>
+</body></html>
+''';
+
+const _jaWeek = '''
+<html><body>
+<h1>7月6-12日 | 詩編 45</h1>
+<p>歌 1、祈り</p>
+<h2>神の言葉の宝</h2>
+<p>1. エホバは自分の王を祝福する（10分）</p>
+<p>2. 宝石を探し出す（10分）</p>
+<p>3. 聖書朗読（4分）</p>
+<h2>野外奉仕に励む</h2>
+<p>4. 会話を始める（3分）</p>
+<h2>クリスチャンとして生活する</h2>
+<p>歌 22</p>
+<p>5. 会衆の聖書研究（30分）</p>
+<p>歌 33、祈り</p>
+</body></html>
+''';
+
 /// Sanitized replica of the 2024+ workbook markup (mwb_E_202611): part
 /// titles in <h3>, duration + instructions in the following detail
 /// paragraph, sections marked by dc-icon-- wrapper classes.
@@ -220,6 +322,144 @@ void main() {
           week.parts.any((p) =>
               p.type == LmmPartType.cbsConductor &&
               p.title == 'Estudio bíblico de la congregación'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses an Italian week', () {
+      final week =
+          MwbParser.parseWeekDocument(_itWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Studio biblico di congregazione'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a French week', () {
+      final week =
+          MwbParser.parseWeekDocument(_frWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Étude biblique de l\'assemblée'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a Portuguese week', () {
+      final week =
+          MwbParser.parseWeekDocument(_ptWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Estudo bíblico de congregação'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a Polish week', () {
+      final week =
+          MwbParser.parseWeekDocument(_plWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Zborowe studium Biblii'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a German week', () {
+      final week =
+          MwbParser.parseWeekDocument(_deWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Versammlungsbibelstudium'),
+          isTrue);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a Japanese week', () {
+      final week =
+          MwbParser.parseWeekDocument(_jaWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == '会衆の聖書研究'),
           isTrue);
       expect(
           week.parts.map((part) => part.type),

@@ -138,13 +138,27 @@ enum _Label {
 /// en / cs / tr, both the official card wording and the app's own S-21
 /// export wording.
 const Map<_Label, List<String>> _labelPhrases = {
-  _Label.name: ['name', 'jmeno', 'isim', 'nombre'],
+  _Label.name: [
+    'name',
+    'jmeno',
+    'isim',
+    'nombre',
+    'nomeecognome',
+    'nom',
+    'nome',
+    'imieinazwisko',
+  ],
   _Label.birth: [
     'dateofbirth',
     'birthdate',
     'datumnarozeni',
     'dogumtarihi',
     'fechadenacimiento',
+    'datadinascita',
+    'datedenaissance',
+    'datadenascimento',
+    'dataurodzenia',
+    'geburtsdatum',
   ],
   _Label.baptism: [
     'dateofbaptism',
@@ -152,41 +166,129 @@ const Map<_Label, List<String>> _labelPhrases = {
     'datumkrtu',
     'vaftiztarihi',
     'fechadebautismo',
+    'datadelbattesimo',
+    'datedebapteme',
+    'datadebatismo',
+    'datachrztu',
+    'taufdatum',
   ],
-  _Label.male: ['male', 'muz', 'erkek', 'hombre'],
-  _Label.female: ['female', 'zena', 'kadin', 'mujer'],
-  _Label.otherSheep: ['othersheep', 'jinaovce', 'baskakoyun', 'otrasovejas'],
-  _Label.anointed: ['anointed', 'pomazany', 'meshedilmis', 'ungido'],
-  _Label.elder: ['elder', 'starsi', 'ihtiyar', 'anciano'],
+  _Label.male: [
+    'male',
+    'muz',
+    'erkek',
+    'hombre',
+    'maschio',
+    'homme',
+    'masculino',
+    'mezczyzna',
+    'mannlich',
+  ],
+  _Label.female: [
+    'female',
+    'zena',
+    'kadin',
+    'mujer',
+    'femmina',
+    'femme',
+    'feminino',
+    'kobieta',
+    'weiblich',
+  ],
+  _Label.otherSheep: [
+    'othersheep',
+    'jinaovce',
+    'baskakoyun',
+    'otrasovejas',
+    'altrepecore',
+    'autrebrebis',
+    'outrasovelhas',
+    'drugaowca',
+    'anderesschaf',
+  ],
+  _Label.anointed: [
+    'anointed',
+    'pomazany',
+    'meshedilmis',
+    'ungido',
+    'unto',
+    'oint',
+    'pomazaniec',
+    'gesalbter',
+  ],
+  _Label.elder: [
+    'elder',
+    'starsi',
+    'ihtiyar',
+    'anciano',
+    'anziano',
+    'ancien',
+    'anciao',
+    'starszy',
+    'altester',
+  ],
   _Label.ministerialServant: [
     'ministerialservant',
     'sluzebnipomocnik',
     'hizmetgorevlisi',
     'siervoministerial',
+    'servitorediministero',
+    'assistant',
+    'servoministerial',
+    'slugapomocniczy',
+    'dienstamtgehilfe',
   ],
   _Label.regularPioneer: [
     'regularpioneer',
     'pravidelnyprukopnik',
     'daimioncu',
     'precursorregular',
+    'pioniereregolare',
+    'pionnierpermanent',
+    'pioneiroregular',
+    'pionierstaly',
+    'allgemeinerpionier',
   ],
   _Label.specialPioneer: [
     'specialpioneer',
     'zvlastniprukopnik',
     'ozeloncu',
     'precursorespecial',
+    'pionierespeciale',
+    'pionnierspecial',
+    'pioneiroespecial',
+    'pionierspecjalny',
+    'sonderpionier',
   ],
   _Label.fieldMissionary: [
     'fieldmissionary',
     'misionar',
     'gorevlivaiz',
     'misioneroquesirveenelcampo',
+    'missionariosulcampo',
+    'missionnaire',
+    'missionarioemcampo',
+    'misjonarzterenowy',
+    'missionar',
   ],
-  _Label.serviceYear: ['serviceyear', 'sluzebnirok', 'hizmetyili', 'anodeservicio'],
-  _Label.total: ['total', 'celkem', 'toplam'],
+  _Label.serviceYear: [
+    'serviceyear',
+    'sluzebnirok',
+    'hizmetyili',
+    'anodeservicio',
+    'annodiservizio',
+    'anneedeservice',
+    'anodeservico',
+    'roksluzbowy',
+    'dienstjahr',
+  ],
+  _Label.total: ['total', 'celkem', 'toplam', 'totale', 'ogolem', 'insgesamt'],
 };
 
-/// Condensed month names (en / cs / tr / es) → calendar month number.
+/// Condensed month names (en / cs / tr / es / it / fr / pt / pl / de) →
+/// calendar month number (Polish uses the nominative here; the workbook parser
+/// uses the genitive). Spellings shared across languages (`marzo`, `agosto`,
+/// `novembre`, `abril`, `listopad`, `april`, `mai`, `august`, `september`,
+/// `november`) appear once.
 const Map<String, int> _monthPhrases = {
   'september': 9, 'october': 10, 'november': 11, 'december': 12, //
   'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5,
@@ -200,6 +302,17 @@ const Map<String, int> _monthPhrases = {
   'enero': 1, 'febrero': 2, 'marzo': 3, 'abril': 4, 'mayo': 5,
   'junio': 6, 'julio': 7, 'agosto': 8, 'septiembre': 9, 'octubre': 10,
   'noviembre': 11, 'diciembre': 12,
+  'gennaio': 1, 'febbraio': 2, 'aprile': 4, 'maggio': 5, 'giugno': 6,
+  'luglio': 7, 'settembre': 9, 'ottobre': 10, 'novembre': 11, 'dicembre': 12,
+  'janvier': 1, 'fevrier': 2, 'mars': 3, 'avril': 4, 'mai': 5, 'juin': 6,
+  'juillet': 7, 'aout': 8, 'septembre': 9, 'octobre': 10, 'decembre': 12,
+  'janeiro': 1, 'fevereiro': 2, 'marco': 3, 'maio': 5, 'junho': 6,
+  'julho': 7, 'setembro': 9, 'outubro': 10, 'novembro': 11, 'dezembro': 12,
+  'styczen': 1, 'luty': 2, 'marzec': 3, 'kwiecien': 4, 'maj': 5,
+  'czerwiec': 6, 'lipiec': 7, 'sierpien': 8, 'wrzesien': 9, 'pazdziernik': 10,
+  'grudzien': 12,
+  'januar': 1, 'februar': 2, 'marz': 3, 'juni': 6, 'juli': 7,
+  'oktober': 10, 'dezember': 12,
 };
 
 /// Checkbox glyphs. `þ`/`¨` are what the common generated cards' dingbat
@@ -209,7 +322,7 @@ const Set<String> _checkedGlyphs = {'þ', 'Þ', '☑', '☒', '✓', '✔', '■
 const Set<String> _uncheckedGlyphs = {'¨', '☐', '□', '❑'};
 
 const Map<String, String> _diacriticsMap = {
-  'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'ă': 'a', 'ą': 'a', //
+  'á': 'a', 'à': 'a', 'â': 'a', 'ä': 'a', 'ă': 'a', 'ą': 'a', 'ã': 'a', //
   'č': 'c', 'ç': 'c', 'ć': 'c',
   'ď': 'd', 'đ': 'd',
   'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e', 'ě': 'e', 'ę': 'e',
@@ -217,7 +330,7 @@ const Map<String, String> _diacriticsMap = {
   'í': 'i', 'ì': 'i', 'î': 'i', 'ï': 'i', 'ı': 'i',
   'ľ': 'l', 'ĺ': 'l', 'ł': 'l',
   'ň': 'n', 'ń': 'n', 'ñ': 'n',
-  'ó': 'o', 'ò': 'o', 'ô': 'o', 'ö': 'o', 'ő': 'o',
+  'ó': 'o', 'ò': 'o', 'ô': 'o', 'ö': 'o', 'ő': 'o', 'õ': 'o',
   'ř': 'r', 'ŕ': 'r',
   'š': 's', 'ś': 's', 'ş': 's', 'ș': 's', 'ß': 'ss',
   'ť': 't', 'ţ': 't', 'ț': 't',
@@ -249,7 +362,8 @@ final RegExp _intRe = RegExp(r'^\d+$');
 final RegExp _yearRe = RegExp(r'^(19|20)\d{2}$');
 final RegExp _ymdRe = RegExp(r'(\d{4})[./-](\d{1,2})[./-](\d{1,2})');
 final RegExp _dmyRe = RegExp(r'(\d{1,2})[./](\d{1,2})[./](\d{4})');
-final RegExp _creditRe = RegExp(r'(?:credit|kredit|kredi)[^0-9]{0,3}(\d+)');
+final RegExp _creditRe =
+    RegExp(r'(?:credit|kredit|kredi|kredyt|gutschrift)[^0-9]{0,3}(\d+)');
 
 class _Hit {
   const _Hit({this.label, this.month, required this.end});

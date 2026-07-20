@@ -89,16 +89,105 @@ abstract final class MwbParser {
     'DICIEMBRE': 12,
   };
 
+  // Italian month names (nominative; not inflected in the date ranges,
+  // e.g. "6-12 luglio").
+  static const _itMonths = {
+    'GENNAIO': 1,
+    'FEBBRAIO': 2,
+    'MARZO': 3,
+    'APRILE': 4,
+    'MAGGIO': 5,
+    'GIUGNO': 6,
+    'LUGLIO': 7,
+    'AGOSTO': 8,
+    'SETTEMBRE': 9,
+    'OTTOBRE': 10,
+    'NOVEMBRE': 11,
+    'DICEMBRE': 12,
+  };
+
+  // French month names (nominative; not inflected in the date ranges,
+  // e.g. "6-12 juillet").
+  static const _frMonths = {
+    'JANVIER': 1,
+    'FÉVRIER': 2,
+    'MARS': 3,
+    'AVRIL': 4,
+    'MAI': 5,
+    'JUIN': 6,
+    'JUILLET': 7,
+    'AOÛT': 8,
+    'SEPTEMBRE': 9,
+    'OCTOBRE': 10,
+    'NOVEMBRE': 11,
+    'DÉCEMBRE': 12,
+  };
+
+  // Portuguese month names (nominative; not inflected in the date ranges,
+  // e.g. "6-12 de julho").
+  static const _ptMonths = {
+    'JANEIRO': 1,
+    'FEVEREIRO': 2,
+    'MARÇO': 3,
+    'ABRIL': 4,
+    'MAIO': 5,
+    'JUNHO': 6,
+    'JULHO': 7,
+    'AGOSTO': 8,
+    'SETEMBRO': 9,
+    'OUTUBRO': 10,
+    'NOVEMBRO': 11,
+    'DEZEMBRO': 12,
+  };
+
+  // Polish month names in the genitive (as used in the date ranges, e.g.
+  // "6-12 lipca").
+  static const _plMonths = {
+    'STYCZNIA': 1,
+    'LUTEGO': 2,
+    'MARCA': 3,
+    'KWIETNIA': 4,
+    'MAJA': 5,
+    'CZERWCA': 6,
+    'LIPCA': 7,
+    'SIERPNIA': 8,
+    'WRZEŚNIA': 9,
+    'PAŹDZIERNIKA': 10,
+    'LISTOPADA': 11,
+    'GRUDNIA': 12,
+  };
+
+  // German month names (nominative; not inflected in the date ranges,
+  // e.g. "6.–12. Juli").
+  static const _deMonths = {
+    'JANUAR': 1,
+    'FEBRUAR': 2,
+    'MÄRZ': 3,
+    'APRIL': 4,
+    'MAI': 5,
+    'JUNI': 6,
+    'JULI': 7,
+    'AUGUST': 8,
+    'SEPTEMBER': 9,
+    'OKTOBER': 10,
+    'NOVEMBER': 11,
+    'DEZEMBER': 12,
+  };
+
   static final _numberedTitlePattern = RegExp(r'^\s*\d+\.\s*(.+)$');
 
   // "(10 min.)", "(Br. … 3 min.)", "(10 dk.)"; the digits directly before
   // the localized minutes abbreviation.
-  static final _durationPattern = RegExp(r'\((?:\D{0,12}?)?(\d+)\s*(?:min|dk)',
-      caseSensitive: false, unicode: true);
+  // Opening paren (ASCII "(" or full-width "（" for Japanese), then the digits
+  // before the localized minutes abbreviation ("min", "dk" or Japanese "分").
+  static final _durationPattern = RegExp(
+      r'[(（](?:\D{0,12}?)?(\d+)\s*(?:min|dk|分)',
+      caseSensitive: false,
+      unicode: true);
 
-  static final _songPattern =
-      RegExp(r'(?:SONG|PÍSEŇ|İLAHİ|CANCIÓN)\s*(?:Ç\.\s*)?(\d+)',
-          caseSensitive: false);
+  static final _songPattern = RegExp(
+      r'(?:SONG|PÍSEŇ|İLAHİ|CANCIÓN|CANTICO|CANTIQUE|CÂNTICO|PIEŚŃ|LIED|歌)\s*(?:Ç\.\s*|NR\.\s*)?(\d+)',
+      caseSensitive: false);
 
   // Zero-width characters (ZWSP..ZWJ, BOM) that leak into extracted text.
   static final _invisiblePattern = RegExp('[\u200B-\u200D\uFEFF]');
@@ -209,6 +298,13 @@ abstract final class MwbParser {
   // fold both sides so the dot no longer decides a match.
   static String _matchKey(String text) =>
       text.toUpperCase().replaceAll('İ', 'I');
+
+  static final _letterPattern = RegExp(r'\p{L}', unicode: true);
+
+  /// Whether the character at [i] in [s] is a Unicode letter (used for
+  /// whole-word month matching in [_parseWeekStart]).
+  static bool _isLetterAt(String s, int i) =>
+      i >= 0 && i < s.length && _letterPattern.hasMatch(s[i]);
 
   /// Parses a single weekly XHTML document; returns null when the file is
   /// not a weekly program (toc, cover, …).
@@ -333,13 +429,25 @@ abstract final class MwbParser {
             titleUpper.contains('DUCHOVNÍ PERLY') ||
             titleUpper.contains('RUHSAL HAZINELER') ||
             titleUpper.contains('RUHI HAZINELER') ||
-            titleUpper.contains('PERLAS ESCONDIDAS')) {
+            titleUpper.contains('PERLAS ESCONDIDAS') ||
+            titleUpper.contains('GEMME SPIRITUALI') ||
+            titleUpper.contains('PERLES SPIRITUELLES') ||
+            titleUpper.contains('JOIAS ESPIRITUAIS') ||
+            titleUpper.contains('DUCHOWE SKARBY') ||
+            titleUpper.contains('GEISTIGEN SCHÄTZEN') ||
+            titleUpper.contains('宝石を探し出す')) {
           type = LmmPartType.gems;
         } else if (titleUpper.contains('BIBLE READING') ||
             titleUpper.contains('ČTENÍ BIBLE') ||
             titleUpper.contains('ČTENÍ Z BIBLE') ||
             titleUpper.contains('KUTSAL KITAP OKUMASI') ||
-            titleUpper.contains('LECTURA DE LA BIBLIA')) {
+            titleUpper.contains('LECTURA DE LA BIBLIA') ||
+            titleUpper.contains('LETTURA BIBLICA') ||
+            titleUpper.contains('LECTURE DE LA BIBLE') ||
+            titleUpper.contains('LEITURA DA BÍBLIA') ||
+            titleUpper.contains('CZYTANIE BIBLII') ||
+            titleUpper.contains('BIBELLESUNG') ||
+            titleUpper.contains('聖書朗読')) {
           type = LmmPartType.bibleReading;
         } else if (treasuresIndex == 1) {
           type = LmmPartType.gems;
@@ -354,7 +462,13 @@ abstract final class MwbParser {
               titleUpper.contains('CEMAAT KUTSAL KITAP TETKIKI') ||
               titleUpper.contains('CEMAAT KUTSAL KITAP INCELEMESI') ||
               titleUpper.contains('CEMAAT KUTSAL KITAP') ||
-              titleUpper.contains('ESTUDIO BÍBLICO DE LA CONGREGACIÓN'))) {
+              titleUpper.contains('ESTUDIO BÍBLICO DE LA CONGREGACIÓN') ||
+              titleUpper.contains('STUDIO BIBLICO DI CONGREGAZIONE') ||
+              titleUpper.contains('ÉTUDE BIBLIQUE DE L') ||
+              titleUpper.contains('ESTUDO BÍBLICO DE CONGREGAÇÃO') ||
+              titleUpper.contains('ZBOROWE STUDIUM BIBLII') ||
+              titleUpper.contains('VERSAMMLUNGSBIBELSTUDIUM') ||
+              titleUpper.contains('会衆の聖書研究'))) {
         type = LmmPartType.cbsConductor;
       }
 
@@ -440,14 +554,26 @@ abstract final class MwbParser {
         upper.contains('TREASURES FROM') ||
         upper.contains('TANRI’NIN SÖZÜNDEKI HAZINELER') ||
         upper.contains("TANRI'NIN SÖZÜNDEKI HAZINELER") ||
-        upper.contains('TESOROS DE LA BIBLIA')) {
+        upper.contains('TESOROS DE LA BIBLIA') ||
+        upper.contains('TESORI DELLA PAROLA DI DIO') ||
+        upper.contains('JOYAUX DE LA PAROLE DE DIEU') ||
+        upper.contains('TESOUROS DA PALAVRA DE DEUS') ||
+        upper.contains('SKARBY ZE SŁOWA BOŻEGO') ||
+        upper.contains('SCHÄTZE AUS GOTTES WORT') ||
+        upper.contains('神の言葉の宝')) {
       return LmmSection.treasures;
     }
     if (upper.contains('FIELD MINISTRY') ||
         upper.contains('VE SLUŽBĚ') ||
         upper.contains('TARLA HIZMETINDE') ||
         upper.contains('HIZMETTE BECERILERIMIZI') ||
-        upper.contains('SEAMOS MEJORES MAESTROS')) {
+        upper.contains('SEAMOS MEJORES MAESTROS') ||
+        upper.contains('EFFICACI NEL MINISTERO') ||
+        upper.contains('APPLIQUE-TOI AU MINISTÈRE') ||
+        upper.contains('FAÇA SEU MELHOR NO MINISTÉRIO') ||
+        upper.contains('ULEPSZAJMY SWOJĄ SŁUŻBĘ') ||
+        upper.contains('UNS IM DIENST VERBESSERN') ||
+        upper.contains('野外奉仕に励む')) {
       return LmmSection.ministry;
     }
     if (upper.contains('LIVING AS CHRISTIANS') ||
@@ -455,7 +581,13 @@ abstract final class MwbParser {
         upper.contains('KŘESŤANSKÝ ŽIVOT') ||
         upper.contains('HIRISTIYANLAR OLARAK') ||
         upper.contains('HIRISTIYANCA YAŞAM') ||
-        upper.contains('NUESTRA VIDA CRISTIANA')) {
+        upper.contains('NUESTRA VIDA CRISTIANA') ||
+        upper.contains('VITA CRISTIANA') ||
+        upper.contains('VIE CHRÉTIENNE') ||
+        upper.contains('NOSSA VIDA CRISTÃ') ||
+        upper.contains('CHRZEŚCIJAŃSKI TRYB ŻYCIA') ||
+        upper.contains('UNSER LEBEN ALS CHRIST') ||
+        upper.contains('クリスチャンとして生活する')) {
       return LmmSection.living;
     }
     return null;
@@ -467,6 +599,23 @@ abstract final class MwbParser {
   static DateTime? _parseWeekStart(String headline,
       {(int, int)? issue, DateTime? now}) {
     final upper = headline.toUpperCase();
+
+    // Japanese: "7月6～12日" / "2026年7月6日〜12日" — the month precedes 月 and
+    // the day is the first number after it (a different order from the
+    // Latin/day-first logic below).
+    final jpMonthMatch = RegExp(r'(\d{1,2})\s*月').firstMatch(headline);
+    if (jpMonthMatch != null) {
+      final jpMonth = int.parse(jpMonthMatch.group(1)!);
+      final jpDayMatch =
+          RegExp(r'(\d{1,2})').firstMatch(headline.substring(jpMonthMatch.end));
+      if (jpMonth >= 1 && jpMonth <= 12 && jpDayMatch != null) {
+        final jpDay = int.parse(jpDayMatch.group(1)!);
+        if (jpDay >= 1 && jpDay <= 31) {
+          return DateTime(
+              _resolveYear(jpMonth, jpDay, upper, issue, now), jpMonth, jpDay);
+        }
+      }
+    }
 
     // First 1-2 digit number that is not part of a longer number (skips the
     // digits of explicit years like "2026").
@@ -486,17 +635,30 @@ abstract final class MwbParser {
       (_csMonths, false),
       (_trMonths, false),
       (_esMonths, false),
+      (_itMonths, false),
+      (_frMonths, false),
+      (_ptMonths, false),
+      (_plMonths, false),
+      (_deMonths, false),
     ]) {
       for (final entry in months.entries) {
         var idx = upper.indexOf(entry.key);
         while (idx >= 0) {
-          final onExpectedSide =
-              monthComesFirst ? idx < dayMatch.start : idx > dayMatch.start;
-          final score =
-              (idx - dayMatch.start).abs() + (onExpectedSide ? 0 : 1000);
-          if (score < bestScore) {
-            bestScore = score;
-            month = entry.value;
+          // Match only whole words: a month name must not be a fragment of a
+          // longer word. Without this, e.g. German "JANUAR" would match inside
+          // English "JANUARY" and hijack the rollover-week disambiguation.
+          final end = idx + entry.key.length;
+          final boundedBefore = idx == 0 || !_isLetterAt(upper, idx - 1);
+          final boundedAfter = end >= upper.length || !_isLetterAt(upper, end);
+          if (boundedBefore && boundedAfter) {
+            final onExpectedSide =
+                monthComesFirst ? idx < dayMatch.start : idx > dayMatch.start;
+            final score =
+                (idx - dayMatch.start).abs() + (onExpectedSide ? 0 : 1000);
+            if (score < bestScore) {
+              bestScore = score;
+              month = entry.value;
+            }
           }
           idx = upper.indexOf(entry.key, idx + 1);
         }
@@ -504,31 +666,40 @@ abstract final class MwbParser {
     }
     if (month == null) return null;
 
-    int year;
+    return DateTime(_resolveYear(month, day, upper, issue, now), month, day);
+  }
+
+  /// Resolves the calendar year of a week given its [month]/[day]: an explicit
+  /// year in the [upper]-cased heading wins; otherwise the workbook [issue]
+  /// month (handling December↔January rollover); otherwise the year that puts
+  /// the week closest to [now].
+  static int _resolveYear(
+      int month, int day, String upper, (int, int)? issue, DateTime? now) {
     final explicitYear = RegExp(r'20\d{2}').firstMatch(upper);
     if (explicitYear != null) {
       // Year-rollover weeks spell the years out, first one first:
       // "DECEMBER 28, 2026–JANUARY 3, 2027".
-      year = int.parse(explicitYear.group(0)!);
-    } else if (issue != null) {
-      year = issue.$1;
+      return int.parse(explicitYear.group(0)!);
+    }
+    if (issue != null) {
+      var year = issue.$1;
       // December issues contain January weeks (and vice versa at rollover).
       if (issue.$2 >= 11 && month <= 2) year++;
       if (issue.$2 <= 2 && month >= 11) year--;
-    } else {
-      // Pick the year that puts the week closest to today.
-      final reference = now ?? DateTime.now();
-      year = reference.year;
-      var best = const Duration(days: 1 << 20);
-      for (final candidate in [year - 1, year, year + 1]) {
-        final d = DateTime(candidate, month, day);
-        final distance = d.difference(reference).abs();
-        if (distance < best) {
-          best = distance;
-          year = candidate;
-        }
+      return year;
+    }
+    // Pick the year that puts the week closest to today.
+    final reference = now ?? DateTime.now();
+    var year = reference.year;
+    var best = const Duration(days: 1 << 20);
+    for (final candidate in [year - 1, year, year + 1]) {
+      final d = DateTime(candidate, month, day);
+      final distance = d.difference(reference).abs();
+      if (distance < best) {
+        best = distance;
+        year = candidate;
       }
     }
-    return DateTime(year, month, day);
+    return year;
   }
 }

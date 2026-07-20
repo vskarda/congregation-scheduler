@@ -6,5 +6,11 @@ String pubLangFor(Locale locale) => switch (locale.languageCode) {
       'cs' => 'B',
       'tr' => 'TK',
       'es' => 'S',
+      'it' => 'I',
+      'fr' => 'F',
+      'pt' => 'T',
+      'pl' => 'P',
+      'de' => 'X',
+      'ja' => 'J',
       _ => 'E',
     };

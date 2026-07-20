@@ -198,3 +198,58 @@ real S-21 PDF in that language, not from your ARB translations.
 5. Export the S-21 and the midweek schedule PDF in the new language and
    diff every label against `example-forms/S-21_<CODE>.pdf` and
    `S-140_<CODE>.docx`.
+
+## 8. Shipped languages and cross-language pitfalls
+
+Currently shipped: English (E), Czech (B), Turkish (TK), Spanish (S),
+Italian (I), French (F), Portuguese (T), Polish (P), German (X), Japanese (J).
+Language symbols live in `lib/core/utils/pub_lang.dart`.
+
+Things later languages ran into (check these when adding the next one):
+
+- **Shared map keys must be unique.** `_monthPhrases` in
+  `s21_import_parser.dart` is one `const` map across all languages, and the
+  workbook month lists share the `_parseWeekStart` scan. When a spelling
+  collides with one already present (e.g. `abril`, `agosto`, `novembre`,
+  `listopad`, and the German `april`/`mai`/`august`/`september`/`november`
+  that equal the English ones) **do not re-add it** — a duplicate key is a
+  compile error, and it already maps to the right month.
+- **Whole-word month matching.** `_parseWeekStart` matches month names as
+  whole words (`_isLetterAt` boundary check) because otherwise German
+  `JANUAR` matches inside English `JANUARY` and hijacks the rollover-week
+  disambiguation. A month that is a prefix of an English month name relies
+  on this.
+- **Extraction.** French/German/Portuguese/Polish/Japanese S-21/S-1 PDFs
+  extract with decomposed diacritics or column interleaving via
+  `pdftotext -layout`; `pypdf` (`page.extract_text()`) usually gives cleaner
+  reading order — cross-check both.
+- **Diacritics map.** Portuguese needed `ã`/`õ` added to `_diacriticsMap`;
+  extend it for any letter the new alphabet introduces, or tokens silently
+  lose those characters.
+- **Monday-first calendar.** `pt` and `ja` are Sunday-first in CLDR (like
+  `en`) and are handled in `core/l10n/monday_first_localizations.dart`; a new
+  Sunday-first locale must be added there (its guard test fails otherwise).
+
+### Japanese (J) — best-effort, with known gaps
+
+- **PDF font.** Noto Sans (Latin-only) can't render kanji, so
+  `assets/fonts/NotoSansJP-Regular.ttf` is bundled and wired as the
+  `PdfFonts.fallback` used by every exported PDF. S-21/schedule export in
+  Japanese renders real glyphs (covered by tests).
+- **Workbook import** parses the Japanese date order (`7月6日〜12日`), the
+  `歌` song marker and full-width `（10分）` durations, plus the section /
+  gems / bible-reading / CBS headings. Verify against a real `mwb_J` epub —
+  the numbered-part format (`1.` vs `①`/full-width) was assumed from the
+  S-140 template, not a live epub.
+- **S-21 text-layer import is NOT wired for Japanese.** The label matcher in
+  `s21_import_parser.dart` normalizes to ASCII, which erases kanji, and the
+  official `S-21_J.pdf` uses a CID-subset font whose text layer does not
+  extract to Unicode at all. A dedicated CJK importer would be a separate
+  effort. Everything else (UI, PDF export, workbook import) works.
+- **Student-talk detection** (`_talkTitleKeywords`) has no Japanese entry:
+  the term is a single common character and would false-match conversation
+  parts, so the brother-only/no-assistant rule is not auto-applied for
+  Japanese — assign those parts manually.
+- **S-1 and S-21 terminology** were not sourced from the official Japanese
+  forms (no `S-1_J`; `S-21_J` did not extract). Those keys come from standard
+  JW-Japanese usage and should be reviewed by a Japanese speaker.

@@ -61,7 +61,16 @@ String lmmClassLabel(AppLocalizations l10n, int classIndex) =>
 /// Detection is by title keyword because the imported workbook parts carry no
 /// dedicated part type (all ministry student parts are [LmmPartType.fieldMinistry]).
 /// Add languages by extending [_talkTitleKeywords].
-const _talkTitleKeywords = ['talk', 'proslov', 'konuşma', 'discurso'];
+const _talkTitleKeywords = [
+  'talk',
+  'proslov',
+  'konuşma',
+  'discurso',
+  'discorso',
+  'discours',
+  'przemówienie',
+  'ansprache',
+];
 
 bool isStudentTalk(LmmPart part) {
   if (part.section != LmmSection.ministry) return false;
