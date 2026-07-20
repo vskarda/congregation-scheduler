@@ -5,12 +5,14 @@ import 'package:http/http.dart' as http;
 import '../../../core/config/app_config.dart';
 import '../../../core/models/models.dart';
 import '../../../core/utils/dates.dart';
+import '../../../core/utils/pub_lang.dart';
 import 'mwb_parser.dart';
 import 'pub_media.dart';
 
 /// Opens the native file picker for a .epub and parses it.
-/// Returns null if the user cancels the picker.
-Future<List<LmmWeek>?> pickEpubWeeks() async {
+/// Returns null if the user cancels the picker. When [songTitles] is provided
+/// (a song number->title catalog), parsed song numbers resolve to their titles.
+Future<List<LmmWeek>?> pickEpubWeeks({Map<int, String>? songTitles}) async {
   final result = await FilePicker.pickFiles(
     type: FileType.custom,
     allowedExtensions: ['epub'],
@@ -18,18 +20,17 @@ Future<List<LmmWeek>?> pickEpubWeeks() async {
   );
   final bytes = result?.files.single.bytes;
   if (bytes == null) return null;
-  return MwbParser.parse(bytes, fileName: result!.files.single.name);
+  return MwbParser.parse(bytes,
+      fileName: result!.files.single.name, songTitles: songTitles);
 }
 
 /// Fetches the current + next Meeting Workbook issue from the CDN for
-/// [locale]. Returns null if neither issue is published yet.
-Future<List<LmmWeek>?> fetchCdnWeeks(Locale locale) async {
+/// [locale]. Returns null if neither issue is published yet. When [songTitles]
+/// is provided, parsed song numbers resolve to their titles.
+Future<List<LmmWeek>?> fetchCdnWeeks(Locale locale,
+    {Map<int, String>? songTitles}) async {
   const template = AppConfig.workbookCdnUrlTemplate;
-  final lang = switch (locale.languageCode) {
-    'cs' => 'B',
-    'tr' => 'TK',
-    _ => 'E',
-  };
+  final lang = pubLangFor(locale);
   final now = DateTime.now();
   // Workbook issues cover two months starting with odd months; try the
   // current issue and the next one (which may not be published yet).
@@ -48,8 +49,8 @@ Future<List<LmmWeek>?> fetchCdnWeeks(Locale locale) async {
     final epub = await http.get(Uri.parse(epubUrl));
     if (epub.statusCode != 200) throw Exception('HTTP ${epub.statusCode}');
     fetchedAny = true;
-    final weeks =
-        MwbParser.parse(epub.bodyBytes, fileName: epubUrl, source: 'cdn');
+    final weeks = MwbParser.parse(epub.bodyBytes,
+        fileName: epubUrl, source: 'cdn', songTitles: songTitles);
     for (final week in weeks) {
       weeksById[week.id] = week;
     }

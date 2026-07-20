@@ -205,6 +205,15 @@ service cloud.firestore {
       allow write: if hasRole('weekendSchedule');
     }
 
+    // Meeting song catalog fetched from the official CDN; readable by all
+    // verified users so the weekend + midweek song pickers can offer titles.
+    // Either schedule role may refresh it (the picker's inline update button is
+    // reachable from both the weekend and midweek views).
+    match /song_catalog/{docId} {
+      allow read: if isVerified();
+      allow write: if hasRole('weekendSchedule') || hasRole('lmmSchedule');
+    }
+
     match /pw_recurring/{ruleId} {
       allow read: if isVerified();
       allow write: if hasRole('publicWitnessing');

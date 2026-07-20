@@ -366,6 +366,18 @@
   "talksOpenCatalog": "Spravovat náměty přednášek",
   "talksEditTitle": "Upravit námět",
 
+  "songLabel": "Píseň",
+  "songsEmpty": "Zatím žádný seznam písní. Aktualizujte jej z oficiálního webu.",
+  "songsUpdateFromWeb": "Aktualizovat seznam písní z oficiálního webu",
+  "songsUpdateDone": "Seznam písní aktualizován: {count} písní.",
+  "@songsUpdateDone": {"placeholders": {"count": {"type": "int"}}},
+  "songsCdnNothing": "Seznam písní zatím není online k dispozici.",
+  "songsStatusEmpty": "Seznam písní zatím nebyl importován.",
+  "songsStatusLoaded": "{count} písní · aktualizováno {date}",
+  "@songsStatusLoaded": {"placeholders": {"count": {"type": "int"}, "date": {"type": "String"}}},
+  "settingsSongsSection": "Seznam písní",
+  "settingsSongsDescription": "Stáhněte si názvy písní ze jw.org, aby je bylo možné vybírat v programu víkendového a všedního shromáždění.",
+
   "pwNoSlots": "Tento týden není žádné veřejné svědectví.",
   "pwAddSlot": "Přidat termín",
   "pwEditSlot": "Upravit termín",

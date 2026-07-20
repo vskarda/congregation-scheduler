@@ -92,7 +92,17 @@ abstract class LmmWeek with _$LmmWeek {
 
     /// Human label from the workbook, e.g. "JULY 6-12 | PSALM 45".
     @Default('') String weekLabel,
-    @Default(<String>[]) List<String> songs,
+
+    /// The three meeting songs at their fixed positions: opening (before
+    /// Treasures), the Living-as-Christians song, and the closing song. Each
+    /// [*Title] is a snapshot; each [*No] is the catalog number when known
+    /// (from the parsed workbook or a picked song), null for free text.
+    @Default('') String openingSongTitle,
+    @JsonKey(includeIfNull: false) int? openingSongNo,
+    @Default('') String livingSongTitle,
+    @JsonKey(includeIfNull: false) int? livingSongNo,
+    @Default('') String closingSongTitle,
+    @JsonKey(includeIfNull: false) int? closingSongNo,
 
     /// epub | cdn | manual
     @Default('manual') String source,

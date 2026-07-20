@@ -11,6 +11,7 @@ import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
+import '../songs/song_editor.dart';
 import 'talk_title_editor.dart';
 
 class WeekendScreen extends StatelessWidget {
@@ -82,6 +83,17 @@ class _WeekContent extends ConsumerWidget {
     if (result != null) {
       await _save(
           ref, week.copyWith(talkNo: result.talkNo, talkTitle: result.title));
+    }
+  }
+
+  Future<void> _editSong(BuildContext context, WidgetRef ref) async {
+    final result = await showSongEditor(context,
+        dialogTitle: context.l10n.songLabel,
+        songNo: week.songNo,
+        songTitle: week.songTitle);
+    if (result != null) {
+      await _save(
+          ref, week.copyWith(songNo: result.songNo, songTitle: result.title));
     }
   }
 
@@ -223,6 +235,12 @@ class _WeekContent extends ConsumerWidget {
                         ],
                       )
                     : null,
+              ),
+              ListTile(
+                dense: true,
+                title: Text(l10n.songLabel),
+                subtitle: Text(songDisplayText(week.songNo, week.songTitle)),
+                onTap: canEdit ? () => _editSong(context, ref) : null,
               ),
               assignmentRow(
                 label: l10n.weekendSpeaker,

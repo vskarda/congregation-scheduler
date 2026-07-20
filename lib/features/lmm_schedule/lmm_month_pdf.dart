@@ -10,6 +10,7 @@ import '../../core/models/models.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/assignment_names.dart';
 import '../../core/utils/dates.dart';
+import '../songs/song_editor.dart' show songDisplayText;
 import 'lmm_screen.dart' show lmmClassLabel, lmmPartDefaultLabel;
 
 // Section accent colors matching the in-app schedule view.
@@ -159,15 +160,20 @@ Future<Uint8List> buildLmmMonthPdf({
       continue;
     }
 
-    if (week.songs.isNotEmpty) {
-      widgets.add(pw.Padding(
-        padding: const pw.EdgeInsets.only(left: 6, bottom: 3),
-        child: pw.Text('${l10n.lmmSongs}: ${week.songs.join(' · ')}',
-            style: const pw.TextStyle(fontSize: 9, color: _gray)),
-      ));
-    }
+    pw.Widget songLine(int? no, String title) => pw.Padding(
+          padding: const pw.EdgeInsets.only(left: 6, top: 2, bottom: 2),
+          child: pw.Text('${l10n.songLabel}: ${songDisplayText(no, title)}',
+              style: const pw.TextStyle(fontSize: 9, color: _gray)),
+        );
 
     for (final section in LmmSection.values) {
+      // Opening song sits above the Treasures heading, mirroring the schedule
+      // view and the S-140 form.
+      if (section == LmmSection.treasures &&
+          (week.openingSongNo != null || week.openingSongTitle.isNotEmpty)) {
+        widgets.add(songLine(week.openingSongNo, week.openingSongTitle));
+      }
+
       final parts = week.parts.where((p) => p.section == section).toList();
       if (parts.isEmpty) continue;
       widgets.add(pw.Padding(
@@ -178,6 +184,14 @@ Future<Uint8List> buildLmmMonthPdf({
                 fontWeight: pw.FontWeight.bold,
                 color: _sectionColor(section))),
       ));
+      // Living / closing songs sit right below their section headings.
+      if (section == LmmSection.living &&
+          (week.livingSongNo != null || week.livingSongTitle.isNotEmpty)) {
+        widgets.add(songLine(week.livingSongNo, week.livingSongTitle));
+      } else if (section == LmmSection.closing &&
+          (week.closingSongNo != null || week.closingSongTitle.isNotEmpty)) {
+        widgets.add(songLine(week.closingSongNo, week.closingSongTitle));
+      }
       widgets.addAll(parts.map(partRow));
     }
 

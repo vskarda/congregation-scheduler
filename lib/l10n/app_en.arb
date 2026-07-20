@@ -382,6 +382,18 @@
   "talksOpenCatalog": "Manage talk titles",
   "talksEditTitle": "Edit title",
 
+  "songLabel": "Song",
+  "songsEmpty": "No song list yet. Update it from the official web.",
+  "songsUpdateFromWeb": "Update song list from official web",
+  "songsUpdateDone": "Song list updated: {count} songs.",
+  "@songsUpdateDone": {"placeholders": {"count": {"type": "int"}}},
+  "songsCdnNothing": "The song list is not available online yet.",
+  "songsStatusEmpty": "No song list imported yet.",
+  "songsStatusLoaded": "{count} songs · updated {date}",
+  "@songsStatusLoaded": {"placeholders": {"count": {"type": "int"}, "date": {"type": "String"}}},
+  "settingsSongsSection": "Song list",
+  "settingsSongsDescription": "Download the meeting song titles from jw.org so they can be picked on the weekend and midweek schedules.",
+
   "pwNoSlots": "No public witnessing this week.",
   "pwAddSlot": "Add time slot",
   "pwEditSlot": "Edit time slot",

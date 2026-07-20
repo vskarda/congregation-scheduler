@@ -1137,6 +1137,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get talksEditTitle => 'Edit title';
 
   @override
+  String get songLabel => 'Song';
+
+  @override
+  String get songsEmpty => 'No song list yet. Update it from the official web.';
+
+  @override
+  String get songsUpdateFromWeb => 'Update song list from official web';
+
+  @override
+  String songsUpdateDone(int count) {
+    return 'Song list updated: $count songs.';
+  }
+
+  @override
+  String get songsCdnNothing => 'The song list is not available online yet.';
+
+  @override
+  String get songsStatusEmpty => 'No song list imported yet.';
+
+  @override
+  String songsStatusLoaded(int count, String date) {
+    return '$count songs · updated $date';
+  }
+
+  @override
+  String get settingsSongsSection => 'Song list';
+
+  @override
+  String get settingsSongsDescription =>
+      'Download the meeting song titles from jw.org so they can be picked on the weekend and midweek schedules.';
+
+  @override
   String get pwNoSlots => 'No public witnessing this week.';
 
   @override

@@ -11,6 +11,14 @@ abstract final class AppConfig {
       'https://app.jw-cdn.org/apis/pub-media/GETPUBMEDIALINKS'
       '?output=json&pub=mwb&fileformat=EPUB&langwritten={lang}&issue={yyyyMM}';
 
+  /// Publication-media API URL template for the meeting songbook (pub `sjjm`).
+  /// The JSON response lists audio tracks under `files.{lang}.MP3[]`, each
+  /// carrying a `title` of the form "N. Song Title"; parsed into a
+  /// number->title catalog. Placeholder: `{lang}` (E / B / TK).
+  static const String songCatalogCdnUrlTemplate =
+      'https://app.jw-cdn.org/apis/pub-media/GETPUBMEDIALINKS'
+      '?output=json&pub=sjjm&fileformat=MP3&langwritten={lang}';
+
   /// Maximum size of a file stored in Firestore (chunked). Larger files
   /// should be shared as external links.
   static const int maxFileSizeBytes = 10 * 1024 * 1024;

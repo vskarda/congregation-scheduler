@@ -75,9 +75,12 @@ const _$LmmPartTypeEnumMap = {
 
 _LmmWeek _$LmmWeekFromJson(Map<String, dynamic> json) => _LmmWeek(
   weekLabel: json['weekLabel'] as String? ?? '',
-  songs:
-      (json['songs'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-      const <String>[],
+  openingSongTitle: json['openingSongTitle'] as String? ?? '',
+  openingSongNo: (json['openingSongNo'] as num?)?.toInt(),
+  livingSongTitle: json['livingSongTitle'] as String? ?? '',
+  livingSongNo: (json['livingSongNo'] as num?)?.toInt(),
+  closingSongTitle: json['closingSongTitle'] as String? ?? '',
+  closingSongNo: (json['closingSongNo'] as num?)?.toInt(),
   source: json['source'] as String? ?? 'manual',
   parts:
       (json['parts'] as List<dynamic>?)
@@ -107,7 +110,12 @@ _LmmWeek _$LmmWeekFromJson(Map<String, dynamic> json) => _LmmWeek(
 
 Map<String, dynamic> _$LmmWeekToJson(_LmmWeek instance) => <String, dynamic>{
   'weekLabel': instance.weekLabel,
-  'songs': instance.songs,
+  'openingSongTitle': instance.openingSongTitle,
+  'openingSongNo': ?instance.openingSongNo,
+  'livingSongTitle': instance.livingSongTitle,
+  'livingSongNo': ?instance.livingSongNo,
+  'closingSongTitle': instance.closingSongTitle,
+  'closingSongNo': ?instance.closingSongNo,
   'source': instance.source,
   'parts': instance.parts.map((e) => e.toJson()).toList(),
   'attendants': instance.attendants.toJson(),

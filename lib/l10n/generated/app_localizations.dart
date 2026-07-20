@@ -2146,6 +2146,60 @@ abstract class AppLocalizations {
   /// **'Edit title'**
   String get talksEditTitle;
 
+  /// No description provided for @songLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Song'**
+  String get songLabel;
+
+  /// No description provided for @songsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No song list yet. Update it from the official web.'**
+  String get songsEmpty;
+
+  /// No description provided for @songsUpdateFromWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Update song list from official web'**
+  String get songsUpdateFromWeb;
+
+  /// No description provided for @songsUpdateDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Song list updated: {count} songs.'**
+  String songsUpdateDone(int count);
+
+  /// No description provided for @songsCdnNothing.
+  ///
+  /// In en, this message translates to:
+  /// **'The song list is not available online yet.'**
+  String get songsCdnNothing;
+
+  /// No description provided for @songsStatusEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No song list imported yet.'**
+  String get songsStatusEmpty;
+
+  /// No description provided for @songsStatusLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} songs · updated {date}'**
+  String songsStatusLoaded(int count, String date);
+
+  /// No description provided for @settingsSongsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Song list'**
+  String get settingsSongsSection;
+
+  /// No description provided for @settingsSongsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Download the meeting song titles from jw.org so they can be picked on the weekend and midweek schedules.'**
+  String get settingsSongsDescription;
+
   /// No description provided for @pwNoSlots.
   ///
   /// In en, this message translates to:

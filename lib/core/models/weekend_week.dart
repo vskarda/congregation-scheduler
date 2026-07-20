@@ -19,6 +19,11 @@ abstract class WeekendWeek with _$WeekendWeek {
     /// S-99 talk number when the title was picked from the catalog;
     /// null for free-text titles. The stored [talkTitle] is a snapshot.
     @JsonKey(includeIfNull: false) int? talkNo,
+
+    /// Opening song. [songTitle] is a snapshot; [songNo] is the catalog number
+    /// when picked from the song list, null for free text.
+    @Default('') String songTitle,
+    @JsonKey(includeIfNull: false) int? songNo,
     @Default(Assignment()) Assignment speaker,
     @Default(Assignment()) Assignment chairman,
     @Default(Assignment()) Assignment wtReader,

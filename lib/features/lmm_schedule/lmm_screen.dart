@@ -8,6 +8,7 @@ import '../../core/data/assignment_history.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/lmm_repository.dart';
 import '../../core/data/schedule_config_repository.dart';
+import '../../core/data/song_catalog_repository.dart';
 import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -15,6 +16,7 @@ import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
+import '../songs/song_editor.dart';
 import 'epub_import/import_actions.dart';
 import 'epub_import/import_screen.dart';
 
@@ -171,10 +173,17 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
     }
   }
 
-  Future<void> _pickFile() => _run(pickEpubWeeks);
+  /// Imported song number->title catalog, for resolving parsed song numbers.
+  Map<int, String>? get _songTitles {
+    final titles = ref.read(songCatalogProvider).value?.titles;
+    if (titles == null) return null;
+    return {for (final e in titles.entries) int.parse(e.key): e.value};
+  }
 
-  Future<void> _checkOnline() =>
-      _run(() => fetchCdnWeeks(Localizations.localeOf(context)));
+  Future<void> _pickFile() => _run(() => pickEpubWeeks(songTitles: _songTitles));
+
+  Future<void> _checkOnline() => _run(() =>
+      fetchCdnWeeks(Localizations.localeOf(context), songTitles: _songTitles));
 
   @override
   Widget build(BuildContext context) {
@@ -246,38 +255,18 @@ class _WeekContent extends ConsumerWidget {
   String _sectionLabel(AppLocalizations l10n, LmmSection s) =>
       lmmSectionLabel(l10n, s);
 
-  Future<void> _editSongs(
+  Future<void> _editSong(
     BuildContext context,
-    WidgetRef ref,
-    AppLocalizations l10n,
-  ) async {
-    final ctrl = TextEditingController(text: week.songs.join(', '));
-    final saved = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.lmmSongs),
-        content: TextField(controller: ctrl, autofocus: true),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.commonSave),
-          ),
-        ],
-      ),
-    );
-    if (saved == true) {
-      final songs = ctrl.text
-          .split(RegExp(r'[,;]'))
-          .map((s) => s.trim())
-          .where((s) => s.isNotEmpty)
-          .toList();
-      await saveLmmWeek(ref, week.copyWith(songs: songs));
-    }
-    ctrl.dispose();
+    WidgetRef ref, {
+    required int? songNo,
+    required String songTitle,
+    required LmmWeek Function(SongSelection) apply,
+  }) async {
+    final result = await showSongEditor(context,
+        dialogTitle: context.l10n.songLabel,
+        songNo: songNo,
+        songTitle: songTitle);
+    if (result != null) await saveLmmWeek(ref, apply(result));
   }
 
   Future<void> _confirmDeleteWeek(
@@ -332,17 +321,6 @@ class _WeekContent extends ConsumerWidget {
                 children: [
                   if (week.weekLabel.isNotEmpty)
                     Text(week.weekLabel, style: theme.textTheme.titleMedium),
-                  if (week.songs.isNotEmpty || canEdit)
-                    InkWell(
-                      onTap: canEdit
-                          ? () => _editSongs(context, ref, l10n)
-                          : null,
-                      child: Text(
-                        '${l10n.lmmSongs}: '
-                        '${week.songs.isEmpty ? '—' : week.songs.join(' · ')}',
-                        style: theme.textTheme.bodySmall,
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -379,7 +357,39 @@ class _WeekContent extends ConsumerWidget {
       );
     }
 
+    // A meeting-song row at one of its three fixed positions. Hidden for
+    // non-admins when neither number nor title is set.
+    Widget? songRow({
+      required int? songNo,
+      required String songTitle,
+      required LmmWeek Function(SongSelection) apply,
+    }) {
+      if (songNo == null && songTitle.isEmpty && !canEdit) return null;
+      return ListTile(
+        dense: true,
+        title: Text(l10n.songLabel),
+        subtitle: Text(songDisplayText(songNo, songTitle)),
+        onTap: canEdit
+            ? () => _editSong(context, ref,
+                songNo: songNo, songTitle: songTitle, apply: apply)
+            : null,
+      );
+    }
+
     for (final section in LmmSection.values) {
+      // Opening song sits above the TREASURES heading (the example S-140 form
+      // places it between the opening prayer and the first section), shown
+      // even when Treasures itself is otherwise empty.
+      if (section == LmmSection.treasures) {
+        final row = songRow(
+          songNo: week.openingSongNo,
+          songTitle: week.openingSongTitle,
+          apply: (s) =>
+              week.copyWith(openingSongNo: s.songNo, openingSongTitle: s.title),
+        );
+        if (row != null) children.add(row);
+      }
+
       final parts = week.parts.where((p) => p.section == section).toList();
       // Non-admins don't need empty sections; admins get them with an
       // add-part button.
@@ -409,6 +419,25 @@ class _WeekContent extends ConsumerWidget {
           ),
         ),
       );
+      // The Living song sits right below the LIVING AS CHRISTIANS heading, the
+      // closing song right below the Conclusion heading.
+      if (section == LmmSection.living) {
+        final row = songRow(
+          songNo: week.livingSongNo,
+          songTitle: week.livingSongTitle,
+          apply: (s) =>
+              week.copyWith(livingSongNo: s.songNo, livingSongTitle: s.title),
+        );
+        if (row != null) children.add(row);
+      } else if (section == LmmSection.closing) {
+        final row = songRow(
+          songNo: week.closingSongNo,
+          songTitle: week.closingSongTitle,
+          apply: (s) =>
+              week.copyWith(closingSongNo: s.songNo, closingSongTitle: s.title),
+        );
+        if (row != null) children.add(row);
+      }
       for (final part in parts) {
         children.add(
           _PartTile(

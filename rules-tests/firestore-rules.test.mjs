@@ -964,6 +964,41 @@ describe('public talk titles catalog', () => {
   });
 });
 
+describe('song catalog', () => {
+  it('verified publisher reads the catalog but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'song_catalog/catalog')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'song_catalog/catalog'), {
+        titles: { 1: 'Hijacked' },
+      }),
+    );
+  });
+
+  it('unverified user cannot read the catalog', async () => {
+    await assertFails(getDoc(doc(db(UNVERIFIED), 'song_catalog/catalog')));
+  });
+
+  it('weekend admin can replace the catalog', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(WEEKEND_ADMIN), 'song_catalog/catalog'), {
+        titles: { 1: "Jehovah's Attributes" },
+        updatedAt: '2026-07-10',
+        lang: 'E',
+      }),
+    );
+  });
+
+  it('midweek admin can replace the catalog', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(LMM_ADMIN), 'song_catalog/catalog'), {
+        titles: { 1: 'Jehovovy vlastnosti' },
+        updatedAt: '2026-07-10',
+        lang: 'B',
+      }),
+    );
+  });
+});
+
 describe('field service meetings', () => {
   it('verified publisher reads meetings but cannot write', async () => {
     await assertSucceeds(getDoc(doc(db(VERIFIED), 'fsm_meetings/m1')));

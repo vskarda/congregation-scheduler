@@ -1138,6 +1138,41 @@ class AppLocalizationsTr extends AppLocalizations {
   String get talksEditTitle => 'Başlığı Düzenle';
 
   @override
+  String get songLabel => 'İlahi';
+
+  @override
+  String get songsEmpty =>
+      'Henüz ilahi listesi yok. Resmî web sitesinden güncelleyin.';
+
+  @override
+  String get songsUpdateFromWeb =>
+      'İlahi listesini resmî web sitesinden güncelle';
+
+  @override
+  String songsUpdateDone(int count) {
+    return 'İlahi listesi güncellendi: $count ilahi.';
+  }
+
+  @override
+  String get songsCdnNothing =>
+      'İlahi listesi henüz çevrimiçi olarak mevcut değil.';
+
+  @override
+  String get songsStatusEmpty => 'Henüz ilahi listesi içe aktarılmadı.';
+
+  @override
+  String songsStatusLoaded(int count, String date) {
+    return '$count ilahi · güncellendi $date';
+  }
+
+  @override
+  String get settingsSongsSection => 'İlahi listesi';
+
+  @override
+  String get settingsSongsDescription =>
+      'İbadet ilahisi başlıklarını jw.org\'dan indirin; böylece hafta içi ve hafta sonu programlarında seçilebilirler.';
+
+  @override
   String get pwNoSlots => 'Bu hafta Halka Açık Yerde Şahitlik yok.';
 
   @override

@@ -6,9 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/data/congregation_repository.dart';
+import '../../core/data/song_catalog_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../songs/song_cdn.dart';
 import 'backup/backup_download.dart';
 import 'backup/backup_import_screen.dart';
 import 'backup/backup_service.dart';
@@ -85,6 +87,30 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
       }
       await ref.read(congregationRepositoryProvider).updateMeta(meta);
       messenger.showSnackBar(SnackBar(content: Text(l10n.profileSaved)));
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))),
+      );
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _updateSongs() async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final locale = Localizations.localeOf(context);
+    setState(() => _busy = true);
+    try {
+      final catalog = await fetchSongCatalogFromCdn(locale);
+      if (catalog == null) {
+        messenger.showSnackBar(SnackBar(content: Text(l10n.songsCdnNothing)));
+        return;
+      }
+      await ref.read(songCatalogRepositoryProvider).saveCatalog(catalog);
+      messenger.showSnackBar(
+        SnackBar(content: Text(l10n.songsUpdateDone(catalog.titles.length))),
+      );
     } catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.commonErrorDetail(e.toString()))),
@@ -202,6 +228,44 @@ class _SettingsFormState extends ConsumerState<_SettingsForm> {
             FilledButton(
               onPressed: _busy ? null : _save,
               child: Text(l10n.commonSave),
+            ),
+            const SizedBox(height: 32),
+            const Divider(),
+            const SizedBox(height: 8),
+            Text(
+              l10n.settingsSongsSection,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 4, bottom: 4),
+              child: Text(
+                l10n.settingsSongsDescription,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Builder(
+                builder: (context) {
+                  final catalog = ref.watch(songCatalogProvider).value;
+                  final status = catalog == null || catalog.titles.isEmpty
+                      ? l10n.songsStatusEmpty
+                      : l10n.songsStatusLoaded(
+                          catalog.titles.length, catalog.updatedAt);
+                  return Text(
+                    status,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color:
+                              Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  );
+                },
+              ),
+            ),
+            OutlinedButton.icon(
+              onPressed: _busy ? null : _updateSongs,
+              icon: const Icon(Icons.cloud_download_outlined),
+              label: Text(l10n.songsUpdateFromWeb),
             ),
             const SizedBox(height: 32),
             const Divider(),

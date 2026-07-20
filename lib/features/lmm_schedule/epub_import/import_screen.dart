@@ -5,6 +5,7 @@ import '../../../core/data/assignment_history.dart';
 import '../../../core/data/lmm_repository.dart';
 import '../../../core/l10n/l10n.dart';
 import '../../../core/models/models.dart';
+import '../../songs/song_editor.dart';
 import 'week_merge.dart';
 
 /// Preview of Meeting Workbook weeks already parsed (from a picked .epub or
@@ -77,12 +78,19 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodySmall?.copyWith(
         color: theme.colorScheme.onSurfaceVariant);
+    final songs = [
+      for (final (no, title) in [
+        (week.openingSongNo, week.openingSongTitle),
+        (week.livingSongNo, week.livingSongTitle),
+        (week.closingSongNo, week.closingSongTitle),
+      ])
+        if (no != null || title.isNotEmpty) songDisplayText(no, title),
+    ];
     return [
-      if (week.songs.isNotEmpty)
+      if (songs.isNotEmpty)
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
-          child: Text('${l10n.lmmSongs}: ${week.songs.join(' · ')}',
-              style: muted),
+          child: Text('${l10n.lmmSongs}: ${songs.join(' · ')}', style: muted),
         ),
       for (final part in week.parts.where((p) => p.title.isNotEmpty))
         Padding(

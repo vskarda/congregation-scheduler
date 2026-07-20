@@ -1139,6 +1139,40 @@ class AppLocalizationsCs extends AppLocalizations {
   String get talksEditTitle => 'Upravit námět';
 
   @override
+  String get songLabel => 'Píseň';
+
+  @override
+  String get songsEmpty =>
+      'Zatím žádný seznam písní. Aktualizujte jej z oficiálního webu.';
+
+  @override
+  String get songsUpdateFromWeb =>
+      'Aktualizovat seznam písní z oficiálního webu';
+
+  @override
+  String songsUpdateDone(int count) {
+    return 'Seznam písní aktualizován: $count písní.';
+  }
+
+  @override
+  String get songsCdnNothing => 'Seznam písní zatím není online k dispozici.';
+
+  @override
+  String get songsStatusEmpty => 'Seznam písní zatím nebyl importován.';
+
+  @override
+  String songsStatusLoaded(int count, String date) {
+    return '$count písní · aktualizováno $date';
+  }
+
+  @override
+  String get settingsSongsSection => 'Seznam písní';
+
+  @override
+  String get settingsSongsDescription =>
+      'Stáhněte si názvy písní ze jw.org, aby je bylo možné vybírat v programu víkendového a všedního shromáždění.';
+
+  @override
   String get pwNoSlots => 'Tento týden není žádné veřejné svědectví.';
 
   @override

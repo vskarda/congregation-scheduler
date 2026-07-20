@@ -88,9 +88,14 @@ abstract final class MwbParser {
 
   /// [fileName] (e.g. mwb_E_202607.epub) provides the issue year/month used
   /// to resolve week years; [now] is injectable for tests. [source] is
-  /// recorded on the produced weeks ('epub' or 'cdn').
+  /// recorded on the produced weeks ('epub' or 'cdn'). [songTitles], when
+  /// given (a song number->title catalog), resolves parsed song numbers to
+  /// their titles.
   static List<LmmWeek> parse(Uint8List bytes,
-      {String? fileName, DateTime? now, String source = 'epub'}) {
+      {String? fileName,
+      DateTime? now,
+      String source = 'epub',
+      Map<int, String>? songTitles}) {
     final archive = ZipDecoder().decodeBytes(bytes);
     (int, int)? issue;
     final m = RegExp(r'(20\d{2})(\d{2})').firstMatch(fileName ?? '');
@@ -118,8 +123,8 @@ abstract final class MwbParser {
       } on FormatException {
         continue;
       }
-      final week =
-          parseWeekDocument(content, issue: issue, now: now, source: source);
+      final week = parseWeekDocument(content,
+          issue: issue, now: now, source: source, songTitles: songTitles);
       if (week != null) weeks[week.id] = week;
     }
     final result = weeks.values.toList()
@@ -191,7 +196,10 @@ abstract final class MwbParser {
   /// Parses a single weekly XHTML document; returns null when the file is
   /// not a weekly program (toc, cover, …).
   static LmmWeek? parseWeekDocument(String content,
-      {(int, int)? issue, DateTime? now, String source = 'epub'}) {
+      {(int, int)? issue,
+      DateTime? now,
+      String source = 'epub',
+      Map<int, String>? songTitles}) {
     final doc = html_parser.parse(content);
     final body = doc.body;
     if (body == null) return null;
@@ -368,10 +376,25 @@ abstract final class MwbParser {
       weekLabel = '$headline | $scripture';
     }
 
+    // The three songs appear in document order: opening (before Treasures),
+    // the Living-as-Christians song, then the closing song. Missing ones stay
+    // null/empty. Titles resolve from [songTitles] when available.
+    int? songNoAt(int i) =>
+        i < songs.length ? int.tryParse(songs[i]) : null;
+    String titleAt(int i) {
+      final no = songNoAt(i);
+      return no == null ? '' : (songTitles?[no] ?? '');
+    }
+
     return LmmWeek(
       id: dateKey(mondayOf(weekStart)),
       weekLabel: weekLabel,
-      songs: songs,
+      openingSongNo: songNoAt(0),
+      openingSongTitle: titleAt(0),
+      livingSongNo: songNoAt(1),
+      livingSongTitle: titleAt(1),
+      closingSongNo: songNoAt(2),
+      closingSongTitle: titleAt(2),
       source: source,
       parts: parts,
     );

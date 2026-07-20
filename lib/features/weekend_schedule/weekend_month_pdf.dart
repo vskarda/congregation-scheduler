@@ -9,6 +9,7 @@ import '../../core/models/models.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/assignment_names.dart';
 import '../../core/utils/dates.dart';
+import '../songs/song_editor.dart' show songDisplayText;
 
 const _gray = PdfColor.fromInt(0xFF757575);
 
@@ -85,6 +86,8 @@ Future<Uint8List> buildWeekendMonthPdf({
             ? week.talkTitle
             : '${week.talkNo}. ${week.talkTitle}';
     widgets.add(row(l10n.weekendTalkTitle, talk));
+    widgets.add(row(
+        l10n.songLabel, songDisplayText(week.songNo, week.songTitle)));
     widgets.add(assignmentRow(l10n.weekendSpeaker, week.speaker));
     widgets.add(assignmentRow(l10n.weekendChairmanLabel, week.chairman));
     widgets.add(assignmentRow(l10n.weekendWtReader, week.wtReader));

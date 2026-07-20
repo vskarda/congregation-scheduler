@@ -432,7 +432,11 @@ $AssignmentCopyWith<$Res> get assistant3 {
 mixin _$LmmWeek {
 
 @JsonKey(includeFromJson: false, includeToJson: false) String get id;/// Human label from the workbook, e.g. "JULY 6-12 | PSALM 45".
- String get weekLabel; List<String> get songs;/// epub | cdn | manual
+ String get weekLabel;/// The three meeting songs at their fixed positions: opening (before
+/// Treasures), the Living-as-Christians song, and the closing song. Each
+/// [*Title] is a snapshot; each [*No] is the catalog number when known
+/// (from the parsed workbook or a picked song), null for free text.
+ String get openingSongTitle;@JsonKey(includeIfNull: false) int? get openingSongNo; String get livingSongTitle;@JsonKey(includeIfNull: false) int? get livingSongNo; String get closingSongTitle;@JsonKey(includeIfNull: false) int? get closingSongNo;/// epub | cdn | manual
  String get source; List<LmmPart> get parts; Assignment get attendants; Assignment get microphones; Assignment get audioVideo; List<CustomAssignment> get customAssignments;/// Denormalized union of every assigned publisher id, kept in sync on
 /// save; enables array-contains "my assignments" queries.
  List<String> get allAssigneeIds;
@@ -448,16 +452,16 @@ $LmmWeekCopyWith<LmmWeek> get copyWith => _$LmmWeekCopyWithImpl<LmmWeek>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LmmWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.weekLabel, weekLabel) || other.weekLabel == weekLabel)&&const DeepCollectionEquality().equals(other.songs, songs)&&(identical(other.source, source) || other.source == source)&&const DeepCollectionEquality().equals(other.parts, parts)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other.customAssignments, customAssignments)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LmmWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.weekLabel, weekLabel) || other.weekLabel == weekLabel)&&(identical(other.openingSongTitle, openingSongTitle) || other.openingSongTitle == openingSongTitle)&&(identical(other.openingSongNo, openingSongNo) || other.openingSongNo == openingSongNo)&&(identical(other.livingSongTitle, livingSongTitle) || other.livingSongTitle == livingSongTitle)&&(identical(other.livingSongNo, livingSongNo) || other.livingSongNo == livingSongNo)&&(identical(other.closingSongTitle, closingSongTitle) || other.closingSongTitle == closingSongTitle)&&(identical(other.closingSongNo, closingSongNo) || other.closingSongNo == closingSongNo)&&(identical(other.source, source) || other.source == source)&&const DeepCollectionEquality().equals(other.parts, parts)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other.customAssignments, customAssignments)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,weekLabel,const DeepCollectionEquality().hash(songs),source,const DeepCollectionEquality().hash(parts),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(customAssignments),const DeepCollectionEquality().hash(allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,weekLabel,openingSongTitle,openingSongNo,livingSongTitle,livingSongNo,closingSongTitle,closingSongNo,source,const DeepCollectionEquality().hash(parts),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(customAssignments),const DeepCollectionEquality().hash(allAssigneeIds));
 
 @override
 String toString() {
-  return 'LmmWeek(id: $id, weekLabel: $weekLabel, songs: $songs, source: $source, parts: $parts, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
+  return 'LmmWeek(id: $id, weekLabel: $weekLabel, openingSongTitle: $openingSongTitle, openingSongNo: $openingSongNo, livingSongTitle: $livingSongTitle, livingSongNo: $livingSongNo, closingSongTitle: $closingSongTitle, closingSongNo: $closingSongNo, source: $source, parts: $parts, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -468,7 +472,7 @@ abstract mixin class $LmmWeekCopyWith<$Res>  {
   factory $LmmWeekCopyWith(LmmWeek value, $Res Function(LmmWeek) _then) = _$LmmWeekCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String weekLabel, List<String> songs, String source, List<LmmPart> parts, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String weekLabel, String openingSongTitle,@JsonKey(includeIfNull: false) int? openingSongNo, String livingSongTitle,@JsonKey(includeIfNull: false) int? livingSongNo, String closingSongTitle,@JsonKey(includeIfNull: false) int? closingSongNo, String source, List<LmmPart> parts, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
 });
 
 
@@ -485,12 +489,17 @@ class _$LmmWeekCopyWithImpl<$Res>
 
 /// Create a copy of LmmWeek
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? weekLabel = null,Object? songs = null,Object? source = null,Object? parts = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? weekLabel = null,Object? openingSongTitle = null,Object? openingSongNo = freezed,Object? livingSongTitle = null,Object? livingSongNo = freezed,Object? closingSongTitle = null,Object? closingSongNo = freezed,Object? source = null,Object? parts = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,weekLabel: null == weekLabel ? _self.weekLabel : weekLabel // ignore: cast_nullable_to_non_nullable
-as String,songs: null == songs ? _self.songs : songs // ignore: cast_nullable_to_non_nullable
-as List<String>,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as String,openingSongTitle: null == openingSongTitle ? _self.openingSongTitle : openingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,openingSongNo: freezed == openingSongNo ? _self.openingSongNo : openingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,livingSongTitle: null == livingSongTitle ? _self.livingSongTitle : livingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,livingSongNo: freezed == livingSongNo ? _self.livingSongNo : livingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,closingSongTitle: null == closingSongTitle ? _self.closingSongTitle : closingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,closingSongNo: freezed == closingSongNo ? _self.closingSongNo : closingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as String,parts: null == parts ? _self.parts : parts // ignore: cast_nullable_to_non_nullable
 as List<LmmPart>,attendants: null == attendants ? _self.attendants : attendants // ignore: cast_nullable_to_non_nullable
 as Assignment,microphones: null == microphones ? _self.microphones : microphones // ignore: cast_nullable_to_non_nullable
@@ -609,10 +618,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  List<String> songs,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  String openingSongTitle, @JsonKey(includeIfNull: false)  int? openingSongNo,  String livingSongTitle, @JsonKey(includeIfNull: false)  int? livingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _LmmWeek() when $default != null:
-return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.weekLabel,_that.openingSongTitle,_that.openingSongNo,_that.livingSongTitle,_that.livingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   return orElse();
 
 }
@@ -630,10 +639,10 @@ return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  List<String> songs,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  String openingSongTitle, @JsonKey(includeIfNull: false)  int? openingSongNo,  String livingSongTitle, @JsonKey(includeIfNull: false)  int? livingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)  $default,) {final _that = this;
 switch (_that) {
 case _LmmWeek():
-return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.weekLabel,_that.openingSongTitle,_that.openingSongNo,_that.livingSongTitle,_that.livingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -650,10 +659,10 @@ return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  List<String> songs,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String weekLabel,  String openingSongTitle, @JsonKey(includeIfNull: false)  int? openingSongNo,  String livingSongTitle, @JsonKey(includeIfNull: false)  int? livingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  String source,  List<LmmPart> parts,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,) {final _that = this;
 switch (_that) {
 case _LmmWeek() when $default != null:
-return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.weekLabel,_that.openingSongTitle,_that.openingSongNo,_that.livingSongTitle,_that.livingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.source,_that.parts,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   return null;
 
 }
@@ -665,19 +674,22 @@ return $default(_that.id,_that.weekLabel,_that.songs,_that.source,_that.parts,_t
 @JsonSerializable()
 
 class _LmmWeek extends LmmWeek {
-  const _LmmWeek({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.weekLabel = '', final  List<String> songs = const <String>[], this.source = 'manual', final  List<LmmPart> parts = const <LmmPart>[], this.attendants = const Assignment(), this.microphones = const Assignment(), this.audioVideo = const Assignment(), final  List<CustomAssignment> customAssignments = const <CustomAssignment>[], final  List<String> allAssigneeIds = const <String>[]}): _songs = songs,_parts = parts,_customAssignments = customAssignments,_allAssigneeIds = allAssigneeIds,super._();
+  const _LmmWeek({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.weekLabel = '', this.openingSongTitle = '', @JsonKey(includeIfNull: false) this.openingSongNo, this.livingSongTitle = '', @JsonKey(includeIfNull: false) this.livingSongNo, this.closingSongTitle = '', @JsonKey(includeIfNull: false) this.closingSongNo, this.source = 'manual', final  List<LmmPart> parts = const <LmmPart>[], this.attendants = const Assignment(), this.microphones = const Assignment(), this.audioVideo = const Assignment(), final  List<CustomAssignment> customAssignments = const <CustomAssignment>[], final  List<String> allAssigneeIds = const <String>[]}): _parts = parts,_customAssignments = customAssignments,_allAssigneeIds = allAssigneeIds,super._();
   factory _LmmWeek.fromJson(Map<String, dynamic> json) => _$LmmWeekFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
 /// Human label from the workbook, e.g. "JULY 6-12 | PSALM 45".
 @override@JsonKey() final  String weekLabel;
- final  List<String> _songs;
-@override@JsonKey() List<String> get songs {
-  if (_songs is EqualUnmodifiableListView) return _songs;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_songs);
-}
-
+/// The three meeting songs at their fixed positions: opening (before
+/// Treasures), the Living-as-Christians song, and the closing song. Each
+/// [*Title] is a snapshot; each [*No] is the catalog number when known
+/// (from the parsed workbook or a picked song), null for free text.
+@override@JsonKey() final  String openingSongTitle;
+@override@JsonKey(includeIfNull: false) final  int? openingSongNo;
+@override@JsonKey() final  String livingSongTitle;
+@override@JsonKey(includeIfNull: false) final  int? livingSongNo;
+@override@JsonKey() final  String closingSongTitle;
+@override@JsonKey(includeIfNull: false) final  int? closingSongNo;
 /// epub | cdn | manual
 @override@JsonKey() final  String source;
  final  List<LmmPart> _parts;
@@ -722,16 +734,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LmmWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.weekLabel, weekLabel) || other.weekLabel == weekLabel)&&const DeepCollectionEquality().equals(other._songs, _songs)&&(identical(other.source, source) || other.source == source)&&const DeepCollectionEquality().equals(other._parts, _parts)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other._customAssignments, _customAssignments)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LmmWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.weekLabel, weekLabel) || other.weekLabel == weekLabel)&&(identical(other.openingSongTitle, openingSongTitle) || other.openingSongTitle == openingSongTitle)&&(identical(other.openingSongNo, openingSongNo) || other.openingSongNo == openingSongNo)&&(identical(other.livingSongTitle, livingSongTitle) || other.livingSongTitle == livingSongTitle)&&(identical(other.livingSongNo, livingSongNo) || other.livingSongNo == livingSongNo)&&(identical(other.closingSongTitle, closingSongTitle) || other.closingSongTitle == closingSongTitle)&&(identical(other.closingSongNo, closingSongNo) || other.closingSongNo == closingSongNo)&&(identical(other.source, source) || other.source == source)&&const DeepCollectionEquality().equals(other._parts, _parts)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other._customAssignments, _customAssignments)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,weekLabel,const DeepCollectionEquality().hash(_songs),source,const DeepCollectionEquality().hash(_parts),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(_customAssignments),const DeepCollectionEquality().hash(_allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,weekLabel,openingSongTitle,openingSongNo,livingSongTitle,livingSongNo,closingSongTitle,closingSongNo,source,const DeepCollectionEquality().hash(_parts),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(_customAssignments),const DeepCollectionEquality().hash(_allAssigneeIds));
 
 @override
 String toString() {
-  return 'LmmWeek(id: $id, weekLabel: $weekLabel, songs: $songs, source: $source, parts: $parts, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
+  return 'LmmWeek(id: $id, weekLabel: $weekLabel, openingSongTitle: $openingSongTitle, openingSongNo: $openingSongNo, livingSongTitle: $livingSongTitle, livingSongNo: $livingSongNo, closingSongTitle: $closingSongTitle, closingSongNo: $closingSongNo, source: $source, parts: $parts, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -742,7 +754,7 @@ abstract mixin class _$LmmWeekCopyWith<$Res> implements $LmmWeekCopyWith<$Res> {
   factory _$LmmWeekCopyWith(_LmmWeek value, $Res Function(_LmmWeek) _then) = __$LmmWeekCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String weekLabel, List<String> songs, String source, List<LmmPart> parts, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String weekLabel, String openingSongTitle,@JsonKey(includeIfNull: false) int? openingSongNo, String livingSongTitle,@JsonKey(includeIfNull: false) int? livingSongNo, String closingSongTitle,@JsonKey(includeIfNull: false) int? closingSongNo, String source, List<LmmPart> parts, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
 });
 
 
@@ -759,12 +771,17 @@ class __$LmmWeekCopyWithImpl<$Res>
 
 /// Create a copy of LmmWeek
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? weekLabel = null,Object? songs = null,Object? source = null,Object? parts = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? weekLabel = null,Object? openingSongTitle = null,Object? openingSongNo = freezed,Object? livingSongTitle = null,Object? livingSongNo = freezed,Object? closingSongTitle = null,Object? closingSongNo = freezed,Object? source = null,Object? parts = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
   return _then(_LmmWeek(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,weekLabel: null == weekLabel ? _self.weekLabel : weekLabel // ignore: cast_nullable_to_non_nullable
-as String,songs: null == songs ? _self._songs : songs // ignore: cast_nullable_to_non_nullable
-as List<String>,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
+as String,openingSongTitle: null == openingSongTitle ? _self.openingSongTitle : openingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,openingSongNo: freezed == openingSongNo ? _self.openingSongNo : openingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,livingSongTitle: null == livingSongTitle ? _self.livingSongTitle : livingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,livingSongNo: freezed == livingSongNo ? _self.livingSongNo : livingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,closingSongTitle: null == closingSongTitle ? _self.closingSongTitle : closingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,closingSongNo: freezed == closingSongNo ? _self.closingSongNo : closingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,source: null == source ? _self.source : source // ignore: cast_nullable_to_non_nullable
 as String,parts: null == parts ? _self._parts : parts // ignore: cast_nullable_to_non_nullable
 as List<LmmPart>,attendants: null == attendants ? _self.attendants : attendants // ignore: cast_nullable_to_non_nullable
 as Assignment,microphones: null == microphones ? _self.microphones : microphones // ignore: cast_nullable_to_non_nullable

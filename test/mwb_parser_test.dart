@@ -123,7 +123,9 @@ void main() {
           MwbParser.parseWeekDocument(_enWeek, issue: (2026, 7));
       expect(week, isNotNull);
       expect(week!.id, '2026-07-06');
-      expect(week.songs, ['1', '22', '33']);
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
       expect(week.source, 'epub');
 
       final types = week.parts.map((p) => p.type).toList();
@@ -157,7 +159,9 @@ void main() {
           MwbParser.parseWeekDocument(_csWeek, issue: (2026, 7));
       expect(week, isNotNull);
       expect(week!.id, '2026-07-06');
-      expect(week.songs, ['1', '22', '33']);
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
       expect(
           week.parts.any((p) =>
               p.type == LmmPartType.cbsConductor &&
@@ -174,7 +178,9 @@ void main() {
           MwbParser.parseWeekDocument(_trWeek, issue: (2026, 7));
       expect(week, isNotNull);
       expect(week!.id, '2026-07-06');
-      expect(week.songs, ['1', '22', '33']);
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
       expect(
           week.parts.map((part) => part.type),
           containsAll([
@@ -201,6 +207,20 @@ void main() {
 ''';
       expect(MwbParser.parseWeekDocument(toc, issue: (2026, 7)), isNull);
     });
+
+    test('resolves song titles from the provided catalog', () {
+      final week = MwbParser.parseWeekDocument(_enWeek,
+          issue: (2026, 7),
+          songTitles: {1: 'Opening Song', 33: 'Closing Song'});
+      expect(week, isNotNull);
+      expect(week!.openingSongNo, 1);
+      expect(week.openingSongTitle, 'Opening Song');
+      // Number present but absent from the catalog stays untitled.
+      expect(week.livingSongNo, 22);
+      expect(week.livingSongTitle, '');
+      expect(week.closingSongNo, 33);
+      expect(week.closingSongTitle, 'Closing Song');
+    });
   });
 
   group('MwbParser.parseWeekDocument (2024+ format)', () {
@@ -210,7 +230,9 @@ void main() {
       expect(week, isNotNull);
       expect(week!.id, '2026-11-02');
       expect(week.weekLabel, 'NOVEMBER 2-8 | JEREMIAH 49-50');
-      expect(week.songs, ['1', '44', '33']);
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 44);
+      expect(week.closingSongNo, 33);
 
       expect(week.parts.map((p) => p.type).toList(), [
         LmmPartType.chairman,
@@ -357,7 +379,9 @@ void main() {
         '2026-12-28',
       ]);
       for (final week in weeks) {
-        expect(week.songs, hasLength(3), reason: week.id);
+        expect(week.openingSongNo, isNotNull, reason: week.id);
+        expect(week.livingSongNo, isNotNull, reason: week.id);
+        expect(week.closingSongNo, isNotNull, reason: week.id);
         expect(week.weekLabel, contains('|'), reason: week.id);
         expect(week.parts.length, greaterThanOrEqualTo(10),
             reason: week.id);

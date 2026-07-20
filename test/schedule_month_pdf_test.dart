@@ -38,7 +38,9 @@ void main() {
   final lmmWeek = LmmWeek(
     id: '2026-07-06',
     weekLabel: 'JULY 6-12 | PSALM 45',
-    songs: const ['132', '5', '88'],
+    openingSongNo: 132,
+    livingSongNo: 5,
+    closingSongNo: 88,
     parts: const [
       LmmPart(
         id: 'a',

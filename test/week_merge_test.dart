@@ -33,7 +33,9 @@ LmmPart _part(
 LmmWeek _existingWeek() => LmmWeek(
   id: '2026-11-02',
   weekLabel: 'NOVEMBER 2-8',
-  songs: ['1', '44', '33'],
+  openingSongNo: 1,
+  livingSongNo: 44,
+  closingSongNo: 33,
   source: 'epub',
   parts: [
     _part(
@@ -143,7 +145,9 @@ LmmWeek _existingWeek() => LmmWeek(
 LmmWeek _parsedWeek() => LmmWeek(
   id: '2026-11-02',
   weekLabel: 'NOVEMBER 2-8 | JEREMIAH 49-50',
-  songs: ['2', '45', '34'],
+  openingSongNo: 2,
+  livingSongNo: 45,
+  closingSongNo: 34,
   source: 'cdn',
   parts: [
     _part('p-ch', LmmSection.opening, LmmPartType.chairman),
@@ -221,7 +225,9 @@ void main() {
         parsed: _parsedWeek(),
       );
       expect(merged.weekLabel, 'NOVEMBER 2-8 | JEREMIAH 49-50');
-      expect(merged.songs, ['2', '45', '34']);
+      expect(merged.openingSongNo, 2);
+      expect(merged.livingSongNo, 45);
+      expect(merged.closingSongNo, 34);
       expect(merged.source, 'cdn');
 
       final talk = merged.parts.firstWhere(

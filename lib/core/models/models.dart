@@ -12,6 +12,7 @@ export 'publisher.dart';
 export 'pw.dart';
 export 'report.dart';
 export 'schedule_config.dart';
+export 'song_catalog.dart';
 export 'talk_catalog.dart';
 export 'territory.dart';
 export 'weekend_week.dart';

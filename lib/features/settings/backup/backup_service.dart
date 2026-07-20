@@ -22,6 +22,7 @@ const _flatCollections = [
   'weekend_weeks',
   'schedule_config',
   'public_talks',
+  'song_catalog',
   'pw_recurring',
   'pw_slots',
   'pw_applications',
