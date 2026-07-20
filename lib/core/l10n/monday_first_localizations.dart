@@ -8,12 +8,15 @@ import 'l10n.dart';
 /// 0 = Sunday .. 6 = Saturday.
 const int _mondayIndex = 1;
 
-/// `en`'s CLDR data defaults to Sunday-first (en_US convention), which is the
-/// only locale among [AppLocalizations.supportedLocales] that isn't already
-/// Monday-first — `cs` and `tr` already start on Monday. Overrides just
-/// [firstDayOfWeekIndex] so the calendar grid in [showDatePicker] etc. always
-/// starts on Monday, matching the Monday-anchored week logic used everywhere
-/// else in the app (see `core/utils/dates.dart`).
+/// The supported locales whose CLDR data defaults to Sunday-first and therefore
+/// need a Monday-first override. Checked against the `intl` package's
+/// `FIRSTDAYOFWEEK` symbol: `en`, `pt` and `ja` are Sunday-first, while
+/// `cs`, `tr`, `es`, `it`, `fr`, `pl` and `de` already start on Monday.
+/// A future Sunday-first locale must be added here (and given its own subclass
+/// below); the guard test in `monday_first_localizations_test.dart` fails
+/// until it is.
+const _sundayFirstCodes = {'en', 'pt', 'ja'};
+
 class _MondayFirstMaterialLocalizationEn extends MaterialLocalizationEn {
   const _MondayFirstMaterialLocalizationEn({
     required super.fullYearFormat,
@@ -30,6 +33,67 @@ class _MondayFirstMaterialLocalizationEn extends MaterialLocalizationEn {
   @override
   int get firstDayOfWeekIndex => _mondayIndex;
 }
+
+class _MondayFirstMaterialLocalizationPt extends MaterialLocalizationPt {
+  const _MondayFirstMaterialLocalizationPt({
+    required super.fullYearFormat,
+    required super.compactDateFormat,
+    required super.shortDateFormat,
+    required super.mediumDateFormat,
+    required super.longDateFormat,
+    required super.yearMonthFormat,
+    required super.shortMonthDayFormat,
+    required super.decimalFormat,
+    required super.twoDigitZeroPaddedFormat,
+  });
+
+  @override
+  int get firstDayOfWeekIndex => _mondayIndex;
+}
+
+class _MondayFirstMaterialLocalizationJa extends MaterialLocalizationJa {
+  const _MondayFirstMaterialLocalizationJa({
+    required super.fullYearFormat,
+    required super.compactDateFormat,
+    required super.shortDateFormat,
+    required super.mediumDateFormat,
+    required super.longDateFormat,
+    required super.yearMonthFormat,
+    required super.shortMonthDayFormat,
+    required super.decimalFormat,
+    required super.twoDigitZeroPaddedFormat,
+  });
+
+  @override
+  int get firstDayOfWeekIndex => _mondayIndex;
+}
+
+/// The date/number formats every [GlobalMaterialLocalizations] subclass needs,
+/// built for one locale code so each Monday-first subclass can be constructed
+/// without repeating the nine expressions.
+typedef _Formats = ({
+  intl.DateFormat fullYearFormat,
+  intl.DateFormat compactDateFormat,
+  intl.DateFormat shortDateFormat,
+  intl.DateFormat mediumDateFormat,
+  intl.DateFormat longDateFormat,
+  intl.DateFormat yearMonthFormat,
+  intl.DateFormat shortMonthDayFormat,
+  intl.NumberFormat decimalFormat,
+  intl.NumberFormat twoDigitZeroPaddedFormat,
+});
+
+_Formats _formatsFor(String code) => (
+      fullYearFormat: intl.DateFormat.y(code),
+      compactDateFormat: intl.DateFormat.yMd(code),
+      shortDateFormat: intl.DateFormat.yMMMd(code),
+      mediumDateFormat: intl.DateFormat.MMMEd(code),
+      longDateFormat: intl.DateFormat.yMMMMEEEEd(code),
+      yearMonthFormat: intl.DateFormat.yMMMM(code),
+      shortMonthDayFormat: intl.DateFormat.MMMd(code),
+      decimalFormat: intl.NumberFormat.decimalPattern(code),
+      twoDigitZeroPaddedFormat: intl.NumberFormat('00', code),
+    );
 
 /// Wraps the stock Material localizations delegate to force Monday as the
 /// first day of week for every locale. Must be listed before
@@ -49,23 +113,45 @@ class MondayFirstMaterialLocalizationsDelegate
     final base = await GlobalMaterialLocalizations.delegate.load(locale);
     if (base.firstDayOfWeekIndex == _mondayIndex) return base;
 
-    // Only 'en' is known to default to Sunday-first today; a future locale
-    // that also defaults to Sunday-first would need its own branch here (the
-    // guard test in monday_first_localizations_test.dart fails until it's
-    // added).
-    if (locale.languageCode != 'en') return base;
+    final code = locale.languageCode;
+    if (!_sundayFirstCodes.contains(code)) return base;
 
-    return _MondayFirstMaterialLocalizationEn(
-      fullYearFormat: intl.DateFormat.y('en'),
-      compactDateFormat: intl.DateFormat.yMd('en'),
-      shortDateFormat: intl.DateFormat.yMMMd('en'),
-      mediumDateFormat: intl.DateFormat.MMMEd('en'),
-      longDateFormat: intl.DateFormat.yMMMMEEEEd('en'),
-      yearMonthFormat: intl.DateFormat.yMMMM('en'),
-      shortMonthDayFormat: intl.DateFormat.MMMd('en'),
-      decimalFormat: intl.NumberFormat.decimalPattern('en'),
-      twoDigitZeroPaddedFormat: intl.NumberFormat('00', 'en'),
-    );
+    final f = _formatsFor(code);
+    return switch (code) {
+      'pt' => _MondayFirstMaterialLocalizationPt(
+          fullYearFormat: f.fullYearFormat,
+          compactDateFormat: f.compactDateFormat,
+          shortDateFormat: f.shortDateFormat,
+          mediumDateFormat: f.mediumDateFormat,
+          longDateFormat: f.longDateFormat,
+          yearMonthFormat: f.yearMonthFormat,
+          shortMonthDayFormat: f.shortMonthDayFormat,
+          decimalFormat: f.decimalFormat,
+          twoDigitZeroPaddedFormat: f.twoDigitZeroPaddedFormat,
+        ),
+      'ja' => _MondayFirstMaterialLocalizationJa(
+          fullYearFormat: f.fullYearFormat,
+          compactDateFormat: f.compactDateFormat,
+          shortDateFormat: f.shortDateFormat,
+          mediumDateFormat: f.mediumDateFormat,
+          longDateFormat: f.longDateFormat,
+          yearMonthFormat: f.yearMonthFormat,
+          shortMonthDayFormat: f.shortMonthDayFormat,
+          decimalFormat: f.decimalFormat,
+          twoDigitZeroPaddedFormat: f.twoDigitZeroPaddedFormat,
+        ),
+      _ => _MondayFirstMaterialLocalizationEn(
+          fullYearFormat: f.fullYearFormat,
+          compactDateFormat: f.compactDateFormat,
+          shortDateFormat: f.shortDateFormat,
+          mediumDateFormat: f.mediumDateFormat,
+          longDateFormat: f.longDateFormat,
+          yearMonthFormat: f.yearMonthFormat,
+          shortMonthDayFormat: f.shortMonthDayFormat,
+          decimalFormat: f.decimalFormat,
+          twoDigitZeroPaddedFormat: f.twoDigitZeroPaddedFormat,
+        ),
+    };
   }
 
   @override

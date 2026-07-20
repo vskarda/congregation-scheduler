@@ -138,40 +138,55 @@ enum _Label {
 /// en / cs / tr, both the official card wording and the app's own S-21
 /// export wording.
 const Map<_Label, List<String>> _labelPhrases = {
-  _Label.name: ['name', 'jmeno', 'isim'],
-  _Label.birth: ['dateofbirth', 'birthdate', 'datumnarozeni', 'dogumtarihi'],
+  _Label.name: ['name', 'jmeno', 'isim', 'nombre'],
+  _Label.birth: [
+    'dateofbirth',
+    'birthdate',
+    'datumnarozeni',
+    'dogumtarihi',
+    'fechadenacimiento',
+  ],
   _Label.baptism: [
     'dateofbaptism',
     'baptismdate',
     'datumkrtu',
     'vaftiztarihi',
+    'fechadebautismo',
   ],
-  _Label.male: ['male', 'muz', 'erkek'],
-  _Label.female: ['female', 'zena', 'kadin'],
-  _Label.otherSheep: ['othersheep', 'jinaovce', 'baskakoyun'],
-  _Label.anointed: ['anointed', 'pomazany', 'meshedilmis'],
-  _Label.elder: ['elder', 'starsi', 'ihtiyar'],
+  _Label.male: ['male', 'muz', 'erkek', 'hombre'],
+  _Label.female: ['female', 'zena', 'kadin', 'mujer'],
+  _Label.otherSheep: ['othersheep', 'jinaovce', 'baskakoyun', 'otrasovejas'],
+  _Label.anointed: ['anointed', 'pomazany', 'meshedilmis', 'ungido'],
+  _Label.elder: ['elder', 'starsi', 'ihtiyar', 'anciano'],
   _Label.ministerialServant: [
     'ministerialservant',
     'sluzebnipomocnik',
     'hizmetgorevlisi',
+    'siervoministerial',
   ],
   _Label.regularPioneer: [
     'regularpioneer',
     'pravidelnyprukopnik',
     'daimioncu',
+    'precursorregular',
   ],
   _Label.specialPioneer: [
     'specialpioneer',
     'zvlastniprukopnik',
     'ozeloncu',
+    'precursorespecial',
   ],
-  _Label.fieldMissionary: ['fieldmissionary', 'misionar', 'gorevlivaiz'],
-  _Label.serviceYear: ['serviceyear', 'sluzebnirok', 'hizmetyili'],
+  _Label.fieldMissionary: [
+    'fieldmissionary',
+    'misionar',
+    'gorevlivaiz',
+    'misioneroquesirveenelcampo',
+  ],
+  _Label.serviceYear: ['serviceyear', 'sluzebnirok', 'hizmetyili', 'anodeservicio'],
   _Label.total: ['total', 'celkem', 'toplam'],
 };
 
-/// Condensed month names (en / cs / tr) → calendar month number.
+/// Condensed month names (en / cs / tr / es) → calendar month number.
 const Map<String, int> _monthPhrases = {
   'september': 9, 'october': 10, 'november': 11, 'december': 12, //
   'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5,
@@ -182,6 +197,9 @@ const Map<String, int> _monthPhrases = {
   'eylul': 9, 'ekim': 10, 'kasim': 11, 'aralik': 12,
   'ocak': 1, 'subat': 2, 'mart': 3, 'nisan': 4, 'mayis': 5,
   'haziran': 6, 'temmuz': 7, 'agustos': 8,
+  'enero': 1, 'febrero': 2, 'marzo': 3, 'abril': 4, 'mayo': 5,
+  'junio': 6, 'julio': 7, 'agosto': 8, 'septiembre': 9, 'octubre': 10,
+  'noviembre': 11, 'diciembre': 12,
 };
 
 /// Checkbox glyphs. `þ`/`¨` are what the common generated cards' dingbat

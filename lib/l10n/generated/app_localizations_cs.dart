@@ -295,6 +295,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get languageTurkish => 'Türkçe';
 
   @override
+  String get languageSpanish => 'Español';
+
+  @override
   String get themeSystem => 'Systém';
 
   @override

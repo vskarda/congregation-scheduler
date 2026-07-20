@@ -20,6 +20,7 @@ class LanguageMenuButton extends ConsumerWidget {
         PopupMenuItem(value: 'system', child: Text(l10n.languageSystem)),
         PopupMenuItem(value: 'cs', child: Text(l10n.languageCzech)),
         PopupMenuItem(value: 'tr', child: Text(l10n.languageTurkish)),
+        PopupMenuItem(value: 'es', child: Text(l10n.languageSpanish)),
         PopupMenuItem(value: 'en', child: Text(l10n.languageEnglish)),
       ],
     );

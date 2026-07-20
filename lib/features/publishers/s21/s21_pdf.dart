@@ -140,7 +140,8 @@ Future<Uint8List> buildS21Pdf({
     pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: const pw.EdgeInsets.all(36),
-      theme: pw.ThemeData.withFont(base: fonts.base, bold: fonts.bold),
+      theme: pw.ThemeData.withFont(
+          base: fonts.base, bold: fonts.bold, fontFallback: fonts.fallback),
       build: (context) => pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.stretch,
         children: [

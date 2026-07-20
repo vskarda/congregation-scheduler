@@ -96,10 +96,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # Unicode fonts embedded into generated PDFs (Czech diacritics).
+  # Unicode fonts embedded into generated PDFs (Czech diacritics; the JP font
+  # is the CJK fallback so Japanese schedule/S-21 exports render real glyphs).
   assets:
     - assets/fonts/NotoSans-Regular.ttf
     - assets/fonts/NotoSans-Bold.ttf
+    - assets/fonts/NotoSansJP-Regular.ttf
     # Firebase console walkthrough screenshots for the in-app setup guide.
     - assets/setup_guide/
     # Shown/copied verbatim in the setup guide; single source of truth.

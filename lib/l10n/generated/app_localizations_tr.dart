@@ -294,6 +294,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get languageTurkish => 'Türkçe';
 
   @override
+  String get languageSpanish => 'Español';
+
+  @override
   String get themeSystem => 'Sistem';
 
   @override

@@ -119,7 +119,8 @@ Future<Uint8List> buildWeekendMonthPdf({
   final doc = pw.Document();
   doc.addPage(pw.MultiPage(
     pageFormat: PdfPageFormat.a4,
-    theme: pw.ThemeData.withFont(base: fonts.base, bold: fonts.bold),
+    theme: pw.ThemeData.withFont(
+        base: fonts.base, bold: fonts.bold, fontFallback: fonts.fallback),
     build: (_) => widgets,
   ));
   return doc.save();

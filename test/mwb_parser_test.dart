@@ -61,6 +61,23 @@ const _trWeek = '''
 </body></html>
 ''';
 
+const _esWeek = '''
+<html><body>
+<h1>6 A 12 DE JULIO | SALMO 45</h1>
+<p>CANCIÓN 1 y oración</p>
+<h2>TESOROS DE LA BIBLIA</h2>
+<p>1. Jehová bendice a su Rey (10 mins.)</p>
+<p>2. Busquemos perlas escondidas (10 mins.)</p>
+<p>3. Lectura de la Biblia (4 mins.)</p>
+<h2>SEAMOS MEJORES MAESTROS</h2>
+<p>4. Empiece conversaciones (3 mins.)</p>
+<h2>NUESTRA VIDA CRISTIANA</h2>
+<p>CANCIÓN 22</p>
+<p>5. Estudio bíblico de la congregación (30 mins.)</p>
+<p>CANCIÓN 33 y oración</p>
+</body></html>
+''';
+
 /// Sanitized replica of the 2024+ workbook markup (mwb_E_202611): part
 /// titles in <h3>, duration + instructions in the following detail
 /// paragraph, sections marked by dc-icon-- wrapper classes.
@@ -181,6 +198,29 @@ void main() {
       expect(week.openingSongNo, 1);
       expect(week.livingSongNo, 22);
       expect(week.closingSongNo, 33);
+      expect(
+          week.parts.map((part) => part.type),
+          containsAll([
+            LmmPartType.gems,
+            LmmPartType.bibleReading,
+            LmmPartType.fieldMinistry,
+            LmmPartType.cbsConductor,
+          ]));
+    });
+
+    test('parses a Spanish week', () {
+      final week =
+          MwbParser.parseWeekDocument(_esWeek, issue: (2026, 7));
+      expect(week, isNotNull);
+      expect(week!.id, '2026-07-06');
+      expect(week.openingSongNo, 1);
+      expect(week.livingSongNo, 22);
+      expect(week.closingSongNo, 33);
+      expect(
+          week.parts.any((p) =>
+              p.type == LmmPartType.cbsConductor &&
+              p.title == 'Estudio bíblico de la congregación'),
+          isTrue);
       expect(
           week.parts.map((part) => part.type),
           containsAll([

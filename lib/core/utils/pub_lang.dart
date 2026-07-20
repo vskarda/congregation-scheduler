@@ -5,5 +5,6 @@ import 'package:flutter/widgets.dart';
 String pubLangFor(Locale locale) => switch (locale.languageCode) {
       'cs' => 'B',
       'tr' => 'TK',
+      'es' => 'S',
       _ => 'E',
     };

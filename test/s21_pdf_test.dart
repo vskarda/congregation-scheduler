@@ -78,6 +78,20 @@ void main() {
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
   });
 
+  test('builds a Spanish S-21 PDF', () async {
+    final bytes = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      serviceYear: 2026,
+      reportsByMonth: reports,
+      l10n: lookupAppLocalizations(const Locale('es')),
+      locale: 'es',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(bytes.length, greaterThan(1000));
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
   test('handles a publisher with no private data or reports', () async {
     final bytes = await buildS21Pdf(
       publisher: const Publisher(id: 'p2', firstName: 'Ann'),

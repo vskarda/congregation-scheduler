@@ -72,6 +72,23 @@ abstract final class MwbParser {
     'ARALIK': 12,
   };
 
+  // Spanish month names (nominative; Spanish does not inflect them in the
+  // date ranges, e.g. "1 a 7 de septiembre").
+  static const _esMonths = {
+    'ENERO': 1,
+    'FEBRERO': 2,
+    'MARZO': 3,
+    'ABRIL': 4,
+    'MAYO': 5,
+    'JUNIO': 6,
+    'JULIO': 7,
+    'AGOSTO': 8,
+    'SEPTIEMBRE': 9,
+    'OCTUBRE': 10,
+    'NOVIEMBRE': 11,
+    'DICIEMBRE': 12,
+  };
+
   static final _numberedTitlePattern = RegExp(r'^\s*\d+\.\s*(.+)$');
 
   // "(10 min.)", "(Br. … 3 min.)", "(10 dk.)"; the digits directly before
@@ -80,7 +97,7 @@ abstract final class MwbParser {
       caseSensitive: false, unicode: true);
 
   static final _songPattern =
-      RegExp(r'(?:SONG|PÍSEŇ|İLAHİ)\s*(?:Ç\.\s*)?(\d+)',
+      RegExp(r'(?:SONG|PÍSEŇ|İLAHİ|CANCIÓN)\s*(?:Ç\.\s*)?(\d+)',
           caseSensitive: false);
 
   // Zero-width characters (ZWSP..ZWJ, BOM) that leak into extracted text.
@@ -315,12 +332,14 @@ abstract final class MwbParser {
             titleUpper.contains('DUCHOVNÍCH DRAHOKAMŮ') ||
             titleUpper.contains('DUCHOVNÍ PERLY') ||
             titleUpper.contains('RUHSAL HAZINELER') ||
-            titleUpper.contains('RUHI HAZINELER')) {
+            titleUpper.contains('RUHI HAZINELER') ||
+            titleUpper.contains('PERLAS ESCONDIDAS')) {
           type = LmmPartType.gems;
         } else if (titleUpper.contains('BIBLE READING') ||
             titleUpper.contains('ČTENÍ BIBLE') ||
             titleUpper.contains('ČTENÍ Z BIBLE') ||
-            titleUpper.contains('KUTSAL KITAP OKUMASI')) {
+            titleUpper.contains('KUTSAL KITAP OKUMASI') ||
+            titleUpper.contains('LECTURA DE LA BIBLIA')) {
           type = LmmPartType.bibleReading;
         } else if (treasuresIndex == 1) {
           type = LmmPartType.gems;
@@ -334,7 +353,8 @@ abstract final class MwbParser {
               titleUpper.contains('SBOROVÉ STUDIUM') ||
               titleUpper.contains('CEMAAT KUTSAL KITAP TETKIKI') ||
               titleUpper.contains('CEMAAT KUTSAL KITAP INCELEMESI') ||
-              titleUpper.contains('CEMAAT KUTSAL KITAP'))) {
+              titleUpper.contains('CEMAAT KUTSAL KITAP') ||
+              titleUpper.contains('ESTUDIO BÍBLICO DE LA CONGREGACIÓN'))) {
         type = LmmPartType.cbsConductor;
       }
 
@@ -419,20 +439,23 @@ abstract final class MwbParser {
     if (upper.contains('POKLADY Z BOŽÍHO') ||
         upper.contains('TREASURES FROM') ||
         upper.contains('TANRI’NIN SÖZÜNDEKI HAZINELER') ||
-        upper.contains("TANRI'NIN SÖZÜNDEKI HAZINELER")) {
+        upper.contains("TANRI'NIN SÖZÜNDEKI HAZINELER") ||
+        upper.contains('TESOROS DE LA BIBLIA')) {
       return LmmSection.treasures;
     }
     if (upper.contains('FIELD MINISTRY') ||
         upper.contains('VE SLUŽBĚ') ||
         upper.contains('TARLA HIZMETINDE') ||
-        upper.contains('HIZMETTE BECERILERIMIZI')) {
+        upper.contains('HIZMETTE BECERILERIMIZI') ||
+        upper.contains('SEAMOS MEJORES MAESTROS')) {
       return LmmSection.ministry;
     }
     if (upper.contains('LIVING AS CHRISTIANS') ||
         upper.contains('ŽIVOT KŘESŤANA') ||
         upper.contains('KŘESŤANSKÝ ŽIVOT') ||
         upper.contains('HIRISTIYANLAR OLARAK') ||
-        upper.contains('HIRISTIYANCA YAŞAM')) {
+        upper.contains('HIRISTIYANCA YAŞAM') ||
+        upper.contains('NUESTRA VIDA CRISTIANA')) {
       return LmmSection.living;
     }
     return null;
@@ -462,6 +485,7 @@ abstract final class MwbParser {
       (_enMonths, true),
       (_csMonths, false),
       (_trMonths, false),
+      (_esMonths, false),
     ]) {
       for (final entry in months.entries) {
         var idx = upper.indexOf(entry.key);
