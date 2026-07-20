@@ -428,6 +428,24 @@ class AppLocalizationsIt extends AppLocalizations {
       'Sei l\'unico amministratore completo della congregazione. Concedi prima i diritti di amministratore completo a un altro membro; altrimenti l\'eliminazione del tuo account lascerebbe la congregazione senza amministratore e senza modo di ripristinare l\'accesso.';
 
   @override
+  String get changePasswordAction => 'Cambia password';
+
+  @override
+  String get changePasswordCurrentLabel => 'Password attuale';
+
+  @override
+  String get changePasswordNewLabel => 'Nuova password';
+
+  @override
+  String get changePasswordConfirmLabel => 'Conferma nuova password';
+
+  @override
+  String get changePasswordConfirm => 'Aggiorna password';
+
+  @override
+  String get changePasswordSuccess => 'Password aggiornata.';
+
+  @override
   String get navInfoBoard => 'Bacheca';
 
   @override

@@ -135,6 +135,13 @@
   "deleteAccountSoleAdminTitle": "Sei l'unico amministratore",
   "deleteAccountSoleAdminBody": "Sei l'unico amministratore completo della congregazione. Concedi prima i diritti di amministratore completo a un altro membro; altrimenti l'eliminazione del tuo account lascerebbe la congregazione senza amministratore e senza modo di ripristinare l'accesso.",
 
+  "changePasswordAction": "Cambia password",
+  "changePasswordCurrentLabel": "Password attuale",
+  "changePasswordNewLabel": "Nuova password",
+  "changePasswordConfirmLabel": "Conferma nuova password",
+  "changePasswordConfirm": "Aggiorna password",
+  "changePasswordSuccess": "Password aggiornata.",
+
   "navInfoBoard": "Bacheca",
   "navEvents": "Eventi",
   "navLmm": "Adunanza infrasettimanale",

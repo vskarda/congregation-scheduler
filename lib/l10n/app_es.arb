@@ -135,6 +135,13 @@
   "deleteAccountSoleAdminTitle": "Eres el único administrador",
   "deleteAccountSoleAdminBody": "Eres el único administrador completo de la congregación. Primero concede derechos de administrador completo a otro miembro; de lo contrario, eliminar tu cuenta dejaría a la congregación sin administrador y sin forma de restaurar el acceso.",
 
+  "changePasswordAction": "Cambiar contraseña",
+  "changePasswordCurrentLabel": "Contraseña actual",
+  "changePasswordNewLabel": "Nueva contraseña",
+  "changePasswordConfirmLabel": "Confirmar nueva contraseña",
+  "changePasswordConfirm": "Actualizar contraseña",
+  "changePasswordSuccess": "Contraseña actualizada.",
+
   "navInfoBoard": "Tablón de anuncios",
   "navEvents": "Eventos",
   "navLmm": "Reunión de entre semana",

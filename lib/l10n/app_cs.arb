@@ -135,6 +135,13 @@
   "deleteAccountSoleAdminTitle": "Jste jediný administrátor",
   "deleteAccountSoleAdminBody": "Jste jediný úplný administrátor sboru. Nejprve udělte práva úplného administrátora jinému členovi, jinak by smazáním vašeho účtu zůstal sbor bez administrátora a bez možnosti obnovit přístup.",
 
+  "changePasswordAction": "Změnit heslo",
+  "changePasswordCurrentLabel": "Aktuální heslo",
+  "changePasswordNewLabel": "Nové heslo",
+  "changePasswordConfirmLabel": "Potvrďte nové heslo",
+  "changePasswordConfirm": "Aktualizovat heslo",
+  "changePasswordSuccess": "Heslo bylo aktualizováno.",
+
   "navInfoBoard": "Informační deska",
   "navEvents": "Události",
   "navLmm": "Shromáždění v týdnu",

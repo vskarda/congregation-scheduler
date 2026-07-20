@@ -430,6 +430,24 @@ class AppLocalizationsDe extends AppLocalizations {
       'Du bist der einzige Volladministrator der Versammlung. Erteile zuerst einem anderen Mitglied Volladministratorrechte; andernfalls würde das Löschen deines Kontos die Versammlung ohne Administrator und ohne Möglichkeit zur Wiederherstellung des Zugriffs zurücklassen.';
 
   @override
+  String get changePasswordAction => 'Passwort ändern';
+
+  @override
+  String get changePasswordCurrentLabel => 'Aktuelles Passwort';
+
+  @override
+  String get changePasswordNewLabel => 'Neues Passwort';
+
+  @override
+  String get changePasswordConfirmLabel => 'Neues Passwort bestätigen';
+
+  @override
+  String get changePasswordConfirm => 'Passwort aktualisieren';
+
+  @override
+  String get changePasswordSuccess => 'Passwort aktualisiert.';
+
+  @override
   String get navInfoBoard => 'Anschlagbrett';
 
   @override

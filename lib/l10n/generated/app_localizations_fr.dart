@@ -428,6 +428,24 @@ class AppLocalizationsFr extends AppLocalizations {
       'Tu es le seul administrateur complet de l\'assemblée. Accorde d\'abord les droits d\'administrateur complet à un autre membre ; sinon, la suppression de ton compte laisserait l\'assemblée sans administrateur et sans moyen de rétablir l\'accès.';
 
   @override
+  String get changePasswordAction => 'Changer le mot de passe';
+
+  @override
+  String get changePasswordCurrentLabel => 'Mot de passe actuel';
+
+  @override
+  String get changePasswordNewLabel => 'Nouveau mot de passe';
+
+  @override
+  String get changePasswordConfirmLabel => 'Confirmer le nouveau mot de passe';
+
+  @override
+  String get changePasswordConfirm => 'Mettre à jour le mot de passe';
+
+  @override
+  String get changePasswordSuccess => 'Mot de passe mis à jour.';
+
+  @override
   String get navInfoBoard => 'Tableau d\'affichage';
 
   @override

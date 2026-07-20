@@ -424,6 +424,24 @@ class AppLocalizationsEn extends AppLocalizations {
       'You are the congregation\'s only Full Administrator. Grant another member Full Admin rights first, otherwise deleting your account would leave the congregation with no administrator and no way to restore access.';
 
   @override
+  String get changePasswordAction => 'Change password';
+
+  @override
+  String get changePasswordCurrentLabel => 'Current password';
+
+  @override
+  String get changePasswordNewLabel => 'New password';
+
+  @override
+  String get changePasswordConfirmLabel => 'Confirm new password';
+
+  @override
+  String get changePasswordConfirm => 'Update password';
+
+  @override
+  String get changePasswordSuccess => 'Password updated.';
+
+  @override
   String get navInfoBoard => 'Information board';
 
   @override

@@ -139,6 +139,13 @@
   "deleteAccountSoleAdminTitle": "You are the only administrator",
   "deleteAccountSoleAdminBody": "You are the congregation's only Full Administrator. Grant another member Full Admin rights first, otherwise deleting your account would leave the congregation with no administrator and no way to restore access.",
 
+  "changePasswordAction": "Change password",
+  "changePasswordCurrentLabel": "Current password",
+  "changePasswordNewLabel": "New password",
+  "changePasswordConfirmLabel": "Confirm new password",
+  "changePasswordConfirm": "Update password",
+  "changePasswordSuccess": "Password updated.",
+
   "navInfoBoard": "Information board",
   "navEvents": "Events",
   "navLmm": "Midweek meeting",

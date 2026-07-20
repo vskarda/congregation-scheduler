@@ -135,6 +135,13 @@
   "deleteAccountSoleAdminTitle": "Du bist der einzige Administrator",
   "deleteAccountSoleAdminBody": "Du bist der einzige Volladministrator der Versammlung. Erteile zuerst einem anderen Mitglied Volladministratorrechte; andernfalls würde das Löschen deines Kontos die Versammlung ohne Administrator und ohne Möglichkeit zur Wiederherstellung des Zugriffs zurücklassen.",
 
+  "changePasswordAction": "Passwort ändern",
+  "changePasswordCurrentLabel": "Aktuelles Passwort",
+  "changePasswordNewLabel": "Neues Passwort",
+  "changePasswordConfirmLabel": "Neues Passwort bestätigen",
+  "changePasswordConfirm": "Passwort aktualisieren",
+  "changePasswordSuccess": "Passwort aktualisiert.",
+
   "navInfoBoard": "Anschlagbrett",
   "navEvents": "Veranstaltungen",
   "navLmm": "Zusammenkunft unter der Woche",

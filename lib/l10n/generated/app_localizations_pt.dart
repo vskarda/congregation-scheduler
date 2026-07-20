@@ -426,6 +426,24 @@ class AppLocalizationsPt extends AppLocalizations {
       'Você é o único administrador completo da congregação. Conceda primeiro direitos de administrador completo a outro membro; caso contrário, excluir sua conta deixaria a congregação sem administrador e sem como restaurar o acesso.';
 
   @override
+  String get changePasswordAction => 'Alterar senha';
+
+  @override
+  String get changePasswordCurrentLabel => 'Senha atual';
+
+  @override
+  String get changePasswordNewLabel => 'Nova senha';
+
+  @override
+  String get changePasswordConfirmLabel => 'Confirmar nova senha';
+
+  @override
+  String get changePasswordConfirm => 'Atualizar senha';
+
+  @override
+  String get changePasswordSuccess => 'Senha atualizada.';
+
+  @override
   String get navInfoBoard => 'Mural de avisos';
 
   @override

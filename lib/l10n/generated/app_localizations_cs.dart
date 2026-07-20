@@ -425,6 +425,24 @@ class AppLocalizationsCs extends AppLocalizations {
       'Jste jediný úplný administrátor sboru. Nejprve udělte práva úplného administrátora jinému členovi, jinak by smazáním vašeho účtu zůstal sbor bez administrátora a bez možnosti obnovit přístup.';
 
   @override
+  String get changePasswordAction => 'Změnit heslo';
+
+  @override
+  String get changePasswordCurrentLabel => 'Aktuální heslo';
+
+  @override
+  String get changePasswordNewLabel => 'Nové heslo';
+
+  @override
+  String get changePasswordConfirmLabel => 'Potvrďte nové heslo';
+
+  @override
+  String get changePasswordConfirm => 'Aktualizovat heslo';
+
+  @override
+  String get changePasswordSuccess => 'Heslo bylo aktualizováno.';
+
+  @override
   String get navInfoBoard => 'Informační deska';
 
   @override

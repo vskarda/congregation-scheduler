@@ -423,6 +423,24 @@ class AppLocalizationsTr extends AppLocalizations {
       'Cemaatin tek Tam Yöneticisisiniz. Önce başka bir üyeye Tam Yönetici yetkisi verin; aksi halde hesabınızı silmek cemaati yöneticisiz ve erişimi geri getirme imkânı olmadan bırakır.';
 
   @override
+  String get changePasswordAction => 'Parolayı değiştir';
+
+  @override
+  String get changePasswordCurrentLabel => 'Mevcut parola';
+
+  @override
+  String get changePasswordNewLabel => 'Yeni parola';
+
+  @override
+  String get changePasswordConfirmLabel => 'Yeni parolayı onayla';
+
+  @override
+  String get changePasswordConfirm => 'Parolayı güncelle';
+
+  @override
+  String get changePasswordSuccess => 'Parola güncellendi.';
+
+  @override
   String get navInfoBoard => 'İlan Panosu';
 
   @override

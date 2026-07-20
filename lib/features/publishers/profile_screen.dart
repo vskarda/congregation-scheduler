@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../auth/change_password.dart';
 import '../auth/delete_account.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
@@ -45,7 +46,13 @@ class ProfileScreen extends ConsumerWidget {
               const Divider(),
               Align(
                 alignment: Alignment.centerLeft,
-                child: const DeleteAccountButton(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    ChangePasswordButton(),
+                    DeleteAccountButton(),
+                  ],
+                ),
               ),
             ],
           ),

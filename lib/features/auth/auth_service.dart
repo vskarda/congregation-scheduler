@@ -165,6 +165,24 @@ class AuthService {
     await user.delete();
   }
 
+  /// Changes the signed-in user's password. The current password
+  /// re-authenticates the (possibly stale) session so Firebase permits
+  /// `user.updatePassword()`, and fails fast on a wrong current password
+  /// before the new one is applied.
+  Future<void> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _auth.currentUser!;
+    final email = user.email;
+    if (email != null && email.isNotEmpty) {
+      final cred =
+          EmailAuthProvider.credential(email: email, password: currentPassword);
+      await user.reauthenticateWithCredential(cred);
+    }
+    await user.updatePassword(newPassword);
+  }
+
   Future<void> _createProfileDocs(
     String uid,
     String email,

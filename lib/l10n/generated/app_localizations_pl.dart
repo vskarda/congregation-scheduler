@@ -423,6 +423,24 @@ class AppLocalizationsPl extends AppLocalizations {
       'Jesteś jedynym pełnym administratorem zboru. Najpierw nadaj uprawnienia pełnego administratora innemu członkowi; w przeciwnym razie usunięcie twojego konta pozostawiłoby zbór bez administratora i bez możliwości przywrócenia dostępu.';
 
   @override
+  String get changePasswordAction => 'Zmień hasło';
+
+  @override
+  String get changePasswordCurrentLabel => 'Aktualne hasło';
+
+  @override
+  String get changePasswordNewLabel => 'Nowe hasło';
+
+  @override
+  String get changePasswordConfirmLabel => 'Potwierdź nowe hasło';
+
+  @override
+  String get changePasswordConfirm => 'Zaktualizuj hasło';
+
+  @override
+  String get changePasswordSuccess => 'Hasło zostało zmienione.';
+
+  @override
   String get navInfoBoard => 'Tablica ogłoszeń';
 
   @override

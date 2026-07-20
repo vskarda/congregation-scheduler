@@ -413,6 +413,24 @@ class AppLocalizationsJa extends AppLocalizations {
       'あなたは会衆で唯一のフル管理者です。先にほかのメンバーにフル管理者権限を与えてください。そうしないと、アカウントを削除すると会衆に管理者がいなくなり、アクセスを復元できなくなります。';
 
   @override
+  String get changePasswordAction => 'パスワードを変更';
+
+  @override
+  String get changePasswordCurrentLabel => '現在のパスワード';
+
+  @override
+  String get changePasswordNewLabel => '新しいパスワード';
+
+  @override
+  String get changePasswordConfirmLabel => '新しいパスワードを確認';
+
+  @override
+  String get changePasswordConfirm => 'パスワードを更新';
+
+  @override
+  String get changePasswordSuccess => 'パスワードを更新しました。';
+
+  @override
   String get navInfoBoard => '掲示板';
 
   @override

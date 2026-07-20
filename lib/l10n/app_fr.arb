@@ -135,6 +135,13 @@
   "deleteAccountSoleAdminTitle": "Tu es le seul administrateur",
   "deleteAccountSoleAdminBody": "Tu es le seul administrateur complet de l'assemblée. Accorde d'abord les droits d'administrateur complet à un autre membre ; sinon, la suppression de ton compte laisserait l'assemblée sans administrateur et sans moyen de rétablir l'accès.",
 
+  "changePasswordAction": "Changer le mot de passe",
+  "changePasswordCurrentLabel": "Mot de passe actuel",
+  "changePasswordNewLabel": "Nouveau mot de passe",
+  "changePasswordConfirmLabel": "Confirmer le nouveau mot de passe",
+  "changePasswordConfirm": "Mettre à jour le mot de passe",
+  "changePasswordSuccess": "Mot de passe mis à jour.",
+
   "navInfoBoard": "Tableau d'affichage",
   "navEvents": "Événements",
   "navLmm": "Réunion de semaine",
