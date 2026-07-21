@@ -3012,11 +3012,11 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get terrName;
 
-  /// No description provided for @terrNumber.
+  /// No description provided for @terrNameDuplicate.
   ///
   /// In en, this message translates to:
-  /// **'Number'**
-  String get terrNumber;
+  /// **'A territory with this name already exists.'**
+  String get terrNameDuplicate;
 
   /// No description provided for @terrMapUrl.
   ///
@@ -3087,7 +3087,7 @@ abstract class AppLocalizations {
   /// No description provided for @terrImportPasteHint.
   ///
   /// In en, this message translates to:
-  /// **'Paste rows from Excel or Google Sheets. Columns: name, number, map link, notes — only name is required.'**
+  /// **'Paste rows from Excel or Google Sheets. Columns: name, map link, notes — only name is required.'**
   String get terrImportPasteHint;
 
   /// No description provided for @terrImportPreview.
@@ -3116,7 +3116,7 @@ abstract class AppLocalizations {
   /// No description provided for @terrImportUpdateExisting.
   ///
   /// In en, this message translates to:
-  /// **'Update existing territories (matched by number) instead of skipping'**
+  /// **'Update existing territories (matched by name) instead of skipping'**
   String get terrImportUpdateExisting;
 
   /// No description provided for @terrImportBadgeNew.

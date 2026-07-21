@@ -1595,7 +1595,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get terrName => 'Ad';
 
   @override
-  String get terrNumber => 'Numara';
+  String get terrNameDuplicate => 'Bu ada sahip bir saha zaten var.';
 
   @override
   String get terrMapUrl => 'Harita bağlantısı (ör. Google My Maps)';
@@ -1634,7 +1634,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'Excel veya Google E-Tablolar\'dan satırları yapıştırın. Sütunlar: ad, numara, harita bağlantısı, notlar — yalnızca ad zorunludur.';
+      'Excel veya Google E-Tablolar\'dan satırları yapıştırın. Sütunlar: ad, harita bağlantısı, notlar — yalnızca ad zorunludur.';
 
   @override
   String get terrImportPreview => 'Önizleme';
@@ -1654,7 +1654,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get terrImportUpdateExisting =>
-      'Mevcut sahaları atlamak yerine güncelle (numaraya göre eşleşir)';
+      'Mevcut sahaları atlamak yerine güncelle (ada göre eşleşir)';
 
   @override
   String get terrImportBadgeNew => 'Yeni';

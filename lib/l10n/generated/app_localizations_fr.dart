@@ -1611,7 +1611,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get terrName => 'Nom';
 
   @override
-  String get terrNumber => 'Numéro';
+  String get terrNameDuplicate => 'Un territoire portant ce nom existe déjà.';
 
   @override
   String get terrMapUrl => 'Lien de carte (par exemple Google My Maps)';
@@ -1650,7 +1650,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'Colle des lignes depuis Excel ou Google Sheets. Colonnes : nom, numéro, lien de carte, notes ; seul le nom est obligatoire.';
+      'Colle des lignes depuis Excel ou Google Sheets. Colonnes : nom, lien de carte, notes ; seul le nom est obligatoire.';
 
   @override
   String get terrImportPreview => 'Aperçu';
@@ -1670,7 +1670,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get terrImportUpdateExisting =>
-      'Mettre à jour les territoires existants (correspondance par numéro) au lieu de les ignorer';
+      'Mettre à jour les territoires existants (correspondance par nom) au lieu de les ignorer';
 
   @override
   String get terrImportBadgeNew => 'Nouveau';

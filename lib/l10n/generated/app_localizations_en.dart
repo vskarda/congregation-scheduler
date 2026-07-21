@@ -1590,7 +1590,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get terrName => 'Name';
 
   @override
-  String get terrNumber => 'Number';
+  String get terrNameDuplicate => 'A territory with this name already exists.';
 
   @override
   String get terrMapUrl => 'Map link (e.g. Google My Maps)';
@@ -1629,7 +1629,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'Paste rows from Excel or Google Sheets. Columns: name, number, map link, notes — only name is required.';
+      'Paste rows from Excel or Google Sheets. Columns: name, map link, notes — only name is required.';
 
   @override
   String get terrImportPreview => 'Preview';
@@ -1649,7 +1649,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get terrImportUpdateExisting =>
-      'Update existing territories (matched by number) instead of skipping';
+      'Update existing territories (matched by name) instead of skipping';
 
   @override
   String get terrImportBadgeNew => 'New';

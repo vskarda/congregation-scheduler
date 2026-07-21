@@ -10,7 +10,6 @@ abstract class Territory with _$Territory {
     @Default('')
     String id,
     @Default('') String name,
-    @Default('') String number,
 
     /// Link to a map (e.g. Google My Maps).
     @Default('') String mapUrl,

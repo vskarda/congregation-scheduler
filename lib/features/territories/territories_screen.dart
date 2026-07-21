@@ -22,7 +22,7 @@ class TerritoriesScreen extends ConsumerWidget {
       floatingActionButton: canEdit
           ? FloatingActionButton(
               tooltip: context.l10n.terrAdd,
-              onPressed: () => _showTerritoryDialog(context, ref),
+              onPressed: () => _showTerritoryDialog(context),
               child: const Icon(Icons.add),
             )
           : null,
@@ -136,7 +136,7 @@ class _MyTerritoriesSection extends ConsumerWidget {
 
 String _territoryLabel(Territory? t) {
   if (t == null) return '…';
-  return [if (t.number.isNotEmpty) t.number, t.name].join(' — ');
+  return t.name;
 }
 
 class _StatsSection extends ConsumerStatefulWidget {
@@ -293,9 +293,7 @@ class _AllTerritoriesSectionState
   int _compareRows(_TerritoryRow a, _TerritoryRow b) {
     switch (_sortField) {
       case _TerritorySort.territory:
-        final byName = collate(a.territory.name, b.territory.name);
-        final result =
-            byName != 0 ? byName : a.territory.number.compareTo(b.territory.number);
+        final result = collate(a.territory.name, b.territory.name);
         return _sortAscending ? result : -result;
       case _TerritorySort.publisher:
         if (a.holder == null && b.holder == null) return 0;
@@ -350,7 +348,6 @@ class _AllTerritoriesSectionState
         : rows.where((r) {
             final holderName = r.holder?.fullName.toLowerCase() ?? '';
             return r.territory.name.toLowerCase().contains(query) ||
-                r.territory.number.toLowerCase().contains(query) ||
                 holderName.contains(query);
           }).toList();
     filtered.sort(_compareRows);
@@ -441,7 +438,7 @@ class _AllTerritoriesSectionState
                                 }
                               case 'edit':
                                 if (context.mounted) {
-                                  await _showTerritoryDialog(context, ref,
+                                  await _showTerritoryDialog(context,
                                       existing: territory);
                                 }
                               case 'delete':
@@ -555,18 +552,72 @@ Future<void> _confirmDeleteTerritory(
   }
 }
 
-Future<void> _showTerritoryDialog(BuildContext context, WidgetRef ref,
-    {Territory? existing}) async {
-  final l10n = context.l10n;
-  final nameCtrl = TextEditingController(text: existing?.name ?? '');
-  final numberCtrl = TextEditingController(text: existing?.number ?? '');
-  final mapCtrl = TextEditingController(text: existing?.mapUrl ?? '');
-  final notesCtrl = TextEditingController(text: existing?.notes ?? '');
-
-  final saved = await showDialog<bool>(
+Future<void> _showTerritoryDialog(BuildContext context, {Territory? existing}) {
+  return showDialog<void>(
     context: context,
-    builder: (context) => AlertDialog(
-      title: Text(existing == null ? l10n.terrAdd : l10n.terrEdit),
+    builder: (_) => _TerritoryDialog(existing: existing),
+  );
+}
+
+/// Add/edit a territory. Owns its text controllers (disposed with the route, so
+/// the dialog's exit animation never touches a disposed controller). Name is the
+/// sole identifier, so Save blocks a name that duplicates another territory
+/// (matched trimmed + case-insensitively) with an inline error.
+class _TerritoryDialog extends ConsumerStatefulWidget {
+  const _TerritoryDialog({this.existing});
+
+  final Territory? existing;
+
+  @override
+  ConsumerState<_TerritoryDialog> createState() => _TerritoryDialogState();
+}
+
+class _TerritoryDialogState extends ConsumerState<_TerritoryDialog> {
+  late final _nameCtrl =
+      TextEditingController(text: widget.existing?.name ?? '');
+  late final _mapCtrl =
+      TextEditingController(text: widget.existing?.mapUrl ?? '');
+  late final _notesCtrl =
+      TextEditingController(text: widget.existing?.notes ?? '');
+  String? _nameError;
+
+  @override
+  void dispose() {
+    _nameCtrl.dispose();
+    _mapCtrl.dispose();
+    _notesCtrl.dispose();
+    super.dispose();
+  }
+
+  bool _nameTaken(String name) {
+    final key = name.trim().toLowerCase();
+    final territories = ref.read(territoriesProvider).value ?? const [];
+    return territories.any((t) =>
+        t.id != widget.existing?.id && t.name.trim().toLowerCase() == key);
+  }
+
+  Future<void> _save() async {
+    final name = _nameCtrl.text.trim();
+    if (name.isEmpty) return;
+    if (_nameTaken(name)) {
+      setState(() => _nameError = context.l10n.terrNameDuplicate);
+      return;
+    }
+    await ref.read(territoriesRepositoryProvider).saveTerritory(
+          (widget.existing ?? const Territory()).copyWith(
+            name: name,
+            mapUrl: _mapCtrl.text.trim(),
+            notes: _notesCtrl.text.trim(),
+          ),
+        );
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(widget.existing == null ? l10n.terrAdd : l10n.terrEdit),
       content: SizedBox(
         width: 380,
         child: SingleChildScrollView(
@@ -574,23 +625,24 @@ Future<void> _showTerritoryDialog(BuildContext context, WidgetRef ref,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
-                controller: nameCtrl,
-                autofocus: existing == null,
-                decoration: InputDecoration(labelText: l10n.terrName),
+                controller: _nameCtrl,
+                autofocus: widget.existing == null,
+                onChanged: (_) {
+                  if (_nameError != null) setState(() => _nameError = null);
+                },
+                decoration: InputDecoration(
+                  labelText: l10n.terrName,
+                  errorText: _nameError,
+                ),
               ),
               const SizedBox(height: 12),
               TextField(
-                controller: numberCtrl,
-                decoration: InputDecoration(labelText: l10n.terrNumber),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: mapCtrl,
+                controller: _mapCtrl,
                 decoration: InputDecoration(labelText: l10n.terrMapUrl),
               ),
               const SizedBox(height: 12),
               TextField(
-                controller: notesCtrl,
+                controller: _notesCtrl,
                 maxLines: 2,
                 decoration: InputDecoration(labelText: l10n.terrNotes),
               ),
@@ -600,26 +652,10 @@ Future<void> _showTerritoryDialog(BuildContext context, WidgetRef ref,
       ),
       actions: [
         TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.commonCancel)),
-        FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.commonSave)),
+        FilledButton(onPressed: _save, child: Text(l10n.commonSave)),
       ],
-    ),
-  );
-  if (saved == true && nameCtrl.text.trim().isNotEmpty) {
-    await ref.read(territoriesRepositoryProvider).saveTerritory(
-          (existing ?? const Territory()).copyWith(
-            name: nameCtrl.text.trim(),
-            number: numberCtrl.text.trim(),
-            mapUrl: mapCtrl.text.trim(),
-            notes: notesCtrl.text.trim(),
-          ),
-        );
+    );
   }
-  nameCtrl.dispose();
-  numberCtrl.dispose();
-  mapCtrl.dispose();
-  notesCtrl.dispose();
 }

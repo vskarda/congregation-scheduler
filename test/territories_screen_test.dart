@@ -13,10 +13,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// search+sort controls, and tap-to-expand assignment history.
 void main() {
   Future<void> seedTerritory(FakeFirebaseFirestore db, String id,
-      {required String name, required String number, String notes = ''}) {
+      {required String name, String notes = ''}) {
     return db.collection('territories').doc(id).set({
       'name': name,
-      'number': number,
       'mapUrl': '',
       'notes': notes,
     });
@@ -59,7 +58,7 @@ void main() {
   testWidgets('delete requires confirmation before removing the territory',
       (tester) async {
     final db = FakeFirebaseFirestore();
-    await seedTerritory(db, 't1', name: 'Alpha', number: '1');
+    await seedTerritory(db, 't1', name: 'Alpha');
 
     await tester.pumpWidget(wrap(db, const []));
     await tester.pumpAndSettle();
@@ -93,9 +92,9 @@ void main() {
   testWidgets('search and sort chips reorder and filter the list',
       (tester) async {
     final db = FakeFirebaseFirestore();
-    await seedTerritory(db, 't1', name: 'Beta', number: '2');
-    await seedTerritory(db, 't2', name: 'Alpha', number: '1');
-    await seedTerritory(db, 't3', name: 'Charlie', number: '3');
+    await seedTerritory(db, 't1', name: 'Beta');
+    await seedTerritory(db, 't2', name: 'Alpha');
+    await seedTerritory(db, 't3', name: 'Charlie');
     await seedAssignment(db, 'a1',
         territoryId: 't2', publisherId: 'p1', assignedDate: '2026-01-01');
     await seedAssignment(db, 'a2',
@@ -113,38 +112,38 @@ void main() {
     double yOf(String text) => tester.getTopLeft(find.text(text)).dy;
 
     // Default sort: Territory, ascending by name.
-    expect(yOf('1 — Alpha'), lessThan(yOf('2 — Beta')));
-    expect(yOf('2 — Beta'), lessThan(yOf('3 — Charlie')));
+    expect(yOf('Alpha'), lessThan(yOf('Beta')));
+    expect(yOf('Beta'), lessThan(yOf('Charlie')));
 
     // Sort by Publisher: unassigned (Beta) always last.
     await tester.tap(find.text('Publisher'));
     await tester.pumpAndSettle();
-    expect(yOf('3 — Charlie'), lessThan(yOf('1 — Alpha')));
-    expect(yOf('1 — Alpha'), lessThan(yOf('2 — Beta')));
+    expect(yOf('Charlie'), lessThan(yOf('Alpha')));
+    expect(yOf('Alpha'), lessThan(yOf('Beta')));
 
     // Sort by Date assigned, ascending then descending; Beta stays last.
     await tester.tap(find.text('Date assigned'));
     await tester.pumpAndSettle();
-    expect(yOf('1 — Alpha'), lessThan(yOf('3 — Charlie')));
-    expect(yOf('3 — Charlie'), lessThan(yOf('2 — Beta')));
+    expect(yOf('Alpha'), lessThan(yOf('Charlie')));
+    expect(yOf('Charlie'), lessThan(yOf('Beta')));
 
     await tester.tap(find.text('Date assigned ▲'));
     await tester.pumpAndSettle();
-    expect(yOf('3 — Charlie'), lessThan(yOf('1 — Alpha')));
-    expect(yOf('1 — Alpha'), lessThan(yOf('2 — Beta')));
+    expect(yOf('Charlie'), lessThan(yOf('Alpha')));
+    expect(yOf('Alpha'), lessThan(yOf('Beta')));
 
     // Search narrows by both territory name and current holder's name.
     await tester.enterText(find.byType(TextField), 'amy');
     await tester.pumpAndSettle();
-    expect(find.text('3 — Charlie'), findsOneWidget);
-    expect(find.text('1 — Alpha'), findsNothing);
-    expect(find.text('2 — Beta'), findsNothing);
+    expect(find.text('Charlie'), findsOneWidget);
+    expect(find.text('Alpha'), findsNothing);
+    expect(find.text('Beta'), findsNothing);
   });
 
   testWidgets('tapping a territory rolls down its assignment history',
       (tester) async {
     final db = FakeFirebaseFirestore();
-    await seedTerritory(db, 't1', name: 'Alpha', number: '1');
+    await seedTerritory(db, 't1', name: 'Alpha');
     await seedAssignment(db, 'a1',
         territoryId: 't1',
         publisherId: 'p1',
@@ -167,14 +166,14 @@ void main() {
     expect(find.text('Finished early'), findsNothing);
     expect(find.text('Old Holder'), findsNothing);
 
-    await tester.tap(find.text('1 — Alpha'));
+    await tester.tap(find.text('Alpha'));
     await tester.pumpAndSettle();
 
     expect(find.text('Old Holder'), findsOneWidget);
     expect(find.text('Finished early'), findsOneWidget);
     expect(find.text('Jul 1, 2025 – Current'), findsOneWidget);
 
-    await tester.tap(find.text('1 — Alpha'));
+    await tester.tap(find.text('Alpha'));
     await tester.pumpAndSettle();
     expect(find.text('Finished early'), findsNothing);
   });
@@ -183,7 +182,7 @@ void main() {
       (tester) async {
     final db = FakeFirebaseFirestore();
     await seedTerritory(db, 't1',
-        name: 'Alpha', number: '1', notes: 'Locked gate on Main St');
+        name: 'Alpha', notes: 'Locked gate on Main St');
 
     await tester.pumpWidget(wrap(db, const []));
     await tester.pumpAndSettle();
@@ -191,8 +190,42 @@ void main() {
     // Collapsed: the note is not shown next to the territory row.
     expect(find.textContaining('Locked gate on Main St'), findsNothing);
 
-    await tester.tap(find.text('1 — Alpha'));
+    await tester.tap(find.text('Alpha'));
     await tester.pumpAndSettle();
     expect(find.textContaining('Locked gate on Main St'), findsOneWidget);
+  });
+
+  testWidgets('adding a territory with an existing name is blocked',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await seedTerritory(db, 't1', name: 'Alpha');
+
+    await tester.pumpWidget(wrap(db, const []));
+    await tester.pumpAndSettle();
+
+    // Open the Add dialog and type a name that already exists (any case).
+    // The name field is the first TextField inside the dialog (not the
+    // search box that also lives on the screen behind it).
+    await tester.tap(find.byType(FloatingActionButton));
+    await tester.pumpAndSettle();
+    final nameField = find
+        .descendant(of: find.byType(AlertDialog), matching: find.byType(TextField))
+        .first;
+    await tester.enterText(nameField, 'alpha');
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
+
+    // Dialog stays open with an inline error; no second territory is written.
+    expect(find.text('A territory with this name already exists.'),
+        findsOneWidget);
+    expect((await db.collection('territories').get()).docs, hasLength(1));
+
+    // A distinct name saves and closes the dialog.
+    await tester.enterText(nameField, 'Beta');
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('A territory with this name already exists.'),
+        findsNothing);
+    expect((await db.collection('territories').get()).docs, hasLength(2));
   });
 }

@@ -8,7 +8,6 @@ class TerritoryImportRow {
   const TerritoryImportRow({
     required this.line,
     required this.name,
-    this.number = '',
     this.mapUrl = '',
     this.notes = '',
   });
@@ -16,7 +15,6 @@ class TerritoryImportRow {
   /// 1-based line in the source text, for error display.
   final int line;
   final String name;
-  final String number;
   final String mapUrl;
   final String notes;
 }
@@ -75,7 +73,7 @@ String decodeImportBytes(Uint8List bytes) {
 /// Splits [text] into rows. Detects the delimiter (tab, semicolon or comma),
 /// skips an optional header row and blank lines, and handles RFC-4180 quoting
 /// (embedded delimiters, escaped quotes, embedded newlines).
-/// Columns are fixed: name, number, map link, notes — trailing ones optional.
+/// Columns are fixed: name, map link, notes — trailing ones optional.
 List<TerritoryImportRow> parseTerritoryImport(String text) {
   final records = _tokenize(text, _detectDelimiter(text));
   if (records.isNotEmpty && _isHeader(records.first.fields)) {
@@ -88,40 +86,41 @@ List<TerritoryImportRow> parseTerritoryImport(String text) {
       TerritoryImportRow(
         line: r.line,
         name: field(r.fields, 0),
-        number: field(r.fields, 1),
-        mapUrl: field(r.fields, 2),
-        notes: field(r.fields, 3),
+        mapUrl: field(r.fields, 1),
+        notes: field(r.fields, 2),
       ),
   ];
 }
 
-/// Classifies parsed rows against the [existing] territories. Numbers are
-/// compared numerically when possible ("01" matches "1"); rows without a
-/// number can never be duplicates.
+/// Classifies parsed rows against the [existing] territories by name (the sole
+/// identifier), matched trimmed + case-insensitively. A row whose name is
+/// already in the database is [TerritoryImportStatus.duplicate]; a name repeated
+/// within the file is [TerritoryImportStatus.duplicateInFile]; an empty name is
+/// [TerritoryImportStatus.invalid].
 List<TerritoryImportEntry> analyzeTerritoryImport(
   List<TerritoryImportRow> rows,
   List<Territory> existing,
 ) {
-  final byNumber = <String, Territory>{};
+  final byName = <String, Territory>{};
   for (final t in existing) {
-    final key = _numberKey(t.number);
-    if (key.isNotEmpty) byNumber.putIfAbsent(key, () => t);
+    final key = _nameKey(t.name);
+    if (key.isNotEmpty) byName.putIfAbsent(key, () => t);
   }
   final seenKeys = <String>{};
   final result = <TerritoryImportEntry>[];
   for (final row in rows) {
-    if (row.name.isEmpty) {
+    final key = _nameKey(row.name);
+    if (key.isEmpty) {
       result.add(TerritoryImportEntry(row, TerritoryImportStatus.invalid));
       continue;
     }
-    final key = _numberKey(row.number);
-    if (key.isNotEmpty && !seenKeys.add(key)) {
+    if (!seenKeys.add(key)) {
       result.add(
         TerritoryImportEntry(row, TerritoryImportStatus.duplicateInFile),
       );
       continue;
     }
-    final match = key.isEmpty ? null : byNumber[key];
+    final match = byName[key];
     result.add(
       match != null
           ? TerritoryImportEntry(
@@ -135,10 +134,7 @@ List<TerritoryImportEntry> analyzeTerritoryImport(
   return result;
 }
 
-String _numberKey(String number) {
-  final trimmed = number.trim();
-  return int.tryParse(trimmed)?.toString() ?? trimmed.toLowerCase();
-}
+String _nameKey(String name) => name.trim().toLowerCase();
 
 /// Tab on the first non-blank line wins (spreadsheet paste is always TSV);
 /// otherwise the more frequent of ";" vs "," outside quotes; null means
@@ -167,12 +163,12 @@ String? _detectDelimiter(String text) {
 
 const _headerWords = {
   // en
-  'name', 'number', 'no', 'link', 'url', 'map', 'maplink', 'notes', 'note',
+  'name', 'link', 'url', 'map', 'maplink', 'notes', 'note',
   // cs
-  'název', 'nazev', 'jméno', 'jmeno', 'číslo', 'cislo', 'odkaz', 'mapa',
+  'název', 'nazev', 'jméno', 'jmeno', 'odkaz', 'mapa',
   'poznámka', 'poznamka', 'poznámky', 'poznamky',
   // tr
-  'ad', 'numara', 'bağlantı', 'baglanti', 'harita', 'not', 'notlar',
+  'ad', 'bağlantı', 'baglanti', 'harita', 'not', 'notlar',
 };
 
 bool _isHeader(List<String> fields) =>

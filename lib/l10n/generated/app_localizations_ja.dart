@@ -1568,7 +1568,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get terrName => '名前';
 
   @override
-  String get terrNumber => '番号';
+  String get terrNameDuplicate => 'この名前の区域はすでに存在します。';
 
   @override
   String get terrMapUrl => '地図リンク（例: Google マイマップ）';
@@ -1607,7 +1607,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'ExcelやGoogleスプレッドシートから行を貼り付けます。列: 名前、番号、地図リンク、メモ — 名前だけが必須です。';
+      'ExcelやGoogleスプレッドシートから行を貼り付けます。列: 名前、地図リンク、メモ — 名前だけが必須です。';
 
   @override
   String get terrImportPreview => 'プレビュー';
@@ -1626,7 +1626,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get terrImportUpdateExisting => '既存の区域をスキップせず、（番号で照合して）更新する';
+  String get terrImportUpdateExisting => '既存の区域をスキップせず、（名前で照合して）更新する';
 
   @override
   String get terrImportBadgeNew => '新規';

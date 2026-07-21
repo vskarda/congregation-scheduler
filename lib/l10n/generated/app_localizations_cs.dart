@@ -1594,7 +1594,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get terrName => 'Název';
 
   @override
-  String get terrNumber => 'Číslo';
+  String get terrNameDuplicate => 'Obvod s tímto názvem již existuje.';
 
   @override
   String get terrMapUrl => 'Odkaz na mapu (např. Google My Maps)';
@@ -1633,7 +1633,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'Vložte řádky z Excelu nebo Tabulek Google. Sloupce: název, číslo, odkaz na mapu, poznámky — povinný je jen název.';
+      'Vložte řádky z Excelu nebo Tabulek Google. Sloupce: název, odkaz na mapu, poznámky — povinný je jen název.';
 
   @override
   String get terrImportPreview => 'Náhled';
@@ -1653,7 +1653,7 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get terrImportUpdateExisting =>
-      'Aktualizovat existující obvody (podle čísla) místo přeskočení';
+      'Aktualizovat existující obvody (podle názvu) místo přeskočení';
 
   @override
   String get terrImportBadgeNew => 'Nový';

@@ -20,8 +20,7 @@ void main() {
   ) async {
     final db = FakeFirebaseFirestore();
     await db.collection('territories').add({
-      'name': 'Old centre',
-      'number': '1',
+      'name': 'Centre',
       'mapUrl': '',
       'notes': '',
     });
@@ -52,10 +51,11 @@ void main() {
     await tester.tap(find.text('open'));
     await pumpFrames(tester);
 
-    // One duplicate (01 matches existing 1), one new, one row without a name.
+    // One duplicate (name "Centre" matches the existing territory), one new,
+    // one row without a name. Columns are now name, map link, notes.
     await tester.enterText(
       find.byType(TextField),
-      'Centre\t01\thttps://maps.example/1\nEast\t2\n\t3',
+      'Centre\thttps://maps.example/1\nEast\n\thttps://maps.example/3',
     );
     await tester.tap(find.text('Preview'));
     await pumpFrames(tester);
@@ -84,11 +84,10 @@ void main() {
     // new doc created, invalid row not imported.
     final docs = await db.collection('territories').get();
     expect(docs.docs, hasLength(2));
-    final byNumber = {
-      for (final d in docs.docs) d.data()['number'] as String: d.data(),
+    final byName = {
+      for (final d in docs.docs) d.data()['name'] as String: d.data(),
     };
-    expect(byNumber['01']?['name'], 'Centre');
-    expect(byNumber['01']?['mapUrl'], 'https://maps.example/1');
-    expect(byNumber['2']?['name'], 'East');
+    expect(byName['Centre']?['mapUrl'], 'https://maps.example/1');
+    expect(byName.containsKey('East'), isTrue);
   });
 }

@@ -9,7 +9,7 @@ import 'territory_import_parser.dart';
 
 /// Bulk import: paste rows from a spreadsheet (or pick a CSV file), preview
 /// what will be created/updated/skipped, then batch-save. Rows are matched
-/// against existing territories by number; matches are skipped unless the
+/// against existing territories by name; matches are skipped unless the
 /// "update existing" switch is on.
 class TerritoryImportScreen extends ConsumerStatefulWidget {
   const TerritoryImportScreen({super.key});
@@ -97,7 +97,6 @@ class _TerritoryImportScreenState extends ConsumerState<TerritoryImportScreen> {
         toSave.add(
           Territory(
             name: e.row.name,
-            number: e.row.number,
             mapUrl: e.row.mapUrl,
             notes: e.row.notes,
           ),
@@ -108,7 +107,6 @@ class _TerritoryImportScreenState extends ConsumerState<TerritoryImportScreen> {
         toSave.add(
           e.existing!.copyWith(
             name: e.row.name,
-            number: e.row.number,
             mapUrl: e.row.mapUrl,
             notes: e.row.notes,
           ),
@@ -174,14 +172,6 @@ class _TerritoryImportScreenState extends ConsumerState<TerritoryImportScreen> {
     ].join(' · ');
     return ListTile(
       dense: true,
-      leading: SizedBox(
-        width: 48,
-        child: Text(
-          row.number,
-          textAlign: TextAlign.right,
-          style: theme.textTheme.bodyMedium,
-        ),
-      ),
       title: Text(
         row.name.isEmpty ? l10n.terrImportLine(row.line) : row.name,
         style: e.status == TerritoryImportStatus.invalid

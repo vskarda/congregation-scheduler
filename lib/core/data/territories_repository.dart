@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
+import '../utils/collation.dart';
 
 class TerritoriesRepository {
   TerritoriesRepository(this._db);
@@ -24,16 +25,9 @@ class TerritoriesRepository {
 
   Stream<List<Territory>> watchAll() => _territories.snapshots().map((snap) {
         final list = snap.docs.map(_territoryFromDoc).toList();
-        list.sort((a, b) => _naturalKey(a).compareTo(_naturalKey(b)));
+        list.sort((a, b) => collate(a.name, b.name));
         return list;
       });
-
-  static String _naturalKey(Territory t) {
-    final n = int.tryParse(t.number);
-    return n != null
-        ? n.toString().padLeft(6, '0')
-        : '999999${t.name.toLowerCase()}';
-  }
 
   Future<void> saveTerritory(Territory territory) async {
     if (territory.id.isEmpty) {

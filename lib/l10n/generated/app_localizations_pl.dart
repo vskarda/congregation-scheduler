@@ -1595,7 +1595,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get terrName => 'Nazwa';
 
   @override
-  String get terrNumber => 'Numer';
+  String get terrNameDuplicate => 'Teren o tej nazwie już istnieje.';
 
   @override
   String get terrMapUrl => 'Link do mapy (np. Google My Maps)';
@@ -1634,7 +1634,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get terrImportPasteHint =>
-      'Wklej wiersze z Excela lub Arkuszy Google. Kolumny: nazwa, numer, link do mapy, notatki — wymagana jest tylko nazwa.';
+      'Wklej wiersze z Excela lub Arkuszy Google. Kolumny: nazwa, link do mapy, notatki — wymagana jest tylko nazwa.';
 
   @override
   String get terrImportPreview => 'Podgląd';
@@ -1654,7 +1654,7 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get terrImportUpdateExisting =>
-      'Aktualizuj istniejące tereny (dopasowanie po numerze) zamiast je pomijać';
+      'Aktualizuj istniejące tereny (dopasowanie po nazwie) zamiast je pomijać';
 
   @override
   String get terrImportBadgeNew => 'Nowy';

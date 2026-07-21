@@ -8,7 +8,6 @@ part of 'territory.dart';
 
 _Territory _$TerritoryFromJson(Map<String, dynamic> json) => _Territory(
   name: json['name'] as String? ?? '',
-  number: json['number'] as String? ?? '',
   mapUrl: json['mapUrl'] as String? ?? '',
   notes: json['notes'] as String? ?? '',
 );
@@ -16,7 +15,6 @@ _Territory _$TerritoryFromJson(Map<String, dynamic> json) => _Territory(
 Map<String, dynamic> _$TerritoryToJson(_Territory instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'number': instance.number,
       'mapUrl': instance.mapUrl,
       'notes': instance.notes,
     };

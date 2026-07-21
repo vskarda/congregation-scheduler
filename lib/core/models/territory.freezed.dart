@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Territory {
 
-@JsonKey(includeFromJson: false, includeToJson: false) String get id; String get name; String get number;/// Link to a map (e.g. Google My Maps).
+@JsonKey(includeFromJson: false, includeToJson: false) String get id; String get name;/// Link to a map (e.g. Google My Maps).
  String get mapUrl; String get notes;
 /// Create a copy of Territory
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ $TerritoryCopyWith<Territory> get copyWith => _$TerritoryCopyWithImpl<Territory>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Territory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.number, number) || other.number == number)&&(identical(other.mapUrl, mapUrl) || other.mapUrl == mapUrl)&&(identical(other.notes, notes) || other.notes == notes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Territory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.mapUrl, mapUrl) || other.mapUrl == mapUrl)&&(identical(other.notes, notes) || other.notes == notes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,number,mapUrl,notes);
+int get hashCode => Object.hash(runtimeType,id,name,mapUrl,notes);
 
 @override
 String toString() {
-  return 'Territory(id: $id, name: $name, number: $number, mapUrl: $mapUrl, notes: $notes)';
+  return 'Territory(id: $id, name: $name, mapUrl: $mapUrl, notes: $notes)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $TerritoryCopyWith<$Res>  {
   factory $TerritoryCopyWith(Territory value, $Res Function(Territory) _then) = _$TerritoryCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String name, String number, String mapUrl, String notes
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String name, String mapUrl, String notes
 });
 
 
@@ -66,11 +66,10 @@ class _$TerritoryCopyWithImpl<$Res>
 
 /// Create a copy of Territory
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? number = null,Object? mapUrl = null,Object? notes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? mapUrl = null,Object? notes = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
 as String,mapUrl: null == mapUrl ? _self.mapUrl : mapUrl // ignore: cast_nullable_to_non_nullable
 as String,notes: null == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
 as String,
@@ -158,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String number,  String mapUrl,  String notes)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String mapUrl,  String notes)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Territory() when $default != null:
-return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case _:
+return $default(_that.id,_that.name,_that.mapUrl,_that.notes);case _:
   return orElse();
 
 }
@@ -179,10 +178,10 @@ return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String number,  String mapUrl,  String notes)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String mapUrl,  String notes)  $default,) {final _that = this;
 switch (_that) {
 case _Territory():
-return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case _:
+return $default(_that.id,_that.name,_that.mapUrl,_that.notes);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +198,10 @@ return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case 
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String number,  String mapUrl,  String notes)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String name,  String mapUrl,  String notes)?  $default,) {final _that = this;
 switch (_that) {
 case _Territory() when $default != null:
-return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case _:
+return $default(_that.id,_that.name,_that.mapUrl,_that.notes);case _:
   return null;
 
 }
@@ -214,12 +213,11 @@ return $default(_that.id,_that.name,_that.number,_that.mapUrl,_that.notes);case 
 @JsonSerializable()
 
 class _Territory implements Territory {
-  const _Territory({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.name = '', this.number = '', this.mapUrl = '', this.notes = ''});
+  const _Territory({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.name = '', this.mapUrl = '', this.notes = ''});
   factory _Territory.fromJson(Map<String, dynamic> json) => _$TerritoryFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
 @override@JsonKey() final  String name;
-@override@JsonKey() final  String number;
 /// Link to a map (e.g. Google My Maps).
 @override@JsonKey() final  String mapUrl;
 @override@JsonKey() final  String notes;
@@ -237,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Territory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.number, number) || other.number == number)&&(identical(other.mapUrl, mapUrl) || other.mapUrl == mapUrl)&&(identical(other.notes, notes) || other.notes == notes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Territory&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.mapUrl, mapUrl) || other.mapUrl == mapUrl)&&(identical(other.notes, notes) || other.notes == notes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,number,mapUrl,notes);
+int get hashCode => Object.hash(runtimeType,id,name,mapUrl,notes);
 
 @override
 String toString() {
-  return 'Territory(id: $id, name: $name, number: $number, mapUrl: $mapUrl, notes: $notes)';
+  return 'Territory(id: $id, name: $name, mapUrl: $mapUrl, notes: $notes)';
 }
 
 
@@ -257,7 +255,7 @@ abstract mixin class _$TerritoryCopyWith<$Res> implements $TerritoryCopyWith<$Re
   factory _$TerritoryCopyWith(_Territory value, $Res Function(_Territory) _then) = __$TerritoryCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String name, String number, String mapUrl, String notes
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String name, String mapUrl, String notes
 });
 
 
@@ -274,11 +272,10 @@ class __$TerritoryCopyWithImpl<$Res>
 
 /// Create a copy of Territory
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? number = null,Object? mapUrl = null,Object? notes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? mapUrl = null,Object? notes = null,}) {
   return _then(_Territory(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,number: null == number ? _self.number : number // ignore: cast_nullable_to_non_nullable
 as String,mapUrl: null == mapUrl ? _self.mapUrl : mapUrl // ignore: cast_nullable_to_non_nullable
 as String,notes: null == notes ? _self.notes : notes // ignore: cast_nullable_to_non_nullable
 as String,
