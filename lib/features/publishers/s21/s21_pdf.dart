@@ -10,6 +10,18 @@ import '../../../core/models/models.dart';
 import '../../../core/pdf/pdf_fonts.dart';
 import '../../../core/utils/dates.dart';
 
+/// One service year's reports for the S-21 export: the [serviceYear] label and
+/// the month-keyed reports drawn in its table.
+class S21YearReports {
+  const S21YearReports({
+    required this.serviceYear,
+    required this.reportsByMonth,
+  });
+
+  final int serviceYear;
+  final Map<String, MinistryReport?> reportsByMonth;
+}
+
 /// Remarks column text: a "Credit: 12" note when credit hours were reported,
 /// followed by the month's own comment from the record. The note's wording is
 /// what the S-21 import parser looks for, so exported cards re-import with
@@ -25,12 +37,12 @@ String s21RemarksText(MinistryReport? report, AppLocalizations l10n) {
 }
 
 /// Builds a one-page PDF replicating the official S-21 (11/23) publisher
-/// record card for one service year, localized to [locale].
+/// record card, localized to [locale]. The header block is drawn once and one
+/// month table is stacked per entry in [years] (top to bottom).
 Future<Uint8List> buildS21Pdf({
   required Publisher publisher,
   required PublisherPrivate? private,
-  required int serviceYear,
-  required Map<String, MinistryReport?> reportsByMonth,
+  required List<S21YearReports> years,
   required AppLocalizations l10n,
   required String locale,
   required PdfFonts fonts,
@@ -45,11 +57,6 @@ Future<Uint8List> buildS21Pdf({
 
   final hope = private?.hope ?? Hope.otherSheep;
   final appointment = private?.appointment ?? Appointment.none;
-  // The official card's Hours column carries field-service hours only;
-  // credit hours appear as a note in Remarks (see [s21RemarksText]).
-  final totalHours = reportsByMonth.values
-      .whereType<MinistryReport>()
-      .fold<int>(0, (sum, r) => sum + (r.hours ?? 0));
 
   pw.Widget checkbox(bool checked, String label) => pw.Row(
         mainAxisSize: pw.MainAxisSize.min,
@@ -135,6 +142,62 @@ Future<Uint8List> buildS21Pdf({
   String capitalize(String s) =>
       s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
+  // One service year's month table (header row, 12 months, Total row).
+  pw.Widget yearTable(S21YearReports year) {
+    final reportsByMonth = year.reportsByMonth;
+    // The official card's Hours column carries field-service hours only;
+    // credit hours appear as a note in Remarks (see [s21RemarksText]).
+    final totalHours = reportsByMonth.values
+        .whereType<MinistryReport>()
+        .fold<int>(0, (sum, r) => sum + (r.hours ?? 0));
+    return pw.Table(
+      border: pw.TableBorder.all(width: 0.5),
+      defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
+      columnWidths: const {
+        0: pw.FlexColumnWidth(2),
+        1: pw.FlexColumnWidth(1.6),
+        2: pw.FlexColumnWidth(1.2),
+        3: pw.FlexColumnWidth(1.4),
+        4: pw.FlexColumnWidth(1.6),
+        5: pw.FlexColumnWidth(3),
+      },
+      children: [
+        pw.TableRow(children: [
+          headCell(l10n.serviceYear(year.serviceYear)),
+          headCell(l10n.reportParticipated),
+          headCell(l10n.reportStudies),
+          headCell(l10n.statusAuxPioneer),
+          headCell(l10n.s21HoursHeader),
+          headCell(l10n.s21Remarks),
+        ]),
+        for (final month in serviceYearMonths(year.serviceYear))
+          pw.TableRow(children: [
+            textCell(capitalize(monthFmt.format(parseMonthKey(month)))),
+            boxCell(reportsByMonth[month]?.participated == true),
+            textCell(reportsByMonth[month]?.bibleStudies?.toString() ?? '',
+                align: pw.TextAlign.center),
+            boxCell(reportsByMonth[month]?.statusAtMonth ==
+                PublisherStatus.auxiliaryPioneer),
+            textCell(
+                (reportsByMonth[month]?.hours ?? 0) == 0
+                    ? ''
+                    : reportsByMonth[month]!.hours.toString(),
+                align: pw.TextAlign.center),
+            textCell(s21RemarksText(reportsByMonth[month], l10n)),
+          ]),
+        pw.TableRow(children: [
+          textCell(''),
+          textCell(''),
+          textCell(''),
+          textCell(l10n.s21Total, align: pw.TextAlign.right, bold: true),
+          textCell(totalHours == 0 ? '' : totalHours.toString(),
+              align: pw.TextAlign.center, bold: true),
+          textCell(''),
+        ]),
+      ],
+    );
+  }
+
   final doc = pw.Document();
   doc.addPage(
     pw.Page(
@@ -180,55 +243,10 @@ Future<Uint8List> buildS21Pdf({
                   l10n.statusFieldMissionary),
             ],
           ),
-          pw.SizedBox(height: 12),
-          pw.Table(
-            border: pw.TableBorder.all(width: 0.5),
-            defaultVerticalAlignment: pw.TableCellVerticalAlignment.middle,
-            columnWidths: const {
-              0: pw.FlexColumnWidth(2),
-              1: pw.FlexColumnWidth(1.6),
-              2: pw.FlexColumnWidth(1.2),
-              3: pw.FlexColumnWidth(1.4),
-              4: pw.FlexColumnWidth(1.6),
-              5: pw.FlexColumnWidth(3),
-            },
-            children: [
-              pw.TableRow(children: [
-                headCell(l10n.serviceYear(serviceYear)),
-                headCell(l10n.reportParticipated),
-                headCell(l10n.reportStudies),
-                headCell(l10n.statusAuxPioneer),
-                headCell(l10n.s21HoursHeader),
-                headCell(l10n.s21Remarks),
-              ]),
-              for (final month in serviceYearMonths(serviceYear))
-                pw.TableRow(children: [
-                  textCell(capitalize(monthFmt.format(parseMonthKey(month)))),
-                  boxCell(reportsByMonth[month]?.participated == true),
-                  textCell(
-                      reportsByMonth[month]?.bibleStudies?.toString() ?? '',
-                      align: pw.TextAlign.center),
-                  boxCell(reportsByMonth[month]?.statusAtMonth ==
-                      PublisherStatus.auxiliaryPioneer),
-                  textCell(
-                      (reportsByMonth[month]?.hours ?? 0) == 0
-                          ? ''
-                          : reportsByMonth[month]!.hours.toString(),
-                      align: pw.TextAlign.center),
-                  textCell(s21RemarksText(reportsByMonth[month], l10n)),
-                ]),
-              pw.TableRow(children: [
-                textCell(''),
-                textCell(''),
-                textCell(''),
-                textCell(l10n.s21Total,
-                    align: pw.TextAlign.right, bold: true),
-                textCell(totalHours == 0 ? '' : totalHours.toString(),
-                    align: pw.TextAlign.center, bold: true),
-                textCell(''),
-              ]),
-            ],
-          ),
+          for (final year in years) ...[
+            pw.SizedBox(height: 12),
+            yearTable(year),
+          ],
           pw.Spacer(),
           pw.Text(l10n.s21FormCode, style: const pw.TextStyle(fontSize: 7)),
         ],

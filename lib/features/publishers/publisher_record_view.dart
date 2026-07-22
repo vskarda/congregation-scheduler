@@ -49,20 +49,28 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
       if (publisher == null) throw StateError('publisher not found');
       final private =
           await ref.read(publisherPrivateProvider(widget.publisherId).future);
-      final reports = await ref.read(serviceYearReportsProvider(
-          (publisherId: widget.publisherId, year: _year)).future);
+      // The S-21 card covers the selected service year (on top) and the one
+      // before it (beneath), following the on-screen year dropdown.
+      final years = [
+        for (final y in [_year, _year - 1])
+          S21YearReports(
+            serviceYear: y,
+            reportsByMonth: await ref.read(serviceYearReportsProvider(
+                (publisherId: widget.publisherId, year: y)).future),
+          ),
+      ];
       final bytes = await buildS21Pdf(
         publisher: publisher,
         private: private,
-        serviceYear: _year,
-        reportsByMonth: reports,
+        years: years,
         l10n: l10n,
         locale: locale,
         fonts: await loadPdfFonts(),
       );
       await openFileBytes(
         bytes: bytes,
-        name: 'S-21_${publisher.lastName}_${publisher.firstName}_$_year.pdf'
+        name: 'S-21_${publisher.lastName}_${publisher.firstName}_'
+                '${_year - 1}-$_year.pdf'
             .replaceAll(' ', '_'),
         mimeType: 'application/pdf',
       );

@@ -50,13 +50,22 @@ void main() {
     ),
     '2025-10': null,
   };
+  final priorReports = <String, MinistryReport?>{
+    '2024-09': const MinistryReport(
+      month: '2024-09',
+      participated: true,
+      bibleStudies: 1,
+      hours: 40,
+      statusAtMonth: PublisherStatus.fieldMissionary,
+    ),
+    '2024-10': null,
+  };
 
   test('builds an English S-21 PDF', () async {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('en')),
       locale: 'en',
       fonts: loadFontsFromDisk(),
@@ -65,12 +74,36 @@ void main() {
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
   });
 
+  test('builds a two-service-year S-21 PDF on one page', () async {
+    final oneYear = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
+      l10n: lookupAppLocalizations(const Locale('en')),
+      locale: 'en',
+      fonts: loadFontsFromDisk(),
+    );
+    final twoYears = await buildS21Pdf(
+      publisher: publisher,
+      private: private,
+      years: [
+        S21YearReports(serviceYear: 2026, reportsByMonth: reports),
+        S21YearReports(serviceYear: 2025, reportsByMonth: priorReports),
+      ],
+      l10n: lookupAppLocalizations(const Locale('en')),
+      locale: 'en',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(String.fromCharCodes(twoYears.take(5)), '%PDF-');
+    // The second stacked year-table adds content beyond the single-year card.
+    expect(twoYears.length, greaterThan(oneYear.length));
+  });
+
   test('builds a Czech S-21 PDF with diacritics', () async {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('cs')),
       locale: 'cs',
       fonts: loadFontsFromDisk(),
@@ -83,8 +116,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('es')),
       locale: 'es',
       fonts: loadFontsFromDisk(),
@@ -97,8 +129,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('it')),
       locale: 'it',
       fonts: loadFontsFromDisk(),
@@ -111,8 +142,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('fr')),
       locale: 'fr',
       fonts: loadFontsFromDisk(),
@@ -125,8 +155,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('pt')),
       locale: 'pt',
       fonts: loadFontsFromDisk(),
@@ -139,8 +168,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('pl')),
       locale: 'pl',
       fonts: loadFontsFromDisk(),
@@ -153,8 +181,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('de')),
       locale: 'de',
       fonts: loadFontsFromDisk(),
@@ -167,8 +194,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: publisher,
       private: private,
-      serviceYear: 2026,
-      reportsByMonth: reports,
+      years: [S21YearReports(serviceYear: 2026, reportsByMonth: reports)],
       l10n: lookupAppLocalizations(const Locale('ja')),
       locale: 'ja',
       fonts: loadFontsFromDisk(),
@@ -181,8 +207,7 @@ void main() {
     final bytes = await buildS21Pdf(
       publisher: const Publisher(id: 'p2', firstName: 'Ann'),
       private: null,
-      serviceYear: 2026,
-      reportsByMonth: const {},
+      years: const [S21YearReports(serviceYear: 2026, reportsByMonth: {})],
       l10n: lookupAppLocalizations(const Locale('en')),
       locale: 'en',
       fonts: loadFontsFromDisk(),
