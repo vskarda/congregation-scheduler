@@ -673,13 +673,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileRecord => 'Müjdeci Kaydı';
 
   @override
-  String get profileAwayTitle => 'Away periods';
+  String get profileAwayTitle => 'Tatil Dönemleri';
 
   @override
-  String get profileAwayEmpty => 'No away periods added';
+  String get profileAwayEmpty => 'Tatil dönemi eklenmedi';
 
   @override
-  String get profileAwayAdd => 'Add away period';
+  String get profileAwayAdd => 'Tatil dönemi ekle';
 
   @override
   String profileAwayRange(String start, String end) {
@@ -1096,7 +1096,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String pickerAwayWarning(String range) {
-    return 'Away $range';
+    return 'Tatilde $range';
   }
 
   @override
@@ -1716,22 +1716,22 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get terrDeleteConfirm =>
-      'Delete this territory? This can\'t be undone.';
+      'Bu saha silinsin mi? Bu işlem geri alınamaz.';
 
   @override
-  String get terrSortByTerritory => 'Territory';
+  String get terrSortByTerritory => 'Saha';
 
   @override
-  String get terrSortByPublisher => 'Publisher';
+  String get terrSortByPublisher => 'Müjdeci';
 
   @override
-  String get terrSortByDate => 'Date assigned';
+  String get terrSortByDate => 'Atanma tarihi';
 
   @override
-  String get terrHistoryOngoing => 'Current';
+  String get terrHistoryOngoing => 'Devam ediyor';
 
   @override
-  String get terrHistoryEmpty => 'No assignment history yet.';
+  String get terrHistoryEmpty => 'Henüz atama geçmişi yok.';
 
   @override
   String get mgEmpty => 'Henüz tarla hizmeti grubu yok.';
