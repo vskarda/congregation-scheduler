@@ -679,6 +679,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get profileRecord => 'Registrazione del proclamatore';
 
   @override
+  String get profileAwayTitle => 'Periodi di assenza';
+
+  @override
+  String get profileAwayEmpty => 'Nessun periodo di assenza aggiunto';
+
+  @override
+  String get profileAwayAdd => 'Aggiungi periodo di assenza';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Anno di servizio $year';
   }
@@ -1086,6 +1100,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Offerto';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Assente $range';
+  }
 
   @override
   String get importTitle => 'Importa la Guida per l\'adunanza';

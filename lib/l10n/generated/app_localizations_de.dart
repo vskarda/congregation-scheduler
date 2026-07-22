@@ -681,6 +681,20 @@ class AppLocalizationsDe extends AppLocalizations {
   String get profileRecord => 'Verkündigerkarte';
 
   @override
+  String get profileAwayTitle => 'Abwesenheiten';
+
+  @override
+  String get profileAwayEmpty => 'Keine Abwesenheiten hinzugefügt';
+
+  @override
+  String get profileAwayAdd => 'Abwesenheit hinzufügen';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Dienstjahr $year';
   }
@@ -1089,6 +1103,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Gemeldet';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Abwesend $range';
+  }
 
   @override
   String get importTitle => 'Arbeitsheft für die Zusammenkunft importieren';

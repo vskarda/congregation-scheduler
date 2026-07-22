@@ -216,6 +216,10 @@
   "profileEmergencyHint": "Wen im Notfall kontaktieren",
   "profileSaved": "Gespeichert",
   "profileRecord": "Verkündigerkarte",
+  "profileAwayTitle": "Abwesenheiten",
+  "profileAwayEmpty": "Keine Abwesenheiten hinzugefügt",
+  "profileAwayAdd": "Abwesenheit hinzufügen",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Dienstjahr {year}",
 
   "recordTotalHours": "Gesamtstunden",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "Zuletzt: {date}",
   "pickerNever": "Nie eingeteilt",
   "pickerApplied": "Gemeldet",
+  "pickerAwayWarning": "Abwesend {range}",
   "importTitle": "Arbeitsheft für die Zusammenkunft importieren",
   "importNoWeeks": "In dieser Datei wurden keine nutzbaren Wochen gefunden.",
   "importWeekExists": "Existiert bereits – der Plan wird aktualisiert, die Einteilungen bleiben erhalten",

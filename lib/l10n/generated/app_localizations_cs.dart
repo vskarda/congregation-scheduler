@@ -674,6 +674,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get profileRecord => 'Záznam zvěstovatele';
 
   @override
+  String get profileAwayTitle => 'Nepřítomnost';
+
+  @override
+  String get profileAwayEmpty => 'Žádná nepřítomnost';
+
+  @override
+  String get profileAwayAdd => 'Přidat nepřítomnost';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Služební rok $year';
   }
@@ -1079,6 +1093,11 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Přihlášen(a)';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Nepřítomen $range';
+  }
 
   @override
   String get importTitle => 'Import pracovního sešitu';

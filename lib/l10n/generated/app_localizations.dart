@@ -1338,6 +1338,30 @@ abstract class AppLocalizations {
   /// **'Publisher record'**
   String get profileRecord;
 
+  /// No description provided for @profileAwayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Away periods'**
+  String get profileAwayTitle;
+
+  /// No description provided for @profileAwayEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No away periods added'**
+  String get profileAwayEmpty;
+
+  /// No description provided for @profileAwayAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add away period'**
+  String get profileAwayAdd;
+
+  /// No description provided for @profileAwayRange.
+  ///
+  /// In en, this message translates to:
+  /// **'{start} – {end}'**
+  String profileAwayRange(String start, String end);
+
   /// No description provided for @serviceYear.
   ///
   /// In en, this message translates to:
@@ -2069,6 +2093,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Applied'**
   String get pickerApplied;
+
+  /// No description provided for @pickerAwayWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Away {range}'**
+  String pickerAwayWarning(String range);
 
   /// No description provided for @importTitle.
   ///

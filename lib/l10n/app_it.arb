@@ -216,6 +216,10 @@
   "profileEmergencyHint": "Chi contattare in caso di emergenza",
   "profileSaved": "Salvato",
   "profileRecord": "Registrazione del proclamatore",
+  "profileAwayTitle": "Periodi di assenza",
+  "profileAwayEmpty": "Nessun periodo di assenza aggiunto",
+  "profileAwayAdd": "Aggiungi periodo di assenza",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Anno di servizio {year}",
 
   "recordTotalHours": "Totale ore",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "Ultima volta: {date}",
   "pickerNever": "Mai assegnato",
   "pickerApplied": "Offerto",
+  "pickerAwayWarning": "Assente {range}",
   "importTitle": "Importa la Guida per l'adunanza",
   "importNoWeeks": "Nessuna settimana utilizzabile trovata in questo file.",
   "importWeekExists": "Esiste già: il programma verrà aggiornato, le assegnazioni mantenute",

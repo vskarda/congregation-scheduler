@@ -216,6 +216,10 @@
   "profileEmergencyHint": "Z kim się kontaktować w nagłym wypadku",
   "profileSaved": "Zapisano",
   "profileRecord": "Karta głosiciela",
+  "profileAwayTitle": "Okresy nieobecności",
+  "profileAwayEmpty": "Nie dodano okresów nieobecności",
+  "profileAwayAdd": "Dodaj okres nieobecności",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Rok służbowy {year}",
 
   "recordTotalHours": "Łączna liczba godzin",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "Ostatnio: {date}",
   "pickerNever": "Nigdy nie przydzielono",
   "pickerApplied": "Zgłosił się",
+  "pickerAwayWarning": "Nieobecny {range}",
   "importTitle": "Importuj Skoroszyt zebrania",
   "importNoWeeks": "Nie znaleziono użytecznych tygodni w tym pliku.",
   "importWeekExists": "Już istnieje — plan zostanie zaktualizowany, przydziały zachowane",

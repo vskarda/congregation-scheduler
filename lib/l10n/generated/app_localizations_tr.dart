@@ -673,6 +673,20 @@ class AppLocalizationsTr extends AppLocalizations {
   String get profileRecord => 'Müjdeci Kaydı';
 
   @override
+  String get profileAwayTitle => 'Away periods';
+
+  @override
+  String get profileAwayEmpty => 'No away periods added';
+
+  @override
+  String get profileAwayAdd => 'Add away period';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Hizmet Yılı $year';
   }
@@ -1079,6 +1093,11 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Başvurdu';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Away $range';
+  }
 
   @override
   String get importTitle => 'İbadet Kitapçığını İçe Aktar';

@@ -673,6 +673,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileRecord => 'Publisher record';
 
   @override
+  String get profileAwayTitle => 'Away periods';
+
+  @override
+  String get profileAwayEmpty => 'No away periods added';
+
+  @override
+  String get profileAwayAdd => 'Add away period';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Service Year $year';
   }
@@ -1080,6 +1094,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Applied';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Away $range';
+  }
 
   @override
   String get importTitle => 'Import Meeting Workbook';

@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
+import '../../core/data/congregation_repository.dart';
 import '../../core/data/schedule_config_repository.dart';
 import '../../core/data/weekend_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
@@ -106,11 +108,13 @@ class _WeekContent extends ConsumerWidget {
     required bool Function(Publisher) qualifies,
     required WeekendWeek Function(Assignment) apply,
   }) async {
+    final meta = ref.read(congregationMetaProvider).value;
     final result = await showAssignmentEditor(context,
         title: title,
         initial: initial,
         historyKey: historyKey,
-        qualifies: qualifies);
+        qualifies: qualifies,
+        date: meta == null ? null : meetingDateOf(week.id, meta.weekendWeekday));
     if (result != null) await _save(ref, apply(result));
   }
 
@@ -297,8 +301,12 @@ class _WeekContent extends ConsumerWidget {
                 ref.watch(weekendPermanentAssignmentsProvider).value ??
                     const [];
             final configRepo = ref.read(scheduleConfigRepositoryProvider);
+            final meta = ref.watch(congregationMetaProvider).value;
             return SupportAssignmentsCard(
               canEdit: canEdit,
+              date: meta == null
+                  ? null
+                  : meetingDateOf(week.id, meta.weekendWeekday),
               attendants: week.attendants,
               microphones: week.microphones,
               audioVideo: week.audioVideo,

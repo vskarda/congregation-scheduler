@@ -28,6 +28,17 @@ DateTime combineDateAndTime(DateTime day, String hhMm) {
   );
 }
 
+/// The calendar date of the meeting held in the week keyed by [weekId] (the
+/// Monday of that week), given the congregation's configured meeting
+/// [weekday] (DateTime.monday..DateTime.sunday). Null when [weekId] can't be
+/// parsed. Used to check schedule assignments against publishers' away
+/// periods.
+DateTime? meetingDateOf(String weekId, int weekday) {
+  final monday = tryParseDateKey(weekId);
+  if (monday == null) return null;
+  return monday.add(Duration(days: weekday - 1));
+}
+
 /// Monday 00:00 of the week containing [d].
 DateTime mondayOf(DateTime d) {
   final day = DateTime(d.year, d.month, d.day);

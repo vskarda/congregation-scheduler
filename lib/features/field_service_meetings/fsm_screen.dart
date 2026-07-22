@@ -252,6 +252,7 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
                       qualifies: (p) =>
                           p.qualifications.ministryMeetingConductor,
                       multi: false,
+                      date: tryParseDateKey(meeting.date),
                     );
                     if (result != null) {
                       setState(() =>

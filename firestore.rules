@@ -151,6 +151,20 @@ service cloud.firestore {
               || request.resource.data.get('appointment', 'none')
                   == resource.data.get('appointment', 'none'));
       }
+
+      // Away periods (vacations): self-managed, but — unlike private/profile —
+      // readable by admins of the sections that assign parts, so the
+      // assignment picker can warn when a candidate is away. Ordinary
+      // publishers still can't see each other's travel dates.
+      match /away/{docId} {
+        allow read: if isSignedIn()
+          && (request.auth.uid == publisherId
+              || hasRole('lmmSchedule') || hasRole('weekendSchedule')
+              || hasRole('publicWitnessing') || hasRole('fieldServiceMeetings')
+              || hasRole('publishers'));
+        allow write: if isSignedIn()
+          && (request.auth.uid == publisherId || hasRole('publishers'));
+      }
     }
 
     // ---------- information board ----------

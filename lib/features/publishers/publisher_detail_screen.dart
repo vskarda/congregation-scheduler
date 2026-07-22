@@ -8,6 +8,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import 'away_periods_section.dart';
 import 'connect_record_dialog.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
@@ -257,6 +258,8 @@ class _ProfileTab extends ConsumerWidget {
                 private: priv,
                 showAppointment: true,
               ),
+              const SizedBox(height: 16),
+              AwayPeriodsSection(publisherId: publisher.id),
             ],
           ),
         ),

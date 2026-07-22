@@ -216,6 +216,10 @@
   "profileEmergencyHint": "Qui contacter en cas d'urgence",
   "profileSaved": "Enregistré",
   "profileRecord": "Fiche d'activité du proclamateur",
+  "profileAwayTitle": "Périodes d'absence",
+  "profileAwayEmpty": "Aucune période d'absence ajoutée",
+  "profileAwayAdd": "Ajouter une période d'absence",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Année de service {year}",
 
   "recordTotalHours": "Total des heures",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "Dernière fois : {date}",
   "pickerNever": "Jamais attribué",
   "pickerApplied": "Volontaire",
+  "pickerAwayWarning": "Absent {range}",
   "importTitle": "Importer le Cahier de la réunion",
   "importNoWeeks": "Aucune semaine utilisable trouvée dans ce fichier.",
   "importWeekExists": "Existe déjà — le programme sera mis à jour, les attributions conservées",

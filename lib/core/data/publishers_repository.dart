@@ -48,6 +48,7 @@ class PublishersRepository {
   Future<void> delete(String id) async {
     final batch = _db.batch();
     batch.delete(_col.doc(id).collection('private').doc('profile'));
+    batch.delete(_awayDoc(id));
     batch.delete(_col.doc(id));
     await batch.commit();
   }
@@ -69,6 +70,20 @@ class PublishersRepository {
 
   Future<void> setPrivate(String publisherId, PublisherPrivate data) =>
       _privateDoc(publisherId).set(data.toJson());
+
+  DocumentReference<Map<String, dynamic>> _awayDoc(String publisherId) =>
+      _col.doc(publisherId).collection('away').doc('periods');
+
+  Stream<PublisherAway> watchAway(String publisherId) =>
+      _awayDoc(publisherId).snapshots().map((doc) {
+        final data = doc.data();
+        return data == null
+            ? const PublisherAway()
+            : PublisherAway.fromJson(data);
+      });
+
+  Future<void> setAway(String publisherId, PublisherAway data) =>
+      _awayDoc(publisherId).set(data.toJson());
 }
 
 final publishersRepositoryProvider = Provider<PublishersRepository>(
@@ -101,3 +116,9 @@ final publishersByIdProvider = Provider<Map<String, Publisher>>((ref) {
   final all = ref.watch(allPublishersProvider).value ?? const [];
   return {for (final p in all) p.id: p};
 });
+
+/// Away periods (vacations) for one publisher. Readable by the publisher
+/// themselves and by admins of the sections that assign parts (enforced in
+/// firestore.rules), so the assignment picker can flag candidates who are away.
+final publisherAwayProvider = StreamProvider.family<PublisherAway, String>(
+    (ref, id) => ref.watch(publishersRepositoryProvider).watchAway(id));

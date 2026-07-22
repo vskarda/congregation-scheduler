@@ -788,6 +788,58 @@ describe('private profiles', () => {
   });
 });
 
+describe('away periods', () => {
+  const away = { periods: [{ startDate: '2026-07-10', endDate: '2026-07-20' }] };
+
+  it('self reads and writes own away periods', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/away/periods`), away),
+    );
+    await assertSucceeds(
+      getDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/away/periods`)),
+    );
+  });
+
+  it('assigning-section admins read others away periods', async () => {
+    await assertSucceeds(
+      getDoc(doc(db(LMM_ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+    await assertSucceeds(
+      getDoc(doc(db(WEEKEND_ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+    await assertSucceeds(
+      getDoc(doc(db(PW_ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+    await assertSucceeds(
+      getDoc(doc(db(FSM_ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+    await assertSucceeds(
+      getDoc(doc(db(ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+  });
+
+  it('unrelated verified publisher cannot read others away periods', async () => {
+    await assertFails(
+      getDoc(doc(db(QUALIFIED), `publishers/${VERIFIED}/away/periods`)),
+    );
+    await assertFails(
+      getDoc(doc(db(ATTENDANCE_ADMIN), `publishers/${VERIFIED}/away/periods`)),
+    );
+  });
+
+  it('section admin may read but not write others away periods', async () => {
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), `publishers/${VERIFIED}/away/periods`), away),
+    );
+  });
+
+  it('publishers-admin writes others away periods', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(ADMIN), `publishers/${VERIFIED}/away/periods`), away),
+    );
+  });
+});
+
 describe('reports', () => {
   it('publisher writes own entry, cannot touch others', async () => {
     await assertSucceeds(

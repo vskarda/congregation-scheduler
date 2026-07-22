@@ -368,6 +368,7 @@ Future<void> showPwSlotDialog(BuildContext context, WidgetRef ref,
                       historyKey: HistoryKeys.publicWitnessing,
                       qualifies: (p) => p.qualifications.publicWitnessing,
                       applicantIds: applicantIds,
+                      date: tryParseDateKey(slot.date),
                     );
                     if (result != null) {
                       setState(

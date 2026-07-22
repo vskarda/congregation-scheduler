@@ -682,6 +682,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get profileRecord => 'Fiche d\'activité du proclamateur';
 
   @override
+  String get profileAwayTitle => 'Périodes d\'absence';
+
+  @override
+  String get profileAwayEmpty => 'Aucune période d\'absence ajoutée';
+
+  @override
+  String get profileAwayAdd => 'Ajouter une période d\'absence';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Année de service $year';
   }
@@ -1090,6 +1104,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Volontaire';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Absent $range';
+  }
 
   @override
   String get importTitle => 'Importer le Cahier de la réunion';

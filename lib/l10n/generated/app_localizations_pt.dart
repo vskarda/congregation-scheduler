@@ -678,6 +678,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileRecord => 'Registro de publicador';
 
   @override
+  String get profileAwayTitle => 'Períodos de ausência';
+
+  @override
+  String get profileAwayEmpty => 'Nenhum período de ausência adicionado';
+
+  @override
+  String get profileAwayAdd => 'Adicionar período de ausência';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Ano de serviço $year';
   }
@@ -1086,6 +1100,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Voluntariou-se';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Ausente $range';
+  }
 
   @override
   String get importTitle => 'Importar a Apostila da Reunião';

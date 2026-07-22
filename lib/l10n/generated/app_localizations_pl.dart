@@ -673,6 +673,20 @@ class AppLocalizationsPl extends AppLocalizations {
   String get profileRecord => 'Karta głosiciela';
 
   @override
+  String get profileAwayTitle => 'Okresy nieobecności';
+
+  @override
+  String get profileAwayEmpty => 'Nie dodano okresów nieobecności';
+
+  @override
+  String get profileAwayAdd => 'Dodaj okres nieobecności';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return 'Rok służbowy $year';
   }
@@ -1079,6 +1093,11 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get pickerApplied => 'Zgłosił się';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return 'Nieobecny $range';
+  }
 
   @override
   String get importTitle => 'Importuj Skoroszyt zebrania';

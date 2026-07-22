@@ -216,6 +216,10 @@
   "profileEmergencyHint": "緊急時の連絡先",
   "profileSaved": "保存しました",
   "profileRecord": "伝道者記録",
+  "profileAwayTitle": "不在期間",
+  "profileAwayEmpty": "不在期間はありません",
+  "profileAwayAdd": "不在期間を追加",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "{year}奉仕年度",
 
   "recordTotalHours": "合計時間",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "前回: {date}",
   "pickerNever": "割り当てなし",
   "pickerApplied": "志願済み",
+  "pickerAwayWarning": "不在 {range}",
   "importTitle": "集会ワークブックをインポート",
   "importNoWeeks": "このファイルに使用できる週が見つかりませんでした。",
   "importWeekExists": "すでに存在します — 予定は更新され、割り当ては保持されます",

@@ -216,6 +216,10 @@
   "profileEmergencyHint": "Koho kontaktovat v případě nouze",
   "profileSaved": "Uloženo",
   "profileRecord": "Záznam zvěstovatele",
+  "profileAwayTitle": "Nepřítomnost",
+  "profileAwayEmpty": "Žádná nepřítomnost",
+  "profileAwayAdd": "Přidat nepřítomnost",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Služební rok {year}",
 
   "recordTotalHours": "Hodiny celkem",
@@ -349,6 +353,7 @@
   "pickerLastAssigned": "Naposledy: {date}",
   "pickerNever": "Zatím bez úkolu",
   "pickerApplied": "Přihlášen(a)",
+  "pickerAwayWarning": "Nepřítomen {range}",
   "importTitle": "Import pracovního sešitu",
   "importNoWeeks": "V souboru nebyly nalezeny žádné použitelné týdny.",
   "importWeekExists": "Už existuje — program se aktualizuje, úkoly zůstanou",

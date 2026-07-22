@@ -6,6 +6,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../auth/change_password.dart';
 import '../auth/delete_account.dart';
+import 'away_periods_section.dart';
 import 'publisher_form.dart';
 import 'publisher_record_view.dart';
 import 'publishers_providers.dart';
@@ -38,6 +39,8 @@ class ProfileScreen extends ConsumerWidget {
                 publisher: me,
                 private: priv,
               ),
+              const SizedBox(height: 16),
+              AwayPeriodsSection(publisherId: me.id),
               if (me.status != PublisherStatus.none) ...[
                 const SizedBox(height: 24),
                 PublisherRecordView(publisherId: me.id),

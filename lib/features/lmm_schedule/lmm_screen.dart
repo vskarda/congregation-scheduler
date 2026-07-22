@@ -12,6 +12,7 @@ import '../../core/data/song_catalog_repository.dart';
 import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/dates.dart';
 import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
@@ -618,6 +619,7 @@ class _PartTile extends ConsumerWidget {
     var label = lmmPartDefaultLabel(l10n, part);
     if (assistant) label = '${l10n.partAssistant} — $label';
     if (classIndex > 1) label = '$label — ${lmmClassLabel(l10n, classIndex)}';
+    final meta = ref.read(congregationMetaProvider).value;
     final result = await showAssignmentEditor(
       context,
       title: label,
@@ -630,6 +632,7 @@ class _PartTile extends ConsumerWidget {
       qualifies: assistant
           ? (p) => p.qualifications.fieldMinistry
           : lmmStudentQualifier(part),
+      date: meta == null ? null : meetingDateOf(week.id, meta.lmmWeekday),
     );
     if (result == null) return;
     final updated = assistant
@@ -780,8 +783,10 @@ class _SupportCard extends ConsumerWidget {
     final permanent =
         ref.watch(lmmPermanentAssignmentsProvider).value ?? const [];
     final configRepo = ref.read(scheduleConfigRepositoryProvider);
+    final meta = ref.watch(congregationMetaProvider).value;
     return SupportAssignmentsCard(
       canEdit: canEdit,
+      date: meta == null ? null : meetingDateOf(week.id, meta.lmmWeekday),
       attendants: week.attendants,
       microphones: week.microphones,
       audioVideo: week.audioVideo,
@@ -825,7 +830,12 @@ class SupportAssignmentsCard extends ConsumerWidget {
     this.permanentAssignments = const [],
     this.onAddPermanent,
     this.onRemovePermanent,
+    this.date,
   });
+
+  /// Meeting date these support slots are for; forwarded to the picker so it
+  /// can flag away publishers. Null when unknown (no warning shown).
+  final DateTime? date;
 
   final bool canEdit;
   final Assignment attendants;
@@ -866,6 +876,7 @@ class SupportAssignmentsCard extends ConsumerWidget {
       initial: initial,
       historyKey: historyKey,
       qualifies: qualifies,
+      date: date,
     );
     if (result != null) await save(result);
   }

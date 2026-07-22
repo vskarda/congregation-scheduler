@@ -17,6 +17,11 @@ import '../utils/dates.dart';
 /// always switch to "all publishers" or free text. [applicantIds] (in
 /// application order) marks publishers who applied for this assignment;
 /// they are pinned to the top of the qualified list with a badge.
+///
+/// [date] is the calendar date this assignment is for; when given, candidates
+/// who declared an away period covering it are flagged with a warning (they
+/// stay selectable). Pass null for template/recurring editors that have no
+/// single date.
 Future<Assignment?> showAssignmentEditor(
   BuildContext context, {
   required String title,
@@ -25,6 +30,7 @@ Future<Assignment?> showAssignmentEditor(
   required bool Function(Publisher) qualifies,
   bool multi = true,
   List<String> applicantIds = const [],
+  DateTime? date,
 }) {
   return showDialog<Assignment>(
     context: context,
@@ -35,6 +41,7 @@ Future<Assignment?> showAssignmentEditor(
       qualifies: qualifies,
       multi: multi,
       applicantIds: applicantIds,
+      date: date,
     ),
   );
 }
@@ -49,6 +56,7 @@ class _AssignmentEditorDialog extends ConsumerStatefulWidget {
     required this.qualifies,
     required this.multi,
     required this.applicantIds,
+    required this.date,
   });
 
   final String title;
@@ -57,6 +65,7 @@ class _AssignmentEditorDialog extends ConsumerStatefulWidget {
   final bool Function(Publisher) qualifies;
   final bool multi;
   final List<String> applicantIds;
+  final DateTime? date;
 
   @override
   ConsumerState<_AssignmentEditorDialog> createState() =>
@@ -187,17 +196,23 @@ class _AssignmentEditorDialogState
                       itemBuilder: (context, i) {
                         final p = visible[i];
                         final last = history[p.id];
+                        final lastLine = _mode == _Mode.qualified
+                            ? (last == null
+                                ? l10n.pickerNever
+                                : l10n.pickerLastAssigned(
+                                    dateFmt.format(parseDateKey(last))))
+                            : null;
                         return CheckboxListTile(
                           dense: true,
                           value: _selected.contains(p.id),
                           onChanged: (v) => _toggle(p.id, v),
                           title: Text(p.fullName),
-                          subtitle: _mode == _Mode.qualified
-                              ? Text(last == null
-                                  ? l10n.pickerNever
-                                  : l10n.pickerLastAssigned(dateFmt
-                                      .format(parseDateKey(last))))
-                              : null,
+                          subtitle: _AwaySubtitle(
+                            publisherId: p.id,
+                            date: widget.date,
+                            dateFmt: dateFmt,
+                            lastLine: lastLine,
+                          ),
                           secondary: applicantOrder.containsKey(p.id)
                               ? Chip(
                                   label: Text(l10n.pickerApplied),
@@ -225,6 +240,68 @@ class _AssignmentEditorDialogState
           )),
           child: Text(l10n.commonSave),
         ),
+      ],
+    );
+  }
+}
+
+/// Row subtitle showing the "last assigned" line and, when [date] falls inside
+/// one of the publisher's declared away periods, a warning line. Kept as its
+/// own consumer so each row watches only its own publisher's away doc.
+class _AwaySubtitle extends ConsumerWidget {
+  const _AwaySubtitle({
+    required this.publisherId,
+    required this.date,
+    required this.dateFmt,
+    required this.lastLine,
+  });
+
+  final String publisherId;
+  final DateTime? date;
+  final DateFormat dateFmt;
+  final String? lastLine;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    AwayPeriod? awayHit;
+    if (date != null) {
+      final periods =
+          ref.watch(publisherAwayProvider(publisherId)).value?.periods ??
+              const <AwayPeriod>[];
+      for (final p in periods) {
+        if (p.includes(date!)) {
+          awayHit = p;
+          break;
+        }
+      }
+    }
+
+    if (awayHit == null && lastLine == null) return const SizedBox.shrink();
+
+    final error = Theme.of(context).colorScheme.error;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (lastLine != null) Text(lastLine!),
+        if (awayHit != null)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.warning_amber_rounded, size: 14, color: error),
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  l10n.pickerAwayWarning(l10n.profileAwayRange(
+                    dateFmt.format(parseDateKey(awayHit.startDate)),
+                    dateFmt.format(parseDateKey(awayHit.endDate)),
+                  )),
+                  style: TextStyle(color: error),
+                ),
+              ),
+            ],
+          ),
       ],
     );
   }

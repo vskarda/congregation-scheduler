@@ -216,6 +216,10 @@
   "profileEmergencyHint": "A quién contactar en caso de emergencia",
   "profileSaved": "Guardado",
   "profileRecord": "Registro de publicador",
+  "profileAwayTitle": "Periodos de ausencia",
+  "profileAwayEmpty": "No se han añadido periodos de ausencia",
+  "profileAwayAdd": "Añadir periodo de ausencia",
+  "profileAwayRange": "{start} – {end}",
   "serviceYear": "Año de servicio {year}",
 
   "recordTotalHours": "Total de horas",
@@ -344,6 +348,7 @@
   "pickerLastAssigned": "Última vez: {date}",
   "pickerNever": "Nunca asignado",
   "pickerApplied": "Se ofreció",
+  "pickerAwayWarning": "Ausente {range}",
   "importTitle": "Importar la Guía de actividades",
   "importNoWeeks": "No se encontraron semanas utilizables en este archivo.",
   "importWeekExists": "Ya existe: se actualizará el programa y se conservarán las asignaciones",

@@ -661,6 +661,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profileRecord => '伝道者記録';
 
   @override
+  String get profileAwayTitle => '不在期間';
+
+  @override
+  String get profileAwayEmpty => '不在期間はありません';
+
+  @override
+  String get profileAwayAdd => '不在期間を追加';
+
+  @override
+  String profileAwayRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
   String serviceYear(int year) {
     return '$year奉仕年度';
   }
@@ -1060,6 +1074,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get pickerApplied => '志願済み';
+
+  @override
+  String pickerAwayWarning(String range) {
+    return '不在 $range';
+  }
 
   @override
   String get importTitle => '集会ワークブックをインポート';
