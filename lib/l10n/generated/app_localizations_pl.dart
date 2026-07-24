@@ -1836,6 +1836,19 @@ class AppLocalizationsPl extends AppLocalizations {
   String get infoEditItem => 'Edytuj element';
 
   @override
+  String get infoCleanTooltip => 'Wyczyść tablicę ogłoszeń';
+
+  @override
+  String get infoCleanConfirmTitle => 'Wyczyścić tablicę ogłoszeń?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Spowoduje to trwałe usunięcie WSZYSTKICH ogłoszeń — tekstów, plików i linków, zarówno przeszłych, bieżących, jak i przyszłych. Tej operacji nie można cofnąć.';
+
+  @override
+  String get infoCleanDone => 'Tablica ogłoszeń została wyczyszczona.';
+
+  @override
   String get s1Active =>
       'Czynni głosiciele (którzy zgłosili służbę co najmniej raz w ciągu ostatnich 6 miesięcy)';
 

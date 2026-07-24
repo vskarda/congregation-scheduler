@@ -34,10 +34,18 @@ class InfoboardRepository {
         return list;
       });
 
-  /// Deletes legacy announcements stored with the removed `link` type.
-  Future<void> purgeLegacyLinkItems() async {
-    final snap = await _items.where('type', isEqualTo: 'link').get();
+  /// Deletes every announcement — text, file and any legacy link items,
+  /// regardless of visibility window — along with the blobs of file items.
+  Future<void> deleteAllItems() async {
+    final snap = await _items.get();
     if (snap.docs.isEmpty) return;
+    // Delete each file's chunked blobs first (own batches per file).
+    for (final doc in snap.docs) {
+      final fileId = doc.data()['fileId'] as String? ?? '';
+      if (fileId.isNotEmpty) {
+        await deleteFile(fileId);
+      }
+    }
     final batch = _db.batch();
     for (final doc in snap.docs) {
       batch.delete(doc.reference);

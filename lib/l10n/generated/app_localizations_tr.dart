@@ -1831,6 +1831,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get infoEditItem => 'İlanı Düzenle';
 
   @override
+  String get infoCleanTooltip => 'İlan panosunu temizle';
+
+  @override
+  String get infoCleanConfirmTitle => 'İlan panosu temizlensin mi?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Bu işlem geçmiş, güncel ve gelecekteki TÜM ilanları — yazılı ilanlar, dosyalar ve bağlantılar — kalıcı olarak siler. Bu işlem geri alınamaz.';
+
+  @override
+  String get infoCleanDone => 'İlan panosu temizlendi.';
+
+  @override
   String get s1Active =>
       'Faal Müjdeciler (son 6 ayda en az bir kez rapor verenler)';
 

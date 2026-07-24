@@ -1799,6 +1799,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get infoEditItem => '項目を編集';
 
   @override
+  String get infoCleanTooltip => '掲示板を消去';
+
+  @override
+  String get infoCleanConfirmTitle => '掲示板を消去しますか？';
+
+  @override
+  String get infoCleanConfirmBody =>
+      '過去・現在・未来を問わず、すべてのお知らせ（テキスト・ファイル・リンク）が完全に削除されます。この操作は元に戻せません。';
+
+  @override
+  String get infoCleanDone => '掲示板を消去しました。';
+
+  @override
   String get s1Active => '活発な伝道者（過去6か月に少なくとも1回報告した人）';
 
   @override

@@ -579,6 +579,10 @@
   "infoHidden": "Oculto actualmente (fuera de su periodo de visibilidad)",
   "infoDownloading": "Cargando archivo…",
   "infoEditItem": "Editar elemento",
+  "infoCleanTooltip": "Vaciar el tablón de anuncios",
+  "infoCleanConfirmTitle": "¿Vaciar el tablón de anuncios?",
+  "infoCleanConfirmBody": "Esto eliminará permanentemente TODOS los anuncios — textos, archivos y enlaces, ya sean pasados, actuales o futuros. Esta acción no se puede deshacer.",
+  "infoCleanDone": "Tablón de anuncios vaciado.",
 
   "s1Active": "Publicadores activos (que informaron al menos una vez en los últimos 6 meses)",
   "s1AvgMid": "Promedio de asistencia a las reuniones de entre semana",

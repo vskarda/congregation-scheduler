@@ -1850,6 +1850,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String get infoEditItem => 'Modifier l\'élément';
 
   @override
+  String get infoCleanTooltip => 'Vider le tableau d\'affichage';
+
+  @override
+  String get infoCleanConfirmTitle => 'Vider le tableau d\'affichage ?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Cette action supprime définitivement TOUTES les annonces — textes, fichiers et liens, qu\'elles soient passées, actuelles ou futures. Cette action est irréversible.';
+
+  @override
+  String get infoCleanDone => 'Tableau d\'affichage vidé.';
+
+  @override
   String get s1Active =>
       'Proclamateurs actifs (qui ont remis un rapport au moins une fois au cours des 6 derniers mois)';
 

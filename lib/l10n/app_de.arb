@@ -579,6 +579,10 @@
   "infoHidden": "Derzeit ausgeblendet (außerhalb des Sichtbarkeitszeitraums)",
   "infoDownloading": "Datei wird geladen…",
   "infoEditItem": "Eintrag bearbeiten",
+  "infoCleanTooltip": "Anschlagbrett leeren",
+  "infoCleanConfirmTitle": "Anschlagbrett leeren?",
+  "infoCleanConfirmBody": "Dadurch werden ALLE Mitteilungen — Texte, Dateien und Links, ob vergangen, aktuell oder zukünftig — dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+  "infoCleanDone": "Anschlagbrett wurde geleert.",
 
   "s1Active": "Tätige Verkündiger (die in den letzten 6 Monaten mindestens einmal berichtet haben)",
   "s1AvgMid": "Durchschnittliche Anwesendenzahl der Zusammenkunft unter der Woche",

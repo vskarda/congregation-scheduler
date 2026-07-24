@@ -579,6 +579,10 @@
   "infoHidden": "Actuellement masqué (en dehors de sa période de visibilité)",
   "infoDownloading": "Chargement du fichier…",
   "infoEditItem": "Modifier l'élément",
+  "infoCleanTooltip": "Vider le tableau d'affichage",
+  "infoCleanConfirmTitle": "Vider le tableau d'affichage ?",
+  "infoCleanConfirmBody": "Cette action supprime définitivement TOUTES les annonces — textes, fichiers et liens, qu'elles soient passées, actuelles ou futures. Cette action est irréversible.",
+  "infoCleanDone": "Tableau d'affichage vidé.",
 
   "s1Active": "Proclamateurs actifs (qui ont remis un rapport au moins une fois au cours des 6 derniers mois)",
   "s1AvgMid": "Assistance moyenne à la réunion de semaine",

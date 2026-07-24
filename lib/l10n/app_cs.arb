@@ -588,6 +588,10 @@
   "infoHidden": "Momentálně skryto (mimo období zobrazení)",
   "infoDownloading": "Načítám soubor…",
   "infoEditItem": "Upravit položku",
+  "infoCleanTooltip": "Vyčistit informační desku",
+  "infoCleanConfirmTitle": "Vyčistit informační desku?",
+  "infoCleanConfirmBody": "Tímto trvale odstraníte VŠECHNA oznámení — texty, soubory i odkazy, ať už minulá, aktuální nebo budoucí. Akci nelze vrátit zpět.",
+  "infoCleanDone": "Informační deska byla vyčištěna.",
 
   "s1Active": "Činní zvěstovatelé (podali zprávu alespoň jednou za posledních 6 měsíců)",
   "s1AvgMid": "Průměrná návštěvnost shromáždění v týdnu",

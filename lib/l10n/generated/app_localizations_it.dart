@@ -1842,6 +1842,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get infoEditItem => 'Modifica elemento';
 
   @override
+  String get infoCleanTooltip => 'Svuota la bacheca';
+
+  @override
+  String get infoCleanConfirmTitle => 'Svuotare la bacheca?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Questa operazione elimina definitivamente TUTTI gli annunci — testi, file e link, siano essi passati, attuali o futuri. L\'azione non può essere annullata.';
+
+  @override
+  String get infoCleanDone => 'Bacheca svuotata.';
+
+  @override
   String get s1Active =>
       'Proclamatori attivi (che hanno riferito almeno una volta negli ultimi 6 mesi)';
 

@@ -1833,6 +1833,19 @@ class AppLocalizationsCs extends AppLocalizations {
   String get infoEditItem => 'Upravit položku';
 
   @override
+  String get infoCleanTooltip => 'Vyčistit informační desku';
+
+  @override
+  String get infoCleanConfirmTitle => 'Vyčistit informační desku?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Tímto trvale odstraníte VŠECHNA oznámení — texty, soubory i odkazy, ať už minulá, aktuální nebo budoucí. Akci nelze vrátit zpět.';
+
+  @override
+  String get infoCleanDone => 'Informační deska byla vyčištěna.';
+
+  @override
   String get s1Active =>
       'Činní zvěstovatelé (podali zprávu alespoň jednou za posledních 6 měsíců)';
 

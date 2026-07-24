@@ -1843,6 +1843,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get infoEditItem => 'Editar item';
 
   @override
+  String get infoCleanTooltip => 'Limpar o mural de avisos';
+
+  @override
+  String get infoCleanConfirmTitle => 'Limpar o mural de avisos?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Isso exclui permanentemente TODOS os avisos — textos, arquivos e links, sejam passados, atuais ou futuros. Esta ação não pode ser desfeita.';
+
+  @override
+  String get infoCleanDone => 'Mural de avisos limpo.';
+
+  @override
   String get s1Active =>
       'Publicadores ativos (que relataram pelo menos uma vez nos últimos 6 meses)';
 

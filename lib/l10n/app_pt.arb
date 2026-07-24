@@ -579,6 +579,10 @@
   "infoHidden": "Oculto no momento (fora do seu período de visibilidade)",
   "infoDownloading": "Carregando arquivo…",
   "infoEditItem": "Editar item",
+  "infoCleanTooltip": "Limpar o mural de avisos",
+  "infoCleanConfirmTitle": "Limpar o mural de avisos?",
+  "infoCleanConfirmBody": "Isso exclui permanentemente TODOS os avisos — textos, arquivos e links, sejam passados, atuais ou futuros. Esta ação não pode ser desfeita.",
+  "infoCleanDone": "Mural de avisos limpo.",
 
   "s1Active": "Publicadores ativos (que relataram pelo menos uma vez nos últimos 6 meses)",
   "s1AvgMid": "Média da assistência da reunião do meio de semana",

@@ -1847,6 +1847,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get infoEditItem => 'Editar elemento';
 
   @override
+  String get infoCleanTooltip => 'Vaciar el tablón de anuncios';
+
+  @override
+  String get infoCleanConfirmTitle => '¿Vaciar el tablón de anuncios?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Esto eliminará permanentemente TODOS los anuncios — textos, archivos y enlaces, ya sean pasados, actuales o futuros. Esta acción no se puede deshacer.';
+
+  @override
+  String get infoCleanDone => 'Tablón de anuncios vaciado.';
+
+  @override
   String get s1Active =>
       'Publicadores activos (que informaron al menos una vez en los últimos 6 meses)';
 

@@ -579,6 +579,10 @@
   "infoHidden": "Obecnie ukryte (poza okresem widoczności)",
   "infoDownloading": "Wczytywanie pliku…",
   "infoEditItem": "Edytuj element",
+  "infoCleanTooltip": "Wyczyść tablicę ogłoszeń",
+  "infoCleanConfirmTitle": "Wyczyścić tablicę ogłoszeń?",
+  "infoCleanConfirmBody": "Spowoduje to trwałe usunięcie WSZYSTKICH ogłoszeń — tekstów, plików i linków, zarówno przeszłych, bieżących, jak i przyszłych. Tej operacji nie można cofnąć.",
+  "infoCleanDone": "Tablica ogłoszeń została wyczyszczona.",
 
   "s1Active": "Czynni głosiciele (którzy zgłosili służbę co najmniej raz w ciągu ostatnich 6 miesięcy)",
   "s1AvgMid": "Średnia liczba obecnych na zebraniach w tygodniu",

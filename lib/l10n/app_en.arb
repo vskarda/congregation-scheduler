@@ -618,6 +618,10 @@
   "infoHidden": "Currently hidden (outside its visibility window)",
   "infoDownloading": "Loading file…",
   "infoEditItem": "Edit item",
+  "infoCleanTooltip": "Clean information board",
+  "infoCleanConfirmTitle": "Clean information board?",
+  "infoCleanConfirmBody": "This permanently deletes ALL announcements — text, files and links, whether past, current or future. This cannot be undone.",
+  "infoCleanDone": "Information board cleared.",
 
   "s1Active": "Active Publishers (reported at least once in the last 6 months)",
   "s1AvgMid": "Average Midweek Meeting Attendance",

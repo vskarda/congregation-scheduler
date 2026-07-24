@@ -12,9 +12,6 @@ import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import 'file_opener/file_opener.dart';
 
-final _legacyLinkPurgeProvider = FutureProvider<void>(
-    (ref) => ref.watch(infoboardRepositoryProvider).purgeLegacyLinkItems());
-
 class InfoBoardScreen extends ConsumerWidget {
   const InfoBoardScreen({super.key});
 
@@ -24,10 +21,6 @@ class InfoBoardScreen extends ConsumerWidget {
     final canEdit = ref.watch(effectiveRolesProvider).canEditInfoBoard();
     final itemsAsync = ref.watch(infoboardItemsProvider);
     final today = dateKey(DateTime.now());
-
-    if (canEdit) {
-      ref.watch(_legacyLinkPurgeProvider);
-    }
 
     return Scaffold(
       floatingActionButton: canEdit

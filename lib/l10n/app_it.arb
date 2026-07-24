@@ -579,6 +579,10 @@
   "infoHidden": "Attualmente nascosto (fuori dal suo periodo di visibilità)",
   "infoDownloading": "Caricamento del file…",
   "infoEditItem": "Modifica elemento",
+  "infoCleanTooltip": "Svuota la bacheca",
+  "infoCleanConfirmTitle": "Svuotare la bacheca?",
+  "infoCleanConfirmBody": "Questa operazione elimina definitivamente TUTTI gli annunci — testi, file e link, siano essi passati, attuali o futuri. L'azione non può essere annullata.",
+  "infoCleanDone": "Bacheca svuotata.",
 
   "s1Active": "Proclamatori attivi (che hanno riferito almeno una volta negli ultimi 6 mesi)",
   "s1AvgMid": "Media dei presenti all'adunanza infrasettimanale",

@@ -1827,6 +1827,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get infoEditItem => 'Edit item';
 
   @override
+  String get infoCleanTooltip => 'Clean information board';
+
+  @override
+  String get infoCleanConfirmTitle => 'Clean information board?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'This permanently deletes ALL announcements — text, files and links, whether past, current or future. This cannot be undone.';
+
+  @override
+  String get infoCleanDone => 'Information board cleared.';
+
+  @override
   String get s1Active =>
       'Active Publishers (reported at least once in the last 6 months)';
 

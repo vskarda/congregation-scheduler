@@ -1847,6 +1847,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String get infoEditItem => 'Eintrag bearbeiten';
 
   @override
+  String get infoCleanTooltip => 'Anschlagbrett leeren';
+
+  @override
+  String get infoCleanConfirmTitle => 'Anschlagbrett leeren?';
+
+  @override
+  String get infoCleanConfirmBody =>
+      'Dadurch werden ALLE Mitteilungen — Texte, Dateien und Links, ob vergangen, aktuell oder zukünftig — dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get infoCleanDone => 'Anschlagbrett wurde geleert.';
+
+  @override
   String get s1Active =>
       'Tätige Verkündiger (die in den letzten 6 Monaten mindestens einmal berichtet haben)';
 

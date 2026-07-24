@@ -3413,6 +3413,30 @@ abstract class AppLocalizations {
   /// **'Edit item'**
   String get infoEditItem;
 
+  /// No description provided for @infoCleanTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean information board'**
+  String get infoCleanTooltip;
+
+  /// No description provided for @infoCleanConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clean information board?'**
+  String get infoCleanConfirmTitle;
+
+  /// No description provided for @infoCleanConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes ALL announcements — text, files and links, whether past, current or future. This cannot be undone.'**
+  String get infoCleanConfirmBody;
+
+  /// No description provided for @infoCleanDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Information board cleared.'**
+  String get infoCleanDone;
+
   /// No description provided for @s1Active.
   ///
   /// In en, this message translates to:

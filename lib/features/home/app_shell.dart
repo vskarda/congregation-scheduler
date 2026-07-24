@@ -10,6 +10,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
 import '../../core/theme/theme_mode_button.dart';
+import '../info_board/clean_info_board_button.dart';
 import '../territories/territory_import_screen.dart';
 import 'schedule_pdf_button.dart';
 
@@ -89,6 +90,8 @@ class AppShell extends ConsumerWidget {
     final appBar = AppBar(
       title: Text(title),
       actions: [
+        if (location == '/' && roles.canEditInfoBoard())
+          const CleanInfoBoardButton(),
         if (location == '/lmm' && roles.canEditLmm())
           const SchedulePdfButton(kind: SchedulePdfKind.lmm),
         if (location == '/weekend' && roles.canEditWeekend())
