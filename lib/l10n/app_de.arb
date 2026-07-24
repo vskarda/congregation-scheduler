@@ -570,7 +570,6 @@
   "infoEmpty": "Zurzeit keine Informationen.",
   "infoAddText": "Text hinzufügen",
   "infoAddFile": "Datei hochladen (PDF/Bild)",
-  "infoAddLink": "Link hinzufügen",
   "infoTitle": "Titel",
   "infoBody": "Text",
   "infoUrl": "Link (URL)",

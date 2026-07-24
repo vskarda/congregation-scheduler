@@ -23,7 +23,7 @@ abstract class InfoboardItem with _$InfoboardItem {
     /// files/{fileId} reference for [InfoItemType.file].
     @Default('') String fileId,
 
-    /// External URL for [InfoItemType.link].
+    /// Optional external URL for [InfoItemType.text] announcements.
     @Default('') String url,
 
     /// Visibility window (yyyy-MM-dd, inclusive); empty = unbounded.

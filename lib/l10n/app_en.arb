@@ -609,7 +609,6 @@
   "infoEmpty": "No information right now.",
   "infoAddText": "Add text",
   "infoAddFile": "Upload file (PDF/image)",
-  "infoAddLink": "Add link",
   "infoTitle": "Title",
   "infoBody": "Text",
   "infoUrl": "Link (URL)",

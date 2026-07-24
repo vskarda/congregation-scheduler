@@ -579,7 +579,6 @@
   "infoEmpty": "Momentálně žádné informace.",
   "infoAddText": "Přidat text",
   "infoAddFile": "Nahrát soubor (PDF/obrázek)",
-  "infoAddLink": "Přidat odkaz",
   "infoTitle": "Nadpis",
   "infoBody": "Text",
   "infoUrl": "Odkaz (URL)",

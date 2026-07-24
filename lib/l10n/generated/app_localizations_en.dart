@@ -1799,9 +1799,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get infoAddFile => 'Upload file (PDF/image)';
 
   @override
-  String get infoAddLink => 'Add link';
-
-  @override
   String get infoTitle => 'Title';
 
   @override

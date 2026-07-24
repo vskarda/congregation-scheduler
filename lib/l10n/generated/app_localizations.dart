@@ -3359,12 +3359,6 @@ abstract class AppLocalizations {
   /// **'Upload file (PDF/image)'**
   String get infoAddFile;
 
-  /// No description provided for @infoAddLink.
-  ///
-  /// In en, this message translates to:
-  /// **'Add link'**
-  String get infoAddLink;
-
   /// No description provided for @infoTitle.
   ///
   /// In en, this message translates to:

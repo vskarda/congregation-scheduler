@@ -38,7 +38,6 @@ Map<String, dynamic> _$InfoboardItemToJson(
 const _$InfoItemTypeEnumMap = {
   InfoItemType.text: 'text',
   InfoItemType.file: 'file',
-  InfoItemType.link: 'link',
 };
 
 _StoredFileMeta _$StoredFileMetaFromJson(Map<String, dynamic> json) =>

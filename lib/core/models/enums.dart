@@ -58,8 +58,6 @@ enum InfoItemType {
   text,
   @JsonValue('file')
   file,
-  @JsonValue('link')
-  link,
 }
 
 enum MeetingType {

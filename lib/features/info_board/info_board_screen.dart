@@ -12,6 +12,9 @@ import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import 'file_opener/file_opener.dart';
 
+final _legacyLinkPurgeProvider = FutureProvider<void>(
+    (ref) => ref.watch(infoboardRepositoryProvider).purgeLegacyLinkItems());
+
 class InfoBoardScreen extends ConsumerWidget {
   const InfoBoardScreen({super.key});
 
@@ -21,6 +24,10 @@ class InfoBoardScreen extends ConsumerWidget {
     final canEdit = ref.watch(effectiveRolesProvider).canEditInfoBoard();
     final itemsAsync = ref.watch(infoboardItemsProvider);
     final today = dateKey(DateTime.now());
+
+    if (canEdit) {
+      ref.watch(_legacyLinkPurgeProvider);
+    }
 
     return Scaffold(
       floatingActionButton: canEdit
@@ -45,12 +52,6 @@ class InfoBoardScreen extends ConsumerWidget {
                           title: Text(l10n.infoAddFile),
                           onTap: () => Navigator.of(context)
                               .pop(InfoItemType.file),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.link),
-                          title: Text(l10n.infoAddLink),
-                          onTap: () => Navigator.of(context)
-                              .pop(InfoItemType.link),
                         ),
                       ],
                     ),
@@ -106,8 +107,6 @@ class _InfoCardState extends ConsumerState<_InfoCard> {
     final item = widget.item;
     switch (item.type) {
       case InfoItemType.text:
-        break;
-      case InfoItemType.link:
         if (item.url.isNotEmpty) {
           await launchUrl(Uri.parse(item.url),
               mode: LaunchMode.externalApplication);
@@ -161,9 +160,9 @@ class _InfoCardState extends ConsumerState<_InfoCard> {
         children: [
           ListTile(
             leading: Icon(switch (item.type) {
-              InfoItemType.text => Icons.notes,
+              InfoItemType.text =>
+                item.url.isNotEmpty ? Icons.link : Icons.notes,
               InfoItemType.file => Icons.picture_as_pdf_outlined,
-              InfoItemType.link => Icons.link,
             }),
             title: Text(item.title,
                 style: theme.textTheme.titleMedium),
@@ -178,7 +177,9 @@ class _InfoCardState extends ConsumerState<_InfoCard> {
                         type: item.type, existing: item),
                   )
                 : null,
-            onTap: item.type == InfoItemType.text ? null : _open,
+            onTap: (item.type == InfoItemType.text && item.url.isEmpty)
+                ? null
+                : _open,
           ),
           if (item.type == InfoItemType.text && item.body.isNotEmpty)
             Padding(
@@ -286,7 +287,6 @@ Future<void> _showItemDialog(
               ? switch (type) {
                   InfoItemType.text => l10n.infoAddText,
                   InfoItemType.file => l10n.infoAddFile,
-                  InfoItemType.link => l10n.infoAddLink,
                 }
               : l10n.infoEditItem),
           content: SizedBox(
@@ -308,8 +308,6 @@ Future<void> _showItemDialog(
                       decoration:
                           InputDecoration(labelText: l10n.infoBody),
                     ),
-                  ],
-                  if (type == InfoItemType.link) ...[
                     const SizedBox(height: 12),
                     TextField(
                       controller: urlCtrl,

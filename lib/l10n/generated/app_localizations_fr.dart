@@ -1821,9 +1821,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get infoAddFile => 'Téléverser un fichier (PDF/image)';
 
   @override
-  String get infoAddLink => 'Ajouter un lien';
-
-  @override
   String get infoTitle => 'Titre';
 
   @override

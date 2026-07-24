@@ -1772,9 +1772,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get infoAddFile => 'ファイルをアップロード（PDF/画像）';
 
   @override
-  String get infoAddLink => 'リンクを追加';
-
-  @override
   String get infoTitle => 'タイトル';
 
   @override

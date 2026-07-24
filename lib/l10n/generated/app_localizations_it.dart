@@ -1813,9 +1813,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get infoAddFile => 'Carica file (PDF/immagine)';
 
   @override
-  String get infoAddLink => 'Aggiungi link';
-
-  @override
   String get infoTitle => 'Titolo';
 
   @override

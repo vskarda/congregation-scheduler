@@ -1814,9 +1814,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get infoAddFile => 'Enviar arquivo (PDF/imagem)';
 
   @override
-  String get infoAddLink => 'Adicionar link';
-
-  @override
   String get infoTitle => 'Título';
 
   @override

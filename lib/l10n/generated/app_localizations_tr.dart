@@ -1803,9 +1803,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get infoAddFile => 'Dosya Yükle (PDF/Resim)';
 
   @override
-  String get infoAddLink => 'Bağlantı Ekle';
-
-  @override
   String get infoTitle => 'Başlık';
 
   @override

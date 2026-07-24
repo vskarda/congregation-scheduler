@@ -570,7 +570,6 @@
   "infoEmpty": "Obecnie brak informacji.",
   "infoAddText": "Dodaj tekst",
   "infoAddFile": "Prześlij plik (PDF/obraz)",
-  "infoAddLink": "Dodaj link",
   "infoTitle": "Tytuł",
   "infoBody": "Tekst",
   "infoUrl": "Link (URL)",

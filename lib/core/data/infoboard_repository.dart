@@ -22,7 +22,10 @@ class InfoboardRepository {
       InfoboardItem.fromJson(doc.data()!).copyWith(id: doc.id);
 
   Stream<List<InfoboardItem>> watchAll() => _items.snapshots().map((snap) {
-        final list = snap.docs.map(_fromDoc).toList();
+        final list = snap.docs
+            .where((doc) => doc.data()['type'] != 'link')
+            .map(_fromDoc)
+            .toList();
         list.sort((a, b) {
           final at = a.createdAt ?? DateTime(2000);
           final bt = b.createdAt ?? DateTime(2000);
@@ -30,6 +33,17 @@ class InfoboardRepository {
         });
         return list;
       });
+
+  /// Deletes legacy announcements stored with the removed `link` type.
+  Future<void> purgeLegacyLinkItems() async {
+    final snap = await _items.where('type', isEqualTo: 'link').get();
+    if (snap.docs.isEmpty) return;
+    final batch = _db.batch();
+    for (final doc in snap.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+  }
 
   Future<void> saveItem(InfoboardItem item) async {
     if (item.id.isEmpty) {

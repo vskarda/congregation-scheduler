@@ -570,7 +570,6 @@
   "infoEmpty": "現在お知らせはありません。",
   "infoAddText": "テキストを追加",
   "infoAddFile": "ファイルをアップロード（PDF/画像）",
-  "infoAddLink": "リンクを追加",
   "infoTitle": "タイトル",
   "infoBody": "テキスト",
   "infoUrl": "リンク（URL）",

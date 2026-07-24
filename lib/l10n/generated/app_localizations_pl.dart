@@ -1808,9 +1808,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get infoAddFile => 'Prześlij plik (PDF/obraz)';
 
   @override
-  String get infoAddLink => 'Dodaj link';
-
-  @override
   String get infoTitle => 'Tytuł';
 
   @override

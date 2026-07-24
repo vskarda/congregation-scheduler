@@ -1805,9 +1805,6 @@ class AppLocalizationsCs extends AppLocalizations {
   String get infoAddFile => 'Nahrát soubor (PDF/obrázek)';
 
   @override
-  String get infoAddLink => 'Přidat odkaz';
-
-  @override
   String get infoTitle => 'Nadpis';
 
   @override

@@ -17,7 +17,7 @@ mixin _$InfoboardItem {
 
 @JsonKey(includeFromJson: false, includeToJson: false) String get id; InfoItemType get type; String get title;/// Text content for [InfoItemType.text].
  String get body;/// files/{fileId} reference for [InfoItemType.file].
- String get fileId;/// External URL for [InfoItemType.link].
+ String get fileId;/// Optional external URL for [InfoItemType.text] announcements.
  String get url;/// Visibility window (yyyy-MM-dd, inclusive); empty = unbounded.
  String get showFrom; String get showUntil;@NullableTimestampConverter() DateTime? get createdAt; String get createdBy;
 /// Create a copy of InfoboardItem
@@ -232,7 +232,7 @@ class _InfoboardItem extends InfoboardItem {
 @override@JsonKey() final  String body;
 /// files/{fileId} reference for [InfoItemType.file].
 @override@JsonKey() final  String fileId;
-/// External URL for [InfoItemType.link].
+/// Optional external URL for [InfoItemType.text] announcements.
 @override@JsonKey() final  String url;
 /// Visibility window (yyyy-MM-dd, inclusive); empty = unbounded.
 @override@JsonKey() final  String showFrom;
