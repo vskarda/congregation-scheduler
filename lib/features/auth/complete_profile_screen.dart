@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/firebase/firebase_providers.dart';
+import '../../core/firebase/local_cache.dart';
 import '../../core/l10n/l10n.dart';
 import 'auth_service.dart';
 import 'delete_account.dart';
@@ -91,7 +91,7 @@ class _CompleteProfileScreenState
                   child: Text(l10n.commonSave),
                 ),
                 TextButton(
-                  onPressed: () => ref.read(firebaseAuthProvider).signOut(),
+                  onPressed: () => signOutAndClearLocalCache(ref),
                   child: Text(l10n.authSignOut),
                 ),
                 const DeleteAccountButton(),

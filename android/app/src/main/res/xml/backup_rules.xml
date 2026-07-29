@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 11 and older (android:fullBackupContent). Keep in sync with
+  data_extraction_rules.xml, which covers Android 12+.
+
+  The "database" domain is where the Firestore SDK keeps its offline
+  persistence SQLite file (firestore.<projectId>.<database>.sqlite). That cache
+  holds a copy of every document the signed-in user has read — for a
+  publishers-admin that is the whole congregation's private profiles (e-mail,
+  phone, address, birth date, emergency note). Without this exclusion it all
+  travels into Google's cloud backup and off the device.
+
+  Everything else stays backed up on purpose, so restoring to a new phone still
+  finds the congregation config and the signed-in session: the excluded data is
+  a cache and re-syncs on the next launch.
+-->
+<full-backup-content>
+    <exclude domain="database" path="." />
+</full-backup-content>

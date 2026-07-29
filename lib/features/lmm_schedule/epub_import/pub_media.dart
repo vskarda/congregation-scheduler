@@ -2,7 +2,18 @@ import 'dart:convert';
 
 /// Extracts the epub download URL (`files.{lang}.EPUB[0].file.url`) from a
 /// pub-media GETPUBMEDIALINKS JSON response; null when the response does not
-/// carry one.
+/// carry one, or carries one the app refuses to fetch (see below).
+///
+/// The URL is remote input, so the transport is pinned to https here rather
+/// than at the call site: Dart's `HttpClient` — which `package:http` uses on
+/// mobile — does not consult Android's cleartext-traffic policy, so an
+/// `http://` value would download the workbook in the clear with nothing on
+/// the platform side to stop it. Rejecting it reads as "issue not published"
+/// upstream, the same as a missing URL.
+///
+/// Deliberately no host allowlist: jw.org serves publication media from
+/// several CDN domains, and pinning them would break the import the day one
+/// changes.
 String? epubUrlFromPubMedia(String jsonBody, String lang) {
   final Object? decoded;
   try {
@@ -22,5 +33,7 @@ String? epubUrlFromPubMedia(String jsonBody, String lang) {
   final file = entry['file'];
   if (file is! Map) return null;
   final url = file['url'];
-  return url is String && url.isNotEmpty ? url : null;
+  if (url is! String || url.isEmpty) return null;
+  final parsed = Uri.tryParse(url);
+  return parsed != null && parsed.isScheme('https') ? url : null;
 }

@@ -7,10 +7,18 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- usesCleartextTraffic: already the platform default at this targetSdk;
+         declared so a merged library manifest cannot opt the app back in.
+         The backup rules keep the Firestore offline cache (which holds the
+         congregation's private profiles) out of cloud backup and device
+         transfer — see android/app/src/main/res/xml/backup_rules.xml. -->
     <application
         android:label="Congregation Scheduler"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="false"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name=".MainActivity"
             android:exported="true"

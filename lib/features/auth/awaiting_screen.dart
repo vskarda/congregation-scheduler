@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/congregation_repository.dart';
-import '../../core/firebase/firebase_providers.dart';
+import '../../core/firebase/local_cache.dart';
 import '../../core/l10n/l10n.dart';
 import 'delete_account.dart';
 
@@ -32,7 +32,7 @@ class AwaitingScreen extends ConsumerWidget {
                 Text(l10n.awaitingBody, textAlign: TextAlign.center),
                 const SizedBox(height: 24),
                 TextButton.icon(
-                  onPressed: () => ref.read(firebaseAuthProvider).signOut(),
+                  onPressed: () => signOutAndClearLocalCache(ref),
                   icon: const Icon(Icons.logout),
                   label: Text(l10n.authSignOut),
                 ),

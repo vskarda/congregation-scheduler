@@ -86,6 +86,40 @@ See header comment of [`firestore.rules`](../firestore.rules). Highlights:
 - Note: a publisher-admin can grant any role, including `fullAdmin` — roles
   are a convenience layer among trusted brothers, not mutual hard isolation.
 
+### Data on the device
+
+Firestore offline persistence keeps a local copy of every document the
+signed-in user has read — for a publisher-admin that is the whole
+congregation's private profiles. Two consequences are handled explicitly:
+
+- **Sign-out.** `FirebaseAuth.signOut()` does not touch that copy, so
+  sign-out and account deletion go through
+  `core/firebase/local_cache.dart`, which marks the cache and lets `main()`
+  clear it on the next launch. That indirection is not optional:
+  `clearPersistence()` only succeeds before a Firestore client has started
+  and while no listener is attached, which is true exactly once per launch.
+- **Backups.** On Android the cache is excluded from cloud backup and
+  device-to-device transfer (`android/app/src/main/res/xml/backup_rules.xml`
+  and `data_extraction_rules.xml`); the rest of the app's data still travels,
+  so restoring to a new phone keeps the congregation config and the session.
+  iOS has no equivalent exclusion yet — an iCloud backup still carries the
+  cache until the user signs out.
+
+### Data in transit
+
+Everything leaves the device over TLS: Auth and Firestore through the
+Firebase SDKs, the pub-media API through the https URLs in
+`core/config/app_config.dart`. The workbook download URL is the one address
+that arrives from a remote response, so `epubUrlFromPubMedia` refuses
+anything that is not https. That check has to live in Dart: `package:http`
+uses `dart:io`'s `HttpClient`, which does not consult Android's
+cleartext-traffic policy, so the platform would not block an `http://` URL.
+
+Known gap, accepted while the web build stays dev-only: `launchUrl` in the
+info-board and territory screens opens an admin-entered URL without checking
+its scheme. On a *distributed* web build a `javascript:` URL would run in the
+app's origin, so add an https/http allowlist before publishing one.
+
 ## Meeting Workbook import
 
 `features/lmm_schedule/epub_import/` unzips the `.epub` (package `archive`),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
+import '../../core/firebase/local_cache.dart';
 import '../../core/l10n/l10n.dart';
 import 'auth_service.dart';
 import 'login_screen.dart';
@@ -89,6 +90,9 @@ class _DeleteAccountDialogState extends ConsumerState<_DeleteAccountDialog> {
       _error = null;
     });
     try {
+      // Same reason as sign-out: the deleted account's documents are still in
+      // the on-device Firestore cache.
+      await LocalCache.markStale();
       await ref
           .read(authServiceProvider)
           .deleteAccount(password: _password.text);

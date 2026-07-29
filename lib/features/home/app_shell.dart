@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/publishers_repository.dart';
-import '../../core/firebase/firebase_providers.dart';
+import '../../core/firebase/local_cache.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
@@ -203,7 +203,7 @@ class _NavPanel extends ConsumerWidget {
               const ThemeModeButton(),
               const Spacer(),
               TextButton.icon(
-                onPressed: () => ref.read(firebaseAuthProvider).signOut(),
+                onPressed: () => signOutAndClearLocalCache(ref),
                 icon: const Icon(Icons.logout),
                 label: Text(l10n.authSignOut),
               ),
