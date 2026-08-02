@@ -46,7 +46,11 @@ flutter run -d chrome         # or an Android/iOS device
 ```sh
 flutter test                  # unit + widget tests
 cd rules-tests && npm install && npm test   # Firestore rules (needs Java 11+)
+scripts\live-test.ps1         # against a real congregation (needs .credits/)
 ```
+
+The live suite verifies a new feature against real rules and real data; see
+[docs/TESTING-LIVE.md](docs/TESTING-LIVE.md). It skips without credentials.
 
 ## Releases
 
