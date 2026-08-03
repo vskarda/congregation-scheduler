@@ -321,10 +321,17 @@ $AssignmentCopyWith<$Res> get defaultAssignment {
 /// @nodoc
 mixin _$FsmMeeting {
 
-@JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd
- String get date; String get time; String get location; String get note; Assignment get assignment;/// Set when this meeting was generated from a recurring rule.
- String get recurringId;/// A "deleted" recurring instance is kept as cancelled so the
-/// materializer doesn't recreate it.
+@JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd — when the meeting actually happens. For an exception this
+/// may differ from [seriesDate] (the occurrence was moved).
+ String get date; String get time; String get location; String get note; Assignment get assignment;/// Set when this meeting is an exception to a recurring rule.
+ String get recurringId;/// yyyy-MM-dd — the slot in the series this exception belongs to. Its
+/// identity: unlike [date] it never changes, so moving an occurrence
+/// cannot make it collide with, or be overwritten by, its own series.
+/// Empty on documents written before the field existed; use [seriesKey].
+ String get seriesDate;/// Which of [FsmFields] this occurrence overrides on its rule. Empty on
+/// one-off meetings, which are authoritative for everything.
+ List<String> get overrides;/// A "deleted" recurring occurrence is kept as a cancelled exception so
+/// the rule stops expanding it.
  bool get cancelled; List<String> get allAssigneeIds;
 /// Create a copy of FsmMeeting
 /// with the given fields replaced by the non-null parameter values.
@@ -338,16 +345,16 @@ $FsmMeetingCopyWith<FsmMeeting> get copyWith => _$FsmMeetingCopyWithImpl<FsmMeet
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.seriesDate, seriesDate) || other.seriesDate == seriesDate)&&const DeepCollectionEquality().equals(other.overrides, overrides)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,seriesDate,const DeepCollectionEquality().hash(overrides),cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
 
 @override
 String toString() {
-  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, seriesDate: $seriesDate, overrides: $overrides, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -358,7 +365,7 @@ abstract mixin class $FsmMeetingCopyWith<$Res>  {
   factory $FsmMeetingCopyWith(FsmMeeting value, $Res Function(FsmMeeting) _then) = _$FsmMeetingCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, String seriesDate, List<String> overrides, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -375,7 +382,7 @@ class _$FsmMeetingCopyWithImpl<$Res>
 
 /// Create a copy of FsmMeeting
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? seriesDate = null,Object? overrides = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -384,7 +391,9 @@ as String,location: null == location ? _self.location : location // ignore: cast
 as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
-as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
+as String,seriesDate: null == seriesDate ? _self.seriesDate : seriesDate // ignore: cast_nullable_to_non_nullable
+as String,overrides: null == overrides ? _self.overrides : overrides // ignore: cast_nullable_to_non_nullable
+as List<String>,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
 as bool,allAssigneeIds: null == allAssigneeIds ? _self.allAssigneeIds : allAssigneeIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
@@ -480,10 +489,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FsmMeeting() when $default != null:
-return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   return orElse();
 
 }
@@ -501,10 +510,10 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.a
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
 switch (_that) {
 case _FsmMeeting():
-return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -521,10 +530,10 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.a
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String time,  String location,  String note,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
 switch (_that) {
 case _FsmMeeting() when $default != null:
-return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   return null;
 
 }
@@ -536,20 +545,37 @@ return $default(_that.id,_that.date,_that.time,_that.location,_that.note,_that.a
 @JsonSerializable()
 
 class _FsmMeeting extends FsmMeeting {
-  const _FsmMeeting({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.time = '09:00', this.location = '', this.note = '', this.assignment = const Assignment(), this.recurringId = '', this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _allAssigneeIds = allAssigneeIds,super._();
+  const _FsmMeeting({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.time = '09:00', this.location = '', this.note = '', this.assignment = const Assignment(), this.recurringId = '', this.seriesDate = '', final  List<String> overrides = const <String>[], this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _overrides = overrides,_allAssigneeIds = allAssigneeIds,super._();
   factory _FsmMeeting.fromJson(Map<String, dynamic> json) => _$FsmMeetingFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
-/// yyyy-MM-dd
+/// yyyy-MM-dd — when the meeting actually happens. For an exception this
+/// may differ from [seriesDate] (the occurrence was moved).
 @override@JsonKey() final  String date;
 @override@JsonKey() final  String time;
 @override@JsonKey() final  String location;
 @override@JsonKey() final  String note;
 @override@JsonKey() final  Assignment assignment;
-/// Set when this meeting was generated from a recurring rule.
+/// Set when this meeting is an exception to a recurring rule.
 @override@JsonKey() final  String recurringId;
-/// A "deleted" recurring instance is kept as cancelled so the
-/// materializer doesn't recreate it.
+/// yyyy-MM-dd — the slot in the series this exception belongs to. Its
+/// identity: unlike [date] it never changes, so moving an occurrence
+/// cannot make it collide with, or be overwritten by, its own series.
+/// Empty on documents written before the field existed; use [seriesKey].
+@override@JsonKey() final  String seriesDate;
+/// Which of [FsmFields] this occurrence overrides on its rule. Empty on
+/// one-off meetings, which are authoritative for everything.
+ final  List<String> _overrides;
+/// Which of [FsmFields] this occurrence overrides on its rule. Empty on
+/// one-off meetings, which are authoritative for everything.
+@override@JsonKey() List<String> get overrides {
+  if (_overrides is EqualUnmodifiableListView) return _overrides;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_overrides);
+}
+
+/// A "deleted" recurring occurrence is kept as a cancelled exception so
+/// the rule stops expanding it.
 @override@JsonKey() final  bool cancelled;
  final  List<String> _allAssigneeIds;
 @override@JsonKey() List<String> get allAssigneeIds {
@@ -572,16 +598,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _FsmMeeting&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.time, time) || other.time == time)&&(identical(other.location, location) || other.location == location)&&(identical(other.note, note) || other.note == note)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.seriesDate, seriesDate) || other.seriesDate == seriesDate)&&const DeepCollectionEquality().equals(other._overrides, _overrides)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,time,location,note,assignment,recurringId,seriesDate,const DeepCollectionEquality().hash(_overrides),cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
 
 @override
 String toString() {
-  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'FsmMeeting(id: $id, date: $date, time: $time, location: $location, note: $note, assignment: $assignment, recurringId: $recurringId, seriesDate: $seriesDate, overrides: $overrides, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -592,7 +618,7 @@ abstract mixin class _$FsmMeetingCopyWith<$Res> implements $FsmMeetingCopyWith<$
   factory _$FsmMeetingCopyWith(_FsmMeeting value, $Res Function(_FsmMeeting) _then) = __$FsmMeetingCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String time, String location, String note, Assignment assignment, String recurringId, String seriesDate, List<String> overrides, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -609,7 +635,7 @@ class __$FsmMeetingCopyWithImpl<$Res>
 
 /// Create a copy of FsmMeeting
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? time = null,Object? location = null,Object? note = null,Object? assignment = null,Object? recurringId = null,Object? seriesDate = null,Object? overrides = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_FsmMeeting(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -618,7 +644,9 @@ as String,location: null == location ? _self.location : location // ignore: cast
 as String,note: null == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
-as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
+as String,seriesDate: null == seriesDate ? _self.seriesDate : seriesDate // ignore: cast_nullable_to_non_nullable
+as String,overrides: null == overrides ? _self._overrides : overrides // ignore: cast_nullable_to_non_nullable
+as List<String>,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
 as bool,allAssigneeIds: null == allAssigneeIds ? _self._allAssigneeIds : allAssigneeIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));

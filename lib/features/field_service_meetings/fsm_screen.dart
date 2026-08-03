@@ -14,47 +14,55 @@ import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
 import 'fsm_recurring_screen.dart';
 
-/// Concrete meetings of one week, including cancelled instances (needed so a
-/// cancelled recurring instance suppresses its virtual counterpart).
-final _fsmWeekRawMeetingsProvider =
-    StreamProvider.family<List<FsmMeeting>, String>((ref, weekId) {
-  final monday = parseDateKey(weekId);
-  final sunday = dateKey(monday.add(const Duration(days: 6)));
-  return ref
-      .watch(fsmRepositoryProvider)
-      .watchRange(weekId, sunday, includeCancelled: true);
-});
+String _sundayOf(String weekId) =>
+    dateKey(parseDateKey(weekId).add(const Duration(days: 6)));
 
-/// Meetings of one week (weekId = Monday key): concrete meetings merged with
-/// instances expanded from the recurring rules, so recurring meetings show up
-/// for every user and every browsed week, not just where the materializer
-/// already wrote docs.
+/// Meeting documents held in one week, including cancelled ones (needed so a
+/// cancelled occurrence suppresses the one its rule would expand).
+final _fsmWeekByDateProvider =
+    StreamProvider.family<List<FsmMeeting>, String>((ref, weekId) => ref
+        .watch(fsmRepositoryProvider)
+        .watchRange(weekId, _sundayOf(weekId), includeCancelled: true));
+
+/// Exceptions whose *occurrence* is in this week, wherever they were moved
+/// to — they claim their slot so the rule does not expand it a second time.
+final _fsmWeekBySeriesDateProvider =
+    StreamProvider.family<List<FsmMeeting>, String>((ref, weekId) => ref
+        .watch(fsmRepositoryProvider)
+        .watchSeriesRange(weekId, _sundayOf(weekId)));
+
+/// Meetings of one week (weekId = Monday key): one-off meetings and edited
+/// occurrences merged with everything the recurring rules produce. Rules are
+/// the source of truth, so a rule edit is visible here immediately, for every
+/// user and every browsed week.
 final fsmWeekMeetingsProvider =
     Provider.family<AsyncValue<List<FsmMeeting>>, String>((ref, weekId) {
-  final meetings = ref.watch(_fsmWeekRawMeetingsProvider(weekId));
+  final byDate = ref.watch(_fsmWeekByDateProvider(weekId));
+  final bySeriesDate = ref.watch(_fsmWeekBySeriesDateProvider(weekId));
   final rules = ref.watch(fsmRecurringProvider);
   final monday = parseDateKey(weekId);
-  return meetings.when(
+  return byDate.when(
     loading: () => const AsyncValue.loading(),
     error: (e, st) => AsyncValue.error(e, st),
-    data: (concrete) => rules.when(
+    data: (held) => bySeriesDate.when(
       loading: () => const AsyncValue.loading(),
       error: (e, st) => AsyncValue.error(e, st),
-      data: (ruleList) => AsyncValue.data(FsmRepository.mergeWithRules(
-          concrete, ruleList, monday, monday.add(const Duration(days: 7)))),
+      data: (claimed) => rules.when(
+        loading: () => const AsyncValue.loading(),
+        error: (e, st) => AsyncValue.error(e, st),
+        data: (ruleList) => AsyncValue.data(FsmRepository.expand(held, claimed,
+            ruleList, monday, monday.add(const Duration(days: 7)))),
+      ),
     ),
   );
 });
 
-/// Ensures recurring rules are materialized ahead; runs once per session for
-/// FSM admins (publishers only read existing meetings).
-final fsmMaterializationProvider = FutureProvider<void>((ref) async {
+/// Reconnects meeting documents to their rules and compacts away the snapshot
+/// copies the old materializer wrote. Runs once per session for FSM admins
+/// (it writes, so publishers must not attempt it) and is idempotent.
+final fsmRepairProvider = FutureProvider<void>((ref) async {
   if (!ref.watch(myRolesProvider).canEditFieldServiceMeetings()) return;
-  final repo = ref.watch(fsmRepositoryProvider);
-  final rules = await repo.watchRecurring().first;
-  for (final rule in rules) {
-    await repo.materializeRule(rule);
-  }
+  await ref.watch(fsmRepositoryProvider).repairAndCompact();
 });
 
 class FsmScreen extends ConsumerWidget {
@@ -62,7 +70,7 @@ class FsmScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(fsmMaterializationProvider);
+    ref.watch(fsmRepairProvider);
     final canEdit =
         ref.watch(effectiveRolesProvider).canEditFieldServiceMeetings();
     final l10n = context.l10n;
@@ -169,7 +177,9 @@ class _FsmWeekView extends ConsumerWidget {
   }
 }
 
-/// Create/edit one concrete meeting.
+/// Create/edit one meeting. Editing an occurrence of a recurring rule writes
+/// an exception recording only the fields that were actually changed, so the
+/// rest keep following the rule.
 Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
     {FsmMeeting? existing}) async {
   final l10n = context.l10n;
@@ -277,10 +287,20 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
     ),
   );
   if (saved == true) {
-    await ref.read(fsmRepositoryProvider).saveMeeting(meeting.copyWith(
-          location: locationCtrl.text.trim(),
-          note: noteCtrl.text.trim(),
-        ));
+    final rule = meeting.isException
+        ? ref
+            .read(fsmRecurringProvider)
+            .value
+            ?.where((r) => r.id == meeting.recurringId)
+            .firstOrNull
+        : null;
+    await ref.read(fsmRepositoryProvider).saveMeeting(
+          meeting.copyWith(
+            location: locationCtrl.text.trim(),
+            note: noteCtrl.text.trim(),
+          ),
+          rule: rule,
+        );
     ref.invalidate(assignmentHistoryProvider);
   }
   locationCtrl.dispose();

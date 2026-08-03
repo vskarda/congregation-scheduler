@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/config/app_config.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/lmm_repository.dart';
@@ -242,9 +243,14 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     );
   }
 
-  final meetings = await ref.watch(fsmRepositoryProvider).getAssignedTo(uid);
+  // Expanded from the rules, not queried: most recurring meetings have no
+  // document of their own, so an array-contains query would miss them.
+  final meetings = await ref.watch(fsmRepositoryProvider).expandAssignedTo(
+        uid,
+        today,
+        dateKey(addMonths(DateTime.now(), AppConfig.fsmMaterializeMonthsAhead)),
+      );
   for (final meeting in meetings) {
-    if (meeting.date.compareTo(today) < 0) continue;
     entries.add(
       MyAssignmentEntry(
         source: AssignmentSource.fsm,

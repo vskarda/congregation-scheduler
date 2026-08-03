@@ -1360,6 +1360,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Tout supprimer';
 
   @override
+  String get fsmDeleteFromWeekTooltip =>
+      'Supprimer les réunions à partir de cette semaine';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Supprimer les réunions à partir de $week ?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Cette action supprime toutes les réunions ponctuelles et périodiques à partir de la semaine sélectionnée, et arrête les réunions périodiques à ce moment-là pour qu\'elles ne réapparaissent pas. Les réunions antérieures sont conservées. Cette action est irréversible.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Réunions supprimées.';
+
+  @override
   String get eventsUpcoming => 'Événements à venir';
 
   @override

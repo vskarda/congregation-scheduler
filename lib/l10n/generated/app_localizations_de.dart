@@ -1358,6 +1358,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Alle entfernen';
 
   @override
+  String get fsmDeleteFromWeekTooltip =>
+      'Zusammenkünfte ab dieser Woche löschen';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Zusammenkünfte ab $week löschen?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Damit werden alle einmaligen und wiederkehrenden Zusammenkünfte ab der ausgewählten Woche gelöscht und die wiederkehrenden Zusammenkünfte dort beendet, damit sie nicht erneut erstellt werden. Frühere Zusammenkünfte bleiben erhalten. Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Zusammenkünfte gelöscht.';
+
+  @override
   String get eventsUpcoming => 'Kommende Veranstaltungen';
 
   @override

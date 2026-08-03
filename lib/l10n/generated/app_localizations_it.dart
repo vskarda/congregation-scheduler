@@ -1353,6 +1353,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Rimuovi tutte';
 
   @override
+  String get fsmDeleteFromWeekTooltip =>
+      'Elimina le adunanze da questa settimana in poi';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Eliminare le adunanze da $week in poi?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Questa azione elimina ogni adunanza singola e ricorrente dalla settimana selezionata in poi e interrompe lì le adunanze ricorrenti, così non ricompaiono. Le adunanze precedenti vengono mantenute. Non può essere annullata.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Adunanze eliminate.';
+
+  @override
   String get eventsUpcoming => 'Prossimi eventi';
 
   @override

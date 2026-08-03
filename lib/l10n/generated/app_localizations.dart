@@ -2538,6 +2538,30 @@ abstract class AppLocalizations {
   /// **'Remove all'**
   String get fsmRemoveAllFutureConfirm;
 
+  /// No description provided for @fsmDeleteFromWeekTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete meetings from this week on'**
+  String get fsmDeleteFromWeekTooltip;
+
+  /// No description provided for @fsmDeleteFromWeekTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete meetings from {week} on?'**
+  String fsmDeleteFromWeekTitle(String week);
+
+  /// No description provided for @fsmDeleteFromWeekBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every one-time and recurring meeting from the selected week onwards, and stops the recurring meetings there so they don\'t come back. Earlier meetings are kept. This can\'t be undone.'**
+  String get fsmDeleteFromWeekBody;
+
+  /// No description provided for @fsmDeleteFromWeekDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Meetings deleted.'**
+  String get fsmDeleteFromWeekDone;
+
   /// No description provided for @eventsUpcoming.
   ///
   /// In en, this message translates to:

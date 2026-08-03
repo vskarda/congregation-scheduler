@@ -1319,6 +1319,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'すべて削除';
 
   @override
+  String get fsmDeleteFromWeekTooltip => '今週以降の集まりを削除';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return '$week 以降の集まりを削除しますか？';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      '選択した週以降のすべての単発および定期の集まりを削除し、定期の集まりもそこで終了するため再び作成されません。それ以前の集まりは残ります。この操作は取り消せません。';
+
+  @override
+  String get fsmDeleteFromWeekDone => '集まりを削除しました。';
+
+  @override
   String get eventsUpcoming => '今後の行事';
 
   @override

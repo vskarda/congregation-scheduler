@@ -68,6 +68,21 @@ core/          bootstrap, config, theme, l10n, shared widgets
 - **Public witnessing recurrence**: `pw_recurring` rules are materialized
   into concrete `pw_slots` ~3 months ahead whenever an admin opens the PW
   admin screen; individual slots stay editable/deletable.
+- **Field-service-meeting recurrence**: the rule *is* the meetings. Nothing is
+  pre-written — `FsmRepository.expand` builds occurrences from `fsm_recurring`
+  on the fly, so a rule edit reaches every one of them at once.
+  `fsm_meetings` holds only one-off meetings and *exceptions*: the occurrences
+  an admin edited, moved or cancelled. An exception's `overrides` names the
+  fields it is authoritative for; everything else keeps following the rule, so
+  changing one week's conductor does not freeze that week's location. Its
+  identity is `seriesDate` (the slot in the series, also the doc id suffix),
+  kept apart from `date` (when it actually happens) so an occurrence can be
+  moved without colliding with its own series. Deleting a rule freezes its
+  past occurrences into stand-alone meetings and detaches customized ones, so
+  no document is ever left pointing at a rule that no longer exists.
+  `repairAndCompact` runs once per admin session to reconnect and compact data
+  written by the earlier materializing model. **PW deliberately still
+  materializes** and carries the drift problems this design removes.
 
 ## Security model
 

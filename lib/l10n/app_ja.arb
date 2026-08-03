@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "今後の集まりをすべて削除しますか？",
   "fsmRemoveAllFutureBody": "これにより、今後の1回限りと繰り返しの野外奉仕の集まりがすべて削除され、繰り返しの集まりのルールもすべて削除されて再生成されなくなります。過去の集まりは保持されます。取り消せません。",
   "fsmRemoveAllFutureConfirm": "すべて削除",
+  "fsmDeleteFromWeekTooltip": "今週以降の集まりを削除",
+  "fsmDeleteFromWeekTitle": "{week} 以降の集まりを削除しますか？",
+  "fsmDeleteFromWeekBody": "選択した週以降のすべての単発および定期の集まりを削除し、定期の集まりもそこで終了するため再び作成されません。それ以前の集まりは残ります。この操作は取り消せません。",
+  "fsmDeleteFromWeekDone": "集まりを削除しました。",
 
   "eventsUpcoming": "今後の行事",
   "eventsNone": "今後の行事はありません。",

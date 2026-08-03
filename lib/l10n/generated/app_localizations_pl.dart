@@ -1344,6 +1344,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Usuń wszystkie';
 
   @override
+  String get fsmDeleteFromWeekTooltip => 'Usuń zbiórki od tego tygodnia';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Usunąć zbiórki od $week?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Spowoduje to usunięcie wszystkich jednorazowych i cyklicznych zbiórek od wybranego tygodnia wzwyż oraz zakończenie zbiórek cyklicznych w tym miejscu, aby nie pojawiły się ponownie. Wcześniejsze zbiórki zostaną zachowane. Tej operacji nie można cofnąć.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Zbiórki zostały usunięte.';
+
+  @override
   String get eventsUpcoming => 'Nadchodzące wydarzenia';
 
   @override

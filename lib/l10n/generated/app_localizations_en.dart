@@ -1340,6 +1340,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Remove all';
 
   @override
+  String get fsmDeleteFromWeekTooltip => 'Delete meetings from this week on';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Delete meetings from $week on?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'This deletes every one-time and recurring meeting from the selected week onwards, and stops the recurring meetings there so they don\'t come back. Earlier meetings are kept. This can\'t be undone.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Meetings deleted.';
+
+  @override
   String get eventsUpcoming => 'Upcoming events';
 
   @override

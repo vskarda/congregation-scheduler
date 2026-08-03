@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "¿Eliminar todas las reuniones futuras?",
   "fsmRemoveAllFutureBody": "Esto elimina cada reunión próxima para predicar, única o recurrente, y quita todas las reglas de reuniones recurrentes para que ninguna se vuelva a generar. Las reuniones pasadas se conservan. Esto no se puede deshacer.",
   "fsmRemoveAllFutureConfirm": "Eliminar todas",
+  "fsmDeleteFromWeekTooltip": "Eliminar las reuniones desde esta semana",
+  "fsmDeleteFromWeekTitle": "¿Eliminar las reuniones desde {week}?",
+  "fsmDeleteFromWeekBody": "Se eliminarán todas las reuniones puntuales y periódicas desde la semana seleccionada en adelante, y las reuniones periódicas se detendrán ahí para que no vuelvan a aparecer. Se conservan las reuniones anteriores. Esta acción no se puede deshacer.",
+  "fsmDeleteFromWeekDone": "Reuniones eliminadas.",
 
   "eventsUpcoming": "Próximos eventos",
   "eventsNone": "No hay eventos próximos.",

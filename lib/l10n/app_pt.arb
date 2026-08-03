@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "Remover todas as reuniões futuras?",
   "fsmRemoveAllFutureBody": "Isso exclui cada reunião futura para o serviço de campo, única ou recorrente, e remove todas as regras de reuniões recorrentes para que nenhuma seja gerada de novo. As reuniões passadas são mantidas. Isso não pode ser desfeito.",
   "fsmRemoveAllFutureConfirm": "Remover todas",
+  "fsmDeleteFromWeekTooltip": "Excluir as reuniões a partir desta semana",
+  "fsmDeleteFromWeekTitle": "Excluir as reuniões a partir de {week}?",
+  "fsmDeleteFromWeekBody": "Isto exclui todas as reuniões avulsas e recorrentes a partir da semana selecionada e encerra aí as reuniões recorrentes, para que não voltem a aparecer. As reuniões anteriores são mantidas. Não é possível desfazer.",
+  "fsmDeleteFromWeekDone": "Reuniões excluídas.",
 
   "eventsUpcoming": "Próximos eventos",
   "eventsNone": "Nenhum evento futuro.",

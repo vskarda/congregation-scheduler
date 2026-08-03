@@ -434,6 +434,10 @@
   "fsmRemoveAllFutureTitle": "Odstranit všechny budoucí schůzky?",
   "fsmRemoveAllFutureBody": "Tímto se smažou všechny nadcházející jednorázové i opakované schůzky pro službu a odstraní se všechna pravidla opakovaných schůzek, aby se znovu neobnovily. Minulé schůzky zůstanou zachovány. Tuto akci nelze vrátit zpět.",
   "fsmRemoveAllFutureConfirm": "Odstranit vše",
+  "fsmDeleteFromWeekTooltip": "Odstranit schůzky od tohoto týdne dál",
+  "fsmDeleteFromWeekTitle": "Odstranit schůzky od {week} dál?",
+  "fsmDeleteFromWeekBody": "Odstraní každou jednorázovou i opakovanou schůzku od vybraného týdne dál a ukončí opakované schůzky, aby se znovu nevytvářely. Dřívější schůzky zůstanou zachovány. Tuto akci nelze vrátit zpět.",
+  "fsmDeleteFromWeekDone": "Schůzky byly odstraněny.",
 
   "eventsUpcoming": "Nadcházející události",
   "eventsNone": "Žádné nadcházející události.",

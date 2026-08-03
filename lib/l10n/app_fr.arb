@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "Supprimer toutes les réunions futures ?",
   "fsmRemoveAllFutureBody": "Cette action efface chaque réunion pour la prédication à venir, ponctuelle ou récurrente, et supprime toutes les règles de réunions récurrentes pour qu'aucune ne se régénère. Les réunions passées sont conservées. Cette action est irréversible.",
   "fsmRemoveAllFutureConfirm": "Tout supprimer",
+  "fsmDeleteFromWeekTooltip": "Supprimer les réunions à partir de cette semaine",
+  "fsmDeleteFromWeekTitle": "Supprimer les réunions à partir de {week} ?",
+  "fsmDeleteFromWeekBody": "Cette action supprime toutes les réunions ponctuelles et périodiques à partir de la semaine sélectionnée, et arrête les réunions périodiques à ce moment-là pour qu'elles ne réapparaissent pas. Les réunions antérieures sont conservées. Cette action est irréversible.",
+  "fsmDeleteFromWeekDone": "Réunions supprimées.",
 
   "eventsUpcoming": "Événements à venir",
   "eventsNone": "Aucun événement à venir.",

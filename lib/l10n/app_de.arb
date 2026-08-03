@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "Alle zukünftigen Zusammenkünfte entfernen?",
   "fsmRemoveAllFutureBody": "Das löscht jede kommende einmalige und wiederkehrende Zusammenkunft für den Predigtdienst und entfernt alle Regeln für wiederkehrende Zusammenkünfte, sodass keine erneut erzeugt wird. Vergangene Zusammenkünfte bleiben erhalten. Das kann nicht rückgängig gemacht werden.",
   "fsmRemoveAllFutureConfirm": "Alle entfernen",
+  "fsmDeleteFromWeekTooltip": "Zusammenkünfte ab dieser Woche löschen",
+  "fsmDeleteFromWeekTitle": "Zusammenkünfte ab {week} löschen?",
+  "fsmDeleteFromWeekBody": "Damit werden alle einmaligen und wiederkehrenden Zusammenkünfte ab der ausgewählten Woche gelöscht und die wiederkehrenden Zusammenkünfte dort beendet, damit sie nicht erneut erstellt werden. Frühere Zusammenkünfte bleiben erhalten. Das kann nicht rückgängig gemacht werden.",
+  "fsmDeleteFromWeekDone": "Zusammenkünfte gelöscht.",
 
   "eventsUpcoming": "Kommende Veranstaltungen",
   "eventsNone": "Keine kommenden Veranstaltungen.",

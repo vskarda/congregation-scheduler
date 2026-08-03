@@ -313,13 +313,12 @@ class FsmRecurringScreen extends ConsumerWidget {
       ),
     );
     if (saved == true) {
-      final repo = ref.read(fsmRepositoryProvider);
-      final finalRule = rule.copyWith(
-        location: locationCtrl.text.trim(),
-        note: noteCtrl.text.trim(),
-      );
-      final id = await repo.saveRecurring(finalRule);
-      await repo.materializeRule(finalRule.copyWith(id: id));
+      // No follow-up write: meetings are expanded from the rule, so this edit
+      // reaches every one of its occurrences at once.
+      await ref.read(fsmRepositoryProvider).saveRecurring(rule.copyWith(
+            location: locationCtrl.text.trim(),
+            note: noteCtrl.text.trim(),
+          ));
       ref.invalidate(assignmentHistoryProvider);
     }
     locationCtrl.dispose();

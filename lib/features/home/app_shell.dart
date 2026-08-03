@@ -10,6 +10,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
 import '../../core/theme/theme_mode_button.dart';
+import '../field_service_meetings/fsm_delete_from_week_button.dart';
 import '../info_board/clean_info_board_button.dart';
 import '../territories/territory_import_screen.dart';
 import 'schedule_pdf_button.dart';
@@ -96,6 +97,8 @@ class AppShell extends ConsumerWidget {
           const SchedulePdfButton(kind: SchedulePdfKind.lmm),
         if (location == '/weekend' && roles.canEditWeekend())
           const SchedulePdfButton(kind: SchedulePdfKind.weekend),
+        if (location == '/fsm' && roles.canEditFieldServiceMeetings())
+          const FsmDeleteFromWeekButton(),
         if (location == '/territories' && roles.canEditTerritories())
           IconButton(
             icon: const Icon(Icons.upload_file_outlined),

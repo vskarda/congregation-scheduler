@@ -89,9 +89,14 @@ final assignmentHistoryProvider =
         record(HistoryKeys.publicWitnessing, slot.assignment, slot.date);
       }
 
-      final meetings = await ref
-          .watch(fsmRepositoryProvider)
-          .getRange(from, until);
+      // Expanded from the rules, not queried: most recurring meetings have no
+      // document of their own. Unlike the other sources this needs a real end
+      // date — a rule runs forever, so `until` cannot be the open-ended key.
+      final meetings = await ref.watch(fsmRepositoryProvider).expandRange(
+            from,
+            dateKey(addMonths(
+                DateTime.now(), AppConfig.fsmMaterializeMonthsAhead)),
+          );
       for (final meeting in meetings) {
         record(
           HistoryKeys.fieldServiceMeetings,

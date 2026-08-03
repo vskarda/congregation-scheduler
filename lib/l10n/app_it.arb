@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "Rimuovere tutte le adunanze future?",
   "fsmRemoveAllFutureBody": "Questa operazione elimina ogni adunanza per il servizio imminente, singola o ricorrente, e rimuove tutte le regole delle adunanze ricorrenti così che nessuna venga rigenerata. Le adunanze passate vengono mantenute. Questa azione non può essere annullata.",
   "fsmRemoveAllFutureConfirm": "Rimuovi tutte",
+  "fsmDeleteFromWeekTooltip": "Elimina le adunanze da questa settimana in poi",
+  "fsmDeleteFromWeekTitle": "Eliminare le adunanze da {week} in poi?",
+  "fsmDeleteFromWeekBody": "Questa azione elimina ogni adunanza singola e ricorrente dalla settimana selezionata in poi e interrompe lì le adunanze ricorrenti, così non ricompaiono. Le adunanze precedenti vengono mantenute. Non può essere annullata.",
+  "fsmDeleteFromWeekDone": "Adunanze eliminate.",
 
   "eventsUpcoming": "Prossimi eventi",
   "eventsNone": "Nessun evento imminente.",

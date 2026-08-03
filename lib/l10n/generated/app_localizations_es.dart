@@ -1358,6 +1358,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Eliminar todas';
 
   @override
+  String get fsmDeleteFromWeekTooltip =>
+      'Eliminar las reuniones desde esta semana';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return '¿Eliminar las reuniones desde $week?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Se eliminarán todas las reuniones puntuales y periódicas desde la semana seleccionada en adelante, y las reuniones periódicas se detendrán ahí para que no vuelvan a aparecer. Se conservan las reuniones anteriores. Esta acción no se puede deshacer.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Reuniones eliminadas.';
+
+  @override
   String get eventsUpcoming => 'Próximos eventos';
 
   @override

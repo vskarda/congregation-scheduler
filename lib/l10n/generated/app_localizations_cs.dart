@@ -1344,6 +1344,22 @@ class AppLocalizationsCs extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Odstranit vše';
 
   @override
+  String get fsmDeleteFromWeekTooltip =>
+      'Odstranit schůzky od tohoto týdne dál';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return 'Odstranit schůzky od $week dál?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Odstraní každou jednorázovou i opakovanou schůzku od vybraného týdne dál a ukončí opakované schůzky, aby se znovu nevytvářely. Dřívější schůzky zůstanou zachovány. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Schůzky byly odstraněny.';
+
+  @override
   String get eventsUpcoming => 'Nadcházející události';
 
   @override

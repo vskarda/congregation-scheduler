@@ -1345,6 +1345,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fsmRemoveAllFutureConfirm => 'Tümünü kaldır';
 
   @override
+  String get fsmDeleteFromWeekTooltip => 'Bu haftadan itibaren buluşmaları sil';
+
+  @override
+  String fsmDeleteFromWeekTitle(String week) {
+    return '$week tarihinden itibaren buluşmalar silinsin mi?';
+  }
+
+  @override
+  String get fsmDeleteFromWeekBody =>
+      'Bu işlem seçilen haftadan itibaren tüm tek seferlik ve tekrarlanan buluşmaları siler ve tekrar oluşmamaları için tekrarlanan buluşmaları o noktada sonlandırır. Daha önceki buluşmalar saklanır. Bu işlem geri alınamaz.';
+
+  @override
+  String get fsmDeleteFromWeekDone => 'Buluşmalar silindi.';
+
+  @override
   String get eventsUpcoming => 'Yaklaşan Etkinlikler';
 
   @override

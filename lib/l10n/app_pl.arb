@@ -427,6 +427,10 @@
   "fsmRemoveAllFutureTitle": "Usunąć wszystkie przyszłe zbiórki?",
   "fsmRemoveAllFutureBody": "Ta operacja kasuje każdą nadchodzącą jednorazową i cykliczną zbiórkę do służby oraz usuwa wszystkie reguły zbiórek cyklicznych, aby żadna nie została wygenerowana ponownie. Zbiórki z przeszłości są zachowane. Tej operacji nie można cofnąć.",
   "fsmRemoveAllFutureConfirm": "Usuń wszystkie",
+  "fsmDeleteFromWeekTooltip": "Usuń zbiórki od tego tygodnia",
+  "fsmDeleteFromWeekTitle": "Usunąć zbiórki od {week}?",
+  "fsmDeleteFromWeekBody": "Spowoduje to usunięcie wszystkich jednorazowych i cyklicznych zbiórek od wybranego tygodnia wzwyż oraz zakończenie zbiórek cyklicznych w tym miejscu, aby nie pojawiły się ponownie. Wcześniejsze zbiórki zostaną zachowane. Tej operacji nie można cofnąć.",
+  "fsmDeleteFromWeekDone": "Zbiórki zostały usunięte.",
 
   "eventsUpcoming": "Nadchodzące wydarzenia",
   "eventsNone": "Brak nadchodzących wydarzeń.",
