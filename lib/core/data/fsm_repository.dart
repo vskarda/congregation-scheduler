@@ -210,6 +210,7 @@ class FsmRepository {
 
     final deletes = <String>[];
     final creates = <FsmMeeting>[];
+    final updates = <String, FsmMeeting>{};
     final frozen = <String>{};
 
     if (rule != null) {
@@ -221,24 +222,29 @@ class FsmRepository {
       for (final date in materializedDates(rule, from, today)) {
         frozen.add(date);
         final existingException = byOccurrence[date];
-        if (existingException != null && existingException.cancelled) continue;
+        if (existingException != null && existingException.cancelled) {
+          deletes.add(existingException.id);
+          continue;
+        }
         creates.add((existingException ?? FsmMeeting.fromRule(rule, date))
             .detachFrom(rule));
       }
     }
 
     for (final meeting in exceptions) {
-      deletes.add(meeting.id);
-      if (frozen.contains(meeting.seriesKey)) continue; // already handled above
-      if (meeting.cancelled) continue;
+      if (frozen.contains(meeting.seriesKey)) continue; // handled above
       final isFuture = meeting.date.compareTo(todayKey) >= 0;
       // Plain future occurrences go with the rule; anything customized, and
-      // any past occurrence, survives as a stand-alone meeting.
-      if (isFuture && meeting.overrides.isEmpty) continue;
-      creates.add(meeting.detachFrom(rule));
+      // any past occurrence, survives as a stand-alone meeting rewritten in
+      // place — never deleted and recreated under the same id.
+      if (meeting.cancelled || (isFuture && meeting.overrides.isEmpty)) {
+        deletes.add(meeting.id);
+      } else {
+        updates[meeting.id] = meeting.detachFrom(rule);
+      }
     }
 
-    await _applyChanges(deletes: deletes, creates: creates);
+    await _applyChanges(deletes: deletes, creates: creates, updates: updates);
     await _recurring.doc(ruleId).delete();
   }
 
@@ -332,11 +338,15 @@ class FsmRepository {
       if (rule == null) {
         // The rule is gone — most often deleted and recreated under a new id.
         // Re-adopt onto whichever rule produces the day this happens, else
-        // set it free as a one-off meeting.
+        // set it free as a one-off meeting, rewritten in place: a document
+        // must never be deleted and recreated under the same id.
         final adopting = _adoptingRule(rules, meeting.date);
         if (adopting == null) {
-          deletes.add(doc.id);
-          if (!stored.cancelled) creates.add(meeting.detachFrom(null));
+          if (stored.cancelled) {
+            deletes.add(doc.id);
+          } else {
+            updates[doc.id] = meeting.detachFrom(null);
+          }
           continue;
         }
         rule = adopting;
@@ -354,12 +364,14 @@ class FsmRepository {
 
       if (!producesOn(rule, meeting.seriesKey)) {
         // Left behind by a weekday or validity-window change.
-        deletes.add(doc.id);
         if (!stored.cancelled && overrides.isNotEmpty) {
           // A snapshot copy is complete on its own; a lean exception has to
           // borrow the fields it never overrode before its rule goes away.
-          creates.add(
-              isSnapshotCopy ? meeting.detachFrom(null) : meeting.detachFrom(rule));
+          updates[doc.id] = isSnapshotCopy
+              ? meeting.detachFrom(null)
+              : meeting.detachFrom(rule);
+        } else {
+          deletes.add(doc.id);
         }
         continue;
       }

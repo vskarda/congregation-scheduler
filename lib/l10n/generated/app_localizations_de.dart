@@ -1290,6 +1290,42 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pwWithdraw => 'Meldung zurückziehen';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Diesen wiederkehrenden Termin löschen? Seine zukünftigen Termine werden ebenfalls entfernt, zusammen mit den Meldungen dafür. Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Alle zukünftigen Termine entfernen';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Das Entfernen aller zukünftigen Termine löscht jeden bevorstehenden einmaligen und wiederkehrenden Termin und kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Alle zukünftigen Termine entfernen?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Damit werden alle bevorstehenden einmaligen und wiederkehrenden Termine gelöscht, die Meldungen dafür zurückgezogen und alle Regeln für wiederkehrende Termine entfernt, damit keine neu erstellt werden. Vergangene Termine bleiben erhalten. Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Alle entfernen';
+
+  @override
+  String get pwDeleteFromWeekTooltip => 'Termine ab dieser Woche löschen';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Termine ab $week löschen?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Damit werden alle einmaligen und wiederkehrenden Termine ab der ausgewählten Woche gelöscht, die Meldungen dafür zurückgezogen und die wiederkehrenden Termine dort beendet, damit sie nicht erneut erstellt werden. Frühere Termine bleiben erhalten. Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Termine gelöscht.';
+
+  @override
   String pwApplicants(int count) {
     return '$count gemeldet';
   }

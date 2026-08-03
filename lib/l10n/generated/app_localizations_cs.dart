@@ -1279,6 +1279,42 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pwWithdraw => 'Zrušit přihlášku';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Odstranit tento opakovaný termín? Jeho budoucí termíny budou odstraněny také, včetně přihlášek na ně. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Odstranit všechny budoucí termíny';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Odstranění všech budoucích termínů smaže každý nadcházející jednorázový i opakovaný termín a nelze je vrátit zpět.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Odstranit všechny budoucí termíny?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Odstraní každý nadcházející jednorázový i opakovaný termín, zruší přihlášky na ně a odstraní všechna pravidla opakovaných termínů, aby se znovu nevytvářely. Minulé termíny zůstanou zachovány. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Odstranit vše';
+
+  @override
+  String get pwDeleteFromWeekTooltip => 'Odstranit termíny od tohoto týdne dál';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Odstranit termíny od $week dál?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Odstraní každý jednorázový i opakovaný termín od vybraného týdne dál, zruší přihlášky na ně a ukončí opakované termíny, aby se znovu nevytvářely. Dřívější termíny zůstanou zachovány. Tuto akci nelze vrátit zpět.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Termíny byly odstraněny.';
+
+  @override
   String pwApplicants(int count) {
     return 'Přihlášeni: $count';
   }

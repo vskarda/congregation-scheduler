@@ -1292,6 +1292,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pwWithdraw => 'Retirer ma candidature';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Supprimer ce créneau récurrent ? Ses créneaux futurs seront également supprimés, ainsi que les candidatures correspondantes. Cette action est irréversible.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Supprimer tous les créneaux à venir';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Supprimer tous les créneaux à venir efface chaque créneau ponctuel et récurrent à venir et est irréversible.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Supprimer tous les créneaux à venir ?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Cette action supprime tous les créneaux ponctuels et récurrents à venir, retire les candidatures correspondantes et supprime toutes les règles de créneaux récurrents pour qu\'aucun ne réapparaisse. Les créneaux passés sont conservés. Cette action est irréversible.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Tout supprimer';
+
+  @override
+  String get pwDeleteFromWeekTooltip =>
+      'Supprimer les créneaux à partir de cette semaine';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Supprimer les créneaux à partir de $week ?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Cette action supprime tous les créneaux ponctuels et récurrents à partir de la semaine sélectionnée, retire les candidatures correspondantes et arrête les créneaux récurrents à ce moment-là pour qu\'ils ne réapparaissent pas. Les créneaux antérieurs sont conservés. Cette action est irréversible.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Créneaux supprimés.';
+
+  @override
   String pwApplicants(int count) {
     return '$count volontaires';
   }

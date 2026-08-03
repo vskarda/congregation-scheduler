@@ -228,9 +228,14 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     );
   }
 
-  final slots = await ref.watch(pwRepositoryProvider).getAssignedTo(uid);
+  // Expanded from the rules, not queried: most recurring slots have no
+  // document of their own, so an array-contains query would miss them.
+  final slots = await ref.watch(pwRepositoryProvider).expandAssignedTo(
+        uid,
+        today,
+        dateKey(addMonths(DateTime.now(), AppConfig.pwMaterializeMonthsAhead)),
+      );
   for (final slot in slots) {
-    if (slot.date.compareTo(today) < 0) continue;
     entries.add(
       MyAssignmentEntry(
         source: AssignmentSource.pw,

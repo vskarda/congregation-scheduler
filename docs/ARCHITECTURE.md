@@ -65,9 +65,17 @@ core/          bootstrap, config, theme, l10n, shared widgets
   created by an admin (random id) and admin-entered reports.
 - **S-1** is computed client-side by a pure calculator over one month of
   entries + last 6 months of activity + the month's attendance docs.
-- **Public witnessing recurrence**: `pw_recurring` rules are materialized
-  into concrete `pw_slots` ~3 months ahead whenever an admin opens the PW
-  admin screen; individual slots stay editable/deletable.
+- **Public witnessing recurrence**: same model as field service meetings
+  below — `PwRepository.expand` builds slots from `pw_recurring` on the fly and
+  `pw_slots` holds only one-off slots and exceptions. What is PW-specific is
+  that **slot ids are permanent**: applications live at
+  `pw_applications/{slotId}_{uid}` and the security rules let nobody re-key
+  them (an admin may create none, because the applicant id must be their own,
+  and update none), so a slot that changed id would silently lose everyone who
+  volunteered. Hence `detachFrom` rewrites in place rather than creating a new
+  document, and every path that removes a slot removes its applications too.
+  `repairAndCompact` additionally sweeps applications naming slots nothing
+  produces any more; past ones are kept as the record of who volunteered.
 - **Field-service-meeting recurrence**: the rule *is* the meetings. Nothing is
   pre-written — `FsmRepository.expand` builds occurrences from `fsm_recurring`
   on the fly, so a rule edit reaches every one of them at once.
@@ -81,8 +89,7 @@ core/          bootstrap, config, theme, l10n, shared widgets
   past occurrences into stand-alone meetings and detaches customized ones, so
   no document is ever left pointing at a rule that no longer exists.
   `repairAndCompact` runs once per admin session to reconnect and compact data
-  written by the earlier materializing model. **PW deliberately still
-  materializes** and carries the drift problems this design removes.
+  written by the earlier materializing model.
 
 ## Security model
 

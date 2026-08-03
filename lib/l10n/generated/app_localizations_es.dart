@@ -1292,6 +1292,42 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pwWithdraw => 'Retirar mi ofrecimiento';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      '¿Eliminar este turno periódico? También se eliminarán sus turnos futuros y los ofrecimientos para ellos. Esta acción no se puede deshacer.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Eliminar todos los turnos futuros';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Eliminar todos los turnos futuros borra cada turno puntual y periódico próximo y no se puede deshacer.';
+
+  @override
+  String get pwRemoveAllFutureTitle => '¿Eliminar todos los turnos futuros?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Se eliminarán todos los turnos puntuales y periódicos próximos, se retirarán los ofrecimientos para ellos y se quitarán todas las reglas de turnos periódicos para que no vuelvan a crearse. Se conservan los turnos pasados. Esta acción no se puede deshacer.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Eliminar todos';
+
+  @override
+  String get pwDeleteFromWeekTooltip => 'Eliminar los turnos desde esta semana';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return '¿Eliminar los turnos desde $week?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Se eliminarán todos los turnos puntuales y periódicos desde la semana seleccionada en adelante, se retirarán los ofrecimientos para ellos y los turnos periódicos se detendrán ahí para que no vuelvan a aparecer. Se conservan los turnos anteriores. Esta acción no se puede deshacer.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Turnos eliminados.';
+
+  @override
   String pwApplicants(int count) {
     return '$count se ofrecieron';
   }

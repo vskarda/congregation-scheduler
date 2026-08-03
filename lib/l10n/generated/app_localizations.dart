@@ -2418,6 +2418,66 @@ abstract class AppLocalizations {
   /// **'Withdraw application'**
   String get pwWithdraw;
 
+  /// No description provided for @pwRecurringDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this recurring slot? Its future slots will be removed too, along with any applications for them. This can\'t be undone.'**
+  String get pwRecurringDeleteConfirm;
+
+  /// No description provided for @pwRemoveAllFutureAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all future slots'**
+  String get pwRemoveAllFutureAction;
+
+  /// No description provided for @pwRemoveAllFutureWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Removing all future slots deletes every upcoming one-time and recurring slot and cannot be undone.'**
+  String get pwRemoveAllFutureWarning;
+
+  /// No description provided for @pwRemoveAllFutureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all future slots?'**
+  String get pwRemoveAllFutureTitle;
+
+  /// No description provided for @pwRemoveAllFutureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every upcoming one-time and recurring slot, withdraws the applications for them, and removes all recurring slot rules so none regenerate. Past slots are kept. This can\'t be undone.'**
+  String get pwRemoveAllFutureBody;
+
+  /// No description provided for @pwRemoveAllFutureConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove all'**
+  String get pwRemoveAllFutureConfirm;
+
+  /// No description provided for @pwDeleteFromWeekTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete slots from this week on'**
+  String get pwDeleteFromWeekTooltip;
+
+  /// No description provided for @pwDeleteFromWeekTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete slots from {week} on?'**
+  String pwDeleteFromWeekTitle(String week);
+
+  /// No description provided for @pwDeleteFromWeekBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every one-time and recurring slot from the selected week onwards, withdraws the applications for them, and stops the recurring slots there so they don\'t come back. Earlier slots are kept. This can\'t be undone.'**
+  String get pwDeleteFromWeekBody;
+
+  /// No description provided for @pwDeleteFromWeekDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Slots deleted.'**
+  String get pwDeleteFromWeekDone;
+
   /// No description provided for @pwApplicants.
   ///
   /// In en, this message translates to:

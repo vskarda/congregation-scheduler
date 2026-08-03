@@ -1254,6 +1254,42 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pwWithdraw => '志願を取り消す';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'この繰り返しの時間帯を削除しますか？今後の時間帯とその志願も削除されます。この操作は取り消せません。';
+
+  @override
+  String get pwRemoveAllFutureAction => '今後の時間帯をすべて削除';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      '今後の時間帯をすべて削除すると、予定されている単発および繰り返しの時間帯がすべて削除され、取り消せません。';
+
+  @override
+  String get pwRemoveAllFutureTitle => '今後の時間帯をすべて削除しますか？';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      '予定されている単発および繰り返しの時間帯をすべて削除し、その志願を取り下げ、再び作成されないよう繰り返しの時間帯の設定もすべて削除します。過去の時間帯は残ります。この操作は取り消せません。';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'すべて削除';
+
+  @override
+  String get pwDeleteFromWeekTooltip => '今週以降の時間帯を削除';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return '$week 以降の時間帯を削除しますか？';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      '選択した週以降のすべての単発および繰り返しの時間帯を削除し、その志願を取り下げ、繰り返しの時間帯もそこで終了するため再び作成されません。それ以前の時間帯は残ります。この操作は取り消せません。';
+
+  @override
+  String get pwDeleteFromWeekDone => '時間帯を削除しました。';
+
+  @override
   String pwApplicants(int count) {
     return '$count人が志願';
   }

@@ -1275,6 +1275,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pwWithdraw => 'Withdraw application';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Delete this recurring slot? Its future slots will be removed too, along with any applications for them. This can\'t be undone.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Remove all future slots';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Removing all future slots deletes every upcoming one-time and recurring slot and cannot be undone.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Remove all future slots?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'This deletes every upcoming one-time and recurring slot, withdraws the applications for them, and removes all recurring slot rules so none regenerate. Past slots are kept. This can\'t be undone.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Remove all';
+
+  @override
+  String get pwDeleteFromWeekTooltip => 'Delete slots from this week on';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Delete slots from $week on?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'This deletes every one-time and recurring slot from the selected week onwards, withdraws the applications for them, and stops the recurring slots there so they don\'t come back. Earlier slots are kept. This can\'t be undone.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Slots deleted.';
+
+  @override
   String pwApplicants(int count) {
     return '$count applied';
   }

@@ -1279,6 +1279,42 @@ class AppLocalizationsPl extends AppLocalizations {
   String get pwWithdraw => 'Wycofaj zgłoszenie';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Usunąć ten termin cykliczny? Jego przyszłe terminy również zostaną usunięte wraz ze zgłoszeniami na nie. Tej operacji nie można cofnąć.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Usuń wszystkie przyszłe terminy';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Usunięcie wszystkich przyszłych terminów kasuje każdy nadchodzący termin jednorazowy i cykliczny i nie można tego cofnąć.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Usunąć wszystkie przyszłe terminy?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Spowoduje to usunięcie wszystkich nadchodzących terminów jednorazowych i cyklicznych, wycofanie zgłoszeń na nie oraz usunięcie wszystkich reguł terminów cyklicznych, aby nie pojawiły się ponownie. Wcześniejsze terminy zostaną zachowane. Tej operacji nie można cofnąć.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Usuń wszystkie';
+
+  @override
+  String get pwDeleteFromWeekTooltip => 'Usuń terminy od tego tygodnia';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Usunąć terminy od $week?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Spowoduje to usunięcie wszystkich terminów jednorazowych i cyklicznych od wybranego tygodnia wzwyż, wycofanie zgłoszeń na nie oraz zakończenie terminów cyklicznych w tym miejscu, aby nie pojawiły się ponownie. Wcześniejsze terminy zostaną zachowane. Tej operacji nie można cofnąć.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Terminy zostały usunięte.';
+
+  @override
   String pwApplicants(int count) {
     return 'zgłoszeń: $count';
   }

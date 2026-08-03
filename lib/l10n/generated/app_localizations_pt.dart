@@ -1288,6 +1288,43 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pwWithdraw => 'Retirar meu voluntariado';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Excluir este horário recorrente? Os seus horários futuros também serão removidos, junto com as candidaturas para eles. Não é possível desfazer.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Remover todos os horários futuros';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Remover todos os horários futuros exclui cada horário avulso e recorrente que ainda vem e não pode ser desfeito.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Remover todos os horários futuros?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Isto exclui todos os horários avulsos e recorrentes que ainda vêm, retira as candidaturas para eles e remove todas as regras de horários recorrentes para que não sejam recriados. Os horários anteriores são mantidos. Não é possível desfazer.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Remover todos';
+
+  @override
+  String get pwDeleteFromWeekTooltip =>
+      'Excluir os horários a partir desta semana';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Excluir os horários a partir de $week?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Isto exclui todos os horários avulsos e recorrentes a partir da semana selecionada, retira as candidaturas para eles e encerra aí os horários recorrentes, para que não voltem a aparecer. Os horários anteriores são mantidos. Não é possível desfazer.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Horários excluídos.';
+
+  @override
   String pwApplicants(int count) {
     return '$count se voluntariaram';
   }

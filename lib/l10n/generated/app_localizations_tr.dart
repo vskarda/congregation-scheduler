@@ -1279,6 +1279,45 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pwWithdraw => 'Başvuruyu geri çek';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Bu tekrarlanan zaman aralığı silinsin mi? Gelecekteki zaman aralıkları da başvurularıyla birlikte kaldırılacak. Bu işlem geri alınamaz.';
+
+  @override
+  String get pwRemoveAllFutureAction =>
+      'Tüm gelecekteki zaman aralıklarını kaldır';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Tüm gelecekteki zaman aralıklarını kaldırmak, yaklaşan her tek seferlik ve tekrarlanan zaman aralığını siler ve bu işlem geri alınamaz.';
+
+  @override
+  String get pwRemoveAllFutureTitle =>
+      'Tüm gelecekteki zaman aralıkları kaldırılsın mı?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Bu işlem yaklaşan tüm tek seferlik ve tekrarlanan zaman aralıklarını siler, bunlara yapılan başvuruları geri çeker ve yeniden oluşmamaları için tüm tekrarlanan zaman aralığı kurallarını kaldırır. Geçmiş zaman aralıkları saklanır. Bu işlem geri alınamaz.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Tümünü kaldır';
+
+  @override
+  String get pwDeleteFromWeekTooltip =>
+      'Bu haftadan itibaren zaman aralıklarını sil';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return '$week tarihinden itibaren zaman aralıkları silinsin mi?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Bu işlem seçilen haftadan itibaren tüm tek seferlik ve tekrarlanan zaman aralıklarını siler, bunlara yapılan başvuruları geri çeker ve tekrar oluşmamaları için tekrarlanan zaman aralıklarını o noktada sonlandırır. Daha önceki zaman aralıkları saklanır. Bu işlem geri alınamaz.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Zaman aralıkları silindi.';
+
+  @override
   String pwApplicants(int count) {
     return '$count başvuru';
   }

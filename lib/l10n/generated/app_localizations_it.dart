@@ -1287,6 +1287,43 @@ class AppLocalizationsIt extends AppLocalizations {
   String get pwWithdraw => 'Ritira la tua offerta';
 
   @override
+  String get pwRecurringDeleteConfirm =>
+      'Eliminare questo turno ricorrente? Verranno rimossi anche i suoi turni futuri e le offerte per essi. Non può essere annullato.';
+
+  @override
+  String get pwRemoveAllFutureAction => 'Rimuovi tutti i turni futuri';
+
+  @override
+  String get pwRemoveAllFutureWarning =>
+      'Rimuovere tutti i turni futuri elimina ogni turno singolo e ricorrente in programma e non può essere annullato.';
+
+  @override
+  String get pwRemoveAllFutureTitle => 'Rimuovere tutti i turni futuri?';
+
+  @override
+  String get pwRemoveAllFutureBody =>
+      'Questa azione elimina ogni turno singolo e ricorrente in programma, ritira le offerte per essi e rimuove tutte le regole dei turni ricorrenti, così non ne vengono creati di nuovi. I turni passati vengono mantenuti. Non può essere annullata.';
+
+  @override
+  String get pwRemoveAllFutureConfirm => 'Rimuovi tutti';
+
+  @override
+  String get pwDeleteFromWeekTooltip =>
+      'Elimina i turni da questa settimana in poi';
+
+  @override
+  String pwDeleteFromWeekTitle(String week) {
+    return 'Eliminare i turni da $week in poi?';
+  }
+
+  @override
+  String get pwDeleteFromWeekBody =>
+      'Questa azione elimina ogni turno singolo e ricorrente dalla settimana selezionata in poi, ritira le offerte per essi e interrompe lì i turni ricorrenti, così non ricompaiono. I turni precedenti vengono mantenuti. Non può essere annullata.';
+
+  @override
+  String get pwDeleteFromWeekDone => 'Turni eliminati.';
+
+  @override
   String pwApplicants(int count) {
     return '$count si sono offerti';
   }

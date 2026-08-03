@@ -145,12 +145,13 @@ abstract class FsmMeeting with _$FsmMeeting {
   /// fields it used to inherit from [rule]. Used when the rule goes away, so
   /// no document is ever left pointing at a rule that no longer exists.
   ///
-  /// The id is cleared with the link: the old one encoded the rule this
-  /// meeting no longer belongs to, and writing a detached meeting back over
-  /// it would race the deletion of the document it was detached from.
+  /// The document id is kept, matching `PwSlot.detachFrom`, where it is
+  /// load-bearing: PW applications are stored at `{slotId}_{uid}` and the
+  /// security rules let nobody re-key them. Callers must therefore write a
+  /// detached meeting before — or in place of — deleting the document it came
+  /// from.
   FsmMeeting detachFrom(FsmRecurring? rule) =>
       (rule == null ? this : applyRule(rule)).copyWith(
-        id: '',
         recurringId: '',
         seriesDate: '',
         overrides: const [],

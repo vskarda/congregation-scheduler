@@ -15,34 +15,45 @@ import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
 import 'pw_recurring_screen.dart';
 
-/// Concrete slots of one week, including cancelled instances (needed so a
-/// cancelled recurring instance suppresses its virtual counterpart).
-final _pwWeekRawSlotsProvider =
-    StreamProvider.family<List<PwSlot>, String>((ref, weekId) {
-  final monday = parseDateKey(weekId);
-  final sunday = dateKey(monday.add(const Duration(days: 6)));
-  return ref
-      .watch(pwRepositoryProvider)
-      .watchRange(weekId, sunday, includeCancelled: true);
-});
+String _sundayOf(String weekId) =>
+    dateKey(parseDateKey(weekId).add(const Duration(days: 6)));
 
-/// Slots of one week (weekId = Monday key): concrete slots merged with
-/// instances expanded from the recurring rules, so recurring slots show up
-/// for every user and every browsed week, not just where the materializer
-/// already wrote docs.
+/// Slot documents held in one week, including cancelled ones (needed so a
+/// cancelled occurrence suppresses the one its rule would expand).
+final _pwWeekByDateProvider =
+    StreamProvider.family<List<PwSlot>, String>((ref, weekId) => ref
+        .watch(pwRepositoryProvider)
+        .watchRange(weekId, _sundayOf(weekId), includeCancelled: true));
+
+/// Exceptions whose *occurrence* is in this week, wherever they were moved
+/// to — they claim their slot so the rule does not expand it a second time.
+final _pwWeekBySeriesDateProvider =
+    StreamProvider.family<List<PwSlot>, String>((ref, weekId) => ref
+        .watch(pwRepositoryProvider)
+        .watchSeriesRange(weekId, _sundayOf(weekId)));
+
+/// Slots of one week (weekId = Monday key): one-off slots and edited
+/// occurrences merged with everything the recurring rules produce. Rules are
+/// the source of truth, so a rule edit is visible here immediately, for every
+/// user and every browsed week.
 final pwWeekSlotsProvider =
     Provider.family<AsyncValue<List<PwSlot>>, String>((ref, weekId) {
-  final slots = ref.watch(_pwWeekRawSlotsProvider(weekId));
+  final byDate = ref.watch(_pwWeekByDateProvider(weekId));
+  final bySeriesDate = ref.watch(_pwWeekBySeriesDateProvider(weekId));
   final rules = ref.watch(pwRecurringProvider);
   final monday = parseDateKey(weekId);
-  return slots.when(
+  return byDate.when(
     loading: () => const AsyncValue.loading(),
     error: (e, st) => AsyncValue.error(e, st),
-    data: (concrete) => rules.when(
+    data: (held) => bySeriesDate.when(
       loading: () => const AsyncValue.loading(),
       error: (e, st) => AsyncValue.error(e, st),
-      data: (ruleList) => AsyncValue.data(PwRepository.mergeWithRules(
-          concrete, ruleList, monday, monday.add(const Duration(days: 7)))),
+      data: (claimed) => rules.when(
+        loading: () => const AsyncValue.loading(),
+        error: (e, st) => AsyncValue.error(e, st),
+        data: (ruleList) => AsyncValue.data(PwRepository.expand(held, claimed,
+            ruleList, monday, monday.add(const Duration(days: 7)))),
+      ),
     ),
   );
 });
@@ -61,38 +72,43 @@ final myPwApplicationsProvider = StreamProvider<Set<String>>((ref) {
       .map((apps) => apps.map((a) => a.slotId).toSet());
 });
 
-/// Applications of one week (weekId = Monday key) grouped by slot id. Only
-/// PW admins may run the underlying range query (uses the real roles, like
-/// [pwMaterializationProvider]); empty for everyone else.
-final pwWeekApplicationsProvider =
+/// Applications for one chunk of slot ids (comma-joined, because a family
+/// key needs value equality). Firestore caps `whereIn` at 30 ids, so a busy
+/// week is split across several of these.
+final _pwApplicationChunkProvider =
     StreamProvider.family<Map<String, List<PwApplication>>, String>(
-        (ref, weekId) {
-  if (!ref.watch(myRolesProvider).canEditPublicWitnessing()) {
-    return Stream.value(const {});
+        (ref, joinedIds) => ref
+            .watch(pwRepositoryProvider)
+            .watchApplicationsForSlots(joinedIds.split(',')));
+
+/// Applications for the slots shown in one week, grouped by slot id. Only PW
+/// admins may run the underlying query (uses the real roles, like
+/// [pwRepairProvider]); empty for everyone else.
+///
+/// Keyed by the ids of the slots actually on screen rather than by the
+/// applications' denormalized date, which goes stale as soon as an admin
+/// moves a slot and which the security rules let nobody correct.
+final pwWeekApplicationsProvider =
+    Provider.family<Map<String, List<PwApplication>>, String>((ref, weekId) {
+  if (!ref.watch(myRolesProvider).canEditPublicWitnessing()) return const {};
+  final slots = ref.watch(pwWeekSlotsProvider(weekId)).value;
+  if (slots == null || slots.isEmpty) return const {};
+
+  final result = <String, List<PwApplication>>{};
+  for (final chunk in PwRepository.chunkIds(slots.map((s) => s.id).toList())) {
+    final apps = ref.watch(_pwApplicationChunkProvider(chunk.join(','))).value;
+    if (apps != null) result.addAll(apps);
   }
-  final monday = parseDateKey(weekId);
-  final sunday = dateKey(monday.add(const Duration(days: 6)));
-  return ref
-      .watch(pwRepositoryProvider)
-      .watchApplicationsInRange(weekId, sunday)
-      .map((apps) {
-    final bySlot = <String, List<PwApplication>>{};
-    for (final app in apps) {
-      (bySlot[app.slotId] ??= []).add(app);
-    }
-    return bySlot;
-  });
+  return result;
 });
 
-/// Ensures recurring rules are materialized ahead; runs once per session for
-/// PW admins (publishers only read existing slots).
-final pwMaterializationProvider = FutureProvider<void>((ref) async {
+/// Reconnects slot documents to their rules, compacts away the snapshot
+/// copies the old materializer wrote, and sweeps up applications naming slots
+/// that no longer happen. Runs once per session for PW admins (it writes, so
+/// publishers must not attempt it) and is idempotent.
+final pwRepairProvider = FutureProvider<void>((ref) async {
   if (!ref.watch(myRolesProvider).canEditPublicWitnessing()) return;
-  final repo = ref.watch(pwRepositoryProvider);
-  final rules = await repo.watchRecurring().first;
-  for (final rule in rules) {
-    await repo.materializeRule(rule);
-  }
+  await ref.watch(pwRepositoryProvider).repairAndCompact();
 });
 
 class PwScreen extends ConsumerWidget {
@@ -100,7 +116,7 @@ class PwScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(pwMaterializationProvider);
+    ref.watch(pwRepairProvider);
     final canEdit = ref.watch(effectiveRolesProvider).canEditPublicWitnessing();
     final l10n = context.l10n;
 
@@ -158,8 +174,7 @@ class _PwWeekView extends ConsumerWidget {
     final appliedSlotIds =
         ref.watch(myPwApplicationsProvider).value ?? const <String>{};
     final weekApplications = canEdit
-        ? ref.watch(pwWeekApplicationsProvider(weekId)).value ??
-            const <String, List<PwApplication>>{}
+        ? ref.watch(pwWeekApplicationsProvider(weekId))
         : const <String, List<PwApplication>>{};
     final todayKey = dateKey(DateTime.now());
 
@@ -262,7 +277,9 @@ class _PwWeekView extends ConsumerWidget {
   }
 }
 
-/// Create/edit one concrete slot.
+/// Create/edit one slot. Editing an occurrence of a recurring rule writes an
+/// exception recording only the fields that were actually changed, so the
+/// rest keep following the rule.
 Future<void> showPwSlotDialog(BuildContext context, WidgetRef ref,
     {PwSlot? existing}) async {
   final l10n = context.l10n;
@@ -392,9 +409,17 @@ Future<void> showPwSlotDialog(BuildContext context, WidgetRef ref,
     ),
   );
   if (saved == true) {
-    await ref
-        .read(pwRepositoryProvider)
-        .saveSlot(slot.copyWith(location: locationCtrl.text.trim()));
+    final rule = slot.isException
+        ? ref
+            .read(pwRecurringProvider)
+            .value
+            ?.where((r) => r.id == slot.recurringId)
+            .firstOrNull
+        : null;
+    await ref.read(pwRepositoryProvider).saveSlot(
+          slot.copyWith(location: locationCtrl.text.trim()),
+          rule: rule,
+        );
     ref.invalidate(assignmentHistoryProvider);
   }
   locationCtrl.dispose();

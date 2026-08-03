@@ -84,7 +84,14 @@ final assignmentHistoryProvider =
         }
       }
 
-      final slots = await ref.watch(pwRepositoryProvider).getRange(from, until);
+      // Expanded from the rules, not queried: most recurring slots have no
+      // document of their own. Unlike the other sources this needs a real end
+      // date — a rule runs forever, so `until` cannot be the open-ended key.
+      final slots = await ref.watch(pwRepositoryProvider).expandRange(
+            from,
+            dateKey(
+                addMonths(DateTime.now(), AppConfig.pwMaterializeMonthsAhead)),
+          );
       for (final slot in slots) {
         record(HistoryKeys.publicWitnessing, slot.assignment, slot.date);
       }

@@ -38,6 +38,10 @@ _PwSlot _$PwSlotFromJson(Map<String, dynamic> json) => _PwSlot(
       ? const Assignment()
       : Assignment.fromJson(json['assignment'] as Map<String, dynamic>),
   recurringId: json['recurringId'] as String? ?? '',
+  seriesDate: json['seriesDate'] as String? ?? '',
+  overrides:
+      (json['overrides'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+      const <String>[],
   cancelled: json['cancelled'] as bool? ?? false,
   allAssigneeIds:
       (json['allAssigneeIds'] as List<dynamic>?)
@@ -53,6 +57,8 @@ Map<String, dynamic> _$PwSlotToJson(_PwSlot instance) => <String, dynamic>{
   'location': instance.location,
   'assignment': instance.assignment.toJson(),
   'recurringId': instance.recurringId,
+  'seriesDate': instance.seriesDate,
+  'overrides': instance.overrides,
   'cancelled': instance.cancelled,
   'allAssigneeIds': instance.allAssigneeIds,
 };

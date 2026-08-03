@@ -321,10 +321,19 @@ $AssignmentCopyWith<$Res> get defaultAssignment {
 /// @nodoc
 mixin _$PwSlot {
 
-@JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd
- String get date; String get startTime; String get endTime; String get location; Assignment get assignment;/// Set when this slot was generated from a recurring rule.
- String get recurringId;/// A "deleted" recurring instance is kept as cancelled so the
-/// materializer doesn't recreate it.
+@JsonKey(includeFromJson: false, includeToJson: false) String get id;/// yyyy-MM-dd — when the slot actually happens. For an exception this may
+/// differ from [seriesDate] (the occurrence was moved).
+ String get date; String get startTime; String get endTime; String get location; Assignment get assignment;/// Set when this slot is an exception to a recurring rule.
+ String get recurringId;/// yyyy-MM-dd — the slot in the series this exception belongs to. Its
+/// identity: unlike [date] it never changes, so moving an occurrence
+/// cannot make it collide with its own series — nor detach the
+/// applications keyed to its id, which the security rules forbid anyone
+/// from re-keying. Empty on documents written before the field existed;
+/// use [seriesKey].
+ String get seriesDate;/// Which of [PwFields] this occurrence overrides on its rule. Empty on
+/// one-off slots, which are authoritative for everything.
+ List<String> get overrides;/// A "deleted" recurring occurrence is kept as a cancelled exception so
+/// the rule stops expanding it.
  bool get cancelled; List<String> get allAssigneeIds;
 /// Create a copy of PwSlot
 /// with the given fields replaced by the non-null parameter values.
@@ -338,16 +347,16 @@ $PwSlotCopyWith<PwSlot> get copyWith => _$PwSlotCopyWithImpl<PwSlot>(this as PwS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PwSlot&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PwSlot&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.seriesDate, seriesDate) || other.seriesDate == seriesDate)&&const DeepCollectionEquality().equals(other.overrides, overrides)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,startTime,endTime,location,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,startTime,endTime,location,assignment,recurringId,seriesDate,const DeepCollectionEquality().hash(overrides),cancelled,const DeepCollectionEquality().hash(allAssigneeIds));
 
 @override
 String toString() {
-  return 'PwSlot(id: $id, date: $date, startTime: $startTime, endTime: $endTime, location: $location, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'PwSlot(id: $id, date: $date, startTime: $startTime, endTime: $endTime, location: $location, assignment: $assignment, recurringId: $recurringId, seriesDate: $seriesDate, overrides: $overrides, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -358,7 +367,7 @@ abstract mixin class $PwSlotCopyWith<$Res>  {
   factory $PwSlotCopyWith(PwSlot value, $Res Function(PwSlot) _then) = _$PwSlotCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String startTime, String endTime, String location, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String startTime, String endTime, String location, Assignment assignment, String recurringId, String seriesDate, List<String> overrides, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -375,7 +384,7 @@ class _$PwSlotCopyWithImpl<$Res>
 
 /// Create a copy of PwSlot
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? seriesDate = null,Object? overrides = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -384,7 +393,9 @@ as String,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nul
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
-as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
+as String,seriesDate: null == seriesDate ? _self.seriesDate : seriesDate // ignore: cast_nullable_to_non_nullable
+as String,overrides: null == overrides ? _self.overrides : overrides // ignore: cast_nullable_to_non_nullable
+as List<String>,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
 as bool,allAssigneeIds: null == allAssigneeIds ? _self.allAssigneeIds : allAssigneeIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
@@ -480,10 +491,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PwSlot() when $default != null:
-return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   return orElse();
 
 }
@@ -501,10 +512,10 @@ return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)  $default,) {final _that = this;
 switch (_that) {
 case _PwSlot():
-return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -521,10 +532,10 @@ return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String date,  String startTime,  String endTime,  String location,  Assignment assignment,  String recurringId,  String seriesDate,  List<String> overrides,  bool cancelled,  List<String> allAssigneeIds)?  $default,) {final _that = this;
 switch (_that) {
 case _PwSlot() when $default != null:
-return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.cancelled,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location,_that.assignment,_that.recurringId,_that.seriesDate,_that.overrides,_that.cancelled,_that.allAssigneeIds);case _:
   return null;
 
 }
@@ -536,20 +547,39 @@ return $default(_that.id,_that.date,_that.startTime,_that.endTime,_that.location
 @JsonSerializable()
 
 class _PwSlot extends PwSlot {
-  const _PwSlot({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.startTime = '09:00', this.endTime = '11:00', this.location = '', this.assignment = const Assignment(), this.recurringId = '', this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _allAssigneeIds = allAssigneeIds,super._();
+  const _PwSlot({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.date = '', this.startTime = '09:00', this.endTime = '11:00', this.location = '', this.assignment = const Assignment(), this.recurringId = '', this.seriesDate = '', final  List<String> overrides = const <String>[], this.cancelled = false, final  List<String> allAssigneeIds = const <String>[]}): _overrides = overrides,_allAssigneeIds = allAssigneeIds,super._();
   factory _PwSlot.fromJson(Map<String, dynamic> json) => _$PwSlotFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
-/// yyyy-MM-dd
+/// yyyy-MM-dd — when the slot actually happens. For an exception this may
+/// differ from [seriesDate] (the occurrence was moved).
 @override@JsonKey() final  String date;
 @override@JsonKey() final  String startTime;
 @override@JsonKey() final  String endTime;
 @override@JsonKey() final  String location;
 @override@JsonKey() final  Assignment assignment;
-/// Set when this slot was generated from a recurring rule.
+/// Set when this slot is an exception to a recurring rule.
 @override@JsonKey() final  String recurringId;
-/// A "deleted" recurring instance is kept as cancelled so the
-/// materializer doesn't recreate it.
+/// yyyy-MM-dd — the slot in the series this exception belongs to. Its
+/// identity: unlike [date] it never changes, so moving an occurrence
+/// cannot make it collide with its own series — nor detach the
+/// applications keyed to its id, which the security rules forbid anyone
+/// from re-keying. Empty on documents written before the field existed;
+/// use [seriesKey].
+@override@JsonKey() final  String seriesDate;
+/// Which of [PwFields] this occurrence overrides on its rule. Empty on
+/// one-off slots, which are authoritative for everything.
+ final  List<String> _overrides;
+/// Which of [PwFields] this occurrence overrides on its rule. Empty on
+/// one-off slots, which are authoritative for everything.
+@override@JsonKey() List<String> get overrides {
+  if (_overrides is EqualUnmodifiableListView) return _overrides;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_overrides);
+}
+
+/// A "deleted" recurring occurrence is kept as a cancelled exception so
+/// the rule stops expanding it.
 @override@JsonKey() final  bool cancelled;
  final  List<String> _allAssigneeIds;
 @override@JsonKey() List<String> get allAssigneeIds {
@@ -572,16 +602,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PwSlot&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PwSlot&&(identical(other.id, id) || other.id == id)&&(identical(other.date, date) || other.date == date)&&(identical(other.startTime, startTime) || other.startTime == startTime)&&(identical(other.endTime, endTime) || other.endTime == endTime)&&(identical(other.location, location) || other.location == location)&&(identical(other.assignment, assignment) || other.assignment == assignment)&&(identical(other.recurringId, recurringId) || other.recurringId == recurringId)&&(identical(other.seriesDate, seriesDate) || other.seriesDate == seriesDate)&&const DeepCollectionEquality().equals(other._overrides, _overrides)&&(identical(other.cancelled, cancelled) || other.cancelled == cancelled)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,date,startTime,endTime,location,assignment,recurringId,cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
+int get hashCode => Object.hash(runtimeType,id,date,startTime,endTime,location,assignment,recurringId,seriesDate,const DeepCollectionEquality().hash(_overrides),cancelled,const DeepCollectionEquality().hash(_allAssigneeIds));
 
 @override
 String toString() {
-  return 'PwSlot(id: $id, date: $date, startTime: $startTime, endTime: $endTime, location: $location, assignment: $assignment, recurringId: $recurringId, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
+  return 'PwSlot(id: $id, date: $date, startTime: $startTime, endTime: $endTime, location: $location, assignment: $assignment, recurringId: $recurringId, seriesDate: $seriesDate, overrides: $overrides, cancelled: $cancelled, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -592,7 +622,7 @@ abstract mixin class _$PwSlotCopyWith<$Res> implements $PwSlotCopyWith<$Res> {
   factory _$PwSlotCopyWith(_PwSlot value, $Res Function(_PwSlot) _then) = __$PwSlotCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String startTime, String endTime, String location, Assignment assignment, String recurringId, bool cancelled, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String date, String startTime, String endTime, String location, Assignment assignment, String recurringId, String seriesDate, List<String> overrides, bool cancelled, List<String> allAssigneeIds
 });
 
 
@@ -609,7 +639,7 @@ class __$PwSlotCopyWithImpl<$Res>
 
 /// Create a copy of PwSlot
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? date = null,Object? startTime = null,Object? endTime = null,Object? location = null,Object? assignment = null,Object? recurringId = null,Object? seriesDate = null,Object? overrides = null,Object? cancelled = null,Object? allAssigneeIds = null,}) {
   return _then(_PwSlot(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
@@ -618,7 +648,9 @@ as String,endTime: null == endTime ? _self.endTime : endTime // ignore: cast_nul
 as String,location: null == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
 as String,assignment: null == assignment ? _self.assignment : assignment // ignore: cast_nullable_to_non_nullable
 as Assignment,recurringId: null == recurringId ? _self.recurringId : recurringId // ignore: cast_nullable_to_non_nullable
-as String,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
+as String,seriesDate: null == seriesDate ? _self.seriesDate : seriesDate // ignore: cast_nullable_to_non_nullable
+as String,overrides: null == overrides ? _self._overrides : overrides // ignore: cast_nullable_to_non_nullable
+as List<String>,cancelled: null == cancelled ? _self.cancelled : cancelled // ignore: cast_nullable_to_non_nullable
 as bool,allAssigneeIds: null == allAssigneeIds ? _self._allAssigneeIds : allAssigneeIds // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
