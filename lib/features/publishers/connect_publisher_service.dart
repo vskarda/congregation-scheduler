@@ -107,9 +107,15 @@ class ConnectPublisherService {
     await fsm.replaceAssigneeInAll(recordId, accountUid);
 
     onProgress?.call(ConnectSection.profile);
-    // The admin-curated record is authoritative for everything except the
-    // name the person typed at registration (they know their own spelling;
-    // empty fields fall back to the record) and the login e-mail.
+    // Registration only ever fills first name, last name and e-mail, and an
+    // awaiting account has no profile editor at all — so those three are the
+    // only values the newly created account may impose on the merged profile
+    // (the person knows their own spelling; the e-mail is the login
+    // identity). Every other field is merged so that the connect can never
+    // destroy information: the admin-curated record wins wherever it holds a
+    // real value, and wherever it sits at its default the account's value —
+    // which an admin may well have filled in on the account before noticing
+    // the duplicate record — is kept instead of being blanked.
     final merged = record.copyWith(
       id: accountUid,
       firstName: account.firstName.isNotEmpty
@@ -117,6 +123,18 @@ class ConnectPublisherService {
           : record.firstName,
       lastName:
           account.lastName.isNotEmpty ? account.lastName : record.lastName,
+      gender: record.gender != Gender.unknown ? record.gender : account.gender,
+      status: record.status != PublisherStatus.publisher
+          ? record.status
+          : account.status,
+      appointment: record.appointment != Appointment.none
+          ? record.appointment
+          : account.appointment,
+      qualifications:
+          _unionQualifications(record.qualifications, account.qualifications),
+      groupId: (record.groupId?.isNotEmpty ?? false)
+          ? record.groupId
+          : account.groupId,
       verified: true,
       hasAccount: true,
       moved: false,
@@ -128,10 +146,11 @@ class ConnectPublisherService {
         await publishers.getPrivate(recordId) ?? const PublisherPrivate();
     final accountPrivate =
         await publishers.getPrivate(accountUid) ?? const PublisherPrivate();
-    // The record is authoritative, but every field it leaves blank falls back
-    // to the account, so personal data entered on the account before the
-    // connect (e.g. birth/baptism dates) is preserved instead of wiped. The
-    // login e-mail is the one field the account always wins (auth identity).
+    // Same rule as the public doc: the record is authoritative, but every
+    // field it leaves blank falls back to the account, so personal data
+    // entered on the account before the connect (e.g. birth/baptism dates) is
+    // preserved instead of wiped. The login e-mail is the one field the
+    // account always wins (auth identity).
     String pick(String r, String a) => r.isNotEmpty ? r : a;
     await publishers.setPrivate(
         accountUid,
@@ -151,8 +170,25 @@ class ConnectPublisherService {
               pick(recordPrivate.emergencyNote, accountPrivate.emergencyNote),
         ));
 
+    // Away periods live in a sub-document that the delete below wipes along
+    // with the record, so they have to be carried over explicitly. Union of
+    // both sides, deduplicated (identical spans are equal by value) and
+    // sorted, so a retry after a partial failure converges instead of
+    // piling up duplicates.
+    final recordAway = await publishers.getAway(recordId);
+    if (recordAway.periods.isNotEmpty) {
+      final accountAway = await publishers.getAway(accountUid);
+      final periods = <AwayPeriod>[
+        ...accountAway.periods,
+        for (final p in recordAway.periods)
+          if (!accountAway.periods.contains(p)) p,
+      ]..sort((a, b) => a.startDate.compareTo(b.startDate));
+      await publishers.setAway(accountUid, PublisherAway(periods: periods));
+    }
+
     // Delete last: the record stays the source of truth until every
-    // reference has been moved. Removes the doc and its private profile.
+    // reference has been moved. Removes the doc, its private profile and its
+    // away periods.
     await publishers.delete(recordId);
   }
 
@@ -168,6 +204,30 @@ class ConnectPublisherService {
         ...serviceYearMonths(y),
     ];
   }
+
+  /// Never drop something either side is already marked as able to do.
+  static Qualifications _unionQualifications(
+          Qualifications a, Qualifications b) =>
+      Qualifications(
+        chairman: a.chairman || b.chairman,
+        prayer: a.prayer || b.prayer,
+        treasures: a.treasures || b.treasures,
+        gems: a.gems || b.gems,
+        bibleReading: a.bibleReading || b.bibleReading,
+        fieldMinistry: a.fieldMinistry || b.fieldMinistry,
+        livingParts: a.livingParts || b.livingParts,
+        cbsConductor: a.cbsConductor || b.cbsConductor,
+        cbsReader: a.cbsReader || b.cbsReader,
+        publicTalk: a.publicTalk || b.publicTalk,
+        weekendChairman: a.weekendChairman || b.weekendChairman,
+        wtReader: a.wtReader || b.wtReader,
+        attendant: a.attendant || b.attendant,
+        microphone: a.microphone || b.microphone,
+        audioVideo: a.audioVideo || b.audioVideo,
+        publicWitnessing: a.publicWitnessing || b.publicWitnessing,
+        ministryMeetingConductor:
+            a.ministryMeetingConductor || b.ministryMeetingConductor,
+      );
 
   /// Never drop a privilege either side already has.
   static Roles _unionRoles(Roles a, Roles b) => Roles(

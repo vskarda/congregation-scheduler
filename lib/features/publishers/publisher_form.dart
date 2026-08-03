@@ -62,6 +62,50 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
     _appointment = priv?.appointment ?? Appointment.none;
   }
 
+  /// The document can change while the form is open: the connect-record card
+  /// sits directly above it on the admin's publisher detail, and a publisher
+  /// can edit their own profile from their device at the same time. The form
+  /// state is created once in [initState] and the widget is keyed by
+  /// publisher id — which a connect does not change — so without this the
+  /// fields keep showing the pre-merge values, and a later Save would write
+  /// them back over the merged profile.
+  ///
+  /// Only fields the user has not touched are adopted (a rebuild follows this
+  /// callback, so no setState is needed); anything they edited is left alone
+  /// so typing is never discarded.
+  @override
+  void didUpdateWidget(covariant PublisherForm oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final was = oldWidget.publisher;
+    final now = widget.publisher;
+    _syncText(_firstName, was.firstName, now.firstName);
+    _syncText(_lastName, was.lastName, now.lastName);
+    _gender = _sync(_gender, was.gender, now.gender);
+    _status = _sync(_status, was.status, now.status);
+
+    // A private profile that momentarily reads as null (still loading, or not
+    // readable) must not blank the fields — only sync against a real doc.
+    final priv = widget.private;
+    if (priv == null) return;
+    final wasPriv = oldWidget.private ?? const PublisherPrivate();
+    _syncText(_email, wasPriv.email, priv.email);
+    _syncText(_phone, wasPriv.phone, priv.phone);
+    _syncText(_address, wasPriv.address, priv.address);
+    _syncText(_emergency, wasPriv.emergencyNote, priv.emergencyNote);
+    _birthDate = _sync(_birthDate, wasPriv.birthDate, priv.birthDate);
+    _baptismDate = _sync(_baptismDate, wasPriv.baptismDate, priv.baptismDate);
+    _hope = _sync(_hope, wasPriv.hope, priv.hope);
+    _appointment = _sync(_appointment, wasPriv.appointment, priv.appointment);
+  }
+
+  /// Adopts [incoming], unless the user has edited the field away from [was].
+  static T _sync<T>(T current, T was, T incoming) =>
+      current == was ? incoming : current;
+
+  static void _syncText(TextEditingController c, String was, String incoming) {
+    if (c.text == was) c.text = incoming;
+  }
+
   @override
   void dispose() {
     _firstName.dispose();
@@ -197,6 +241,10 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<Gender>(
+            // FormField state is internal and only seeded from initialValue,
+            // so re-key whenever the value changes underneath (see
+            // didUpdateWidget) or the dropdown keeps showing the old one.
+            key: ValueKey('gender-$_gender'),
             initialValue: _gender,
             decoration: InputDecoration(labelText: l10n.profileGender),
             items: [
@@ -207,6 +255,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<Hope>(
+            key: ValueKey('hope-$_hope'),
             initialValue: _hope,
             decoration: InputDecoration(labelText: l10n.profileHope),
             items: [
@@ -217,6 +266,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           ),
           const SizedBox(height: 12),
           DropdownButtonFormField<PublisherStatus>(
+            key: ValueKey('status-$_status'),
             initialValue: _status,
             decoration: InputDecoration(labelText: l10n.profileStatus),
             items: [
@@ -240,6 +290,7 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           const SizedBox(height: 12),
           if (widget.showAppointment) ...[
             DropdownButtonFormField<Appointment>(
+              key: ValueKey('appointment-$_appointment'),
               initialValue: _appointment,
               decoration: InputDecoration(labelText: l10n.profileAppointment),
               items: [

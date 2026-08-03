@@ -82,6 +82,14 @@ class PublishersRepository {
             : PublisherAway.fromJson(data);
       });
 
+  Future<PublisherAway> getAway(String publisherId) async {
+    final doc = await _awayDoc(publisherId).get();
+    final data = doc.data();
+    return data == null
+        ? const PublisherAway()
+        : PublisherAway.fromJson(data);
+  }
+
   Future<void> setAway(String publisherId, PublisherAway data) =>
       _awayDoc(publisherId).set(data.toJson());
 }

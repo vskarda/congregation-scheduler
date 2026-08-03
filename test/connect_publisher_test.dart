@@ -14,9 +14,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// Connecting an admin-created record (random doc id, no account) to a
 /// self-registered account (doc id == auth uid): every reference to the
-/// record's id is rewritten onto the uid, the publisher docs are merged
-/// (account keeps its typed name and login e-mail, the record wins
-/// everything else) and the record is deleted last.
+/// record's id is rewritten onto the uid, the publisher docs are merged and
+/// the record is deleted last.
+///
+/// Merge contract: the account contributes exactly what registration can fill
+/// — first name, last name and the login e-mail. Everything else is merged
+/// without ever losing information: the record wins where it holds a real
+/// value, the account's value is kept where the record sits at its default.
 void main() {
   const recordId = 'rec-1';
   const uid = 'uid-1';
@@ -240,6 +244,115 @@ void main() {
     expect(private.baptismDate, '2000-05-01'); // from record
     expect(private.phone, '+420 777 000 000'); // record wins the conflict
     expect(private.email, 'jana@example.com'); // account login identity
+  });
+
+  test('a bare record never blanks profile data held on the account',
+      () async {
+    // Registration can only fill name + e-mail, so everything else on the
+    // account was put there by an admin who completed the newly registered
+    // person's profile before noticing the older, still empty record. The
+    // connect must not overwrite any of it with the record's defaults.
+    await publishers.update(const Publisher(
+      id: recordId,
+      firstName: 'Jana',
+      lastName: 'Novakova',
+      verified: true,
+      hasAccount: false,
+    ));
+    await publishers.setPrivate(recordId, const PublisherPrivate());
+    await publishers.update(const Publisher(
+      id: uid,
+      firstName: 'Jana',
+      lastName: 'Nováková',
+      gender: Gender.female,
+      status: PublisherStatus.regularPioneer,
+      appointment: Appointment.ministerialServant,
+      qualifications: Qualifications(bibleReading: true, attendant: true),
+      groupId: 'g2',
+      hasAccount: true,
+    ));
+    await publishers.setPrivate(
+        uid,
+        const PublisherPrivate(
+          email: 'jana@example.com',
+          phone: 'account-phone',
+          address: 'account-address',
+          birthDate: '1990-03-15',
+          baptismDate: '2010-06-01',
+          hope: Hope.anointed,
+          appointment: Appointment.ministerialServant,
+          emergencyNote: 'account-note',
+        ));
+
+    await service.connect(recordId: recordId, accountUid: uid, now: now);
+
+    final merged = (await publishers.getOne(uid))!;
+    expect(merged.gender, Gender.female);
+    expect(merged.status, PublisherStatus.regularPioneer);
+    expect(merged.appointment, Appointment.ministerialServant);
+    expect(merged.qualifications.bibleReading, isTrue);
+    expect(merged.qualifications.attendant, isTrue);
+    expect(merged.groupId, 'g2');
+    final private = (await publishers.getPrivate(uid))!;
+    expect(private.email, 'jana@example.com');
+    expect(private.phone, 'account-phone');
+    expect(private.address, 'account-address');
+    expect(private.birthDate, '1990-03-15');
+    expect(private.baptismDate, '2010-06-01');
+    expect(private.hope, Hope.anointed);
+    expect(private.appointment, Appointment.ministerialServant);
+    expect(private.emergencyNote, 'account-note');
+  });
+
+  test('qualifications and appointment survive from the record', () async {
+    await publishers.update((await publishers.getOne(recordId))!
+        .copyWith(appointment: Appointment.elder));
+    await publishers.setPrivate(
+        recordId, const PublisherPrivate(appointment: Appointment.elder));
+
+    await service.connect(recordId: recordId, accountUid: uid, now: now);
+
+    final merged = (await publishers.getOne(uid))!;
+    expect(merged.appointment, Appointment.elder);
+    expect(merged.qualifications.fieldMinistry, isTrue);
+    expect(merged.qualifications.publicWitnessing, isTrue);
+    // The private copy stays in sync with the denormalized public value.
+    expect((await publishers.getPrivate(uid))!.appointment, Appointment.elder);
+  });
+
+  test('away periods move onto the account instead of being deleted',
+      () async {
+    await publishers.setAway(
+        recordId,
+        const PublisherAway(periods: [
+          AwayPeriod(startDate: '2026-08-01', endDate: '2026-08-14'),
+        ]));
+    await publishers.setAway(
+        uid,
+        const PublisherAway(periods: [
+          AwayPeriod(startDate: '2026-09-01', endDate: '2026-09-07'),
+        ]));
+
+    await service.connect(recordId: recordId, accountUid: uid, now: now);
+
+    final away = await publishers.getAway(uid);
+    expect(away.periods, const [
+      AwayPeriod(startDate: '2026-08-01', endDate: '2026-08-14'),
+      AwayPeriod(startDate: '2026-09-01', endDate: '2026-09-07'),
+    ]);
+    expect(await exists('publishers/$recordId/away/periods'), isFalse);
+  });
+
+  test('re-running the away migration does not duplicate periods', () async {
+    const period = AwayPeriod(startDate: '2026-08-01', endDate: '2026-08-14');
+    await publishers.setAway(recordId, const PublisherAway(periods: [period]));
+    // Simulates a retry that failed after the away step: the account already
+    // carries the record's periods.
+    await publishers.setAway(uid, const PublisherAway(periods: [period]));
+
+    await service.connect(recordId: recordId, accountUid: uid, now: now);
+
+    expect((await publishers.getAway(uid)).periods, const [period]);
   });
 
   test('works when the account was already verified (retry path)', () async {
