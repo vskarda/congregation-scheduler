@@ -83,14 +83,19 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
         final byId = {for (final r in reports) r.publisherId: r};
         // A publisher who moved away belongs to the months before the move
         // and to no later one — so past months stay complete and enterable
-        // while they stop being missing from every month after. An entry that
-        // already exists always shows, whatever the roster says about it.
-        final publishers = roster
-            .where((p) =>
-                p.onRosterInMonth(_month) || byId.containsKey(p.id))
-            .toList();
+        // while they stop being missing from every month after.
+        final expected =
+            roster.where((p) => p.onRosterInMonth(_month)).toList();
+        // An entry filed for a month they had already left still shows (it
+        // happened, and a mistake must stay correctable), marked as counting
+        // for nobody — otherwise this list and the S-1 would disagree.
+        final publishers = [
+          ...expected,
+          ...roster.where(
+              (p) => !p.onRosterInMonth(_month) && byId.containsKey(p.id)),
+        ];
         final reported =
-            publishers.where((p) => byId.containsKey(p.id)).length;
+            expected.where((p) => byId.containsKey(p.id)).length;
         return Column(
           children: [
             Padding(
@@ -111,7 +116,7 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                                 Theme.of(context).textTheme.titleMedium),
                         Text(
                           l10n.reportSummaryReported(
-                              reported, publishers.length),
+                              reported, expected.length),
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ],
@@ -132,6 +137,7 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                 itemBuilder: (context, i) {
                   final p = publishers[i];
                   final report = byId[p.id];
+                  final counts = p.onRosterInMonth(_month);
                   final summary = report == null
                       ? null
                       : [
@@ -150,13 +156,18 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                   // Three states: no report (grey ring), a report where the
                   // publisher shared in the ministry (green tick), or an empty
                   // report — nothing but maybe a note/credit hours (red cross).
-                  final (icon, iconColor) = report == null
-                      ? (Icons.radio_button_unchecked,
+                  // A report that counts for nobody gets neither: it says
+                  // nothing about this month's ministry.
+                  final (icon, iconColor) = !counts
+                      ? (Icons.local_shipping_outlined,
                           Theme.of(context).disabledColor)
-                      : report.sharedInMinistry
-                          ? (Icons.check_circle, Colors.green)
-                          : (Icons.cancel,
-                              Theme.of(context).colorScheme.error);
+                      : report == null
+                          ? (Icons.radio_button_unchecked,
+                              Theme.of(context).disabledColor)
+                          : report.sharedInMinistry
+                              ? (Icons.check_circle, Colors.green)
+                              : (Icons.cancel,
+                                  Theme.of(context).colorScheme.error);
                   return ListTile(
                     dense: true,
                     leading: Icon(icon, color: iconColor, size: 20),
@@ -165,7 +176,9 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                         ? Text(l10n.reportMissing,
                             style: TextStyle(
                                 color: Theme.of(context).disabledColor))
-                        : Text(summary),
+                        : Text(counts
+                            ? summary
+                            : '${l10n.reportNotCountedMoved}  ·  $summary'),
                     onTap: () => _enterFor(p, report),
                   );
                 },

@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "{date}に転出",
   "pubAdminMovingOn": "{date}に転出予定",
   "pubAdminMovedHint": "記録と報告の履歴は保持されます。転出前の月は統計とS-1に引き続き含まれます。",
+  "pubAdminMovedNoDateHint": "転出日が記録されていないため、報告は統計にもS-1にも含まれません。日付を入力すると、在籍していた月が再び集計されます。",
   "pubAdminMovePendingHint": "その日までは通常の成員のままです。予定、報告リスト、アプリの利用はそのままです。",
   "pubFilterPioneers": "開拓者",
   "pubFilterHasRights": "権限あり",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "{date} に送信",
   "reportSaved": "報告を保存しました。",
   "reportMissing": "未送信",
+  "reportNotCountedMoved": "転出 — 集計外",
   "reportEnterFor": "報告を入力 — {name}",
   "reportSummaryReported": "報告済み: {reported} / {total}",
 

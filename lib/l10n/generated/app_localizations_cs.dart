@@ -898,6 +898,10 @@ class AppLocalizationsCs extends AppLocalizations {
       'Záznam i historie zpráv zůstávají zachovány. Měsíce před přestěhováním se dál počítají do statistik i do S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'Není zadáno datum přestěhování, a proto se žádná jeho zpráva nepočítá do statistik ani do S-1. Zadáním data vrátíte měsíce, kdy tu ještě byl.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Do toho dne zůstává plnohodnotným členem: programy, seznamy zpráv i přístup do aplikace se nemění.';
 
@@ -1541,6 +1545,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reportMissing => 'Neodevzdáno';
+
+  @override
+  String get reportNotCountedMoved => 'Přestěhoval se — nepočítá se';
 
   @override
   String reportEnterFor(String name) {

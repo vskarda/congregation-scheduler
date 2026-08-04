@@ -903,6 +903,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'La registrazione e lo storico dei rapporti vengono mantenuti. I mesi precedenti al trasferimento continuano a contare nelle statistiche e nell\'S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'Non è registrata alcuna data di trasferimento, quindi nessuno dei suoi rapporti conta nelle statistiche o nell\'S-1. Inserisci la data per recuperare i mesi in cui era ancora qui.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Fino a quel giorno resta membro a tutti gli effetti: programmi, elenchi dei rapporti e accesso all\'app non cambiano.';
 
@@ -1551,6 +1555,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get reportMissing => 'Non inviato';
+
+  @override
+  String get reportNotCountedMoved => 'Trasferito — non conteggiato';
 
   @override
   String reportEnterFor(String name) {

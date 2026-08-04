@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "Weggezogen am {date}",
   "pubAdminMovingOn": "Zieht weg am {date}",
   "pubAdminMovedHint": "Der Datensatz und der Berichtsverlauf bleiben erhalten. Monate vor dem Umzug zählen weiterhin in den Statistiken und im S-1.",
+  "pubAdminMovedNoDateHint": "Es ist kein Umzugsdatum hinterlegt, deshalb zählt keiner seiner Berichte in den Statistiken oder im S-1. Trage das Datum ein, um die Monate zurückzugeben, in denen er noch hier war.",
   "pubAdminMovePendingHint": "Bis zu diesem Tag bleibt er vollwertiges Mitglied: Pläne, Berichtslisten und der Zugriff auf die App ändern sich nicht.",
   "pubFilterPioneers": "Pioniere",
   "pubFilterHasRights": "Mit Rechten",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "Gesendet am {date}",
   "reportSaved": "Bericht gespeichert.",
   "reportMissing": "Nicht gesendet",
+  "reportNotCountedMoved": "Weggezogen — zählt nicht",
   "reportEnterFor": "Bericht eingeben – {name}",
   "reportSummaryReported": "Berichtet: {reported} / {total}",
 

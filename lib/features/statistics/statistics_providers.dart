@@ -27,20 +27,44 @@ final rosterBirthDatesProvider =
   }));
 });
 
+/// Entries a month may count: everything except reports of publishers who had
+/// already moved away by then, which belong to the congregation they moved to
+/// (the same rule the S-1 applies). Entries whose publisher record no longer
+/// exists are kept — there is nothing to judge them by.
+///
+/// Both callers await the roster rather than reading the already-loaded map,
+/// so the first result is the filtered one: recomputing after the stream
+/// arrives would mean re-reading every month of the service year.
+List<MinistryReport> _countableIn(String month, List<MinistryReport> entries,
+        Map<String, Publisher> byId) =>
+    entries
+        .where((r) => byId[r.publisherId]?.onRosterInMonth(month) ?? true)
+        .toList();
+
+Future<Map<String, Publisher>> _rosterById(Ref ref) async {
+  final all = await ref.watch(allPublishersProvider.future);
+  return {for (final p in all) p.id: p};
+}
+
 /// One list of reports per month of the given service year (12 entries,
 /// September first; months without data yield empty lists).
 final serviceYearReportsProvider =
     FutureProvider.autoDispose.family<List<List<MinistryReport>>, int>(
         (ref, serviceYear) async {
   final repo = ref.watch(reportsRepositoryProvider);
-  return Future.wait(
-      serviceYearMonths(serviceYear).map((month) => repo.getMonth(month)));
+  final byId = await _rosterById(ref);
+  return Future.wait(serviceYearMonths(serviceYear).map((month) async =>
+      _countableIn(month, await repo.getMonth(month), byId)));
 });
 
 /// Previous calendar month's reports — the month whose reporting is
 /// typically complete; used for the self-reported share on the usage card.
 final lastMonthReportsProvider =
-    StreamProvider.autoDispose<List<MinistryReport>>((ref) {
+    StreamProvider.autoDispose<List<MinistryReport>>((ref) async* {
   final month = monthKey(addMonths(DateTime.now(), -1));
-  return ref.watch(reportsRepositoryProvider).watchMonth(month);
+  final byId = await _rosterById(ref);
+  yield* ref
+      .watch(reportsRepositoryProvider)
+      .watchMonth(month)
+      .map((entries) => _countableIn(month, entries, byId));
 });

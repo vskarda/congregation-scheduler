@@ -906,6 +906,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Der Datensatz und der Berichtsverlauf bleiben erhalten. Monate vor dem Umzug zählen weiterhin in den Statistiken und im S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'Es ist kein Umzugsdatum hinterlegt, deshalb zählt keiner seiner Berichte in den Statistiken oder im S-1. Trage das Datum ein, um die Monate zurückzugeben, in denen er noch hier war.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Bis zu diesem Tag bleibt er vollwertiges Mitglied: Pläne, Berichtslisten und der Zugriff auf die App ändern sich nicht.';
 
@@ -1555,6 +1559,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reportMissing => 'Nicht gesendet';
+
+  @override
+  String get reportNotCountedMoved => 'Weggezogen — zählt nicht';
 
   @override
   String reportEnterFor(String name) {

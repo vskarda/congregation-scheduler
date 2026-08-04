@@ -1734,6 +1734,12 @@ abstract class AppLocalizations {
   /// **'Their record and report history are kept. Months before the move still count in the statistics and on the S-1.'**
   String get pubAdminMovedHint;
 
+  /// No description provided for @pubAdminMovedNoDateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No moving date is recorded, so none of their reports count in the statistics or on the S-1. Set the date to give back the months they were still here.'**
+  String get pubAdminMovedNoDateHint;
+
   /// No description provided for @pubAdminMovePendingHint.
   ///
   /// In en, this message translates to:
@@ -2885,6 +2891,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not submitted'**
   String get reportMissing;
+
+  /// No description provided for @reportNotCountedMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved — not counted'**
+  String get reportNotCountedMoved;
 
   /// No description provided for @reportEnterFor.
   ///

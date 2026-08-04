@@ -291,6 +291,7 @@
   "pubAdminMovedOn": "Přestěhoval se {date}",
   "pubAdminMovingOn": "Stěhuje se {date}",
   "pubAdminMovedHint": "Záznam i historie zpráv zůstávají zachovány. Měsíce před přestěhováním se dál počítají do statistik i do S-1.",
+  "pubAdminMovedNoDateHint": "Není zadáno datum přestěhování, a proto se žádná jeho zpráva nepočítá do statistik ani do S-1. Zadáním data vrátíte měsíce, kdy tu ještě byl.",
   "pubAdminMovePendingHint": "Do toho dne zůstává plnohodnotným členem: programy, seznamy zpráv i přístup do aplikace se nemění.",
   "pubFilterPioneers": "Průkopníci",
   "pubFilterHasRights": "Má práva",
@@ -494,6 +495,7 @@
   "reportSubmittedAt": "Odesláno {date}",
   "reportSaved": "Zpráva uložena.",
   "reportMissing": "Neodevzdáno",
+  "reportNotCountedMoved": "Přestěhoval se — nepočítá se",
   "reportEnterFor": "Zadat zprávu — {name}",
   "reportSummaryReported": "Odevzdáno: {reported} / {total}",
 

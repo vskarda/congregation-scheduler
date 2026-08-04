@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "Przeprowadził się {date}",
   "pubAdminMovingOn": "Przeprowadza się {date}",
   "pubAdminMovedHint": "Karta i historia sprawozdań są zachowane. Miesiące sprzed przeprowadzki nadal liczą się w statystykach i w S-1.",
+  "pubAdminMovedNoDateHint": "Nie zapisano daty przeprowadzki, więc żadne z jego sprawozdań nie liczy się w statystykach ani w S-1. Podaj datę, aby odzyskać miesiące, w których jeszcze tu był.",
   "pubAdminMovePendingHint": "Do tego dnia pozostaje pełnoprawnym członkiem: plany, listy sprawozdań i dostęp do aplikacji nie zmieniają się.",
   "pubFilterPioneers": "Pionierzy",
   "pubFilterHasRights": "Z uprawnieniami",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "Wysłano {date}",
   "reportSaved": "Zapisano sprawozdanie.",
   "reportMissing": "Nie wysłano",
+  "reportNotCountedMoved": "Przeprowadził się — nie liczy się",
   "reportEnterFor": "Wprowadź sprawozdanie — {name}",
   "reportSummaryReported": "Zgłosiło: {reported} / {total}",
 

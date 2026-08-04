@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "Trasferito il {date}",
   "pubAdminMovingOn": "Si trasferisce il {date}",
   "pubAdminMovedHint": "La registrazione e lo storico dei rapporti vengono mantenuti. I mesi precedenti al trasferimento continuano a contare nelle statistiche e nell'S-1.",
+  "pubAdminMovedNoDateHint": "Non è registrata alcuna data di trasferimento, quindi nessuno dei suoi rapporti conta nelle statistiche o nell'S-1. Inserisci la data per recuperare i mesi in cui era ancora qui.",
   "pubAdminMovePendingHint": "Fino a quel giorno resta membro a tutti gli effetti: programmi, elenchi dei rapporti e accesso all'app non cambiano.",
   "pubFilterPioneers": "Pionieri",
   "pubFilterHasRights": "Con diritti",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "Inviato il {date}",
   "reportSaved": "Rapporto salvato.",
   "reportMissing": "Non inviato",
+  "reportNotCountedMoved": "Trasferito — non conteggiato",
   "reportEnterFor": "Inserisci rapporto — {name}",
   "reportSummaryReported": "Hanno riferito: {reported} / {total}",
 

@@ -64,26 +64,36 @@ core/          bootstrap, config, theme, l10n, shared widgets
   correct historically. Publishers without smartphones get publisher docs
   created by an admin (random id) and admin-entered reports.
 - **S-1** is computed client-side by a pure calculator over one month of
-  entries + last 6 months of activity + the month's attendance docs. It takes
-  no publisher roster at all — a closed month is whatever its documents say,
-  which is what keeps past months stable when the roster changes later
-  (`test/s1_moved_publisher_test.dart` pins that down).
+  entries + last 6 months of activity + the month's attendance docs. The
+  roster is consulted for exactly one thing: dropping entries a recorded
+  moving date places in another congregation by that month (`excludedIds`).
+  So a closed month keeps its numbers unless a *date* says the publisher had
+  already left — an entry filed on the 10th by someone who moved on the 15th
+  is theirs, not ours, and neither the group lines nor the six-month actives
+  count it. Entries whose publisher record is gone altogether keep counting:
+  a deletion says nothing about where the person went, and tidying the roster
+  must not silently change a filed month. A record archived *without* a date
+  counts in no month at all, which is why the detail screen flags one and
+  points at "Change moving date". `test/s1_moved_publisher_test.dart` pins
+  every one of these cases down.
 - **Moving away** is one date, `publishers/{uid}.movedDate`, and it may be in
   the future — until it arrives the record behaves like any other member's.
   It cuts on two different scales: *day-level* for meetings, assignments and
-  app access (`hasMovedBy`), *month-level* for report rosters, where the month
-  containing the move already belongs to the new congregation, so the last
-  month claimed is the one before it (`onRosterInMonth`). Roster-based
-  statistics (membership, ages, usage) read it as of today; the report- and
-  attendance-based ones read the documents of the period they cover, so a
-  publisher's history stays in the years they were here. Access is not revoked
-  by a client sweep — with no Cloud Functions there is nothing to run one —
-  but by `firestore.rules`, which compares `request.time` against the
-  denormalized `movedAt` timestamp (rules cannot parse a date string). The
-  client mirrors that cut in `isVerifiedProvider` and the router, otherwise a
-  publisher past their date would be let into an app whose every read the
-  backend denies. A record archived before this field existed has no date and
-  reads as moved long ago.
+  app access (`hasMovedBy`), *month-level* both for report rosters and for
+  which entries a month may count, where the month containing the move
+  already belongs to the new congregation, so the last month claimed is the
+  one before it (`onRosterInMonth`). Membership and age statistics read the
+  roster as of today; the report-driven figures (S-1, service-year field
+  service, the usage card) apply the month-level cut month by month, so a
+  publisher's history stays in the years they were here and stops where they
+  left. Access is not revoked by a client sweep — with no Cloud Functions
+  there is nothing to run one — but by `firestore.rules`, which compares
+  `request.time` against the denormalized `movedAt` timestamp (rules cannot
+  parse a date string). The client mirrors that cut in `isVerifiedProvider`
+  and the router, otherwise a publisher past their date would be let into an
+  app whose every read the backend denies. A record archived before this
+  field existed has no date, and counts neither on a roster nor in any
+  month's figures until an admin sets one.
 - **Public witnessing recurrence**: same model as field service meetings
   below — `PwRepository.expand` builds slots from `pw_recurring` on the fly and
   `pw_slots` holds only one-off slots and exceptions. What is PW-specific is

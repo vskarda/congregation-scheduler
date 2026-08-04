@@ -907,6 +907,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Se conservan su registro y el historial de informes. Los meses anteriores a la mudanza siguen contando en las estadísticas y en el S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'No hay una fecha de mudanza registrada, así que ninguno de sus informes cuenta en las estadísticas ni en el S-1. Indica la fecha para recuperar los meses en que todavía estaba aquí.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Hasta ese día sigue siendo miembro pleno: los programas, las listas de informes y el acceso a la aplicación no cambian.';
 
@@ -1555,6 +1559,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reportMissing => 'No enviado';
+
+  @override
+  String get reportNotCountedMoved => 'Se mudó — no cuenta';
 
   @override
   String reportEnterFor(String name) {

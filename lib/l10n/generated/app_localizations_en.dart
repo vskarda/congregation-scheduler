@@ -897,6 +897,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Their record and report history are kept. Months before the move still count in the statistics and on the S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'No moving date is recorded, so none of their reports count in the statistics or on the S-1. Set the date to give back the months they were still here.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Until that day they stay a full member: schedules, report lists and app access are unchanged.';
 
@@ -1536,6 +1540,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportMissing => 'Not submitted';
+
+  @override
+  String get reportNotCountedMoved => 'Moved — not counted';
 
   @override
   String reportEnterFor(String name) {

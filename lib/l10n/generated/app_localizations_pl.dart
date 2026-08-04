@@ -897,6 +897,10 @@ class AppLocalizationsPl extends AppLocalizations {
       'Karta i historia sprawozdań są zachowane. Miesiące sprzed przeprowadzki nadal liczą się w statystykach i w S-1.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'Nie zapisano daty przeprowadzki, więc żadne z jego sprawozdań nie liczy się w statystykach ani w S-1. Podaj datę, aby odzyskać miesiące, w których jeszcze tu był.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'Do tego dnia pozostaje pełnoprawnym członkiem: plany, listy sprawozdań i dostęp do aplikacji nie zmieniają się.';
 
@@ -1540,6 +1544,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get reportMissing => 'Nie wysłano';
+
+  @override
+  String get reportNotCountedMoved => 'Przeprowadził się — nie liczy się';
 
   @override
   String reportEnterFor(String name) {

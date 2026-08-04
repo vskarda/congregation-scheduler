@@ -38,20 +38,34 @@ class S1Result {
 /// Group membership uses the status snapshot stored on each report
 /// (statusAtMonth); pioneers are excluded from the Publishers group and
 /// special pioneers from every group, per the S-1 definition.
+///
+/// [excludedIds] names publishers who had already left the congregation by
+/// this month (see `Publisher.onRosterInMonth`). Their entries belong to the
+/// congregation they moved to, whichever month they were filed for — a report
+/// submitted on the 10th by someone who moved on the 15th is still theirs, not
+/// ours. Entries whose publisher record is gone altogether are not in the set
+/// and keep counting: a deleted record says nothing about where the person
+/// went, and a closed month should not quietly lose a number because somebody
+/// tidied up the roster.
 S1Result computeS1({
   required List<MinistryReport> monthReports,
   required List<List<MinistryReport>> lastSixMonths,
   required List<AttendanceEntry> monthAttendance,
+  Set<String> excludedIds = const {},
 }) {
   final activeIds = <String>{
     for (final month in lastSixMonths)
       for (final report in month)
-        if (report.participated) report.publisherId,
+        if (report.participated && !excludedIds.contains(report.publisherId))
+          report.publisherId,
   };
 
   S1Group group(PublisherStatus status) {
     final reports = monthReports
-        .where((r) => r.participated && r.statusAtMonth == status)
+        .where((r) =>
+            r.participated &&
+            r.statusAtMonth == status &&
+            !excludedIds.contains(r.publisherId))
         .toList();
     return S1Group(
       count: reports.length,

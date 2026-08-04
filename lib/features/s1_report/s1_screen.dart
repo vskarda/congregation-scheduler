@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/data/attendance_repository.dart';
+import '../../core/data/publishers_repository.dart';
 import '../../core/data/reports_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
@@ -23,10 +24,20 @@ final s1ResultProvider =
         '$month-01',
         '$month-31',
       );
+  // Who had already left by this month. Watching the roster (rather than
+  // reading it once) is deliberate: recording a move updates the form right
+  // away, where this per-month provider would otherwise hold its numbers for
+  // the rest of the session.
+  final publishers = await ref.watch(allPublishersProvider.future);
+  final excluded = <String>{
+    for (final p in publishers)
+      if (!p.onRosterInMonth(month)) p.id,
+  };
   return computeS1(
     monthReports: lastSix.first,
     lastSixMonths: lastSix,
     monthAttendance: attendance,
+    excludedIds: excluded,
   );
 });
 

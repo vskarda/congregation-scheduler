@@ -69,10 +69,12 @@ void main() {
     expect(find.text('Reported: 0 / 1'), findsOneWidget);
   });
 
-  testWidgets('a report already entered keeps the person listed',
+  testWidgets('a report for a month they had left is shown, not counted',
       (tester) async {
     // Reports are the record of what happened: one entered for a month the
-    // roster no longer claims must stay visible and correctable.
+    // roster no longer claims stays visible and correctable, but it counts
+    // for nobody — the S-1 drops it, and this list has to say so or the two
+    // screens contradict each other.
     final db = FakeFirebaseFirestore();
     await db
         .collection('reports')
@@ -83,11 +85,14 @@ void main() {
             .toJson());
 
     await tester.pumpWidget(wrap(db, [
+      person('Stayer'),
       person('Leaver', movedDate: '${monthKey(monthBefore)}-05'),
     ]));
     await tester.pumpAndSettle();
 
     expect(find.text('Leaver Leaver'), findsOneWidget);
-    expect(find.text('Reported: 1 / 1'), findsOneWidget);
+    expect(find.textContaining('Moved — not counted'), findsOneWidget);
+    // Only the one person who still owes a report is in the tally.
+    expect(find.text('Reported: 0 / 1'), findsOneWidget);
   });
 }

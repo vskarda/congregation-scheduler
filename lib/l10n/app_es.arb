@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "Se mudó el {date}",
   "pubAdminMovingOn": "Se muda el {date}",
   "pubAdminMovedHint": "Se conservan su registro y el historial de informes. Los meses anteriores a la mudanza siguen contando en las estadísticas y en el S-1.",
+  "pubAdminMovedNoDateHint": "No hay una fecha de mudanza registrada, así que ninguno de sus informes cuenta en las estadísticas ni en el S-1. Indica la fecha para recuperar los meses en que todavía estaba aquí.",
   "pubAdminMovePendingHint": "Hasta ese día sigue siendo miembro pleno: los programas, las listas de informes y el acceso a la aplicación no cambian.",
   "pubFilterPioneers": "Precursores",
   "pubFilterHasRights": "Con derechos",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "Enviado el {date}",
   "reportSaved": "Informe guardado.",
   "reportMissing": "No enviado",
+  "reportNotCountedMoved": "Se mudó — no cuenta",
   "reportEnterFor": "Introducir informe — {name}",
   "reportSummaryReported": "Informaron: {reported} / {total}",
 

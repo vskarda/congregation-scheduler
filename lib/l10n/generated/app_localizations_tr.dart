@@ -897,6 +897,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kaydı ve rapor geçmişi korunur. Taşınmadan önceki aylar istatistiklerde ve S-1\'de sayılmaya devam eder.';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      'Taşınma tarihi kayıtlı değil, bu yüzden raporlarının hiçbiri istatistiklerde veya S-1\'de sayılmaz. Hâlâ burada olduğu ayları geri kazanmak için tarihi girin.';
+
+  @override
   String get pubAdminMovePendingHint =>
       'O güne kadar tam üye olarak kalır: programlar, rapor listeleri ve uygulama erişimi değişmez.';
 
@@ -1544,6 +1548,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportMissing => 'Gönderilmedi';
+
+  @override
+  String get reportNotCountedMoved => 'Taşındı — sayılmıyor';
 
   @override
   String reportEnterFor(String name) {

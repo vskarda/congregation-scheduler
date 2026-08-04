@@ -287,6 +287,7 @@
   "pubAdminMovedOn": "Déménagé le {date}",
   "pubAdminMovingOn": "Déménage le {date}",
   "pubAdminMovedHint": "Sa fiche et l'historique des rapports sont conservés. Les mois précédant le déménagement comptent toujours dans les statistiques et dans le S-1.",
+  "pubAdminMovedNoDateHint": "Aucune date de déménagement n'est enregistrée, donc aucun de ses rapports ne compte dans les statistiques ni dans le S-1. Indique la date pour récupérer les mois où il était encore là.",
   "pubAdminMovePendingHint": "Jusqu'à ce jour, il reste membre à part entière : les programmes, les listes de rapports et l'accès à l'application ne changent pas.",
   "pubFilterPioneers": "Pionniers",
   "pubFilterHasRights": "Avec des droits",
@@ -487,6 +488,7 @@
   "reportSubmittedAt": "Envoyé le {date}",
   "reportSaved": "Rapport enregistré.",
   "reportMissing": "Non envoyé",
+  "reportNotCountedMoved": "Déménagé — non compté",
   "reportEnterFor": "Saisir le rapport — {name}",
   "reportSummaryReported": "Ont remis leur rapport : {reported} / {total}",
 

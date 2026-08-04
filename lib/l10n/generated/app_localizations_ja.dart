@@ -882,6 +882,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pubAdminMovedHint => '記録と報告の履歴は保持されます。転出前の月は統計とS-1に引き続き含まれます。';
 
   @override
+  String get pubAdminMovedNoDateHint =>
+      '転出日が記録されていないため、報告は統計にもS-1にも含まれません。日付を入力すると、在籍していた月が再び集計されます。';
+
+  @override
   String get pubAdminMovePendingHint =>
       'その日までは通常の成員のままです。予定、報告リスト、アプリの利用はそのままです。';
 
@@ -1513,6 +1517,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get reportMissing => '未送信';
+
+  @override
+  String get reportNotCountedMoved => '転出 — 集計外';
 
   @override
   String reportEnterFor(String name) {

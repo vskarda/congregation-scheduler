@@ -331,26 +331,31 @@ class _MovedBanner extends StatelessWidget {
     final theme = Theme.of(context);
     final date = publisher.movedOn;
     final pending = publisher.isMovePending;
+    final dateFmt =
+        DateFormat.yMMMd(Localizations.localeOf(context).toString());
     final text = date == null
         ? l10n.pubAdminMovedBadge
         : pending
-            ? l10n.pubAdminMovingOn(
-                DateFormat.yMMMd(Localizations.localeOf(context).toString())
-                    .format(date))
-            : l10n.pubAdminMovedOn(
-                DateFormat.yMMMd(Localizations.localeOf(context).toString())
-                    .format(date));
+            ? l10n.pubAdminMovingOn(dateFmt.format(date))
+            : l10n.pubAdminMovedOn(dateFmt.format(date));
+    // Without a date there is no month to draw the line at, so none of their
+    // reports count anywhere — worth saying plainly, with the remedy, because
+    // only an admin setting the date can give those months back.
+    final hint = date == null
+        ? l10n.pubAdminMovedNoDateHint
+        : pending
+            ? l10n.pubAdminMovePendingHint
+            : l10n.pubAdminMovedHint;
     return Card(
       color: pending
           ? theme.colorScheme.secondaryContainer
-          : theme.colorScheme.surfaceContainerHighest,
+          : date == null
+              ? theme.colorScheme.errorContainer
+              : theme.colorScheme.surfaceContainerHighest,
       child: ListTile(
         leading: const Icon(Icons.local_shipping_outlined),
         title: Text(text),
-        subtitle: Text(
-          pending ? l10n.pubAdminMovePendingHint : l10n.pubAdminMovedHint,
-          style: theme.textTheme.bodySmall,
-        ),
+        subtitle: Text(hint, style: theme.textTheme.bodySmall),
       ),
     );
   }
