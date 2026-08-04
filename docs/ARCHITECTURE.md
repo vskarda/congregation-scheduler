@@ -64,7 +64,26 @@ core/          bootstrap, config, theme, l10n, shared widgets
   correct historically. Publishers without smartphones get publisher docs
   created by an admin (random id) and admin-entered reports.
 - **S-1** is computed client-side by a pure calculator over one month of
-  entries + last 6 months of activity + the month's attendance docs.
+  entries + last 6 months of activity + the month's attendance docs. It takes
+  no publisher roster at all — a closed month is whatever its documents say,
+  which is what keeps past months stable when the roster changes later
+  (`test/s1_moved_publisher_test.dart` pins that down).
+- **Moving away** is one date, `publishers/{uid}.movedDate`, and it may be in
+  the future — until it arrives the record behaves like any other member's.
+  It cuts on two different scales: *day-level* for meetings, assignments and
+  app access (`hasMovedBy`), *month-level* for report rosters, where the month
+  containing the move already belongs to the new congregation, so the last
+  month claimed is the one before it (`onRosterInMonth`). Roster-based
+  statistics (membership, ages, usage) read it as of today; the report- and
+  attendance-based ones read the documents of the period they cover, so a
+  publisher's history stays in the years they were here. Access is not revoked
+  by a client sweep — with no Cloud Functions there is nothing to run one —
+  but by `firestore.rules`, which compares `request.time` against the
+  denormalized `movedAt` timestamp (rules cannot parse a date string). The
+  client mirrors that cut in `isVerifiedProvider` and the router, otherwise a
+  publisher past their date would be let into an app whose every read the
+  backend denies. A record archived before this field existed has no date and
+  reads as moved long ago.
 - **Public witnessing recurrence**: same model as field service meetings
   below — `PwRepository.expand` builds slots from `pw_recurring` on the fly and
   `pw_slots` holds only one-off slots and exceptions. What is PW-specific is

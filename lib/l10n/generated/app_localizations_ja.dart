@@ -393,6 +393,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get awaitingBody => 'アカウントが作成されました。会衆情報を見られるようになる前に、会衆の管理者による確認が必要です。';
 
   @override
+  String get awaitingMovedTitle => '会衆の成員ではありません';
+
+  @override
+  String get awaitingMovedBody =>
+      'この会衆の記録では転出済みとなっているため、会衆の情報はここに表示されません。あなたの報告の履歴は会衆に保存されています。誤りの場合は長老に連絡してください。';
+
+  @override
   String get deleteAccountAction => 'アカウントを削除';
 
   @override
@@ -856,6 +863,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pubAdminShowMoved => '転出を表示';
 
   @override
+  String get pubAdminMovingDate => '転出日';
+
+  @override
+  String get pubAdminChangeMovingDate => '転出日を変更';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return '$dateに転出';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return '$dateに転出予定';
+  }
+
+  @override
+  String get pubAdminMovedHint => '記録と報告の履歴は保持されます。転出前の月は統計とS-1に引き続き含まれます。';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'その日までは通常の成員のままです。予定、報告リスト、アプリの利用はそのままです。';
+
+  @override
   String get pubFilterPioneers => '開拓者';
 
   @override
@@ -871,8 +901,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => '転出として記録しますか？';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      '記録と報告の履歴は保持されますが、伝道者は保管されます。アクセスが取り消され、予定や報告リストに表示されなくなります。あとで復元できます。';
+  String pubAdminMoveConfirmBody(String date) {
+    return '転出日: $date。記録と報告の履歴は保持され、その日までの分は統計とS-1に引き続き含まれます。その日から伝道者は保管され、アクセスが取り消され、予定や報告リストに表示されなくなります。あとで復元できます。';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return '転出日: $date。それまでは何も変わりません。伝道者はアプリを利用でき、予定や報告リストにも表示されます。その日に自動的に保管されます。記録と報告の履歴は保持されます。';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle => '自分の確認済み状態をオフにしますか？';

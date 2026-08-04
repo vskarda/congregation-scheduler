@@ -15,7 +15,9 @@ Future<void> showConnectRecordFlow(
   final l10n = context.l10n;
   final messenger = ScaffoldMessenger.of(context);
   final all = ref.read(allPublishersProvider).value ?? const <Publisher>[];
-  final records = all.where((p) => !p.hasAccount && !p.moved).toList();
+  final records = all
+      .where((p) => !p.hasAccount && !p.hasMovedBy(DateTime.now()))
+      .toList();
   if (records.isEmpty) {
     messenger
         .showSnackBar(SnackBar(content: Text(l10n.pubConnectNoRecords)));

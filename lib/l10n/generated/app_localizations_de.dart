@@ -409,6 +409,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Dein Konto wurde erstellt. Ein Administrator der Versammlung muss es nun bestätigen, bevor du Versammlungsinformationen sehen kannst.';
 
   @override
+  String get awaitingMovedTitle => 'Kein Mitglied mehr';
+
+  @override
+  String get awaitingMovedBody =>
+      'Nach den Unterlagen dieser Versammlung bist du weggezogen, deshalb werden hier keine Versammlungsinformationen mehr angezeigt. Dein Berichtsverlauf bleibt bei der Versammlung gespeichert. Falls das ein Irrtum ist, wende dich bitte an einen der Ältesten.';
+
+  @override
   String get deleteAccountAction => 'Mein Konto löschen';
 
   @override
@@ -879,6 +886,30 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pubAdminShowMoved => 'Weggezogene anzeigen';
 
   @override
+  String get pubAdminMovingDate => 'Umzugsdatum';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Umzugsdatum ändern';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Weggezogen am $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Zieht weg am $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Der Datensatz und der Berichtsverlauf bleiben erhalten. Monate vor dem Umzug zählen weiterhin in den Statistiken und im S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Bis zu diesem Tag bleibt er vollwertiges Mitglied: Pläne, Berichtslisten und der Zugriff auf die App ändern sich nicht.';
+
+  @override
   String get pubFilterPioneers => 'Pioniere';
 
   @override
@@ -894,8 +925,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Als weggezogen markieren?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'Der Datensatz und der Berichtsverlauf bleiben erhalten, aber der Verkündiger wird archiviert: Sein Zugriff wird entzogen und er erscheint nicht mehr in Plänen oder Berichtslisten. Du kannst ihn später wiederherstellen.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Umzugsdatum: $date. Der Datensatz und der Berichtsverlauf bleiben erhalten — alles bis zu diesem Tag zählt weiterhin in den Statistiken und im S-1. Ab diesem Tag wird der Verkündiger archiviert: Sein Zugriff wird entzogen und er erscheint nicht mehr in Plänen oder Berichtslisten. Du kannst ihn später wiederherstellen.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Umzugsdatum: $date. Bis dahin ändert sich nichts — der Verkündiger behält den Zugriff auf die App und bleibt in Plänen und Berichtslisten. An diesem Tag wird er automatisch archiviert; sein Datensatz und der Berichtsverlauf bleiben erhalten.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

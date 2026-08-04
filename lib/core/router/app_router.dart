@@ -76,7 +76,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         // registration) — let the user finish it.
         return loc == '/complete-profile' ? null : '/complete-profile';
       }
-      if (!publisher.verified) {
+      // Not verified (yet), or verified but past their own moving date — the
+      // rules deny congregation data in both cases, so both land on
+      // /awaiting, which tells them which of the two it is.
+      if (!publisher.verified || publisher.hasMovedBy(DateTime.now())) {
         return loc == '/awaiting' ? null : '/awaiting';
       }
       if (onAuthScreens || loc == '/awaiting' || loc == '/complete-profile') {

@@ -405,6 +405,13 @@ class AppLocalizationsCs extends AppLocalizations {
       'Váš účet byl vytvořen. Administrátor sboru ho nyní musí ověřit, teprve potom uvidíte sborové informace.';
 
   @override
+  String get awaitingMovedTitle => 'Už nejste členem sboru';
+
+  @override
+  String get awaitingMovedBody =>
+      'Podle záznamů tohoto sboru jste se přestěhoval(a), a proto se vám zde sborové informace už nezobrazují. Historie vašich zpráv zůstává uložena u sboru. Pokud jde o omyl, obraťte se prosím na někoho ze starších.';
+
+  @override
   String get deleteAccountAction => 'Smazat můj účet';
 
   @override
@@ -871,6 +878,30 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pubAdminShowMoved => 'Zobrazit přestěhované';
 
   @override
+  String get pubAdminMovingDate => 'Datum přestěhování';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Změnit datum přestěhování';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Přestěhoval se $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Stěhuje se $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Záznam i historie zpráv zůstávají zachovány. Měsíce před přestěhováním se dál počítají do statistik i do S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Do toho dne zůstává plnohodnotným členem: programy, seznamy zpráv i přístup do aplikace se nemění.';
+
+  @override
   String get pubFilterPioneers => 'Průkopníci';
 
   @override
@@ -886,8 +917,14 @@ class AppLocalizationsCs extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Označit jako přestěhovaného?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'Záznam a historie zpráv zůstanou zachovány, ale zvěstovatel bude archivován: jeho přístup bude odebrán a nebude se objevovat v programech ani v seznamech zpráv. Později ho můžete obnovit.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Datum přestěhování: $date. Záznam a historie zpráv zůstanou zachovány — vše do toho dne se dál počítá do statistik i do S-1. Od toho dne bude zvěstovatel archivován: jeho přístup bude odebrán a nebude se objevovat v programech ani v seznamech zpráv. Později ho můžete obnovit.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Datum přestěhování: $date. Do té doby se nic nemění — zvěstovatel má dál přístup do aplikace a zůstává v programech i v seznamech zpráv. V ten den bude automaticky archivován; jeho záznam a historie zpráv zůstanou zachovány.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle => 'Vypnout vlastní ověření?';

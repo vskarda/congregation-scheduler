@@ -260,7 +260,8 @@ class _AllTerritoriesSectionState
       builder: (context) => SimpleDialog(
         title: Text(l10n.terrAssignTo),
         children: [
-          for (final p in publishers.where((p) => p.verified))
+          for (final p in publishers
+              .where((p) => p.verified && !p.hasMovedBy(DateTime.now())))
             SimpleDialogOption(
               onPressed: () => Navigator.of(context).pop(p),
               child: Text(p.listName),

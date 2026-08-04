@@ -407,6 +407,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il tuo account è stato creato. Ora un amministratore della congregazione deve verificarlo prima che tu possa vedere le informazioni della congregazione.';
 
   @override
+  String get awaitingMovedTitle => 'Non sei più membro';
+
+  @override
+  String get awaitingMovedBody =>
+      'Secondo i registri di questa congregazione ti sei trasferito, quindi le sue informazioni non vengono più mostrate qui. Lo storico dei tuoi rapporti resta conservato dalla congregazione. Se si tratta di un errore, contatta uno degli anziani.';
+
+  @override
   String get deleteAccountAction => 'Elimina il mio account';
 
   @override
@@ -876,6 +883,30 @@ class AppLocalizationsIt extends AppLocalizations {
   String get pubAdminShowMoved => 'Mostra i trasferiti';
 
   @override
+  String get pubAdminMovingDate => 'Data del trasferimento';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Cambia la data del trasferimento';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Trasferito il $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Si trasferisce il $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'La registrazione e lo storico dei rapporti vengono mantenuti. I mesi precedenti al trasferimento continuano a contare nelle statistiche e nell\'S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Fino a quel giorno resta membro a tutti gli effetti: programmi, elenchi dei rapporti e accesso all\'app non cambiano.';
+
+  @override
   String get pubFilterPioneers => 'Pionieri';
 
   @override
@@ -891,8 +922,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Segnare come trasferito?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'La registrazione e lo storico dei rapporti vengono mantenuti, ma il proclamatore viene archiviato: il suo accesso è revocato e non compare più nei programmi né negli elenchi dei rapporti. Puoi ripristinarlo in seguito.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Data del trasferimento: $date. La registrazione e lo storico dei rapporti vengono mantenuti: tutto ciò che precede quel giorno continua a contare nelle statistiche e nell\'S-1. Da quel giorno il proclamatore viene archiviato: il suo accesso è revocato e non compare più nei programmi né negli elenchi dei rapporti. Puoi ripristinarlo in seguito.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Data del trasferimento: $date. Fino ad allora non cambia nulla: il proclamatore mantiene l\'accesso all\'app e resta nei programmi e negli elenchi dei rapporti. Quel giorno verrà archiviato automaticamente; la sua registrazione e lo storico dei rapporti vengono mantenuti.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

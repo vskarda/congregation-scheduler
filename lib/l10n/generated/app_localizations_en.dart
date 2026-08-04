@@ -404,6 +404,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your account was created. An administrator of the congregation now needs to verify it before you can see any congregation information.';
 
   @override
+  String get awaitingMovedTitle => 'No longer a member';
+
+  @override
+  String get awaitingMovedBody =>
+      'This congregation\'s records show that you have moved away, so its information is no longer shown here. Your report history stays with the congregation. If this is a mistake, please contact one of the elders.';
+
+  @override
   String get deleteAccountAction => 'Delete my account';
 
   @override
@@ -870,6 +877,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pubAdminShowMoved => 'Show moved';
 
   @override
+  String get pubAdminMovingDate => 'Moving date';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Change moving date';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Moved on $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Moving on $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Their record and report history are kept. Months before the move still count in the statistics and on the S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Until that day they stay a full member: schedules, report lists and app access are unchanged.';
+
+  @override
   String get pubFilterPioneers => 'Pioneers';
 
   @override
@@ -885,8 +916,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Mark as moved?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'The record and report history are kept, but the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Moving date: $date. The record and report history are kept — everything up to that day still counts in the statistics and on the S-1. From it on the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Moving date: $date. Until then nothing changes — the publisher keeps app access and stays in schedules and report lists. On that day they are archived automatically; their record and report history are kept.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

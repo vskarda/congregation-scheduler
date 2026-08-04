@@ -407,6 +407,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ton compte a été créé. Un administrateur de l\'assemblée doit maintenant le vérifier avant que tu puisses voir les informations de l\'assemblée.';
 
   @override
+  String get awaitingMovedTitle => 'Tu n\'es plus membre';
+
+  @override
+  String get awaitingMovedBody =>
+      'D\'après les registres de cette assemblée, tu as déménagé ; ses informations ne sont donc plus affichées ici. L\'historique de tes rapports reste conservé par l\'assemblée. S\'il s\'agit d\'une erreur, contacte l\'un des anciens.';
+
+  @override
   String get deleteAccountAction => 'Supprimer mon compte';
 
   @override
@@ -879,6 +886,30 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pubAdminShowMoved => 'Afficher les déménagés';
 
   @override
+  String get pubAdminMovingDate => 'Date du déménagement';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Modifier la date du déménagement';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Déménagé le $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Déménage le $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Sa fiche et l\'historique des rapports sont conservés. Les mois précédant le déménagement comptent toujours dans les statistiques et dans le S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Jusqu\'à ce jour, il reste membre à part entière : les programmes, les listes de rapports et l\'accès à l\'application ne changent pas.';
+
+  @override
   String get pubFilterPioneers => 'Pionniers';
 
   @override
@@ -894,8 +925,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Marquer comme déménagé ?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'La fiche et l\'historique des rapports sont conservés, mais le proclamateur est archivé : son accès est révoqué et il n\'apparaît plus dans les programmes ni dans les listes de rapports. Tu peux le restaurer plus tard.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Date du déménagement : $date. La fiche et l\'historique des rapports sont conservés — tout ce qui précède ce jour compte toujours dans les statistiques et dans le S-1. À partir de ce jour, le proclamateur est archivé : son accès est révoqué et il n\'apparaît plus dans les programmes ni dans les listes de rapports. Tu peux le restaurer plus tard.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Date du déménagement : $date. Jusque-là, rien ne change — le proclamateur garde l\'accès à l\'application et reste dans les programmes et les listes de rapports. Ce jour-là, il sera archivé automatiquement ; sa fiche et l\'historique des rapports sont conservés.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

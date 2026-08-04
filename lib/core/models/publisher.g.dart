@@ -99,6 +99,8 @@ _Publisher _$PublisherFromJson(Map<String, dynamic> json) => _Publisher(
       : Qualifications.fromJson(json['qualifications'] as Map<String, dynamic>),
   hasAccount: json['hasAccount'] as bool? ?? false,
   moved: json['moved'] as bool? ?? false,
+  movedDate: json['movedDate'] as String?,
+  movedAt: const NullableTimestampConverter().fromJson(json['movedAt']),
   groupId: json['groupId'] as String?,
 );
 
@@ -114,6 +116,8 @@ Map<String, dynamic> _$PublisherToJson(_Publisher instance) =>
       'qualifications': instance.qualifications.toJson(),
       'hasAccount': instance.hasAccount,
       'moved': instance.moved,
+      'movedDate': ?instance.movedDate,
+      'movedAt': ?const NullableTimestampConverter().toJson(instance.movedAt),
       'groupId': ?instance.groupId,
     };
 

@@ -403,6 +403,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'Hesabınız oluşturuldu. Cemaatin bilgilerini görebilmeniz için cemaat yöneticisinin hesabınızı doğrulaması gerekiyor.';
 
   @override
+  String get awaitingMovedTitle => 'Artık cemaat üyesi değilsiniz';
+
+  @override
+  String get awaitingMovedBody =>
+      'Bu cemaatin kayıtlarına göre taşındınız, bu yüzden cemaat bilgileri burada artık gösterilmiyor. Rapor geçmişiniz cemaatte saklı kalır. Bu bir yanlışlıksa lütfen ihtiyarlardan biriyle görüşün.';
+
+  @override
   String get deleteAccountAction => 'Hesabımı sil';
 
   @override
@@ -870,6 +877,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminShowMoved => 'Taşınanları göster';
 
   @override
+  String get pubAdminMovingDate => 'Taşınma tarihi';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Taşınma tarihini değiştir';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return '$date tarihinde taşındı';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return '$date tarihinde taşınıyor';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Kaydı ve rapor geçmişi korunur. Taşınmadan önceki aylar istatistiklerde ve S-1\'de sayılmaya devam eder.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'O güne kadar tam üye olarak kalır: programlar, rapor listeleri ve uygulama erişimi değişmez.';
+
+  @override
   String get pubFilterPioneers => 'Öncüler';
 
   @override
@@ -885,8 +916,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Taşındı olarak işaretlensin mi?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'Kayıt ve rapor geçmişi korunur, ancak müjdeci arşivlenir: erişimi kaldırılır ve artık programlarda veya rapor listelerinde görünmez. Daha sonra geri getirebilirsiniz.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Taşınma tarihi: $date. Kayıt ve rapor geçmişi korunur; o güne kadarki her şey istatistiklerde ve S-1\'de sayılmaya devam eder. O tarihten itibaren müjdeci arşivlenir: erişimi kaldırılır ve artık programlarda veya rapor listelerinde görünmez. Daha sonra geri getirebilirsiniz.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Taşınma tarihi: $date. O tarihe kadar hiçbir şey değişmez — müjdeci uygulamayı kullanmaya devam eder ve programlarda ile rapor listelerinde kalır. O gün otomatik olarak arşivlenir; kaydı ve rapor geçmişi korunur.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

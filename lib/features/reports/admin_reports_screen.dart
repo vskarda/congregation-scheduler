@@ -68,7 +68,7 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final publishers = (ref.watch(allPublishersProvider).value ?? const [])
+    final roster = (ref.watch(allPublishersProvider).value ?? const [])
         .where((p) => p.status != PublisherStatus.none)
         .toList();
     final reportsAsync = ref.watch(monthReportsProvider(_month));
@@ -81,6 +81,14 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
           Center(child: Text(l10n.commonErrorDetail(e.toString()))),
       data: (reports) {
         final byId = {for (final r in reports) r.publisherId: r};
+        // A publisher who moved away belongs to the months before the move
+        // and to no later one — so past months stay complete and enterable
+        // while they stop being missing from every month after. An entry that
+        // already exists always shows, whatever the roster says about it.
+        final publishers = roster
+            .where((p) =>
+                p.onRosterInMonth(_month) || byId.containsKey(p.id))
+            .toList();
         final reported =
             publishers.where((p) => byId.containsKey(p.id)).length;
         return Column(

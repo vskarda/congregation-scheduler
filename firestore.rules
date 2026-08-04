@@ -7,7 +7,9 @@ rules_version = '2';
 //
 // Model:
 //  - One Firebase project = one congregation.
-//  - publishers/{uid}.verified gates all congregation data.
+//  - publishers/{uid}.verified gates all congregation data; publishers/{uid}
+//    .movedAt ends that access on the day the publisher moves away, so a
+//    departure can be recorded in advance and takes effect on its own.
 //  - publishers/{uid}.roles.{section} grants per-section admin rights;
 //    roles.fullAdmin grants everything.
 //  - Sensitive personal data lives in publishers/{uid}/private/profile so that
@@ -33,10 +35,21 @@ service cloud.firestore {
       return get(myPublisherPath()).data;
     }
 
+    // A publisher who moved away keeps their record (and its history) but
+    // stops being a member of this congregation the moment they leave.
+    // 'movedAt' is the departure date at local midnight, denormalized next to
+    // the yyyy-MM-dd 'movedDate' precisely for this check — rules cannot parse
+    // a date string. Absent on records that never moved and on ones archived
+    // before the field existed (those carry verified == false instead).
+    function notMovedYet(p) {
+      return !('movedAt' in p) || request.time < p.movedAt;
+    }
+
     function isVerified() {
       return isSignedIn()
         && exists(myPublisherPath())
-        && me().verified == true;
+        && me().verified == true
+        && notMovedYet(me());
     }
 
     function hasRole(role) {
@@ -97,9 +110,11 @@ service cloud.firestore {
       // Granting/removing rights ('roles') is restricted to full admins; a
       // limited publisher-admin may manage everyone else's fields but not their
       // rights. Self-service edits may not touch privilege fields at all.
-      // 'moved' is an admin-only lifecycle flag (marking someone moved also
-      // revokes their access), so members may not change it on their own
-      // record. 'groupId' (ministry group membership) is likewise assigned by
+      // 'moved' / 'movedDate' / 'movedAt' are the admin-only lifecycle fields
+      // (they revoke access from the moving date), so members may not change
+      // them on their own record — 'movedAt' in particular is what
+      // notMovedYet() reads, so a member who could write it could postpone
+      // their own cut-off. 'groupId' (ministry group membership) is likewise assigned by
       // admins only. 'appointment' (elder/MS) is denormalized here from the
       // private profile and admin-set only: members may keep it unchanged
       // (get() with a default tolerates legacy docs the client rewrites in
@@ -113,7 +128,7 @@ service cloud.firestore {
         || (isSignedIn() && request.auth.uid == publisherId
             && !request.resource.data.diff(resource.data).affectedKeys()
                 .hasAny(['verified', 'roles', 'qualifications', 'moved',
-                    'groupId'].toSet())
+                    'movedDate', 'movedAt', 'groupId'].toSet())
             && request.resource.data.get('appointment', 'none')
                 == resource.data.get('appointment', 'none')
             && (request.resource.data.status == resource.data.status

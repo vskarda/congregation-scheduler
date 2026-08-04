@@ -11,6 +11,7 @@ Publisher publisher(
   bool hasAccount = false,
   bool verified = false,
   bool moved = false,
+  String? movedDate,
   String? groupId,
 }) =>
     Publisher(
@@ -23,6 +24,7 @@ Publisher publisher(
       hasAccount: hasAccount,
       verified: verified,
       moved: moved,
+      movedDate: movedDate,
       groupId: groupId,
     );
 
@@ -65,6 +67,26 @@ void main() {
       expect(stats.byGender[Gender.female], 1);
       expect(stats.groupSizes, {'Group 1': 2, 'Group 2': 0});
       expect(stats.ungrouped, 2); // a, f
+    });
+
+    test('a departure counts from its date, not from when it was recorded',
+        () {
+      // The roster cards describe the congregation as it stands: a move that
+      // has not happened yet is still one of us, one that has is not.
+      final roster = [
+        publisher('here'),
+        publisher('leaving', moved: true, movedDate: '2026-03-15'),
+        publisher('gone', moved: true, movedDate: '2026-03-15'),
+      ];
+      expect(activeRoster(roster, asOf: DateTime(2026, 3, 14)), hasLength(3));
+      expect(activeRoster(roster, asOf: DateTime(2026, 3, 15)), hasLength(1));
+
+      expect(
+          computeMembership(roster, const [], asOf: DateTime(2026, 3, 1)).total,
+          3);
+      expect(
+          computeMembership(roster, const [], asOf: DateTime(2026, 4, 1)).total,
+          1);
     });
 
     test('empty roster yields zeros', () {

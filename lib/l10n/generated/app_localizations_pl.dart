@@ -403,6 +403,13 @@ class AppLocalizationsPl extends AppLocalizations {
       'Twoje konto zostało utworzone. Teraz administrator zboru musi je zweryfikować, zanim będziesz mógł zobaczyć informacje o zborze.';
 
   @override
+  String get awaitingMovedTitle => 'Nie jesteś już członkiem zboru';
+
+  @override
+  String get awaitingMovedBody =>
+      'Według kartoteki tego zboru przeprowadziłeś się, dlatego informacje zboru nie są tu już pokazywane. Historia twoich sprawozdań pozostaje w zborze. Jeśli to pomyłka, skontaktuj się z jednym ze starszych.';
+
+  @override
   String get deleteAccountAction => 'Usuń moje konto';
 
   @override
@@ -870,6 +877,30 @@ class AppLocalizationsPl extends AppLocalizations {
   String get pubAdminShowMoved => 'Pokaż przeniesionych';
 
   @override
+  String get pubAdminMovingDate => 'Data przeprowadzki';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Zmień datę przeprowadzki';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Przeprowadził się $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Przeprowadza się $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Karta i historia sprawozdań są zachowane. Miesiące sprzed przeprowadzki nadal liczą się w statystykach i w S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Do tego dnia pozostaje pełnoprawnym członkiem: plany, listy sprawozdań i dostęp do aplikacji nie zmieniają się.';
+
+  @override
   String get pubFilterPioneers => 'Pionierzy';
 
   @override
@@ -885,8 +916,14 @@ class AppLocalizationsPl extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Oznaczyć jako przeniesiony?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'Karta i historia sprawozdań są zachowane, ale głosiciel zostaje zarchiwizowany: jego dostęp jest odbierany i nie pojawia się już w planach ani na listach sprawozdań. Możesz go później przywrócić.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Data przeprowadzki: $date. Karta i historia sprawozdań są zachowane — wszystko do tego dnia nadal liczy się w statystykach i w S-1. Od tego dnia głosiciel zostaje zarchiwizowany: jego dostęp jest odbierany i nie pojawia się już w planach ani na listach sprawozdań. Możesz go później przywrócić.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Data przeprowadzki: $date. Do tego czasu nic się nie zmienia — głosiciel zachowuje dostęp do aplikacji i pozostaje w planach oraz na listach sprawozdań. Tego dnia zostanie automatycznie zarchiwizowany; jego karta i historia sprawozdań są zachowane.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

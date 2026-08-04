@@ -36,6 +36,10 @@ const RECORD_ATTENDANCE_ADMIN = 'record-attendance-admin-uid';
 const PW_ADMIN = 'pw-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
+// Still flagged verified, but with a recorded moving date: one already past
+// (access must be over) and one still ahead (access must be untouched).
+const MOVED_PAST = 'moved-past-uid';
+const MOVED_FUTURE = 'moved-future-uid';
 // Verified publisher with the public-witnessing qualification.
 const QUALIFIED = 'qualified-uid';
 
@@ -117,6 +121,18 @@ async function seed() {
     await setDoc(doc(f, `publishers/${UNVERIFIED}`), {
       ...basePublisher,
       verified: false,
+    });
+    await setDoc(doc(f, `publishers/${MOVED_PAST}`), {
+      ...basePublisher,
+      moved: true,
+      movedDate: '2020-03-15',
+      movedAt: new Date('2020-03-15T00:00:00Z'),
+    });
+    await setDoc(doc(f, `publishers/${MOVED_FUTURE}`), {
+      ...basePublisher,
+      moved: true,
+      movedDate: '2099-03-15',
+      movedAt: new Date('2099-03-15T00:00:00Z'),
     });
     await setDoc(doc(f, `publishers/${VERIFIED}/private/profile`), {
       email: 'v@example.com',
@@ -336,6 +352,71 @@ describe('privilege escalation', () => {
       updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
         moved: true,
         verified: false,
+      }),
+    );
+  });
+
+  it('publisher cannot set or postpone their own moving date', async () => {
+    // movedAt is what the access cut-off reads, so writing it on your own
+    // record would mean choosing when (or whether) you stop being a member.
+    await assertFails(
+      updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}`), {
+        movedDate: '2099-01-01',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(MOVED_FUTURE), `publishers/${MOVED_FUTURE}`), {
+        movedAt: new Date('2199-01-01T00:00:00Z'),
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}`), {
+        moved: true,
+        movedDate: '2026-09-15',
+        movedAt: new Date('2026-09-15T00:00:00Z'),
+      }),
+    );
+  });
+});
+
+describe('access ends on the moving date', () => {
+  it('a past moving date revokes congregation data despite verified', async () => {
+    await assertFails(getDoc(doc(db(MOVED_PAST), 'lmm_weeks/2026-07-06')));
+    await assertFails(
+      getDoc(doc(db(MOVED_PAST), `publishers/${VERIFIED}/private/profile`)),
+    );
+    // Their own record stays readable — the app needs it to explain why.
+    await assertSucceeds(
+      getDoc(doc(db(MOVED_PAST), `publishers/${MOVED_PAST}`)),
+    );
+  });
+
+  it('a past moving date revokes admin rights too', async () => {
+    await env.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), `publishers/${MOVED_PAST}`), {
+        ...basePublisher,
+        moved: true,
+        movedDate: '2020-03-15',
+        movedAt: new Date('2020-03-15T00:00:00Z'),
+        roles: { ...basePublisher.roles, fullAdmin: true },
+      });
+    });
+    await assertFails(
+      setDoc(doc(db(MOVED_PAST), 'lmm_weeks/2026-07-13'), {
+        parts: [],
+        allAssigneeIds: [],
+      }),
+    );
+  });
+
+  it('a future moving date changes nothing yet', async () => {
+    await assertSucceeds(
+      getDoc(doc(db(MOVED_FUTURE), 'lmm_weeks/2026-07-06')),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(MOVED_FUTURE), `reports/2026-06/entries/${MOVED_FUTURE}`), {
+        month: '2026-06',
+        participated: true,
       }),
     );
   });

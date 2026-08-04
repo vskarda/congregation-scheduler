@@ -4,13 +4,24 @@ import '../../core/models/models.dart';
 ///
 /// Everything here is derived from data the app already stores (publishers,
 /// private profiles, reports, attendance) — no telemetry is collected.
-/// Publishers marked [Publisher.moved] are excluded from every figure.
+///
+/// The roster-based figures (membership, ages, app usage) describe the
+/// congregation as it stands [asOf], so someone with a moving date still
+/// ahead is counted and someone past it is not. The report- and
+/// attendance-based ones (field service, meeting attendance) read the
+/// documents of the period they cover, which is what keeps a publisher's
+/// history in the years they were here after they leave.
 
-/// Publishers on the active roster: not moved away and an actual publisher.
-/// Records with status 'none' ("-") are people the congregation tracks but
-/// who are not publishers, so they are excluded from every statistic.
-List<Publisher> activeRoster(List<Publisher> all) =>
-    all.where((p) => !p.moved && p.status != PublisherStatus.none).toList();
+/// Publishers on the active roster: not moved away by [asOf] (defaults to
+/// today) and an actual publisher. Records with status 'none' ("-") are
+/// people the congregation tracks but who are not publishers, so they are
+/// excluded from every statistic.
+List<Publisher> activeRoster(List<Publisher> all, {DateTime? asOf}) {
+  final day = asOf ?? DateTime.now();
+  return all
+      .where((p) => !p.hasMovedBy(day) && p.status != PublisherStatus.none)
+      .toList();
+}
 
 // ---------------------------------------------------------------------------
 // Membership & pioneers
@@ -48,9 +59,9 @@ class MembershipStats {
   final int ungrouped;
 }
 
-MembershipStats computeMembership(
-    List<Publisher> all, List<MinistryGroup> groups) {
-  final roster = activeRoster(all);
+MembershipStats computeMembership(List<Publisher> all,
+    List<MinistryGroup> groups, {DateTime? asOf}) {
+  final roster = activeRoster(all, asOf: asOf);
   final byStatus = <PublisherStatus, int>{};
   final byGender = <Gender, int>{};
   var elders = 0, servants = 0, pioneers = 0;
@@ -309,8 +320,9 @@ class AppUsageStats {
 }
 
 AppUsageStats computeAppUsage(
-    List<Publisher> all, List<MinistryReport> lastMonthReports) {
-  final roster = activeRoster(all);
+    List<Publisher> all, List<MinistryReport> lastMonthReports,
+    {DateTime? asOf}) {
+  final roster = activeRoster(all, asOf: asOf);
   var withAccount = 0, awaiting = 0, fullAdmins = 0, sectionAdmins = 0;
   for (final p in roster) {
     if (p.hasAccount) withAccount++;

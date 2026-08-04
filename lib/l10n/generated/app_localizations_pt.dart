@@ -406,6 +406,13 @@ class AppLocalizationsPt extends AppLocalizations {
       'Sua conta foi criada. Agora um administrador da congregação precisa verificá-la antes que você possa ver as informações da congregação.';
 
   @override
+  String get awaitingMovedTitle => 'Você não é mais membro';
+
+  @override
+  String get awaitingMovedBody =>
+      'De acordo com os registros desta congregação, você se mudou, por isso as informações dela não são mais mostradas aqui. O histórico dos seus relatórios continua guardado na congregação. Se isso for um engano, fale com um dos anciãos.';
+
+  @override
   String get deleteAccountAction => 'Excluir minha conta';
 
   @override
@@ -876,6 +883,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pubAdminShowMoved => 'Mostrar mudados';
 
   @override
+  String get pubAdminMovingDate => 'Data da mudança';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Alterar a data da mudança';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Mudou-se em $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Muda-se em $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'O registro e o histórico de relatórios são mantidos. Os meses anteriores à mudança continuam contando nas estatísticas e no S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Até esse dia ele continua sendo membro pleno: as programações, as listas de relatórios e o acesso ao aplicativo não mudam.';
+
+  @override
   String get pubFilterPioneers => 'Pioneiros';
 
   @override
@@ -891,8 +922,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => 'Marcar como mudado?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'O registro e o histórico de relatórios são mantidos, mas o publicador é arquivado: o acesso dele é revogado e ele não aparece mais nas programações nem nas listas de relatórios. Você pode restaurá-lo depois.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Data da mudança: $date. O registro e o histórico de relatórios são mantidos — tudo até esse dia continua contando nas estatísticas e no S-1. A partir dele o publicador é arquivado: o acesso dele é revogado e ele não aparece mais nas programações nem nas listas de relatórios. Você pode restaurá-lo depois.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Data da mudança: $date. Até lá nada muda — o publicador mantém o acesso ao aplicativo e continua nas programações e nas listas de relatórios. Nesse dia ele será arquivado automaticamente; o registro e o histórico de relatórios dele são mantidos.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

@@ -108,8 +108,14 @@ final myPublisherProvider = StreamProvider<Publisher?>((ref) {
 final myRolesProvider = Provider<Roles>(
     (ref) => ref.watch(myPublisherProvider).value?.roles ?? const Roles());
 
-final isVerifiedProvider = Provider<bool>(
-    (ref) => ref.watch(myPublisherProvider).value?.verified ?? false);
+/// Mirrors what firestore.rules grants: verified, and not past one's own
+/// moving date. Without the second half a publisher whose recorded departure
+/// has arrived would still be routed into the app while the backend denies
+/// every read, turning a clean "you have moved" state into error screens.
+final isVerifiedProvider = Provider<bool>((ref) {
+  final me = ref.watch(myPublisherProvider).value;
+  return me != null && me.verified && !me.hasMovedBy(DateTime.now());
+});
 
 /// All publishers; empty until the user is verified (rules would deny it).
 final allPublishersProvider = StreamProvider<List<Publisher>>((ref) {

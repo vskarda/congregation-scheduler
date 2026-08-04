@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/ministry_groups_repository.dart';
@@ -177,6 +178,8 @@ class _AdminPublishersScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final dateFmt =
+        DateFormat.yMMMd(Localizations.localeOf(context).toString());
     final publishers = ref.watch(allPublishersProvider);
     final groups = ref.watch(ministryGroupsProvider).value ?? const [];
     final metaName =
@@ -198,9 +201,13 @@ class _AdminPublishersScreenState
             Center(child: Text(l10n.commonErrorDetail(e.toString()))),
         data: (all) {
           final query = _filter.toLowerCase();
-          final hasMoved = all.any((p) => p.moved);
+          final today = DateTime.now();
+          // Only a departure that has happened archives the record; one still
+          // ahead leaves the publisher on the roster like everybody else,
+          // carrying the date as a note.
+          final hasMoved = all.any((p) => p.hasMovedBy(today));
           final matched = all.where((p) {
-            if (p.moved && !_showMoved) return false;
+            if (p.hasMovedBy(today) && !_showMoved) return false;
             if (_pioneerOnly && !p.isPioneer) return false;
             if (_genderFilter != null && p.gender != _genderFilter) {
               return false;
@@ -223,8 +230,8 @@ class _AdminPublishersScreenState
           // Active first, moved (dimmed) last; alphabetical order is preserved
           // within each group by the repository's sort.
           final filtered = [
-            ...matched.where((p) => !p.moved),
-            ...matched.where((p) => p.moved),
+            ...matched.where((p) => !p.hasMovedBy(today)),
+            ...matched.where((p) => p.hasMovedBy(today)),
           ];
           return Column(
             children: [
@@ -326,6 +333,8 @@ class _AdminPublishersScreenState
                   itemBuilder: (context, i) {
                     final p = filtered[i];
                     final genderColors = genderAvatarColors(context, p.gender);
+                    final gone = p.hasMovedBy(today);
+                    final movedOn = p.movedOn;
                     // Moved is checked first: a moved publisher is also
                     // unverified, but should read as "moved", not "awaiting".
                     final tile = ListTile(
@@ -337,18 +346,23 @@ class _AdminPublishersScreenState
                             : p.firstName[0].toUpperCase()),
                       ),
                       title: Text(p.listName),
-                      subtitle: p.moved
-                          ? Text(l10n.pubAdminMovedBadge)
-                          : !p.verified
-                              ? Text(l10n.pubAdminUnverifiedBadge,
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .error))
-                              : !p.hasAccount
-                                  ? Text(l10n.pubAdminNoAccountBadge)
-                                  : null,
-                      trailing: p.moved
+                      subtitle: gone
+                          ? Text(movedOn == null
+                              ? l10n.pubAdminMovedBadge
+                              : l10n.pubAdminMovedOn(dateFmt.format(movedOn)))
+                          : p.isMovePending
+                              ? Text(l10n
+                                  .pubAdminMovingOn(dateFmt.format(movedOn!)))
+                              : !p.verified
+                                  ? Text(l10n.pubAdminUnverifiedBadge,
+                                      style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error))
+                                  : !p.hasAccount
+                                      ? Text(l10n.pubAdminNoAccountBadge)
+                                      : null,
+                      trailing: gone || p.isMovePending
                           ? const Icon(Icons.local_shipping_outlined)
                           : !p.verified
                               ? const Icon(Icons.hourglass_top)
@@ -356,9 +370,7 @@ class _AdminPublishersScreenState
                       onTap: () =>
                           context.go('/admin/publishers/${p.id}'),
                     );
-                    return p.moved
-                        ? Opacity(opacity: 0.5, child: tile)
-                        : tile;
+                    return gone ? Opacity(opacity: 0.5, child: tile) : tile;
                   },
                 ),
               ),

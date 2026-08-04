@@ -123,11 +123,17 @@ class _AssignmentEditorDialogState
         widget.applicantIds[i]: i,
     };
 
+    // Someone who moves away is assignable right up to the day they leave, so
+    // the cut is the assignment's own date where there is one — the same
+    // reading as the away-period warning below.
+    final on = widget.date ?? DateTime.now();
+    bool available(Publisher p) => p.verified && !p.hasMovedBy(on);
+
     List<Publisher> visible;
     switch (_mode) {
       case _Mode.qualified:
         visible = publishers
-            .where((p) => p.verified && widget.qualifies(p))
+            .where((p) => available(p) && widget.qualifies(p))
             .toList()
           // Applicants first (in application order), then least recently
           // assigned; never-assigned to the very top.
@@ -146,7 +152,7 @@ class _AssignmentEditorDialogState
             return collate(a.listName, b.listName);
           });
       case _Mode.all:
-        visible = publishers.where((p) => p.verified).toList();
+        visible = publishers.where(available).toList();
       case _Mode.freeText:
         visible = const [];
     }

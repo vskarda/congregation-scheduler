@@ -828,6 +828,18 @@ abstract class AppLocalizations {
   /// **'Your account was created. An administrator of the congregation now needs to verify it before you can see any congregation information.'**
   String get awaitingBody;
 
+  /// No description provided for @awaitingMovedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No longer a member'**
+  String get awaitingMovedTitle;
+
+  /// No description provided for @awaitingMovedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This congregation\'s records show that you have moved away, so its information is no longer shown here. Your report history stays with the congregation. If this is a mistake, please contact one of the elders.'**
+  String get awaitingMovedBody;
+
   /// No description provided for @deleteAccountAction.
   ///
   /// In en, this message translates to:
@@ -1692,6 +1704,42 @@ abstract class AppLocalizations {
   /// **'Show moved'**
   String get pubAdminShowMoved;
 
+  /// No description provided for @pubAdminMovingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving date'**
+  String get pubAdminMovingDate;
+
+  /// No description provided for @pubAdminChangeMovingDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Change moving date'**
+  String get pubAdminChangeMovingDate;
+
+  /// No description provided for @pubAdminMovedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Moved on {date}'**
+  String pubAdminMovedOn(String date);
+
+  /// No description provided for @pubAdminMovingOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving on {date}'**
+  String pubAdminMovingOn(String date);
+
+  /// No description provided for @pubAdminMovedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Their record and report history are kept. Months before the move still count in the statistics and on the S-1.'**
+  String get pubAdminMovedHint;
+
+  /// No description provided for @pubAdminMovePendingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Until that day they stay a full member: schedules, report lists and app access are unchanged.'**
+  String get pubAdminMovePendingHint;
+
   /// No description provided for @pubFilterPioneers.
   ///
   /// In en, this message translates to:
@@ -1725,8 +1773,14 @@ abstract class AppLocalizations {
   /// No description provided for @pubAdminMoveConfirmBody.
   ///
   /// In en, this message translates to:
-  /// **'The record and report history are kept, but the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.'**
-  String get pubAdminMoveConfirmBody;
+  /// **'Moving date: {date}. The record and report history are kept — everything up to that day still counts in the statistics and on the S-1. From it on the publisher is archived: their access is revoked and they no longer appear in schedules or report lists. You can restore them later.'**
+  String pubAdminMoveConfirmBody(String date);
+
+  /// No description provided for @pubAdminMoveConfirmFutureBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving date: {date}. Until then nothing changes — the publisher keeps app access and stays in schedules and report lists. On that day they are archived automatically; their record and report history are kept.'**
+  String pubAdminMoveConfirmFutureBody(String date);
 
   /// No description provided for @pubAdminSelfVerifiedWarningTitle.
   ///

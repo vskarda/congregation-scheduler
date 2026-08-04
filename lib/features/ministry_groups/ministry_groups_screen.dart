@@ -18,8 +18,12 @@ class MinistryGroupsScreen extends ConsumerWidget {
     final canEdit = ref.watch(effectiveRolesProvider).canEditPublishers();
     final groups = ref.watch(ministryGroupsProvider).value ?? const [];
     final publishers = ref.watch(allPublishersProvider).value ?? const [];
+    // Someone who has moved away keeps their groupId (restoring them should
+    // put them back where they were) but is no longer part of the group —
+    // which is also how the statistics count group sizes.
+    final today = DateTime.now();
     final membersByGroup = groupBy(
-        publishers.where((p) => p.groupId != null),
+        publishers.where((p) => p.groupId != null && !p.hasMovedBy(today)),
         (Publisher p) => p.groupId!);
 
     return Scaffold(
@@ -223,7 +227,8 @@ Future<void> _addMember(
   final l10n = context.l10n;
   final publishers = ref.read(allPublishersProvider).value ?? const [];
   final candidates = publishers
-      .where((p) => p.verified && !p.moved && p.groupId == null)
+      .where((p) =>
+          p.verified && !p.hasMovedBy(DateTime.now()) && p.groupId == null)
       .toList();
 
   final selected = await showDialog<Publisher>(

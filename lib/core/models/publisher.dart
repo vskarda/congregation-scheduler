@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../utils/dates.dart';
+import 'converters.dart';
 import 'enums.dart';
 
 part 'publisher.freezed.dart';
@@ -127,10 +129,25 @@ abstract class Publisher with _$Publisher {
     @Default(false) bool hasAccount,
 
     /// Archived because the publisher moved to another congregation. The
-    /// record (and their S-21 history) is kept, but access is revoked
-    /// (marking moved also clears [verified]) and they drop out of schedule
-    /// pickers and report rosters. Distinct from an unverified/awaiting user.
+    /// record (and their S-21 history) is kept, but from [movedDate] on they
+    /// lose access and drop out of schedule pickers and report rosters.
+    /// Distinct from an unverified/awaiting user.
     @Default(false) bool moved,
+
+    /// The day the publisher left, `yyyy-MM-dd`. May be in the future: until
+    /// it arrives the record behaves exactly like any other member. Absent on
+    /// records archived before this field existed — those read as moved long
+    /// ago. Admin-set only (firestore.rules blocks self-edits, like [moved]);
+    /// includeIfNull keeps the key out of toJson() so full-doc self-saves
+    /// don't trip the affectedKeys rule (same reason as [groupId]).
+    @JsonKey(includeIfNull: false) String? movedDate,
+
+    /// [movedDate] at local midnight, denormalized purely so firestore.rules
+    /// can end access at the right instant — rules cannot parse a date
+    /// string. Never read by the app; always written with [movedDate].
+    @JsonKey(includeIfNull: false)
+    @NullableTimestampConverter()
+    DateTime? movedAt,
 
     /// Ministry group membership (ministry_groups doc id); null = no group.
     /// Admin-assigned only — firestore.rules blocks self-edits of this key.
@@ -150,6 +167,33 @@ abstract class Publisher with _$Publisher {
 
   bool get isPioneer =>
       status != PublisherStatus.publisher && status != PublisherStatus.none;
+
+  /// The parsed [movedDate], or null when there is none to parse.
+  DateTime? get movedOn => tryParseDateKey(movedDate);
+
+  /// Whether the publisher had already left on [day]. A record marked moved
+  /// without a date (archived before the date existed) counts as gone
+  /// throughout. Day-level: this is the cut for meetings and assignments.
+  bool hasMovedBy(DateTime day) {
+    if (!moved) return false;
+    final left = movedOn;
+    if (left == null) return true;
+    return !DateTime(day.year, day.month, day.day).isBefore(left);
+  }
+
+  /// Whether the publisher belongs on the roster of report month [month]
+  /// (`yyyy-MM`). The month the move falls in already belongs to the new
+  /// congregation, so the last month counted here is the one before it.
+  bool onRosterInMonth(String month) {
+    if (!moved) return true;
+    final left = movedDate;
+    if (left == null) return false;
+    return month.compareTo(left.substring(0, 7)) < 0;
+  }
+
+  /// Marked as moved with a date that has not arrived yet: still a full
+  /// member everywhere, just with the departure already recorded.
+  bool get isMovePending => moved && !hasMovedBy(DateTime.now());
 }
 
 /// Sensitive personal data, stored at publishers/{uid}/private/profile and

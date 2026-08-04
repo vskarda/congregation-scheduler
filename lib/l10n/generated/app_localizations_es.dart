@@ -410,6 +410,13 @@ class AppLocalizationsEs extends AppLocalizations {
       'Se creó tu cuenta. Ahora un administrador de la congregación debe verificarla antes de que puedas ver la información de la congregación.';
 
   @override
+  String get awaitingMovedTitle => 'Ya no eres miembro';
+
+  @override
+  String get awaitingMovedBody =>
+      'Según los registros de esta congregación, te has mudado, así que su información ya no se muestra aquí. Tu historial de informes queda guardado en la congregación. Si se trata de un error, comunícate con uno de los ancianos.';
+
+  @override
   String get deleteAccountAction => 'Eliminar mi cuenta';
 
   @override
@@ -880,6 +887,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pubAdminShowMoved => 'Mostrar mudados';
 
   @override
+  String get pubAdminMovingDate => 'Fecha de mudanza';
+
+  @override
+  String get pubAdminChangeMovingDate => 'Cambiar la fecha de mudanza';
+
+  @override
+  String pubAdminMovedOn(String date) {
+    return 'Se mudó el $date';
+  }
+
+  @override
+  String pubAdminMovingOn(String date) {
+    return 'Se muda el $date';
+  }
+
+  @override
+  String get pubAdminMovedHint =>
+      'Se conservan su registro y el historial de informes. Los meses anteriores a la mudanza siguen contando en las estadísticas y en el S-1.';
+
+  @override
+  String get pubAdminMovePendingHint =>
+      'Hasta ese día sigue siendo miembro pleno: los programas, las listas de informes y el acceso a la aplicación no cambian.';
+
+  @override
   String get pubFilterPioneers => 'Precursores';
 
   @override
@@ -895,8 +926,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get pubAdminMoveConfirmTitle => '¿Marcar como mudado?';
 
   @override
-  String get pubAdminMoveConfirmBody =>
-      'El registro y el historial de informes se conservan, pero el publicador se archiva: se le revoca el acceso y ya no aparece en los programas ni en las listas de informes. Puedes restaurarlo más adelante.';
+  String pubAdminMoveConfirmBody(String date) {
+    return 'Fecha de mudanza: $date. El registro y el historial de informes se conservan: todo lo anterior a ese día sigue contando en las estadísticas y en el S-1. A partir de ese día el publicador se archiva: se le revoca el acceso y ya no aparece en los programas ni en las listas de informes. Puedes restaurarlo más adelante.';
+  }
+
+  @override
+  String pubAdminMoveConfirmFutureBody(String date) {
+    return 'Fecha de mudanza: $date. Hasta entonces no cambia nada: el publicador conserva el acceso a la aplicación y sigue en los programas y en las listas de informes. Ese día se archivará automáticamente; su registro y su historial de informes se conservan.';
+  }
 
   @override
   String get pubAdminSelfVerifiedWarningTitle =>

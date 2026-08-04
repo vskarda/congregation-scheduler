@@ -2,12 +2,14 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/data/ministry_groups_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../../core/utils/dates.dart';
 import 'away_periods_section.dart';
 import 'connect_record_dialog.dart';
 import 'publisher_form.dart';
@@ -74,15 +76,26 @@ class PublisherDetailScreen extends ConsumerWidget {
       }
     }
 
-    // Marking a publisher "moved" archives the record (keeping S-21 history)
-    // and revokes their access by clearing Verified; restoring only clears
-    // the flag (an admin re-enables Verified to grant access again).
-    Future<void> confirmMove() async {
-      if (publisher.moved) {
-        await repo.update(publisher.copyWith(moved: false));
-        return;
-      }
-      if (isSelf) {
+    // Marking a publisher "moved" archives the record (keeping their S-21
+    // history) as of a chosen day: everything before it stands, from it on
+    // they leave the schedules, the report rosters and the app. A date still
+    // ahead changes nothing until it arrives — Verified stays on and
+    // firestore.rules ends the access on the day itself.
+    Future<void> markMoved() async {
+      final today = DateTime.now();
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: publisher.movedOn ?? today,
+        firstDate: DateTime(today.year - 5),
+        lastDate: DateTime(today.year + 2, 12, 31),
+        helpText: l10n.pubAdminMovingDate,
+      );
+      if (picked == null || !context.mounted) return;
+
+      final movesNow = !picked.isAfter(DateTime(today.year, today.month, today.day));
+      // Losing Verified straight away is the part an admin can lock
+      // themselves out with, so warn only when the date takes effect now.
+      if (isSelf && movesNow) {
         final ok = await _confirmSelfPrivilegeRemoval(
           context,
           title: l10n.pubAdminSelfVerifiedWarningTitle,
@@ -91,12 +104,16 @@ class PublisherDetailScreen extends ConsumerWidget {
         if (!ok) return;
       }
       if (!context.mounted) return;
+      final dateText = DateFormat.yMMMd(Localizations.localeOf(context).toString())
+          .format(picked);
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
           icon: const Icon(Icons.local_shipping_outlined, size: 32),
           title: Text(l10n.pubAdminMoveConfirmTitle),
-          content: Text(l10n.pubAdminMoveConfirmBody),
+          content: Text(movesNow
+              ? l10n.pubAdminMoveConfirmBody(dateText)
+              : l10n.pubAdminMoveConfirmFutureBody(dateText)),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -109,10 +126,21 @@ class PublisherDetailScreen extends ConsumerWidget {
           ],
         ),
       );
-      if (confirmed == true) {
-        await repo.update(publisher.copyWith(moved: true, verified: false));
-      }
+      if (confirmed != true) return;
+      await repo.update(publisher.copyWith(
+        moved: true,
+        movedDate: dateKey(picked),
+        // Local midnight: the rules compare it against request.time, so
+        // access ends as the day starts where the congregation is.
+        movedAt: DateTime(picked.year, picked.month, picked.day),
+        verified: movesNow ? false : publisher.verified,
+      ));
     }
+
+    // Restoring clears the departure; Verified stays the admin's own call
+    // (a record archived with a past date needs it switched back on).
+    Future<void> restoreMoved() => repo.update(
+        publisher.copyWith(moved: false, movedDate: null, movedAt: null));
 
     final tabs = <Tab>[
       Tab(text: l10n.pubAdminTabProfile),
@@ -158,7 +186,17 @@ class PublisherDetailScreen extends ConsumerWidget {
                       );
                       if (!ok) return;
                     }
-                    repo.update(publisher.copyWith(verified: v));
+                    // Verified alone cannot bring back someone whose moving
+                    // date has passed — the rules keep denying them on
+                    // movedAt. Switching it on therefore un-archives them,
+                    // which is the only reading that matches what it does.
+                    repo.update(v && publisher.hasMovedBy(DateTime.now())
+                        ? publisher.copyWith(
+                            verified: true,
+                            moved: false,
+                            movedDate: null,
+                            movedAt: null)
+                        : publisher.copyWith(verified: v));
                   },
                 ),
               ],
@@ -167,7 +205,9 @@ class PublisherDetailScreen extends ConsumerWidget {
               onSelected: (v) {
                 switch (v) {
                   case 'move':
-                    confirmMove();
+                    markMoved();
+                  case 'restore':
+                    restoreMoved();
                   case 'delete':
                     confirmDelete();
                 }
@@ -176,9 +216,14 @@ class PublisherDetailScreen extends ConsumerWidget {
                 PopupMenuItem(
                   value: 'move',
                   child: Text(publisher.moved
-                      ? l10n.pubAdminRestoreMoved
+                      ? l10n.pubAdminChangeMovingDate
                       : l10n.pubAdminMarkMoved),
                 ),
+                if (publisher.moved)
+                  PopupMenuItem(
+                    value: 'restore',
+                    child: Text(l10n.pubAdminRestoreMoved),
+                  ),
                 PopupMenuItem(
                   value: 'delete',
                   child: Text(l10n.commonDelete),
@@ -246,6 +291,10 @@ class _ProfileTab extends ConsumerWidget {
           data: (priv) => ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              if (publisher.moved) ...[
+                _MovedBanner(publisher: publisher),
+                const SizedBox(height: 12),
+              ],
               if (publisher.hasAccount && !publisher.verified) ...[
                 _ConnectRecordCard(publisher: publisher),
                 const SizedBox(height: 12),
@@ -262,6 +311,45 @@ class _ProfileTab extends ConsumerWidget {
               AwayPeriodsSection(publisherId: publisher.id),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// States the recorded departure on the profile: already gone, or still a
+/// member until the date arrives. Without it the only trace of a pending move
+/// would be a menu entry nobody opens.
+class _MovedBanner extends StatelessWidget {
+  const _MovedBanner({required this.publisher});
+
+  final Publisher publisher;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+    final date = publisher.movedOn;
+    final pending = publisher.isMovePending;
+    final text = date == null
+        ? l10n.pubAdminMovedBadge
+        : pending
+            ? l10n.pubAdminMovingOn(
+                DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                    .format(date))
+            : l10n.pubAdminMovedOn(
+                DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                    .format(date));
+    return Card(
+      color: pending
+          ? theme.colorScheme.secondaryContainer
+          : theme.colorScheme.surfaceContainerHighest,
+      child: ListTile(
+        leading: const Icon(Icons.local_shipping_outlined),
+        title: Text(text),
+        subtitle: Text(
+          pending ? l10n.pubAdminMovePendingHint : l10n.pubAdminMovedHint,
+          style: theme.textTheme.bodySmall,
         ),
       ),
     );
