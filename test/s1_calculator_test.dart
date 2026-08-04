@@ -37,6 +37,7 @@ void main() {
       report('g', status: PublisherStatus.specialPioneer, hours: 100),
     ];
     final result = computeS1(
+      month: '2026-06',
       monthReports: month,
       lastSixMonths: [
         month,
@@ -78,6 +79,7 @@ void main() {
 
   test('attendance averages use stored totals and skip empty entries', () {
     final result = computeS1(
+      month: '2026-06',
       monthReports: const [],
       lastSixMonths: const [],
       monthAttendance: const [

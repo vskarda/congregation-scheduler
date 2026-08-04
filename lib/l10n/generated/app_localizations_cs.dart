@@ -600,6 +600,13 @@ class AppLocalizationsCs extends AppLocalizations {
       'V Názvech veřejných proslovů zvol „Aktualizovat názvy z PDF“ a vyber oficiální formulář S-99 v PDF. Nadcházející víkendová shromáždění, která odkazují na tato čísla proslovů, se automaticky aktualizují.';
 
   @override
+  String get helpS1FreezeTitle => 'Uzamknutí údajů S-1 za měsíc';
+
+  @override
+  String get helpS1FreezeBody =>
+      'Na obrazovce S-1 tlačítko „Uzamknout údaje“ uloží měsíc přesně tak, jak jste ho odevzdali – pozdě podaná zpráva ani opravená návštěvnost už ho nezmění. Zprávy se dají dál upravovat, jen se do uzamčeného měsíce nepromítnou. Měsíce starší než dva se uzamknou automaticky; tlačítkem „Odemknout“ se údaje v případě potřeby spočítají znovu.';
+
+  @override
   String get adminToggleHide => 'Skrýt možnosti správce';
 
   @override
@@ -1972,6 +1979,47 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get s1Note =>
       'Pomocní, pravidelní a zvláštní průkopníci se nepočítají do skupiny Zvěstovatelé; zvláštní průkopníci nejsou zahrnuti v žádné skupině.';
+
+  @override
+  String get s1Freeze => 'Uzamknout údaje';
+
+  @override
+  String get s1FreezeHint =>
+      'Uzamčení zachová údaje tohoto měsíce přesně v tomto stavu. Zprávy a návštěvnost se dají dál upravovat – jen už nezmění S-1, kterou jste odevzdali.';
+
+  @override
+  String get s1FreezeOnlyPast => 'Měsíc lze uzamknout, až skončí.';
+
+  @override
+  String get s1Frozen => 'Údaje uzamčeny';
+
+  @override
+  String get s1Unfrozen => 'Údaje odemčeny';
+
+  @override
+  String s1FrozenOn(String date) {
+    return 'Uzamčeno $date';
+  }
+
+  @override
+  String s1FrozenBy(String name) {
+    return 'uzamkl(a) $name';
+  }
+
+  @override
+  String get s1FrozenAuto => 'uzamčeno automaticky';
+
+  @override
+  String get s1FrozenNote =>
+      'Toto jsou údaje ve stavu, v jakém byl měsíc uzamčen. Zprávy a návštěvnost zadané později se ukládají, ale tyto údaje už nemění.';
+
+  @override
+  String get s1Unfreeze => 'Odemknout';
+
+  @override
+  String s1UnfreezeConfirm(String month) {
+    return 'Odemknout $month? Údaje se znovu spočítají z aktuálních zpráv a návštěvnosti a mohou se lišit od těch odevzdaných.';
+  }
 
   @override
   String get settingsName => 'Název sboru';

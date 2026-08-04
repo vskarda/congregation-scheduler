@@ -604,6 +604,13 @@ class AppLocalizationsPt extends AppLocalizations {
       'Em Temas dos discursos públicos, escolha «Atualizar temas a partir de PDF» e selecione um formulário S-99 oficial em PDF. As próximas reuniões do fim de semana que se referem a esses números de discurso são atualizadas automaticamente.';
 
   @override
+  String get helpS1FreezeTitle => 'Freeze a month\'s S-1 figures';
+
+  @override
+  String get helpS1FreezeBody =>
+      'On the S-1 screen, \"Freeze figures\" stores the month exactly as you handed it in, so a late report or a corrected attendance count no longer changes it. Reports stay editable — they simply stop affecting the frozen month. Months older than two are frozen automatically; \"Unfreeze\" computes the figures again if you need to.';
+
+  @override
   String get adminToggleHide => 'Ocultar opções de administração';
 
   @override
@@ -1983,6 +1990,47 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get s1Note =>
       'Os pioneiros auxiliares, regulares e especiais não são contados no grupo dos Publicadores; os pioneiros especiais não são incluídos em nenhum grupo.';
+
+  @override
+  String get s1Freeze => 'Freeze figures';
+
+  @override
+  String get s1FreezeHint =>
+      'Freezing keeps this month\'s figures exactly as they are now. Reports and attendance stay editable — they simply no longer change the S-1 you have handed in.';
+
+  @override
+  String get s1FreezeOnlyPast => 'A month can be frozen once it has ended.';
+
+  @override
+  String get s1Frozen => 'Figures frozen';
+
+  @override
+  String get s1Unfrozen => 'Figures unfrozen';
+
+  @override
+  String s1FrozenOn(String date) {
+    return 'Frozen on $date';
+  }
+
+  @override
+  String s1FrozenBy(String name) {
+    return 'by $name';
+  }
+
+  @override
+  String get s1FrozenAuto => 'frozen automatically';
+
+  @override
+  String get s1FrozenNote =>
+      'These are the figures as they stood when the month was frozen. Reports and attendance entered since then are recorded, but do not change them.';
+
+  @override
+  String get s1Unfreeze => 'Unfreeze';
+
+  @override
+  String s1UnfreezeConfirm(String month) {
+    return 'Unfreeze $month? The figures will be computed again from the current reports and attendance, and may differ from the ones handed in.';
+  }
 
   @override
   String get settingsName => 'Nome da congregação';

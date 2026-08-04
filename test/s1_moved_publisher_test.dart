@@ -1,8 +1,7 @@
 import 'package:congregation_scheduler/core/data/publishers_repository.dart';
 import 'package:congregation_scheduler/core/firebase/firebase_providers.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
-import 'package:congregation_scheduler/features/s1_report/s1_calculator.dart';
-import 'package:congregation_scheduler/features/s1_report/s1_screen.dart';
+import 'package:congregation_scheduler/features/s1_report/s1_providers.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,7 +45,7 @@ void main() {
 
   /// The roster is overridden rather than seeded: allPublishersProvider is
   /// gated on the signed-in user being verified, and there is no auth here.
-  Future<S1Result> s1For(
+  Future<S1Record> s1For(
     FakeFirebaseFirestore db,
     List<Publisher> publishers, {
     String on = month,

@@ -1188,6 +1188,18 @@ abstract class AppLocalizations {
   /// **'On Public talk titles, choose \"Update titles from PDF\" and pick an official S-99 form PDF. Upcoming weekend meetings that reference those talk numbers update automatically.'**
   String get helpS99Body;
 
+  /// No description provided for @helpS1FreezeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze a month\'s S-1 figures'**
+  String get helpS1FreezeTitle;
+
+  /// No description provided for @helpS1FreezeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'On the S-1 screen, \"Freeze figures\" stores the month exactly as you handed it in, so a late report or a corrected attendance count no longer changes it. Reports stay editable — they simply stop affecting the frozen month. Months older than two are frozen automatically; \"Unfreeze\" computes the figures again if you need to.'**
+  String get helpS1FreezeBody;
+
   /// No description provided for @adminToggleHide.
   ///
   /// In en, this message translates to:
@@ -3646,6 +3658,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Auxiliary, regular and special pioneers are not counted in the Publishers group; special pioneers are not included in any group.'**
   String get s1Note;
+
+  /// No description provided for @s1Freeze.
+  ///
+  /// In en, this message translates to:
+  /// **'Freeze figures'**
+  String get s1Freeze;
+
+  /// No description provided for @s1FreezeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Freezing keeps this month\'s figures exactly as they are now. Reports and attendance stay editable — they simply no longer change the S-1 you have handed in.'**
+  String get s1FreezeHint;
+
+  /// No description provided for @s1FreezeOnlyPast.
+  ///
+  /// In en, this message translates to:
+  /// **'A month can be frozen once it has ended.'**
+  String get s1FreezeOnlyPast;
+
+  /// No description provided for @s1Frozen.
+  ///
+  /// In en, this message translates to:
+  /// **'Figures frozen'**
+  String get s1Frozen;
+
+  /// No description provided for @s1Unfrozen.
+  ///
+  /// In en, this message translates to:
+  /// **'Figures unfrozen'**
+  String get s1Unfrozen;
+
+  /// No description provided for @s1FrozenOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Frozen on {date}'**
+  String s1FrozenOn(String date);
+
+  /// No description provided for @s1FrozenBy.
+  ///
+  /// In en, this message translates to:
+  /// **'by {name}'**
+  String s1FrozenBy(String name);
+
+  /// No description provided for @s1FrozenAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'frozen automatically'**
+  String get s1FrozenAuto;
+
+  /// No description provided for @s1FrozenNote.
+  ///
+  /// In en, this message translates to:
+  /// **'These are the figures as they stood when the month was frozen. Reports and attendance entered since then are recorded, but do not change them.'**
+  String get s1FrozenNote;
+
+  /// No description provided for @s1Unfreeze.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfreeze'**
+  String get s1Unfreeze;
+
+  /// No description provided for @s1UnfreezeConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Unfreeze {month}? The figures will be computed again from the current reports and attendance, and may differ from the ones handed in.'**
+  String s1UnfreezeConfirm(String month);
 
   /// No description provided for @settingsName.
   ///

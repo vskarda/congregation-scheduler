@@ -18,7 +18,7 @@ else with a QR code.
 - Public witnessing schedule with recurring slots
 - Territories (assignment, return with notes, map links, statistics)
 - Ministry reports (self-service + admin paper entry), publisher record by
-  service year, S-1 monthly summary
+  service year, S-1 monthly summary with freezing of submitted months
 - Meeting attendance (in-person/online, monthly averages)
 - Publisher management: verification, granular per-section admin roles,
   assignment qualifications, emergency notes

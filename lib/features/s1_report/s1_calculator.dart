@@ -1,37 +1,5 @@
 import '../../core/models/models.dart';
 
-/// One S-1 group line: publishers / auxiliary pioneers / regular pioneers.
-class S1Group {
-  const S1Group(
-      {required this.count, required this.studies, required this.hours});
-
-  final int count;
-  final int studies;
-
-  /// Field service + credit hours.
-  final int hours;
-}
-
-class S1Result {
-  const S1Result({
-    required this.activePublishers,
-    required this.avgMidweekAttendance,
-    required this.avgWeekendAttendance,
-    required this.publishers,
-    required this.auxiliaryPioneers,
-    required this.regularPioneers,
-  });
-
-  /// Distinct persons with a positive report in the last 6 months
-  /// (including the selected month).
-  final int activePublishers;
-  final int? avgMidweekAttendance;
-  final int? avgWeekendAttendance;
-  final S1Group publishers;
-  final S1Group auxiliaryPioneers;
-  final S1Group regularPioneers;
-}
-
 /// Pure S-1 computation over one month's report entries, the last six
 /// months' entries (for the actives count) and the month's attendance.
 ///
@@ -47,7 +15,11 @@ class S1Result {
 /// and keep counting: a deleted record says nothing about where the person
 /// went, and a closed month should not quietly lose a number because somebody
 /// tidied up the roster.
-S1Result computeS1({
+///
+/// The result carries no freezing metadata — it is what the month looks like
+/// *now*. Once frozen it is stored as-is and read back instead of recomputed.
+S1Record computeS1({
+  required String month,
   required List<MinistryReport> monthReports,
   required List<List<MinistryReport>> lastSixMonths,
   required List<AttendanceEntry> monthAttendance,
@@ -83,7 +55,8 @@ S1Result computeS1({
     return (totals.reduce((a, b) => a + b) / totals.length).round();
   }
 
-  return S1Result(
+  return S1Record(
+    month: month,
     activePublishers: activeIds.length,
     avgMidweekAttendance: average(MeetingType.lmm),
     avgWeekendAttendance: average(MeetingType.weekend),

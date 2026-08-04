@@ -12,6 +12,7 @@ export 'ministry_group.dart';
 export 'publisher.dart';
 export 'pw.dart';
 export 'report.dart';
+export 's1_record.dart';
 export 'schedule_config.dart';
 export 'song_catalog.dart';
 export 'talk_catalog.dart';

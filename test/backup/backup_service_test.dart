@@ -41,6 +41,13 @@ Future<void> _seed(FakeFirebaseFirestore db) async {
     'meetingType': 'weekend',
     'total': 42,
   });
+  await db.collection('s1_records').doc('2026-06').set({
+    'month': '2026-06',
+    'activePublishers': 42,
+    'publishers': {'count': 31, 'studies': 14, 'hours': 0},
+    'frozenAt': Timestamp.fromDate(DateTime.utc(2026, 7, 5, 8)),
+    'frozenBy': 'uid-1',
+  });
 }
 
 void main() {
@@ -101,6 +108,11 @@ void main() {
     final att =
         await target.collection('attendance').doc('2026-06-01_weekend').get();
     expect(att.data()!['total'], 42);
+
+    // Frozen S-1 figures: the month as it was handed in, nested map and all.
+    final s1 = await target.collection('s1_records').doc('2026-06').get();
+    expect((s1.data()!['publishers'] as Map)['studies'], 14);
+    expect(s1.data()!['frozenAt'], isA<Timestamp>());
   });
 
   test('doc counts cover nested subcollection documents', () async {

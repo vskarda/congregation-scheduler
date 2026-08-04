@@ -42,7 +42,9 @@ publishers can see schedules, only you can edit them).
 > Re-do this step whenever a new app version ships an updated
 > `firestore.rules` file. In particular, self-service **"Delete my account"**
 > only works once the current rules are published (they let a user remove
-> their own publisher record).
+> their own publisher record), and **freezing S-1 months** needs the rules
+> that came with this version (the S-1 screen still works without them, it
+> just cannot store the figures).
 
 ## 5. Get the app configuration
 

@@ -86,6 +86,12 @@ class HelpScreen extends ConsumerWidget {
                   title: l10n.helpS99Title,
                   body: l10n.helpS99Body,
                 ),
+              if (roles.canEditReports())
+                _HelpTopic(
+                  icon: Icons.lock_outline,
+                  title: l10n.helpS1FreezeTitle,
+                  body: l10n.helpS1FreezeBody,
+                ),
               if (roles.canEditTerritories())
                 _HelpTopic(
                   icon: Icons.map_outlined,
