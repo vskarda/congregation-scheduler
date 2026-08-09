@@ -23,6 +23,7 @@
   "commonNo": "No",
   "commonOk": "OK",
   "commonSearch": "Cerca",
+  "commonExport": "Esporta",
   "commonNotAssigned": "—",
   "commonLanguage": "Lingua",
 
@@ -236,6 +237,16 @@
 
   "s21Export": "Esporta S-21 (PDF)",
   "schedulePdfExport": "Riepilogo mensile (PDF)",
+
+  "pubPdfExport": "Esporta elenco (PDF)",
+  "pubPdfTitle": "Profili dei proclamatori",
+  "pubPdfGenerated": "Generato il {date} · {count} proclamatori",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Legenda",
+  "pubPdfConfirmTitle": "Esportare i profili dei proclamatori?",
+  "pubPdfConfirmBody": "Il PDF conterrà i dati personali di {count} proclamatori: indirizzi, numeri di telefono, date di nascita e battesimo e note di emergenza. Conserva il file in modo sicuro e condividilo solo con chi ne ha bisogno.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Programma dell’adunanza infrasettimanale",
   "s21Title": "REGISTRAZIONE DEL PROCLAMATORE DI CONGREGAZIONE",
   "s21Name": "Nome e cognome:",

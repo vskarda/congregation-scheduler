@@ -24,6 +24,7 @@
   "commonNo": "No",
   "commonOk": "OK",
   "commonSearch": "Search",
+  "commonExport": "Export",
   "commonNotAssigned": "—",
   "commonLanguage": "Language",
 
@@ -245,6 +246,16 @@
 
   "s21Export": "Export S-21 (PDF)",
   "schedulePdfExport": "Monthly overview (PDF)",
+
+  "pubPdfExport": "Export list (PDF)",
+  "pubPdfTitle": "Publisher profiles",
+  "pubPdfGenerated": "Generated {date} · {count} publishers",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Legend",
+  "pubPdfConfirmTitle": "Export publisher profiles?",
+  "pubPdfConfirmBody": "The PDF will contain personal data of {count} publishers — addresses, phone numbers, birth and baptism dates and emergency notes. Store it securely and share it only with those who need it.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Midweek Meeting Schedule",
   "s21Title": "CONGREGATION’S PUBLISHER RECORD",
   "s21Name": "Name:",

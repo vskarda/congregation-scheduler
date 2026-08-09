@@ -77,6 +77,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonSearch => 'Search';
 
   @override
+  String get commonExport => 'Export';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -734,6 +737,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Monthly overview (PDF)';
+
+  @override
+  String get pubPdfExport => 'Export list (PDF)';
+
+  @override
+  String get pubPdfTitle => 'Publisher profiles';
+
+  @override
+  String pubPdfGenerated(String date, int count) {
+    return 'Generated $date · $count publishers';
+  }
+
+  @override
+  String get pubPdfLegend => 'Legend';
+
+  @override
+  String get pubPdfConfirmTitle => 'Export publisher profiles?';
+
+  @override
+  String pubPdfConfirmBody(int count) {
+    return 'The PDF will contain personal data of $count publishers — addresses, phone numbers, birth and baptism dates and emergency notes. Store it securely and share it only with those who need it.';
+  }
 
   @override
   String get lmmScheduleTitle => 'Midweek Meeting Schedule';

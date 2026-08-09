@@ -77,6 +77,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get commonSearch => 'Rechercher';
 
   @override
+  String get commonExport => 'Exporter';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -743,6 +746,28 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Récapitulatif mensuel (PDF)';
+
+  @override
+  String get pubPdfExport => 'Exporter la liste (PDF)';
+
+  @override
+  String get pubPdfTitle => 'Profils des proclamateurs';
+
+  @override
+  String pubPdfGenerated(String date, int count) {
+    return 'Généré le $date · $count proclamateurs';
+  }
+
+  @override
+  String get pubPdfLegend => 'Légende';
+
+  @override
+  String get pubPdfConfirmTitle => 'Exporter les profils des proclamateurs ?';
+
+  @override
+  String pubPdfConfirmBody(int count) {
+    return 'Le PDF contiendra les données personnelles de $count proclamateurs : adresses, numéros de téléphone, dates de naissance et de baptême et notes d\'urgence. Conservez le fichier en lieu sûr et ne le partagez qu\'avec ceux qui en ont besoin.';
+  }
 
   @override
   String get lmmScheduleTitle => 'Programme de la réunion de semaine';

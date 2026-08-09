@@ -23,6 +23,7 @@
   "commonNo": "Nie",
   "commonOk": "OK",
   "commonSearch": "Szukaj",
+  "commonExport": "Eksportuj",
   "commonNotAssigned": "—",
   "commonLanguage": "Język",
 
@@ -236,6 +237,16 @@
 
   "s21Export": "Eksportuj S-21 (PDF)",
   "schedulePdfExport": "Przegląd miesięczny (PDF)",
+
+  "pubPdfExport": "Eksportuj listę (PDF)",
+  "pubPdfTitle": "Profile głosicieli",
+  "pubPdfGenerated": "Utworzono {date} · {count} głosicieli",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Legenda",
+  "pubPdfConfirmTitle": "Wyeksportować profile głosicieli?",
+  "pubPdfConfirmBody": "Plik PDF będzie zawierał dane osobowe {count} głosicieli — adresy, numery telefonów, daty urodzenia i chrztu oraz kontakty alarmowe. Przechowuj plik bezpiecznie i udostępniaj go tylko tym, którzy go potrzebują.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Plan zebrań w tygodniu",
   "s21Title": "ZBOROWE ZESTAWIENIE SPRAWOZDAŃ GŁOSICIELA",
   "s21Name": "Imię i nazwisko:",

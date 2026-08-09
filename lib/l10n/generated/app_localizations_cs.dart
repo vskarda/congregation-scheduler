@@ -77,6 +77,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get commonSearch => 'Hledat';
 
   @override
+  String get commonExport => 'Exportovat';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -735,6 +738,28 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Měsíční přehled (PDF)';
+
+  @override
+  String get pubPdfExport => 'Exportovat seznam (PDF)';
+
+  @override
+  String get pubPdfTitle => 'Profily zvěstovatelů';
+
+  @override
+  String pubPdfGenerated(String date, int count) {
+    return 'Vytvořeno $date · $count zvěstovatelů';
+  }
+
+  @override
+  String get pubPdfLegend => 'Vysvětlivky';
+
+  @override
+  String get pubPdfConfirmTitle => 'Exportovat profily zvěstovatelů?';
+
+  @override
+  String pubPdfConfirmBody(int count) {
+    return 'PDF bude obsahovat osobní údaje $count zvěstovatelů — adresy, telefonní čísla, data narození a křtu a nouzové kontakty. Uložte soubor bezpečně a sdílejte ho jen s těmi, kdo ho potřebují.';
+  }
 
   @override
   String get lmmScheduleTitle => 'Program shromáždění v týdnu';

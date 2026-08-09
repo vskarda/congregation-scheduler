@@ -23,6 +23,7 @@
   "commonNo": "Não",
   "commonOk": "OK",
   "commonSearch": "Pesquisar",
+  "commonExport": "Exportar",
   "commonNotAssigned": "—",
   "commonLanguage": "Idioma",
 
@@ -236,6 +237,16 @@
 
   "s21Export": "Exportar S-21 (PDF)",
   "schedulePdfExport": "Resumo mensal (PDF)",
+
+  "pubPdfExport": "Exportar lista (PDF)",
+  "pubPdfTitle": "Perfis dos publicadores",
+  "pubPdfGenerated": "Gerado em {date} · {count} publicadores",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Legenda",
+  "pubPdfConfirmTitle": "Exportar os perfis dos publicadores?",
+  "pubPdfConfirmBody": "O PDF conterá dados pessoais de {count} publicadores — endereços, números de telefone, datas de nascimento e batismo e notas de emergência. Guarde o arquivo com segurança e compartilhe-o apenas com quem precisa dele.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Programação da reunião do meio de semana",
   "s21Title": "REGISTRO DE PUBLICADOR DE CONGREGAÇÃO",
   "s21Name": "Nome:",

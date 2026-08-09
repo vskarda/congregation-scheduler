@@ -23,6 +23,7 @@
   "commonNo": "Nein",
   "commonOk": "OK",
   "commonSearch": "Suchen",
+  "commonExport": "Exportieren",
   "commonNotAssigned": "—",
   "commonLanguage": "Sprache",
 
@@ -236,6 +237,16 @@
 
   "s21Export": "S-21 exportieren (PDF)",
   "schedulePdfExport": "Monatsübersicht (PDF)",
+
+  "pubPdfExport": "Liste exportieren (PDF)",
+  "pubPdfTitle": "Verkündigerprofile",
+  "pubPdfGenerated": "Erstellt am {date} · {count} Verkündiger",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Legende",
+  "pubPdfConfirmTitle": "Verkündigerprofile exportieren?",
+  "pubPdfConfirmBody": "Das PDF enthält personenbezogene Daten von {count} Verkündigern — Adressen, Telefonnummern, Geburts- und Taufdaten sowie Notfallhinweise. Die Datei sicher aufbewahren und nur an diejenigen weitergeben, die sie benötigen.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Zusammenkunft unter der Woche",
   "s21Title": "VERKÜNDIGERBERICHTSKARTE DER VERSAMMLUNG",
   "s21Name": "Name:",

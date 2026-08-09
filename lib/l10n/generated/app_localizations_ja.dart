@@ -77,6 +77,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonSearch => '検索';
 
   @override
+  String get commonExport => 'エクスポート';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -722,6 +725,28 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get schedulePdfExport => '月間予定（PDF）';
+
+  @override
+  String get pubPdfExport => '一覧をエクスポート（PDF）';
+
+  @override
+  String get pubPdfTitle => '伝道者のプロフィール';
+
+  @override
+  String pubPdfGenerated(String date, int count) {
+    return '作成日 $date · 伝道者 $count 人';
+  }
+
+  @override
+  String get pubPdfLegend => '凡例';
+
+  @override
+  String get pubPdfConfirmTitle => '伝道者のプロフィールをエクスポートしますか？';
+
+  @override
+  String pubPdfConfirmBody(int count) {
+    return 'この PDF には伝道者 $count 人の個人情報（住所、電話番号、生年月日、バプテスマの日付、緊急連絡先）が含まれます。ファイルは安全に保管し、必要な人にだけ渡してください。';
+  }
 
   @override
   String get lmmScheduleTitle => '週日の集会の予定';

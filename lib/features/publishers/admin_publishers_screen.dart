@@ -12,6 +12,7 @@ import '../../core/models/models.dart';
 import 'gender_style.dart';
 import 'invite_dialog.dart';
 import 'publisher_badges.dart';
+import 'publishers_pdf_button.dart';
 import 's21/s21_import_screen.dart';
 
 class AdminPublishersScreen extends ConsumerStatefulWidget {
@@ -188,6 +189,9 @@ class _AdminPublishersScreenState
     final roles = ref.watch(myRolesProvider);
     final canImportS21 =
         roles.canEditPublishers() && roles.canEditReports();
+    // The export pulls every listed publisher's private profile, which
+    // firestore.rules grants to publisher-admins only.
+    final canExportPdf = roles.canEditPublishers();
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
@@ -264,6 +268,8 @@ class _AdminPublishersScreenState
                         ),
                         icon: const Icon(Icons.upload_file_outlined),
                       ),
+                    if (canExportPdf)
+                      PublishersPdfButton(publishers: filtered),
                   ],
                 ),
               ),

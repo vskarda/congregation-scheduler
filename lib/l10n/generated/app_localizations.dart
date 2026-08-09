@@ -246,6 +246,12 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get commonSearch;
 
+  /// No description provided for @commonExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export'**
+  String get commonExport;
+
   /// No description provided for @commonNotAssigned.
   ///
   /// In en, this message translates to:
@@ -1451,6 +1457,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Monthly overview (PDF)'**
   String get schedulePdfExport;
+
+  /// No description provided for @pubPdfExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export list (PDF)'**
+  String get pubPdfExport;
+
+  /// No description provided for @pubPdfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher profiles'**
+  String get pubPdfTitle;
+
+  /// No description provided for @pubPdfGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated {date} · {count} publishers'**
+  String pubPdfGenerated(String date, int count);
+
+  /// No description provided for @pubPdfLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Legend'**
+  String get pubPdfLegend;
+
+  /// No description provided for @pubPdfConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export publisher profiles?'**
+  String get pubPdfConfirmTitle;
+
+  /// No description provided for @pubPdfConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The PDF will contain personal data of {count} publishers — addresses, phone numbers, birth and baptism dates and emergency notes. Store it securely and share it only with those who need it.'**
+  String pubPdfConfirmBody(int count);
 
   /// No description provided for @lmmScheduleTitle.
   ///

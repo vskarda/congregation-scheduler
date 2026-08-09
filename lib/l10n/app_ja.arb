@@ -23,6 +23,7 @@
   "commonNo": "いいえ",
   "commonOk": "OK",
   "commonSearch": "検索",
+  "commonExport": "エクスポート",
   "commonNotAssigned": "—",
   "commonLanguage": "言語",
 
@@ -236,6 +237,16 @@
 
   "s21Export": "S-21をエクスポート（PDF）",
   "schedulePdfExport": "月間予定（PDF）",
+
+  "pubPdfExport": "一覧をエクスポート（PDF）",
+  "pubPdfTitle": "伝道者のプロフィール",
+  "pubPdfGenerated": "作成日 {date} · 伝道者 {count} 人",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "凡例",
+  "pubPdfConfirmTitle": "伝道者のプロフィールをエクスポートしますか？",
+  "pubPdfConfirmBody": "この PDF には伝道者 {count} 人の個人情報（住所、電話番号、生年月日、バプテスマの日付、緊急連絡先）が含まれます。ファイルは安全に保管し、必要な人にだけ渡してください。",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "週日の集会の予定",
   "s21Title": "会衆伝道者記録カード",
   "s21Name": "氏名:",

@@ -23,6 +23,7 @@
   "commonNo": "Ne",
   "commonOk": "OK",
   "commonSearch": "Hledat",
+  "commonExport": "Exportovat",
   "commonNotAssigned": "—",
   "commonLanguage": "Jazyk",
 
@@ -239,6 +240,16 @@
 
   "s21Export": "Exportovat S-21 (PDF)",
   "schedulePdfExport": "Měsíční přehled (PDF)",
+
+  "pubPdfExport": "Exportovat seznam (PDF)",
+  "pubPdfTitle": "Profily zvěstovatelů",
+  "pubPdfGenerated": "Vytvořeno {date} · {count} zvěstovatelů",
+  "@pubPdfGenerated": {"placeholders": {"date": {"type": "String"}, "count": {"type": "int"}}},
+  "pubPdfLegend": "Vysvětlivky",
+  "pubPdfConfirmTitle": "Exportovat profily zvěstovatelů?",
+  "pubPdfConfirmBody": "PDF bude obsahovat osobní údaje {count} zvěstovatelů — adresy, telefonní čísla, data narození a křtu a nouzové kontakty. Uložte soubor bezpečně a sdílejte ho jen s těmi, kdo ho potřebují.",
+  "@pubPdfConfirmBody": {"placeholders": {"count": {"type": "int"}}},
+
   "lmmScheduleTitle": "Program shromáždění v týdnu",
   "s21Title": "KARTA SBOROVÉHO ZVĚSTOVATELE",
   "s21Name": "Jméno:",

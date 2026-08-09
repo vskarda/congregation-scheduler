@@ -77,6 +77,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get commonSearch => 'Ara';
 
   @override
+  String get commonExport => 'Dışa aktar';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -734,6 +737,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get schedulePdfExport => 'Aylık program (PDF)';
+
+  @override
+  String get pubPdfExport => 'Listeyi dışa aktar (PDF)';
+
+  @override
+  String get pubPdfTitle => 'Müjdeci profilleri';
+
+  @override
+  String pubPdfGenerated(String date, int count) {
+    return '$date tarihinde oluşturuldu · $count müjdeci';
+  }
+
+  @override
+  String get pubPdfLegend => 'Kısaltmalar';
+
+  @override
+  String get pubPdfConfirmTitle => 'Müjdeci profilleri dışa aktarılsın mı?';
+
+  @override
+  String pubPdfConfirmBody(int count) {
+    return 'PDF, $count müjdecinin kişisel bilgilerini içerecek — adresler, telefon numaraları, doğum ve vaftiz tarihleri ve acil durum notları. Dosyayı güvenli şekilde saklayın ve yalnızca ihtiyacı olanlarla paylaşın.';
+  }
 
   @override
   String get lmmScheduleTitle => 'Hafta İçi İbadeti Programı';
