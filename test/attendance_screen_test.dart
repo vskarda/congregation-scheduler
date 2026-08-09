@@ -12,8 +12,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 
-/// Attendance quick-add auto-calculation and the past-meetings history card
-/// (fill in, edit, delete via the row dialog).
+/// The attendance admin screen (monthly averages + past-meetings history,
+/// full attendance right only) and the history card's fill-in/edit/delete
+/// dialog. Recording from the meeting views lives in
+/// meeting_attendance_card_test.dart.
 void main() {
   // Bypasses the auth gate; defaults are LMM Tuesday, weekend Sunday.
   overrides(FakeFirebaseFirestore db, {Roles roles = const Roles(fullAdmin: true)}) => [
@@ -55,34 +57,6 @@ void main() {
 
   String textOf(Finder finder, WidgetTester tester) =>
       tester.widget<TextField>(finder).controller!.text;
-
-  testWidgets('quick-add derives the third count and saves all three',
-      (tester) async {
-    final db = FakeFirebaseFirestore();
-    await tester.pumpWidget(wrapScreen(db));
-    await tester.pumpAndSettle();
-
-    await tester.enterText(field('In person'), '40');
-    await tester.pump();
-    await tester.enterText(field('Online'), '10');
-    await tester.pump();
-    expect(textOf(field('Total'), tester), '50');
-
-    // Editing the derived total re-derives the least recently typed count.
-    await tester.enterText(field('Total'), '60');
-    await tester.pump();
-    expect(textOf(field('In person'), tester), '50');
-
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
-    await tester.pumpAndSettle();
-
-    final docs = (await db.collection('attendance').get()).docs;
-    expect(docs, hasLength(1));
-    expect(docs.single.data(),
-        containsPair('inPerson', 50));
-    expect(docs.single.data(), containsPair('online', 10));
-    expect(docs.single.data(), containsPair('total', 60));
-  });
 
   testWidgets('history lists unrecorded past meetings and fills them in',
       (tester) async {
@@ -198,28 +172,37 @@ void main() {
     expect((await db.collection('attendance').doc(id).get()).exists, isFalse);
   });
 
-  testWidgets(
-      'record-attendance-only role sees just the record form, not the overview or history',
+  testWidgets('record-attendance-only role sees nothing on this screen',
       (tester) async {
     final db = FakeFirebaseFirestore();
     await tester.pumpWidget(
         wrapScreen(db, roles: const Roles(recordAttendance: true)));
     await tester.pumpAndSettle();
 
-    expect(find.text('Record attendance'), findsOneWidget);
+    // The right records from the meeting views and gets no nav entry here;
+    // a deep link must not hand it the averages or the history either.
+    expect(find.text('Record attendance'), findsNothing);
     expect(find.text('Monthly averages'), findsNothing);
     expect(find.text('Past meetings'), findsNothing);
   });
 
-  testWidgets('full attendance role sees the record form, overview, and history',
+  testWidgets('full attendance role sees the overview and history',
       (tester) async {
     final db = FakeFirebaseFirestore();
     await tester
         .pumpWidget(wrapScreen(db, roles: const Roles(attendance: true)));
     await tester.pumpAndSettle();
 
-    expect(find.text('Record attendance'), findsOneWidget);
+    // The record form moved to the meeting views.
+    expect(find.text('Record attendance'), findsNothing);
     expect(find.text('Monthly averages'), findsOneWidget);
     expect(find.text('Past meetings'), findsOneWidget);
+  });
+
+  test('the attendance nav entry is gated on the full right, not recording',
+      () {
+    expect(const Roles(recordAttendance: true).canRecordAttendance(), isTrue);
+    expect(const Roles(recordAttendance: true).canEditAttendance(), isFalse);
+    expect(const Roles(attendance: true).canEditAttendance(), isTrue);
   });
 }

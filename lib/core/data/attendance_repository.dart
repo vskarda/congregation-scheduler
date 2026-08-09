@@ -35,6 +35,10 @@ class AttendanceRepository {
     return snap.docs.map(_fromDoc).toList();
   }
 
+  /// One meeting's entry, or null when nothing has been recorded for it.
+  Stream<AttendanceEntry?> watchDoc(String docId) =>
+      _col.doc(docId).snapshots().map((d) => d.exists ? _fromDoc(d) : null);
+
   /// Doc id {date}_{type} makes saving idempotent per meeting.
   Future<void> upsert(AttendanceEntry entry) => _col
       .doc(AttendanceEntry.docId(entry.date, entry.meetingType))
@@ -59,3 +63,10 @@ final attendanceEntriesProvider =
       .watch(attendanceRepositoryProvider)
       .watchRange(attendanceHistoryStart(), to);
 });
+
+/// One meeting's counts, keyed by [AttendanceEntry.docId]. Backs the record
+/// card in the meeting views, which page far outside the 24-month window
+/// [attendanceEntriesProvider] covers.
+final attendanceEntryProvider =
+    StreamProvider.family<AttendanceEntry?, String>((ref, docId) =>
+        ref.watch(attendanceRepositoryProvider).watchDoc(docId));

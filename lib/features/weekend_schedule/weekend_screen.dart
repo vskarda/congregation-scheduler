@@ -12,6 +12,7 @@ import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
+import '../attendance/meeting_attendance_card.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
 import '../songs/song_editor.dart';
 import 'talk_title_editor.dart';
@@ -178,6 +179,12 @@ class _WeekContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
+    final meta = ref.watch(congregationMetaProvider).value;
+    // Attendance is recorded against the meeting date this week's schedule is
+    // for. Without meta the weekday is unknown, and guessing it would write
+    // the count under the wrong document id.
+    final meetingDate =
+        meta == null ? null : meetingDateOf(week.id, meta.weekendWeekday);
 
     Widget assignmentRow({
       required String label,
@@ -301,12 +308,9 @@ class _WeekContent extends ConsumerWidget {
                 ref.watch(weekendPermanentAssignmentsProvider).value ??
                     const [];
             final configRepo = ref.read(scheduleConfigRepositoryProvider);
-            final meta = ref.watch(congregationMetaProvider).value;
             return SupportAssignmentsCard(
               canEdit: canEdit,
-              date: meta == null
-                  ? null
-                  : meetingDateOf(week.id, meta.weekendWeekday),
+              date: meetingDate,
               attendants: week.attendants,
               microphones: week.microphones,
               audioVideo: week.audioVideo,
@@ -342,6 +346,11 @@ class _WeekContent extends ConsumerWidget {
             );
           },
         ),
+        if (meetingDate != null)
+          MeetingAttendanceCard(
+            date: meetingDate,
+            meetingType: MeetingType.weekend,
+          ),
         const SizedBox(height: 24),
       ],
     );

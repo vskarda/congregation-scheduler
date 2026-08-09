@@ -17,6 +17,7 @@ import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/week_navigator.dart';
+import '../attendance/meeting_attendance_card.dart';
 import '../songs/song_editor.dart';
 import 'epub_import/import_actions.dart';
 import 'epub_import/import_screen.dart';
@@ -311,11 +312,8 @@ class _WeekContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final theme = Theme.of(context);
-    final classCount =
-        (ref.watch(congregationMetaProvider).value?.lmmClassCount ?? 1).clamp(
-          1,
-          3,
-        );
+    final meta = ref.watch(congregationMetaProvider).value;
+    final classCount = (meta?.lmmClassCount ?? 1).clamp(1, 3);
     final classIndex = classCount >= 2
         ? ref.watch(lmmSelectedClassProvider).clamp(1, classCount)
         : 1;
@@ -461,6 +459,22 @@ class _WeekContent extends ConsumerWidget {
     }
 
     children.add(_SupportCard(week: week, canEdit: canEdit));
+
+    // Attendance is recorded against the meeting date this week's schedule is
+    // for. Without meta the weekday is unknown, and guessing it would write
+    // the count under the wrong document id.
+    final meetingDate = meta == null
+        ? null
+        : meetingDateOf(week.id, meta.lmmWeekday);
+    if (meetingDate != null) {
+      children.add(
+        MeetingAttendanceCard(
+          date: meetingDate,
+          meetingType: MeetingType.lmm,
+        ),
+      );
+    }
+
     children.add(const SizedBox(height: 24));
 
     return ListView(children: children);

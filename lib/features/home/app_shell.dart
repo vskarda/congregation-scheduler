@@ -64,7 +64,9 @@ class AppShell extends ConsumerWidget {
             l10n.navReportsAdmin),
       if (roles.canEditReports())
         _Destination('/admin/s1', Icons.summarize_outlined, l10n.navS1),
-      if (roles.canRecordAttendance())
+      // Record-only rights get no entry here: they record from the meeting
+      // views, and this screen shows the averages and history they can't see.
+      if (roles.canEditAttendance())
         _Destination(
             '/admin/attendance', Icons.tag_outlined, l10n.navAttendance),
       if (roles.canEditWeekend())
