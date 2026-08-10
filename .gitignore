@@ -46,3 +46,7 @@ app.*.map.json
 
 # Local test credentials (never commit)
 .credits/
+
+# Congregation backups: real personal data (names, addresses, phones,
+# birth dates, emergency notes) — keep them off the remote.
+congregation-backup-*.json
