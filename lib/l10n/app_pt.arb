@@ -229,6 +229,7 @@
   "recordAverageHours": "Média mensal",
 
   "reportMonth": "Mês",
+  "reportPublisher": "Publicador",
   "reportParticipated": "Participou no ministério",
   "reportStudies": "Estudos bíblicos",
   "reportHours": "Horas",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Enviado em {date}",
   "reportSaved": "Relatório salvo.",
   "reportMissing": "Não enviado",
+  "reportEmpty": "Relatório vazio — sem serviço",
   "reportNotCountedMoved": "Mudou-se — não contabilizado",
   "reportEnterFor": "Inserir relatório — {name}",
   "reportSummaryReported": "Relataram: {reported} / {total}",

@@ -235,6 +235,7 @@
   "recordAverageHours": "Monthly average",
 
   "reportMonth": "Month",
+  "reportPublisher": "Publisher",
   "reportParticipated": "Shared in Ministry",
   "reportStudies": "Bible Studies",
   "reportHours": "Hours",
@@ -532,6 +533,7 @@
   "@reportSubmittedAt": {"placeholders": {"date": {"type": "String"}}},
   "reportSaved": "Report saved.",
   "reportMissing": "Not submitted",
+  "reportEmpty": "Empty report — no ministry",
   "reportNotCountedMoved": "Moved — not counted",
   "reportFormerMember": "Former member",
   "reportEnterFor": "Enter report — {name}",

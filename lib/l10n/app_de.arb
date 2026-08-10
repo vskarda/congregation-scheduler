@@ -229,6 +229,7 @@
   "recordAverageHours": "Monatsdurchschnitt",
 
   "reportMonth": "Monat",
+  "reportPublisher": "Verkündiger",
   "reportParticipated": "Hat sich am Predigtdienst beteiligt",
   "reportStudies": "Bibelstudien",
   "reportHours": "Stunden",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Gesendet am {date}",
   "reportSaved": "Bericht gespeichert.",
   "reportMissing": "Nicht gesendet",
+  "reportEmpty": "Leerer Bericht — kein Dienst",
   "reportNotCountedMoved": "Weggezogen — zählt nicht",
   "reportEnterFor": "Bericht eingeben – {name}",
   "reportSummaryReported": "Berichtet: {reported} / {total}",

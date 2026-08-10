@@ -229,6 +229,7 @@
   "recordAverageHours": "Średnia miesięczna",
 
   "reportMonth": "Miesiąc",
+  "reportPublisher": "Głosiciel",
   "reportParticipated": "Uczestniczył(a) w służbie",
   "reportStudies": "Kursy biblijne",
   "reportHours": "Godziny",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Wysłano {date}",
   "reportSaved": "Zapisano sprawozdanie.",
   "reportMissing": "Nie wysłano",
+  "reportEmpty": "Pusty raport — brak służby",
   "reportNotCountedMoved": "Przeprowadził się — nie liczy się",
   "reportEnterFor": "Wprowadź sprawozdanie — {name}",
   "reportSummaryReported": "Zgłosiło: {reported} / {total}",

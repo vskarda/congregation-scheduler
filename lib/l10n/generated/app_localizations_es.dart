@@ -720,6 +720,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reportMonth => 'Mes';
 
   @override
+  String get reportPublisher => 'Publicador';
+
+  @override
   String get reportParticipated => 'Participación en el ministerio';
 
   @override
@@ -1585,6 +1588,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reportMissing => 'No enviado';
+
+  @override
+  String get reportEmpty => 'Informe vacío — sin servicio';
 
   @override
   String get reportNotCountedMoved => 'Se mudó — no cuenta';

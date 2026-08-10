@@ -699,6 +699,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reportMonth => '月';
 
   @override
+  String get reportPublisher => '伝道者';
+
+  @override
   String get reportParticipated => '宣教に参加した';
 
   @override
@@ -1542,6 +1545,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get reportMissing => '未送信';
+
+  @override
+  String get reportEmpty => '報告は空 — 奉仕なし';
 
   @override
   String get reportNotCountedMoved => '転出 — 集計外';

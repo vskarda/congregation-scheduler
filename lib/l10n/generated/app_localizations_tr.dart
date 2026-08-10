@@ -711,6 +711,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportMonth => 'Ay';
 
   @override
+  String get reportPublisher => 'Müjdeci';
+
+  @override
   String get reportParticipated => 'Hizmete katıldı';
 
   @override
@@ -1573,6 +1576,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get reportMissing => 'Gönderilmedi';
+
+  @override
+  String get reportEmpty => 'Boş rapor — hizmet yok';
 
   @override
   String get reportNotCountedMoved => 'Taşındı — sayılmıyor';

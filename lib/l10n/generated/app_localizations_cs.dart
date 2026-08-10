@@ -712,6 +712,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reportMonth => 'Měsíc';
 
   @override
+  String get reportPublisher => 'Zvěstovatel';
+
+  @override
   String get reportParticipated => 'Byl/a ve službě';
 
   @override
@@ -1570,6 +1573,9 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get reportMissing => 'Neodevzdáno';
+
+  @override
+  String get reportEmpty => 'Prázdná zpráva — žádná služba';
 
   @override
   String get reportNotCountedMoved => 'Přestěhoval se — nepočítá se';

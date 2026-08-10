@@ -229,6 +229,7 @@
   "recordAverageHours": "Media mensile",
 
   "reportMonth": "Mese",
+  "reportPublisher": "Proclamatore",
   "reportParticipated": "Ha partecipato al ministero",
   "reportStudies": "Studi biblici",
   "reportHours": "Ore",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Inviato il {date}",
   "reportSaved": "Rapporto salvato.",
   "reportMissing": "Non inviato",
+  "reportEmpty": "Rapporto vuoto — nessun servizio",
   "reportNotCountedMoved": "Trasferito — non conteggiato",
   "reportEnterFor": "Inserisci rapporto — {name}",
   "reportSummaryReported": "Hanno riferito: {reported} / {total}",

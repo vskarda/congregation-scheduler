@@ -229,6 +229,7 @@
   "recordAverageHours": "月平均",
 
   "reportMonth": "月",
+  "reportPublisher": "伝道者",
   "reportParticipated": "宣教に参加した",
   "reportStudies": "聖書研究",
   "reportHours": "時間",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "{date} に送信",
   "reportSaved": "報告を保存しました。",
   "reportMissing": "未送信",
+  "reportEmpty": "報告は空 — 奉仕なし",
   "reportNotCountedMoved": "転出 — 集計外",
   "reportEnterFor": "報告を入力 — {name}",
   "reportSummaryReported": "報告済み: {reported} / {total}",

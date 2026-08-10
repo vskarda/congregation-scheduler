@@ -229,6 +229,7 @@
   "recordAverageHours": "Promedio mensual",
 
   "reportMonth": "Mes",
+  "reportPublisher": "Publicador",
   "reportParticipated": "Participación en el ministerio",
   "reportStudies": "Cursos bíblicos",
   "reportHours": "Horas",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Enviado el {date}",
   "reportSaved": "Informe guardado.",
   "reportMissing": "No enviado",
+  "reportEmpty": "Informe vacío — sin servicio",
   "reportNotCountedMoved": "Se mudó — no cuenta",
   "reportEnterFor": "Introducir informe — {name}",
   "reportSummaryReported": "Informaron: {reported} / {total}",

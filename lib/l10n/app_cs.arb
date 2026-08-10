@@ -229,6 +229,7 @@
   "recordAverageHours": "Měsíční průměr",
 
   "reportMonth": "Měsíc",
+  "reportPublisher": "Zvěstovatel",
   "reportParticipated": "Byl/a ve službě",
   "reportStudies": "Biblická studia",
   "reportHours": "Hodiny",
@@ -506,6 +507,7 @@
   "reportSubmittedAt": "Odesláno {date}",
   "reportSaved": "Zpráva uložena.",
   "reportMissing": "Neodevzdáno",
+  "reportEmpty": "Prázdná zpráva — žádná služba",
   "reportNotCountedMoved": "Přestěhoval se — nepočítá se",
   "reportFormerMember": "Bývalý člen",
   "reportEnterFor": "Zadat zprávu — {name}",

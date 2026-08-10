@@ -1404,6 +1404,12 @@ abstract class AppLocalizations {
   /// **'Month'**
   String get reportMonth;
 
+  /// No description provided for @reportPublisher.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher'**
+  String get reportPublisher;
+
   /// No description provided for @reportParticipated.
   ///
   /// In en, this message translates to:
@@ -2933,6 +2939,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not submitted'**
   String get reportMissing;
+
+  /// No description provided for @reportEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Empty report — no ministry'**
+  String get reportEmpty;
 
   /// No description provided for @reportNotCountedMoved.
   ///

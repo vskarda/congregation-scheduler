@@ -229,6 +229,7 @@
   "recordAverageHours": "Moyenne mensuelle",
 
   "reportMonth": "Mois",
+  "reportPublisher": "Proclamateur",
   "reportParticipated": "A participé à la prédication",
   "reportStudies": "Cours bibliques",
   "reportHours": "Heures",
@@ -499,6 +500,7 @@
   "reportSubmittedAt": "Envoyé le {date}",
   "reportSaved": "Rapport enregistré.",
   "reportMissing": "Non envoyé",
+  "reportEmpty": "Rapport vide — pas de prédication",
   "reportNotCountedMoved": "Déménagé — non compté",
   "reportEnterFor": "Saisir le rapport — {name}",
   "reportSummaryReported": "Ont remis leur rapport : {reported} / {total}",
