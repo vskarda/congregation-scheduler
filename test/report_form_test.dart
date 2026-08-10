@@ -441,6 +441,70 @@ void main() {
     expect(out!.statusAtMonth, PublisherStatus.publisher);
   });
 
+  testWidgets('a publisher month is not questioned for blank hours',
+      (tester) async {
+    // The admin dialog shows hours on every report so a paper one can be
+    // entered in full, but a publisher does not report hours — asking about
+    // them turns every ordinary report into a dialog.
+    MinistryReport? out;
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: ReportForm(
+            initial: const MinistryReport(
+                month: '2026-07', statusAtMonth: PublisherStatus.publisher),
+            isPioneer: true,
+            showStatusPicker: true,
+            onSubmit: (r) async => out = r,
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.widgetWithText(TextField, 'Bible Studies'), '1');
+    await tapSubmit(tester);
+
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(out, isNotNull);
+    expect(out!.hours, isNull);
+  });
+
+  testWidgets('the same form does ask once the month is set to pioneer',
+      (tester) async {
+    await tester.pumpWidget(MaterialApp(
+      locale: const Locale('en'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: ReportForm(
+            initial: const MinistryReport(
+                month: '2026-07',
+                participated: true,
+                statusAtMonth: PublisherStatus.publisher),
+            isPioneer: true,
+            showStatusPicker: true,
+            onSubmit: (r) async {},
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(DropdownButtonFormField<PublisherStatus>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Regular pioneer').last);
+    await tester.pumpAndSettle();
+    await tapSubmit(tester);
+
+    expect(find.text(noHoursWarning), findsOneWidget);
+  });
+
   testWidgets('both slips are raised together in one question',
       (tester) async {
     await tester.pumpWidget(MaterialApp(

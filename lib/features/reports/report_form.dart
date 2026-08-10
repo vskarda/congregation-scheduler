@@ -156,9 +156,12 @@ class _ReportFormState extends State<ReportForm> {
     // hours on a pioneer report are the costly one: the field is the whole
     // point of the report, and the S-1 quietly loses the time. A pioneer who
     // truly did nothing types 0, so blank means forgotten far more often than
-    // it means zero.
+    // it means zero. The question follows the month as filed, not who can see
+    // the field: an admin is shown hours on every report so that a paper one
+    // can be entered in full, and a publisher's month has no hours to forget.
     final warnings = [
-      if (_effectivePioneer && hours == null) l10n.reportCheckPioneerNoHours,
+      if (_isPioneerStatus(_statusAtMonth) && hours == null)
+        l10n.reportCheckPioneerNoHours,
       if (!participated && widget.sharedLastMonth)
         l10n.reportCheckWasActiveLastMonth,
     ];
