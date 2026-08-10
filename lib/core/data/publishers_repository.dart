@@ -13,6 +13,10 @@ class PublishersRepository {
   CollectionReference<Map<String, dynamic>> get _col =>
       _db.collection('publishers');
 
+  /// Departures of deleted records; see [FormerPublisher].
+  CollectionReference<Map<String, dynamic>> get _formerCol =>
+      _db.collection('former_publishers');
+
   Publisher _fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) =>
       Publisher.fromJson(doc.data()!).copyWith(id: doc.id);
 
@@ -33,8 +37,20 @@ class PublishersRepository {
   }
 
   /// Create with a fixed id (auth uid at self-registration).
-  Future<void> createWithId(String id, Publisher publisher) =>
-      _col.doc(id).set(publisher.toJson());
+  ///
+  /// Clears any departure left over from a previous record on the same id:
+  /// somebody who deleted their account and registers again arrives on the
+  /// very same auth uid, and an old tombstone would silently drop their new
+  /// reports from the S-1.
+  Future<void> createWithId(String id, Publisher publisher) async {
+    await _col.doc(id).set(publisher.toJson());
+    try {
+      await _formerCol.doc(id).delete();
+    } on FirebaseException catch (_) {
+      // Nothing to clear, or rules not yet updated: registration must not
+      // fail over a document that only matters to the S-1.
+    }
+  }
 
   /// Admin-created record for a member without a login.
   Future<String> create(Publisher publisher) async {
@@ -45,7 +61,21 @@ class PublishersRepository {
   Future<void> update(Publisher publisher) =>
       _col.doc(publisher.id).set(publisher.toJson());
 
-  Future<void> delete(String id) async {
+  /// Removes the record, its private profile and its away periods.
+  ///
+  /// A record that had moved away leaves a [FormerPublisher] behind first:
+  /// their report entries stay under `reports/{month}/entries/{id}`, and
+  /// without the departure the months they had already left would start
+  /// counting for this congregation again. [known] saves a read for callers
+  /// holding the document already.
+  Future<void> delete(String id, {Publisher? known}) async {
+    final publisher = known ?? await getOne(id);
+    if (publisher != null && publisher.moved) {
+      await _formerCol.doc(id).set(FormerPublisher(
+            movedDate: publisher.movedDate,
+            deletedAt: DateTime.now(),
+          ).toJson());
+    }
     final batch = _db.batch();
     batch.delete(_col.doc(id).collection('private').doc('profile'));
     batch.delete(_awayDoc(id));
@@ -92,6 +122,14 @@ class PublishersRepository {
 
   Future<void> setAway(String publisherId, PublisherAway data) =>
       _awayDoc(publisherId).set(data.toJson());
+
+  /// Departures that outlived their records; see [FormerPublisher]. A handful
+  /// of tiny documents at most, so the whole collection is read at once.
+  Stream<List<FormerPublisher>> watchFormer() =>
+      _formerCol.snapshots().map((snap) => [
+            for (final doc in snap.docs)
+              FormerPublisher.fromJson(doc.data()).copyWith(id: doc.id),
+          ]);
 }
 
 final publishersRepositoryProvider = Provider<PublishersRepository>(
@@ -123,6 +161,17 @@ final allPublishersProvider = StreamProvider<List<Publisher>>((ref) {
     return Stream.value(const <Publisher>[]);
   }
   return ref.watch(publishersRepositoryProvider).watchAll();
+});
+
+/// Departures of publishers whose records have been deleted. Only the report
+/// screens need them, and only their admins may read them (firestore.rules),
+/// so everyone else gets an empty list rather than a denied query.
+final formerPublishersProvider = StreamProvider<List<FormerPublisher>>((ref) {
+  final roles = ref.watch(myRolesProvider);
+  if (!roles.canEditReports() && !roles.canEditPublishers()) {
+    return Stream.value(const <FormerPublisher>[]);
+  }
+  return ref.watch(publishersRepositoryProvider).watchFormer();
 });
 
 /// Quick id -> publisher lookup for rendering assignment names.

@@ -182,18 +182,34 @@ abstract class Publisher with _$Publisher {
   }
 
   /// Whether the publisher belongs on the roster of report month [month]
-  /// (`yyyy-MM`). The month the move falls in already belongs to the new
-  /// congregation, so the last month counted here is the one before it.
-  bool onRosterInMonth(String month) {
-    if (!moved) return true;
-    final left = movedDate;
-    if (left == null) return false;
-    return month.compareTo(left.substring(0, 7)) < 0;
-  }
+  /// (`yyyy-MM`). See [onRosterInMonthOf] for the rule itself, which a
+  /// [FormerPublisher] applies to the same person after their record is gone.
+  bool onRosterInMonth(String month) =>
+      onRosterInMonthOf(moved: moved, movedDate: movedDate, month: month);
 
   /// Marked as moved with a date that has not arrived yet: still a full
   /// member everywhere, just with the departure already recorded.
   bool get isMovePending => moved && !hasMovedBy(DateTime.now());
+}
+
+/// The month-level cut a departure makes: whether someone who left on
+/// [movedDate] still belongs on the roster of report month [month]
+/// (`yyyy-MM`). The month the move falls in already belongs to the new
+/// congregation, so the last month claimed here is the one before it. A
+/// departure with no date (records archived before the date existed) claims
+/// no month at all.
+///
+/// Lives outside [Publisher] because the fact outlives the record: once a
+/// moved publisher is deleted, the same rule is applied to the
+/// [FormerPublisher] tombstone left behind.
+bool onRosterInMonthOf({
+  required bool moved,
+  required String? movedDate,
+  required String month,
+}) {
+  if (!moved) return true;
+  if (movedDate == null) return false;
+  return month.compareTo(movedDate.substring(0, 7)) < 0;
 }
 
 /// Sensitive personal data, stored at publishers/{uid}/private/profile and

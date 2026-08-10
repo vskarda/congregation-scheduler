@@ -4,6 +4,7 @@ import '../../core/data/publishers_repository.dart';
 import '../../core/data/reports_repository.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
+import '../../core/utils/roster.dart';
 import 'statistics_model.dart';
 
 /// Birth dates of the active roster, one entry per member (null = unknown),
@@ -29,22 +30,31 @@ final rosterBirthDatesProvider =
 
 /// Entries a month may count: everything except reports of publishers who had
 /// already moved away by then, which belong to the congregation they moved to
-/// (the same rule the S-1 applies). Entries whose publisher record no longer
-/// exists are kept — there is nothing to judge them by.
+/// (the same rule the S-1 applies, via the same helper — including departures
+/// whose publisher record has since been deleted). Entries with neither a
+/// record nor a recorded departure are kept: there is nothing to judge them by.
 ///
 /// Both callers await the roster rather than reading the already-loaded map,
 /// so the first result is the filtered one: recomputing after the stream
 /// arrives would mean re-reading every month of the service year.
-List<MinistryReport> _countableIn(String month, List<MinistryReport> entries,
-        Map<String, Publisher> byId) =>
+List<MinistryReport> _countableIn(
+        String month, List<MinistryReport> entries, _Roster roster) =>
     entries
-        .where((r) => byId[r.publisherId]?.onRosterInMonth(month) ?? true)
+        .where((r) => !movedAwayBy(month, roster.publishers, roster.former)
+            .contains(r.publisherId))
         .toList();
 
-Future<Map<String, Publisher>> _rosterById(Ref ref) async {
-  final all = await ref.watch(allPublishersProvider.future);
-  return {for (final p in all) p.id: p};
+/// The two sources of the month-level cut, loaded once per query.
+class _Roster {
+  const _Roster(this.publishers, this.former);
+  final List<Publisher> publishers;
+  final List<FormerPublisher> former;
 }
+
+Future<_Roster> _roster(Ref ref) async => _Roster(
+      await ref.watch(allPublishersProvider.future),
+      await ref.watch(formerPublishersProvider.future),
+    );
 
 /// One list of reports per month of the given service year (12 entries,
 /// September first; months without data yield empty lists).
@@ -52,9 +62,9 @@ final serviceYearReportsProvider =
     FutureProvider.autoDispose.family<List<List<MinistryReport>>, int>(
         (ref, serviceYear) async {
   final repo = ref.watch(reportsRepositoryProvider);
-  final byId = await _rosterById(ref);
+  final roster = await _roster(ref);
   return Future.wait(serviceYearMonths(serviceYear).map((month) async =>
-      _countableIn(month, await repo.getMonth(month), byId)));
+      _countableIn(month, await repo.getMonth(month), roster)));
 });
 
 /// Previous calendar month's reports — the month whose reporting is
@@ -62,9 +72,9 @@ final serviceYearReportsProvider =
 final lastMonthReportsProvider =
     StreamProvider.autoDispose<List<MinistryReport>>((ref) async* {
   final month = monthKey(addMonths(DateTime.now(), -1));
-  final byId = await _rosterById(ref);
+  final roster = await _roster(ref);
   yield* ref
       .watch(reportsRepositoryProvider)
       .watchMonth(month)
-      .map((entries) => _countableIn(month, entries, byId));
+      .map((entries) => _countableIn(month, entries, roster));
 });

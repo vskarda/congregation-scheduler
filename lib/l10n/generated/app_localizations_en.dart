@@ -1570,6 +1570,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportNotCountedMoved => 'Moved — not counted';
 
   @override
+  String get reportFormerMember => 'Former member';
+
+  @override
   String reportEnterFor(String name) {
     return 'Enter report — $name';
   }

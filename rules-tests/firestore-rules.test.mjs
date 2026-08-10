@@ -31,6 +31,7 @@ const ADMIN = 'admin-uid'; // publishers + reports admin
 const LMM_ADMIN = 'lmm-admin-uid';
 const WEEKEND_ADMIN = 'weekend-admin-uid';
 const FSM_ADMIN = 'fsm-admin-uid';
+const REPORTS_ONLY = 'reports-only-uid'; // reports, but not publishers
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
 const RECORD_ATTENDANCE_ADMIN = 'record-attendance-admin-uid';
 const PW_ADMIN = 'pw-admin-uid';
@@ -85,6 +86,10 @@ async function seed() {
     await setDoc(doc(f, `publishers/${ADMIN}`), {
       ...basePublisher,
       roles: { ...basePublisher.roles, publishers: true, reports: true },
+    });
+    await setDoc(doc(f, `publishers/${REPORTS_ONLY}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, reports: true },
     });
     await setDoc(doc(f, `publishers/${LMM_ADMIN}`), {
       ...basePublisher,
@@ -450,6 +455,23 @@ describe('self-service account deletion', () => {
   it('a user can remove their own pw applications', async () => {
     await assertSucceeds(
       deleteDoc(doc(db(QUALIFIED), `pw_applications/slot1_${QUALIFIED}`)),
+    );
+  });
+
+  // Someone whose departure has been recorded may still close their account;
+  // the departure has to be written before the record goes.
+  it('a user can record their own departure on the way out', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(VERIFIED), `former_publishers/${VERIFIED}`), {
+        moved: true,
+        movedDate: '2026-06-15',
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), `former_publishers/${UNVERIFIED}`), {
+        moved: true,
+        movedDate: '2026-06-15',
+      }),
     );
   });
 });
@@ -958,6 +980,47 @@ describe('reports', () => {
     await assertSucceeds(getDocs(collectionGroup(db(ADMIN), 'entries')));
     await assertSucceeds(getDocs(collectionGroup(db(FULL_ADMIN), 'entries')));
     await assertFails(getDocs(collectionGroup(db(VERIFIED), 'entries')));
+  });
+});
+
+// The departure of a deleted record: an id and a date, kept so the months a
+// publisher had already left don't come back to this congregation's S-1.
+describe('former publishers', () => {
+  it('a publishers-admin writes, reads and clears a departure', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(ADMIN), 'former_publishers/gone-uid'), {
+        moved: true,
+        movedDate: '2026-06-15',
+      }),
+    );
+    await assertSucceeds(getDocs(collection(db(ADMIN), 'former_publishers')));
+    // Registering again on the same uid clears it.
+    await assertSucceeds(
+      deleteDoc(doc(db(ADMIN), 'former_publishers/gone-uid')),
+    );
+  });
+
+  it('a reports-admin reads them but does not write', async () => {
+    await assertSucceeds(
+      getDocs(collection(db(REPORTS_ONLY), 'former_publishers')),
+    );
+    await assertFails(
+      setDoc(doc(db(REPORTS_ONLY), 'former_publishers/gone-uid'), {
+        moved: true,
+      }),
+    );
+  });
+
+  it('everyone else is kept out', async () => {
+    await assertFails(getDocs(collection(db(VERIFIED), 'former_publishers')));
+    await assertFails(
+      getDocs(collection(db(LMM_ADMIN), 'former_publishers')),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'former_publishers/someone-else'), {
+        moved: true,
+      }),
+    );
   });
 });
 

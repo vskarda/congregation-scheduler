@@ -71,7 +71,7 @@ class PublisherDetailScreen extends ConsumerWidget {
         ),
       );
       if (confirmed == true) {
-        await repo.delete(publisherId);
+        await repo.delete(publisherId, known: publisher);
         if (context.mounted) context.go('/admin/publishers');
       }
     }

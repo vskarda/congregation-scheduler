@@ -182,6 +182,24 @@ service cloud.firestore {
       }
     }
 
+    // ---------- departures of deleted records ----------
+    // A publisher's report entries outlive their record: they are keyed by
+    // publisher id under reports/{month}/entries. The moving date, which says
+    // which months belong to the congregation they moved to, lives only on
+    // publishers/{uid} — so deleting the record would hand those months back
+    // to this congregation's S-1. former_publishers/{uid} keeps the departure
+    // and nothing else: an id and a date, no name, nothing personal.
+    match /former_publishers/{publisherId} {
+      // Only the report screens apply the month-level cut.
+      allow read: if hasRole('reports') || hasRole('publishers');
+      // Written by the publishers-admin who deletes a record, and by a member
+      // deleting their own account. Overwritable so a repeated delete is
+      // harmless, and deletable because registering again on the same uid must
+      // clear the old departure.
+      allow write: if hasRole('publishers')
+        || (isSignedIn() && request.auth.uid == publisherId);
+    }
+
     // ---------- information board ----------
 
     match /infoboard_items/{itemId} {

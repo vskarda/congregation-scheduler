@@ -15,11 +15,13 @@ void main() {
   final lastMonth = addMonths(DateTime.now(), -1);
   final monthBefore = addMonths(DateTime.now(), -2);
 
-  Widget wrap(FakeFirebaseFirestore db, List<Publisher> publishers) =>
+  Widget wrap(FakeFirebaseFirestore db, List<Publisher> publishers,
+          {List<FormerPublisher> former = const []}) =>
       ProviderScope(
         overrides: [
           firestoreProvider.overrideWithValue(db),
           allPublishersProvider.overrideWith((ref) => Stream.value(publishers)),
+          formerPublishersProvider.overrideWith((ref) => Stream.value(former)),
         ],
         child: MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -94,5 +96,57 @@ void main() {
     expect(find.textContaining('Moved — not counted'), findsOneWidget);
     // Only the one person who still owes a report is in the tally.
     expect(find.text('Reported: 0 / 1'), findsOneWidget);
+  });
+
+  testWidgets('an entry whose record was deleted is shown as a former member',
+      (tester) async {
+    // It still counts on the S-1 (nothing says the person left), so it has to
+    // be visible here — and openable, or a wrong figure could never be put
+    // right once the record is gone.
+    final db = FakeFirebaseFirestore();
+    await db
+        .collection('reports')
+        .doc(monthKey(lastMonth))
+        .collection('entries')
+        .doc('deleted-id')
+        .set(MinistryReport(month: monthKey(lastMonth), participated: true)
+            .toJson());
+
+    await tester.pumpWidget(wrap(db, [person('Stayer')]));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Former member'), findsOneWidget);
+    expect(find.textContaining('Moved — not counted'), findsNothing);
+    // Nobody is waiting for a report from them, so the tally is unchanged.
+    expect(find.text('Reported: 0 / 1'), findsOneWidget);
+
+    await tester.tap(find.text('Former member'));
+    await tester.pumpAndSettle();
+    expect(find.text('Enter report — Former member'), findsOneWidget);
+  });
+
+  testWidgets('a deleted publisher who had moved is marked as not counted',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await db
+        .collection('reports')
+        .doc(monthKey(lastMonth))
+        .collection('entries')
+        .doc('deleted-id')
+        .set(MinistryReport(month: monthKey(lastMonth), participated: true)
+            .toJson());
+
+    await tester.pumpWidget(wrap(
+      db,
+      [person('Stayer')],
+      former: [
+        FormerPublisher(
+            id: 'deleted-id', movedDate: '${monthKey(monthBefore)}-05'),
+      ],
+    ));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Former member'), findsOneWidget);
+    expect(find.textContaining('Moved — not counted'), findsOneWidget);
   });
 }

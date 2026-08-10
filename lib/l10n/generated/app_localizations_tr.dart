@@ -1578,6 +1578,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportNotCountedMoved => 'Taşındı — sayılmıyor';
 
   @override
+  String get reportFormerMember => 'Former member';
+
+  @override
   String reportEnterFor(String name) {
     return '$name için rapor girin';
   }

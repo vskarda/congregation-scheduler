@@ -8,6 +8,7 @@ import '../../core/data/reports_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
+import '../../core/utils/roster.dart';
 import 's1_calculator.dart';
 
 final s1ResultProvider =
@@ -24,15 +25,14 @@ final s1ResultProvider =
         '$month-01',
         '$month-31',
       );
-  // Who had already left by this month. Watching the roster (rather than
-  // reading it once) is deliberate: recording a move updates the form right
-  // away, where this per-month provider would otherwise hold its numbers for
-  // the rest of the session.
+  // Who had already left by this month — from the roster, and from the
+  // departures of records that have since been deleted. Watching both (rather
+  // than reading them once) is deliberate: recording a move updates the form
+  // right away, where this per-month provider would otherwise hold its numbers
+  // for the rest of the session.
   final publishers = await ref.watch(allPublishersProvider.future);
-  final excluded = <String>{
-    for (final p in publishers)
-      if (!p.onRosterInMonth(month)) p.id,
-  };
+  final former = await ref.watch(formerPublishersProvider.future);
+  final excluded = movedAwayBy(month, publishers, former);
   return computeS1(
     monthReports: lastSix.first,
     lastSixMonths: lastSix,

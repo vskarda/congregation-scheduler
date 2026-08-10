@@ -2940,6 +2940,12 @@ abstract class AppLocalizations {
   /// **'Moved — not counted'**
   String get reportNotCountedMoved;
 
+  /// No description provided for @reportFormerMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Former member'**
+  String get reportFormerMember;
+
   /// No description provided for @reportEnterFor.
   ///
   /// In en, this message translates to:

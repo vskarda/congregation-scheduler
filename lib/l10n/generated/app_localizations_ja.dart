@@ -1547,6 +1547,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reportNotCountedMoved => '転出 — 集計外';
 
   @override
+  String get reportFormerMember => 'Former member';
+
+  @override
   String reportEnterFor(String name) {
     return '報告を入力 — $name';
   }

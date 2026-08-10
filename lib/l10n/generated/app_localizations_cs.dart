@@ -1575,6 +1575,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reportNotCountedMoved => 'Přestěhoval se — nepočítá se';
 
   @override
+  String get reportFormerMember => 'Bývalý člen';
+
+  @override
   String reportEnterFor(String name) {
     return 'Zadat zprávu — $name';
   }

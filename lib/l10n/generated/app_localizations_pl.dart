@@ -1574,6 +1574,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reportNotCountedMoved => 'Przeprowadził się — nie liczy się';
 
   @override
+  String get reportFormerMember => 'Former member';
+
+  @override
   String reportEnterFor(String name) {
     return 'Wprowadź sprawozdanie — $name';
   }

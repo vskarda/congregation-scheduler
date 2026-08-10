@@ -72,9 +72,11 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final roster = (ref.watch(allPublishersProvider).value ?? const [])
-        .where((p) => p.status != PublisherStatus.none)
-        .toList();
+    final all = ref.watch(allPublishersProvider).value ?? const <Publisher>[];
+    final roster =
+        all.where((p) => p.status != PublisherStatus.none).toList();
+    final former =
+        ref.watch(formerPublishersProvider).value ?? const <FormerPublisher>[];
     final reportsAsync = ref.watch(monthReportsProvider(_month));
     // Who was out in the ministry the month before — the form questions a
     // report that files one of them as having done nothing this month.
@@ -103,10 +105,28 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
         // An entry filed for a month they had already left still shows (it
         // happened, and a mistake must stay correctable), marked as counting
         // for nobody — otherwise this list and the S-1 would disagree.
+        // Entries whose publisher record is gone altogether. They go on
+        // counting on the S-1 unless a recorded departure says otherwise, so
+        // they belong on this list too — nameless, out of the "reported" tally
+        // (nobody is waiting for them), and still openable, because a wrong
+        // figure has to stay correctable after the person has left.
+        final knownIds = {for (final p in all) p.id};
+        final formerById = {for (final f in former) f.id: f};
+        final orphans = [
+          for (final r in reports)
+            if (!knownIds.contains(r.publisherId))
+              Publisher(
+                id: r.publisherId,
+                firstName: l10n.reportFormerMember,
+                moved: formerById.containsKey(r.publisherId),
+                movedDate: formerById[r.publisherId]?.movedDate,
+              ),
+        ];
         final publishers = [
           ...expected,
           ...roster.where(
               (p) => !p.onRosterInMonth(_month) && byId.containsKey(p.id)),
+          ...orphans,
         ];
         final reported =
             expected.where((p) => byId.containsKey(p.id)).length;

@@ -533,6 +533,7 @@
   "reportSaved": "Report saved.",
   "reportMissing": "Not submitted",
   "reportNotCountedMoved": "Moved — not counted",
+  "reportFormerMember": "Former member",
   "reportEnterFor": "Enter report — {name}",
   "@reportEnterFor": {"placeholders": {"name": {"type": "String"}}},
   "reportSummaryReported": "Reported: {reported} / {total}",

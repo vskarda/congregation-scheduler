@@ -507,6 +507,7 @@
   "reportSaved": "Zpráva uložena.",
   "reportMissing": "Neodevzdáno",
   "reportNotCountedMoved": "Přestěhoval se — nepočítá se",
+  "reportFormerMember": "Bývalý člen",
   "reportEnterFor": "Zadat zprávu — {name}",
   "reportSummaryReported": "Odevzdáno: {reported} / {total}",
   "reportCheckTitle": "Zkontrolujte zprávu",

@@ -70,12 +70,31 @@ core/          bootstrap, config, theme, l10n, shared widgets
   So a closed month keeps its numbers unless a *date* says the publisher had
   already left — an entry filed on the 10th by someone who moved on the 15th
   is theirs, not ours, and neither the group lines nor the six-month actives
-  count it. Entries whose publisher record is gone altogether keep counting:
-  a deletion says nothing about where the person went, and tidying the roster
-  must not silently change a filed month. A record archived *without* a date
-  counts in no month at all, which is why the detail screen flags one and
-  points at "Change moving date". `test/s1_moved_publisher_test.dart` pins
-  every one of these cases down.
+  count it. Entries whose publisher record is gone *and* whose departure was
+  never recorded keep counting: a deletion says nothing about where the person
+  went, and tidying the roster must not silently change a filed month. A
+  record archived *without* a date counts in no month at all, which is why the
+  detail screen flags one and points at "Change moving date".
+  `test/s1_moved_publisher_test.dart` pins every one of these cases down.
+  Everything else the S-1 reads is recomputed every time it is opened, on
+  purpose: a late report, a corrected attendance count and above all a fixed
+  `statusAtMonth` must reach the month they belong to, however long
+  afterwards. The one change that must *not* reach it is roster housekeeping,
+  which is what `former_publishers` is for (below).
+- **Departures outlive their records.** Report entries are keyed by publisher
+  id under `reports/{month}/entries`, but the moving date that says which
+  months belong to the next congregation lives on `publishers/{uid}` — so
+  deleting the record would hand those months straight back to this
+  congregation's S-1, months after they were handed in. Deleting a record that
+  is marked moved therefore writes `former_publishers/{uid}` first: the
+  departure and nothing else, no name, nothing personal (deleting a publisher
+  must really delete them). `movedAwayBy()` merges roster and tombstones into
+  one exclusion set, and the S-1, the service-year statistics and the usage
+  card all take their cut from it, so the screens cannot disagree. A record
+  deleted while still a member leaves no tombstone — there is nothing to
+  remember. Registering again on the same auth uid clears an old one
+  (`createWithId`), or the returning publisher's new reports would vanish from
+  the S-1 without a word. `test/s1_deleted_publisher_test.dart` covers it.
 - **Moving away** is one date, `publishers/{uid}.movedDate`, and it may be in
   the future — until it arrives the record behaves like any other member's.
   It cuts on two different scales: *day-level* for meetings, assignments and
@@ -93,7 +112,8 @@ core/          bootstrap, config, theme, l10n, shared widgets
   and the router, otherwise a publisher past their date would be let into an
   app whose every read the backend denies. A record archived before this
   field existed has no date, and counts neither on a roster nor in any
-  month's figures until an admin sets one.
+  month's figures until an admin sets one. The date survives the record it was
+  written on — see "Departures outlive their records" above.
 - **Public witnessing recurrence**: same model as field service meetings
   below — `PwRepository.expand` builds slots from `pw_recurring` on the fly and
   `pw_slots` holds only one-off slots and exceptions. What is PW-specific is

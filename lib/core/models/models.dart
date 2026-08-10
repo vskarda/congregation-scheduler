@@ -5,6 +5,7 @@ export 'congregation.dart';
 export 'converters.dart';
 export 'enums.dart';
 export 'event_item.dart';
+export 'former_publisher.dart';
 export 'fsm.dart';
 export 'infoboard.dart';
 export 'lmm_week.dart';

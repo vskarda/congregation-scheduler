@@ -16,11 +16,13 @@ void main() {
   const serviceYear = 2026;
 
   ProviderContainer containerWith(
-      FakeFirebaseFirestore db, List<Publisher> publishers) {
+      FakeFirebaseFirestore db, List<Publisher> publishers,
+      {List<FormerPublisher> former = const []}) {
     final container = ProviderContainer(
       overrides: [
         firestoreProvider.overrideWithValue(db),
         allPublishersProvider.overrideWith((ref) => Stream.value(publishers)),
+        formerPublishersProvider.overrideWith((ref) => Stream.value(former)),
       ],
     );
     addTearDown(container.dispose);
@@ -86,6 +88,22 @@ void main() {
     // Sep–Dec 2025 count (4 months), January onwards does not.
     expect(stats.monthsWithData, 4);
     expect(stats.reportsSubmitted, 4);
+    expect(stats.totalHours, 40);
+    expect(stats.totalStudies, 4);
+  });
+
+  test('deleting the mover changes none of it', () async {
+    // The record is gone, its departure is not: the statistics and the S-1
+    // have to draw the line in the same place, or the two screens disagree
+    // about a year that has already been reported.
+    final db = await seedFullYear('p1');
+    final stats = computeFieldService(await serviceYearReports(containerWith(
+      db,
+      const [],
+      former: const [FormerPublisher(id: 'p1', movedDate: '2026-01-20')],
+    )));
+
+    expect(stats.monthsWithData, 4);
     expect(stats.totalHours, 40);
     expect(stats.totalStudies, 4);
   });
