@@ -1591,6 +1591,26 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Sprawdź sprawozdanie';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'W sprawozdaniu pioniera nie podano godzin. Wpisz 0, jeśli naprawdę nie było czasu w służbie.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      'Nie zaznaczono „Udział w służbie”, choć w poprzednim miesiącu służba została zgłoszona.';
+
+  @override
+  String get reportCheckQuestion => 'Zapisać sprawozdanie mimo to?';
+
+  @override
+  String get reportSaveAnyway => 'Zapisz mimo to';
+
+  @override
+  String get reportStatusThisMonth => 'Status w tym miesiącu';
+
+  @override
   String get attAdd => 'Rejestruj obecność';
 
   @override

@@ -540,6 +540,12 @@
   "@reportEnterFor": {"placeholders": {"name": {"type": "String"}}},
   "reportSummaryReported": "Reported: {reported} / {total}",
   "@reportSummaryReported": {"placeholders": {"reported": {"type": "int"}, "total": {"type": "int"}}},
+  "reportCheckTitle": "Check the report",
+  "reportCheckPioneerNoHours": "Hours are blank on a pioneer report. Enter 0 if there really was no time in the ministry.",
+  "reportCheckWasActiveLastMonth": "“Shared in Ministry” is not ticked, but ministry was reported last month.",
+  "reportCheckQuestion": "Save the report anyway?",
+  "reportSaveAnyway": "Save anyway",
+  "reportStatusThisMonth": "Status this month",
 
   "attAdd": "Record attendance",
   "attInPerson": "In person",

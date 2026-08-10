@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Przeprowadził się — nie liczy się",
   "reportEnterFor": "Wprowadź sprawozdanie — {name}",
   "reportSummaryReported": "Zgłosiło: {reported} / {total}",
+  "reportCheckTitle": "Sprawdź sprawozdanie",
+  "reportCheckPioneerNoHours": "W sprawozdaniu pioniera nie podano godzin. Wpisz 0, jeśli naprawdę nie było czasu w służbie.",
+  "reportCheckWasActiveLastMonth": "Nie zaznaczono „Udział w służbie”, choć w poprzednim miesiącu służba została zgłoszona.",
+  "reportCheckQuestion": "Zapisać sprawozdanie mimo to?",
+  "reportSaveAnyway": "Zapisz mimo to",
+  "reportStatusThisMonth": "Status w tym miesiącu",
 
   "attAdd": "Rejestruj obecność",
   "attInPerson": "Osobiście",

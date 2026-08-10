@@ -1607,6 +1607,26 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Revisa el informe';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Las horas están en blanco en un informe de precursor. Escribe 0 si de verdad no hubo tiempo en el ministerio.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      'No está marcado «Participó en el ministerio», pero el mes pasado sí se informó ministerio.';
+
+  @override
+  String get reportCheckQuestion => '¿Guardar el informe de todas formas?';
+
+  @override
+  String get reportSaveAnyway => 'Guardar igualmente';
+
+  @override
+  String get reportStatusThisMonth => 'Situación este mes';
+
+  @override
   String get attAdd => 'Registrar asistencia';
 
   @override

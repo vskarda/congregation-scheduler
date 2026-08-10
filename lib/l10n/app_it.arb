@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Trasferito — non conteggiato",
   "reportEnterFor": "Inserisci rapporto — {name}",
   "reportSummaryReported": "Hanno riferito: {reported} / {total}",
+  "reportCheckTitle": "Controlla il rapporto",
+  "reportCheckPioneerNoHours": "Le ore sono vuote in un rapporto da pioniere. Inserisci 0 se davvero non c'è stato tempo nel ministero.",
+  "reportCheckWasActiveLastMonth": "«Ha partecipato al ministero» non è spuntato, ma il mese scorso è stato riferito il ministero.",
+  "reportCheckQuestion": "Salvare comunque il rapporto?",
+  "reportSaveAnyway": "Salva comunque",
+  "reportStatusThisMonth": "Condizione questo mese",
 
   "attAdd": "Registra le presenze",
   "attInPerson": "Di persona",

@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Déménagé — non compté",
   "reportEnterFor": "Saisir le rapport — {name}",
   "reportSummaryReported": "Ont remis leur rapport : {reported} / {total}",
+  "reportCheckTitle": "Vérifiez le rapport",
+  "reportCheckPioneerNoHours": "Les heures sont vides sur un rapport de pionnier. Indiquez 0 s'il n'y a vraiment eu aucune heure de prédication.",
+  "reportCheckWasActiveLastMonth": "« A participé au ministère » n'est pas coché, alors que du ministère a été rapporté le mois dernier.",
+  "reportCheckQuestion": "Enregistrer quand même le rapport ?",
+  "reportSaveAnyway": "Enregistrer quand même",
+  "reportStatusThisMonth": "Situation ce mois-ci",
 
   "attAdd": "Enregistrer l'assistance",
   "attInPerson": "En présentiel",

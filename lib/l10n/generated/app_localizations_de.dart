@@ -1606,6 +1606,26 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Bericht prüfen';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Bei einem Pionierbericht sind die Stunden leer. Trage 0 ein, wenn wirklich keine Zeit im Predigtdienst verbracht wurde.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '„Am Predigtdienst teilgenommen“ ist nicht angehakt, obwohl im Vormonat Predigtdienst berichtet wurde.';
+
+  @override
+  String get reportCheckQuestion => 'Bericht trotzdem speichern?';
+
+  @override
+  String get reportSaveAnyway => 'Trotzdem speichern';
+
+  @override
+  String get reportStatusThisMonth => 'Status in diesem Monat';
+
+  @override
   String get attAdd => 'Anwesenheit erfassen';
 
   @override

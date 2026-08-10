@@ -2964,6 +2964,42 @@ abstract class AppLocalizations {
   /// **'Reported: {reported} / {total}'**
   String reportSummaryReported(int reported, int total);
 
+  /// No description provided for @reportCheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the report'**
+  String get reportCheckTitle;
+
+  /// No description provided for @reportCheckPioneerNoHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours are blank on a pioneer report. Enter 0 if there really was no time in the ministry.'**
+  String get reportCheckPioneerNoHours;
+
+  /// No description provided for @reportCheckWasActiveLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'“Shared in Ministry” is not ticked, but ministry was reported last month.'**
+  String get reportCheckWasActiveLastMonth;
+
+  /// No description provided for @reportCheckQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Save the report anyway?'**
+  String get reportCheckQuestion;
+
+  /// No description provided for @reportSaveAnyway.
+  ///
+  /// In en, this message translates to:
+  /// **'Save anyway'**
+  String get reportSaveAnyway;
+
+  /// No description provided for @reportStatusThisMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Status this month'**
+  String get reportStatusThisMonth;
+
   /// No description provided for @attAdd.
   ///
   /// In en, this message translates to:

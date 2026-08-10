@@ -1595,6 +1595,26 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Raporu kontrol edin';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Öncü raporunda saat alanı boş. Hizmette gerçekten hiç vakit harcanmadıysa 0 yazın.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '„Hizmete Katıldı“ işaretlenmemiş, ancak geçen ay hizmet bildirilmişti.';
+
+  @override
+  String get reportCheckQuestion => 'Rapor yine de kaydedilsin mi?';
+
+  @override
+  String get reportSaveAnyway => 'Yine de kaydet';
+
+  @override
+  String get reportStatusThisMonth => 'Bu ayki durum';
+
+  @override
   String get attAdd => 'Katılım Kaydet';
 
   @override

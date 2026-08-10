@@ -512,6 +512,12 @@
   "reportNotCountedMoved": "Přestěhoval se — nepočítá se",
   "reportEnterFor": "Zadat zprávu — {name}",
   "reportSummaryReported": "Odevzdáno: {reported} / {total}",
+  "reportCheckTitle": "Zkontrolujte zprávu",
+  "reportCheckPioneerNoHours": "U zprávy průkopníka nejsou vyplněné hodiny. Pokud opravdu nebyl žádný čas ve službě, zadejte 0.",
+  "reportCheckWasActiveLastMonth": "Není zaškrtnuto „Účast ve službě“, ale minulý měsíc byla služba nahlášena.",
+  "reportCheckQuestion": "Uložit zprávu i tak?",
+  "reportSaveAnyway": "Přesto uložit",
+  "reportStatusThisMonth": "Stav v tomto měsíci",
 
   "attAdd": "Zapsat návštěvnost",
   "attInPerson": "Osobně",

@@ -22,7 +22,8 @@ class AdminReportsScreen extends ConsumerStatefulWidget {
 class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
   late String _month = monthKey(addMonths(DateTime.now(), -1));
 
-  Future<void> _enterFor(Publisher publisher, MinistryReport? existing) async {
+  Future<void> _enterFor(Publisher publisher, MinistryReport? existing,
+      {required bool sharedLastMonth}) async {
     final l10n = context.l10n;
     final adminUid = ref.read(currentUidProvider) ?? 'admin';
     await showDialog<void>(
@@ -39,9 +40,12 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                       month: _month,
                       statusAtMonth: publisher.status),
               isPioneer: true,
-              showAuxiliaryPioneer:
-                  publisher.status == PublisherStatus.publisher ||
-                      publisher.status == PublisherStatus.auxiliaryPioneer,
+              // The admin gets the whole status list rather than the aux tick:
+              // it covers the aux month the tick covered, and it is the only
+              // place a snapshot taken under a wrong standing status can be
+              // put right afterwards.
+              showStatusPicker: true,
+              sharedLastMonth: sharedLastMonth,
               submitLabel: l10n.commonSave,
               onSubmit: (report) async {
                 // statusAtMonth (aux tick) is owned by the form.
@@ -72,6 +76,16 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
         .where((p) => p.status != PublisherStatus.none)
         .toList();
     final reportsAsync = ref.watch(monthReportsProvider(_month));
+    // Who was out in the ministry the month before — the form questions a
+    // report that files one of them as having done nothing this month.
+    final sharedLastMonth = {
+      for (final r in ref
+              .watch(monthReportsProvider(
+                  monthKey(addMonths(parseMonthKey(_month), -1))))
+              .value ??
+          const <MinistryReport>[])
+        if (r.sharedInMinistry) r.publisherId,
+    };
     final locale = Localizations.localeOf(context).toString();
     final monthFmt = DateFormat.yMMMM(locale);
 
@@ -179,7 +193,8 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
                         : Text(counts
                             ? summary
                             : '${l10n.reportNotCountedMoved}  ·  $summary'),
-                    onTap: () => _enterFor(p, report),
+                    onTap: () => _enterFor(p, report,
+                        sharedLastMonth: sharedLastMonth.contains(p.id)),
                   );
                 },
               ),

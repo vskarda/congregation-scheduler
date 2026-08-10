@@ -1592,6 +1592,26 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Zkontrolujte zprávu';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'U zprávy průkopníka nejsou vyplněné hodiny. Pokud opravdu nebyl žádný čas ve službě, zadejte 0.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      'Není zaškrtnuto „Účast ve službě“, ale minulý měsíc byla služba nahlášena.';
+
+  @override
+  String get reportCheckQuestion => 'Uložit zprávu i tak?';
+
+  @override
+  String get reportSaveAnyway => 'Přesto uložit';
+
+  @override
+  String get reportStatusThisMonth => 'Stav v tomto měsíci';
+
+  @override
   String get attAdd => 'Zapsat návštěvnost';
 
   @override

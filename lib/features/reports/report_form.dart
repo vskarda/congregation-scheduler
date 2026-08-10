@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/numeric_input.dart';
@@ -15,6 +16,8 @@ class ReportForm extends StatefulWidget {
     required this.onSubmit,
     this.submitLabel,
     this.showAuxiliaryPioneer = false,
+    this.showStatusPicker = false,
+    this.sharedLastMonth = false,
   });
 
   final MinistryReport initial;
@@ -34,6 +37,22 @@ class ReportForm extends StatefulWidget {
   /// S-1 group breakdown and the S-21 aux column.
   final bool showAuxiliaryPioneer;
 
+  /// Whether to offer the full month-status dropdown instead of the aux tick.
+  /// Admin-only. The snapshot is otherwise written once, when the row is
+  /// created, and for a permanent pioneer nothing may rewrite it afterwards —
+  /// which leaves a snapshot taken while the standing status was still wrong
+  /// stuck at that value, mis-grouping the month on the S-1 and the S-21 with
+  /// no way back. This is that way back: it starts on the stored value, so
+  /// saving without touching it changes nothing.
+  final bool showStatusPicker;
+
+  /// Whether the publisher shared in the ministry the month before this one.
+  /// Only used to question a report that says they did nothing this month —
+  /// somebody who was out last month and is suddenly inactive is more often a
+  /// forgotten tick than a real change. False when the previous month is
+  /// unknown (still loading, or never entered), which simply asks nothing.
+  final bool sharedLastMonth;
+
   @override
   State<ReportForm> createState() => _ReportFormState();
 }
@@ -42,6 +61,12 @@ class _ReportFormState extends State<ReportForm> {
   late bool _participated = widget.initial.participated;
   late bool _aux =
       widget.initial.statusAtMonth == PublisherStatus.auxiliaryPioneer;
+  // `none` is not offered by the picker, so a row carrying it (nothing writes
+  // one today) opens on Publisher rather than tripping the dropdown.
+  late PublisherStatus _status =
+      widget.initial.statusAtMonth == PublisherStatus.none
+          ? PublisherStatus.publisher
+          : widget.initial.statusAtMonth;
   late final _studies = TextEditingController(
       text: widget.initial.bibleStudies?.toString() ?? '');
   late final _hours =
@@ -52,11 +77,27 @@ class _ReportFormState extends State<ReportForm> {
       TextEditingController(text: widget.initial.comments);
   bool _busy = false;
 
-  /// Hours/credit apply to standing pioneers and to a publisher who ticks
-  /// auxiliary pioneer for this month. Drives both field visibility and
-  /// whether those values are persisted.
+  /// Hours/credit apply to standing pioneers, to a publisher who ticks
+  /// auxiliary pioneer for this month, and to whatever the admin's picker
+  /// says the month was. Drives both field visibility and whether those
+  /// values are persisted.
   bool get _effectivePioneer =>
-      widget.isPioneer || (widget.showAuxiliaryPioneer && _aux);
+      widget.isPioneer ||
+      (widget.showAuxiliaryPioneer && _aux) ||
+      (widget.showStatusPicker && _isPioneerStatus(_status));
+
+  static bool _isPioneerStatus(PublisherStatus status) =>
+      status != PublisherStatus.publisher && status != PublisherStatus.none;
+
+  /// The month's status as the form has it: whatever the picker holds, else
+  /// the aux tick's verdict, else the stored snapshot untouched.
+  PublisherStatus get _statusAtMonth => widget.showStatusPicker
+      ? _status
+      : widget.showAuxiliaryPioneer
+          ? (_aux
+              ? PublisherStatus.auxiliaryPioneer
+              : PublisherStatus.publisher)
+          : widget.initial.statusAtMonth;
 
   @override
   void dispose() {
@@ -67,17 +108,65 @@ class _ReportFormState extends State<ReportForm> {
     super.dispose();
   }
 
+  /// Puts the two questionable-looking reports to the person filing them.
+  /// Both are legitimate answers, so neither blocks the save — the form only
+  /// asks, and taking "Save anyway" files exactly what was typed.
+  Future<bool> _confirmWarnings(List<String> warnings) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.reportCheckTitle),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (final warning in warnings)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(warning),
+              ),
+            Text(l10n.reportCheckQuestion),
+          ],
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n.commonCancel)),
+          FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n.reportSaveAnyway)),
+        ],
+      ),
+    );
+    return confirmed ?? false;
+  }
+
   Future<void> _submit() async {
+    final l10n = context.l10n;
+    final studies = int.tryParse(_studies.text.trim());
+    final hours = _effectivePioneer ? int.tryParse(_hours.text.trim()) : null;
+    // If hours or Bible studies are reported, the publisher clearly shared
+    // in the ministry — tick it automatically even if they forgot to.
+    // (Credit hours alone don't count; see MinistryReport.sharedInMinistry.)
+    final participated =
+        _participated || (studies ?? 0) > 0 || (hours ?? 0) > 0;
+
+    // Two slips this form can spot but must not decide on its own. Blank
+    // hours on a pioneer report are the costly one: the field is the whole
+    // point of the report, and the S-1 quietly loses the time. A pioneer who
+    // truly did nothing types 0, so blank means forgotten far more often than
+    // it means zero.
+    final warnings = [
+      if (_effectivePioneer && hours == null) l10n.reportCheckPioneerNoHours,
+      if (!participated && widget.sharedLastMonth)
+        l10n.reportCheckWasActiveLastMonth,
+    ];
+    if (warnings.isNotEmpty && !await _confirmWarnings(warnings)) return;
+    if (!mounted) return;
+
     setState(() => _busy = true);
     try {
-      final studies = int.tryParse(_studies.text.trim());
-      final hours =
-          _effectivePioneer ? int.tryParse(_hours.text.trim()) : null;
-      // If hours or Bible studies are reported, the publisher clearly shared
-      // in the ministry — tick it automatically even if they forgot to.
-      // (Credit hours alone don't count; see MinistryReport.sharedInMinistry.)
-      final participated =
-          _participated || (studies ?? 0) > 0 || (hours ?? 0) > 0;
       await widget.onSubmit(widget.initial.copyWith(
         participated: participated,
         bibleStudies: studies,
@@ -85,13 +174,7 @@ class _ReportFormState extends State<ReportForm> {
         creditHours:
             _effectivePioneer ? int.tryParse(_credit.text.trim()) : null,
         comments: _comments.text.trim(),
-        // The aux tick owns the publisher/auxiliaryPioneer distinction; for
-        // permanent pioneers (tick hidden) the snapshot is left untouched.
-        statusAtMonth: widget.showAuxiliaryPioneer
-            ? (_aux
-                ? PublisherStatus.auxiliaryPioneer
-                : PublisherStatus.publisher)
-            : widget.initial.statusAtMonth,
+        statusAtMonth: _statusAtMonth,
       ));
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -118,6 +201,24 @@ class _ReportFormState extends State<ReportForm> {
             title: Text(l10n.statusAuxPioneer),
             controlAffinity: ListTileControlAffinity.leading,
           ),
+        if (widget.showStatusPicker) ...[
+          const SizedBox(height: 8),
+          DropdownButtonFormField<PublisherStatus>(
+            initialValue: _status,
+            decoration:
+                InputDecoration(labelText: l10n.reportStatusThisMonth),
+            // `none` is not a way to report a month — a publisher who did
+            // nothing files an empty report, they do not stop being one.
+            items: [
+              for (final status in PublisherStatus.values)
+                if (status != PublisherStatus.none)
+                  DropdownMenuItem(
+                      value: status, child: Text(statusLabel(l10n, status))),
+            ],
+            onChanged: (v) =>
+                setState(() => _status = v ?? _status),
+          ),
+        ],
         const SizedBox(height: 8),
         TextField(
           controller: _studies,

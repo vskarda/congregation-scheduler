@@ -1587,6 +1587,26 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Check the report';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Hours are blank on a pioneer report. Enter 0 if there really was no time in the ministry.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '“Shared in Ministry” is not ticked, but ministry was reported last month.';
+
+  @override
+  String get reportCheckQuestion => 'Save the report anyway?';
+
+  @override
+  String get reportSaveAnyway => 'Save anyway';
+
+  @override
+  String get reportStatusThisMonth => 'Status this month';
+
+  @override
   String get attAdd => 'Record attendance';
 
   @override

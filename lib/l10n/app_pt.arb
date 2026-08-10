@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Mudou-se — não contabilizado",
   "reportEnterFor": "Inserir relatório — {name}",
   "reportSummaryReported": "Relataram: {reported} / {total}",
+  "reportCheckTitle": "Verifique o relatório",
+  "reportCheckPioneerNoHours": "As horas estão em branco num relatório de pioneiro. Escreva 0 se realmente não houve tempo no ministério.",
+  "reportCheckWasActiveLastMonth": "«Participou no ministério» não está marcado, mas houve ministério relatado no mês passado.",
+  "reportCheckQuestion": "Guardar o relatório mesmo assim?",
+  "reportSaveAnyway": "Guardar mesmo assim",
+  "reportStatusThisMonth": "Situação neste mês",
 
   "attAdd": "Registrar assistência",
   "attInPerson": "Presencial",

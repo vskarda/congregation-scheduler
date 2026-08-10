@@ -1603,6 +1603,26 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Verifique o relatório';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'As horas estão em branco num relatório de pioneiro. Escreva 0 se realmente não houve tempo no ministério.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '«Participou no ministério» não está marcado, mas houve ministério relatado no mês passado.';
+
+  @override
+  String get reportCheckQuestion => 'Guardar o relatório mesmo assim?';
+
+  @override
+  String get reportSaveAnyway => 'Guardar mesmo assim';
+
+  @override
+  String get reportStatusThisMonth => 'Situação neste mês';
+
+  @override
   String get attAdd => 'Registrar assistência';
 
   @override

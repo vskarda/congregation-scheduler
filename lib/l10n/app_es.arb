@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Se mudó — no cuenta",
   "reportEnterFor": "Introducir informe — {name}",
   "reportSummaryReported": "Informaron: {reported} / {total}",
+  "reportCheckTitle": "Revisa el informe",
+  "reportCheckPioneerNoHours": "Las horas están en blanco en un informe de precursor. Escribe 0 si de verdad no hubo tiempo en el ministerio.",
+  "reportCheckWasActiveLastMonth": "No está marcado «Participó en el ministerio», pero el mes pasado sí se informó ministerio.",
+  "reportCheckQuestion": "¿Guardar el informe de todas formas?",
+  "reportSaveAnyway": "Guardar igualmente",
+  "reportStatusThisMonth": "Situación este mes",
 
   "attAdd": "Registrar asistencia",
   "attInPerson": "Presencial",

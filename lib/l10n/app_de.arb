@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "Weggezogen — zählt nicht",
   "reportEnterFor": "Bericht eingeben – {name}",
   "reportSummaryReported": "Berichtet: {reported} / {total}",
+  "reportCheckTitle": "Bericht prüfen",
+  "reportCheckPioneerNoHours": "Bei einem Pionierbericht sind die Stunden leer. Trage 0 ein, wenn wirklich keine Zeit im Predigtdienst verbracht wurde.",
+  "reportCheckWasActiveLastMonth": "„Am Predigtdienst teilgenommen“ ist nicht angehakt, obwohl im Vormonat Predigtdienst berichtet wurde.",
+  "reportCheckQuestion": "Bericht trotzdem speichern?",
+  "reportSaveAnyway": "Trotzdem speichern",
+  "reportStatusThisMonth": "Status in diesem Monat",
 
   "attAdd": "Anwesenheit erfassen",
   "attInPerson": "Persönlich",

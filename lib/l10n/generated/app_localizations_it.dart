@@ -1602,6 +1602,26 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Controlla il rapporto';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Le ore sono vuote in un rapporto da pioniere. Inserisci 0 se davvero non c\'è stato tempo nel ministero.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '«Ha partecipato al ministero» non è spuntato, ma il mese scorso è stato riferito il ministero.';
+
+  @override
+  String get reportCheckQuestion => 'Salvare comunque il rapporto?';
+
+  @override
+  String get reportSaveAnyway => 'Salva comunque';
+
+  @override
+  String get reportStatusThisMonth => 'Condizione questo mese';
+
+  @override
   String get attAdd => 'Registra le presenze';
 
   @override

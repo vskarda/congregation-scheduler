@@ -1609,6 +1609,26 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => 'Vérifiez le rapport';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      'Les heures sont vides sur un rapport de pionnier. Indiquez 0 s\'il n\'y a vraiment eu aucune heure de prédication.';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '« A participé au ministère » n\'est pas coché, alors que du ministère a été rapporté le mois dernier.';
+
+  @override
+  String get reportCheckQuestion => 'Enregistrer quand même le rapport ?';
+
+  @override
+  String get reportSaveAnyway => 'Enregistrer quand même';
+
+  @override
+  String get reportStatusThisMonth => 'Situation ce mois-ci';
+
+  @override
   String get attAdd => 'Enregistrer l\'assistance';
 
   @override

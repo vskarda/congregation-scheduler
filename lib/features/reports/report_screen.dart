@@ -29,6 +29,11 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     final reportAsync = ref.watch(myReportProvider(_month));
+    // The month before the one being reported, so the form can question a
+    // report that says nothing was done by someone who was out last month.
+    final previous = ref
+        .watch(myReportProvider(monthKey(addMonths(parseMonthKey(_month), -1))))
+        .value;
     final locale = Localizations.localeOf(context).toString();
     final monthFmt = DateFormat.yMMMM(locale);
     final months = [
@@ -86,6 +91,7 @@ class _ReportScreenState extends ConsumerState<ReportScreen> {
                     showAuxiliaryPioneer:
                         me.status == PublisherStatus.publisher ||
                             me.status == PublisherStatus.auxiliaryPioneer,
+                    sharedLastMonth: previous?.sharedInMinistry ?? false,
                     onSubmit: (report) async {
                       // statusAtMonth comes from the form (aux tick) for
                       // publishers/aux pioneers; for permanent pioneers the

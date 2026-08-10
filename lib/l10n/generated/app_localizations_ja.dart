@@ -1564,6 +1564,26 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get reportCheckTitle => '報告を確認してください';
+
+  @override
+  String get reportCheckPioneerNoHours =>
+      '開拓者の報告に時間が入力されていません。奉仕の時間が本当になかった場合は 0 を入力してください。';
+
+  @override
+  String get reportCheckWasActiveLastMonth =>
+      '「宣教に参加」にチェックが入っていませんが、先月は奉仕が報告されています。';
+
+  @override
+  String get reportCheckQuestion => 'このまま報告を保存しますか。';
+
+  @override
+  String get reportSaveAnyway => 'このまま保存';
+
+  @override
+  String get reportStatusThisMonth => 'この月の状態';
+
+  @override
   String get attAdd => '出席を記録';
 
   @override

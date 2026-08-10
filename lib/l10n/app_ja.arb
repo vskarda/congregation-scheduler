@@ -502,6 +502,12 @@
   "reportNotCountedMoved": "転出 — 集計外",
   "reportEnterFor": "報告を入力 — {name}",
   "reportSummaryReported": "報告済み: {reported} / {total}",
+  "reportCheckTitle": "報告を確認してください",
+  "reportCheckPioneerNoHours": "開拓者の報告に時間が入力されていません。奉仕の時間が本当になかった場合は 0 を入力してください。",
+  "reportCheckWasActiveLastMonth": "「宣教に参加」にチェックが入っていませんが、先月は奉仕が報告されています。",
+  "reportCheckQuestion": "このまま報告を保存しますか。",
+  "reportSaveAnyway": "このまま保存",
+  "reportStatusThisMonth": "この月の状態",
 
   "attAdd": "出席を記録",
   "attInPerson": "会場",
