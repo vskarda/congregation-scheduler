@@ -76,21 +76,6 @@ core/          bootstrap, config, theme, l10n, shared widgets
   counts in no month at all, which is why the detail screen flags one and
   points at "Change moving date". `test/s1_moved_publisher_test.dart` pins
   every one of these cases down.
-- **Freezing the S-1** stops a month that has been handed in from drifting.
-  Everything the calculator reads keeps moving — a report arrives late, an
-  attendance count is corrected, a moving date is entered afterwards — so the
-  figures are stored as sent at `s1_records/{yyyy-MM}` and from then on read
-  back verbatim instead of recomputed; the reports behind them stay editable,
-  because a late report is still a fact worth recording. Unfreezing deletes
-  the document and the month goes live again. Months freeze on their own once
-  they are `kS1FreezeAfterMonths` old: with no Cloud Functions the sweep can
-  only ride along with a reports-admin opening the screen, so it is bounded on
-  every side — a bookmark document (`s1_records/_autofreeze`) holding the
-  newest month already considered, a first-run backfill of at most
-  `kS1AutoFreezeBackfillMonths` months, one shared read of the report window
-  whose six-month actives ranges overlap, and a rule never to freeze a month
-  with neither reports nor attendance (a congregation that imports its S-21
-  history later must still get real figures for those months, not zeros).
 - **Moving away** is one date, `publishers/{uid}.movedDate`, and it may be in
   the future — until it arrives the record behaves like any other member's.
   It cuts on two different scales: *day-level* for meetings, assignments and

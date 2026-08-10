@@ -166,12 +166,6 @@ async function seed() {
       inPerson: 50,
       online: 10,
     });
-    await setDoc(doc(f, 's1_records/2026-05'), {
-      month: '2026-05',
-      activePublishers: 40,
-      publishers: { count: 30, studies: 12, hours: 0 },
-      frozenBy: ADMIN,
-    });
     await setDoc(doc(f, 'public_talks/catalog'), {
       titles: { 1: 'How Well Do You Know God?' },
       updatedAt: '2026-07-01',
@@ -964,58 +958,6 @@ describe('reports', () => {
     await assertSucceeds(getDocs(collectionGroup(db(ADMIN), 'entries')));
     await assertSucceeds(getDocs(collectionGroup(db(FULL_ADMIN), 'entries')));
     await assertFails(getDocs(collectionGroup(db(VERIFIED), 'entries')));
-  });
-});
-
-// Frozen S-1 figures: the congregation's own report, kept out of reach of
-// everyone but the admins who compile it.
-describe('frozen S-1 records', () => {
-  it('reports-admin freezes, reads and unfreezes a month', async () => {
-    await assertSucceeds(getDocs(collection(db(ADMIN), 's1_records')));
-    await assertSucceeds(
-      setDoc(doc(db(ADMIN), 's1_records/2026-06'), {
-        month: '2026-06',
-        activePublishers: 42,
-        publishers: { count: 31, studies: 14, hours: 0 },
-        frozenBy: ADMIN,
-      }),
-    );
-    await assertSucceeds(
-      setDoc(doc(db(ADMIN), 's1_records/_autofreeze'), {
-        scannedThrough: '2026-06',
-      }),
-    );
-    await assertSucceeds(deleteDoc(doc(db(ADMIN), 's1_records/2026-06')));
-  });
-
-  it('full admin may too (the backup restores this collection)', async () => {
-    await assertSucceeds(
-      setDoc(doc(db(FULL_ADMIN), 's1_records/2026-04'), {
-        month: '2026-04',
-        activePublishers: 41,
-      }),
-    );
-  });
-
-  it('a verified publisher can neither read nor write them', async () => {
-    await assertFails(getDoc(doc(db(VERIFIED), 's1_records/2026-05')));
-    await assertFails(
-      setDoc(doc(db(VERIFIED), 's1_records/2026-05'), {
-        month: '2026-05',
-        activePublishers: 1,
-      }),
-    );
-    await assertFails(deleteDoc(doc(db(VERIFIED), 's1_records/2026-05')));
-  });
-
-  it('an admin of another section is no closer to them', async () => {
-    await assertFails(getDoc(doc(db(LMM_ADMIN), 's1_records/2026-05')));
-    await assertFails(
-      setDoc(doc(db(ATTENDANCE_ADMIN), 's1_records/2026-05'), {
-        month: '2026-05',
-        activePublishers: 1,
-      }),
-    );
   });
 });
 

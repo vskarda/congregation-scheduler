@@ -32,7 +32,6 @@ const _flatCollections = [
   'territory_assignments',
   'ministry_groups',
   'attendance',
-  's1_records',
 ];
 
 /// Thrown by [BackupService.importAll] when the file is not a recognised,

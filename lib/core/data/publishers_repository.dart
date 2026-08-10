@@ -22,15 +22,6 @@ class PublishersRepository {
         return list;
       });
 
-  /// One-shot roster read, for callers that run once rather than rebuild with
-  /// the roster (the S-1 auto-freeze sweep).
-  Future<List<Publisher>> getAll() async {
-    final snap = await _col.get();
-    final list = snap.docs.map(_fromDoc).toList();
-    list.sort((a, b) => collate(a.listName, b.listName));
-    return list;
-  }
-
   Stream<Publisher?> watchOne(String id) => _col
       .doc(id)
       .snapshots()

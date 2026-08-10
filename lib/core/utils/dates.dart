@@ -69,18 +69,6 @@ List<DateTime> mondaysInMonth(DateTime month) {
   return mondays;
 }
 
-/// Month keys from [from] to [to] inclusive, oldest first; empty when [to]
-/// precedes [from].
-List<String> monthsBetween(String from, String to) {
-  final months = <String>[];
-  for (var m = parseMonthKey(from);
-      monthKey(m).compareTo(to) <= 0;
-      m = addMonths(m, 1)) {
-    months.add(monthKey(m));
-  }
-  return months;
-}
-
 /// Service years run September..August; returns the year the service year
 /// ends in (e.g. 2026 for Sep 2025 – Aug 2026).
 int serviceYearOf(DateTime d) => d.month >= 9 ? d.year + 1 : d.year;
