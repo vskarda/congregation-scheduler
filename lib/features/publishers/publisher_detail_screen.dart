@@ -152,12 +152,20 @@ class PublisherDetailScreen extends ConsumerWidget {
       _ProfileTab(publisher: publisher),
       if (isFullAdmin) _RolesTab(publisher: publisher, isSelf: isSelf),
       _AssignTab(publisher: publisher),
-      Padding(
+      // Unlike the other tabs, this one has no fixed set of items — the
+      // report table plus the pioneer hours summary can run taller than the
+      // viewport (a phone in portrait, a tablet with the keyboard up). A bare
+      // Padding has no scrollable ancestor, so that overflow used to clip
+      // silently with no way to reach it; ListView gives it one, matching
+      // the other three tabs.
+      ListView(
         padding: const EdgeInsets.all(16),
-        child: PublisherRecordView(
-          publisherId: publisherId,
-          showS21Export: true,
-        ),
+        children: [
+          PublisherRecordView(
+            publisherId: publisherId,
+            showS21Export: true,
+          ),
+        ],
       ),
     ];
 
