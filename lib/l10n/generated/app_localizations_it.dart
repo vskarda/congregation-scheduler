@@ -735,6 +735,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reportComments => 'Commenti';
 
   @override
+  String get reportParticipatedShort => 'Servizio';
+
+  @override
+  String get reportStudiesShort => 'Studi';
+
+  @override
+  String get reportAuxShort => 'Aus.';
+
+  @override
+  String get reportCreditShort => 'Credito';
+
+  @override
   String get s21Export => 'Esporta S-21 (PDF)';
 
   @override

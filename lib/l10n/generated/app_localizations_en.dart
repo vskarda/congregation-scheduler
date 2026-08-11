@@ -729,6 +729,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportComments => 'Comments';
 
   @override
+  String get reportParticipatedShort => 'Shared';
+
+  @override
+  String get reportStudiesShort => 'Studies';
+
+  @override
+  String get reportAuxShort => 'Aux.';
+
+  @override
+  String get reportCreditShort => 'Credit';
+
+  @override
   String get s21Export => 'Export S-21 (PDF)';
 
   @override

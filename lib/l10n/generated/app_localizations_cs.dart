@@ -730,6 +730,18 @@ class AppLocalizationsCs extends AppLocalizations {
   String get reportComments => 'Poznámky';
 
   @override
+  String get reportParticipatedShort => 'Ve službě';
+
+  @override
+  String get reportStudiesShort => 'Studia';
+
+  @override
+  String get reportAuxShort => 'Pomocný';
+
+  @override
+  String get reportCreditShort => 'Započtené';
+
+  @override
   String get s21Export => 'Exportovat S-21 (PDF)';
 
   @override

@@ -69,13 +69,25 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
     );
   }
 
-  /// A column header. Every column but the name and the comments holds one
-  /// digit or one icon, while the labels ("Shared in Ministry", "Auxiliary
-  /// Pioneer") are several words long — left to itself the table sizes each
-  /// column to its heading and scrolls the useful columns off the screen. The
-  /// cap makes the headings wrap instead — softWrap explicitly, because
-  /// DataTable turns it off for heading labels and the cap would otherwise
-  /// clip them mid-word.
+  /// The comments column takes whatever width the figures leave over. The two
+  /// halves do different jobs, and the asymmetry is the point:
+  ///  - the cap bounds what the column contributes to the table's *intrinsic*
+  ///    width, so a single long note cannot widen the table and push everyone
+  ///    into scrolling sideways;
+  ///  - the flex is passed through by MinColumnWidth (FixedColumnWidth has
+  ///    none) and RenderTable's growth step does not re-apply the cap, so on a
+  ///    screen with room to spare the column still grows past it.
+  static const _commentsWidth =
+      MinColumnWidth(IntrinsicColumnWidth(flex: 1), FixedColumnWidth(420));
+
+  /// A column header. Every column is sized to the wider of its heading and
+  /// its content, and most of these hold one digit or one icon — so the
+  /// headings, not the figures, decide how much room a column takes. The four
+  /// narrow columns therefore carry an abbreviated label and hand the full one
+  /// to DataColumn.tooltip. The cap is what is left of that problem: a guard
+  /// for a locale whose short form is still long, wrapping it rather than
+  /// widening the column. softWrap is set explicitly because DataTable turns
+  /// it off for heading labels, and the cap would otherwise clip mid-word.
   static Widget _head(String label, {bool numeric = false}) => ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 96),
         child: Text(label,
@@ -143,13 +155,12 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
             : const SizedBox()),
         DataCell(Text(report?.hours?.toString() ?? '', style: style)),
         DataCell(Text(report?.creditHours?.toString() ?? '', style: style)),
-        // Comments are free text; the column is capped and the full note is
-        // one tap away in the entry dialog.
-        DataCell(ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 220),
-          child: Text(report?.comments ?? '',
-              maxLines: 2, overflow: TextOverflow.ellipsis, style: style),
-        )),
+        // Comments are free text. The width is the column's business (see
+        // _commentsWidth) — capping the cell too would wrap the note early
+        // and leave dead space beside it. Longer notes are cut off here and
+        // read in full one tap away, in the entry dialog.
+        DataCell(Text(report?.comments ?? '',
+            maxLines: 3, overflow: TextOverflow.ellipsis, style: style)),
       ],
     );
   }
@@ -254,41 +265,71 @@ class _AdminReportsScreenState extends ConsumerState<AdminReportsScreen> {
               // Vertical scroll on the outside, horizontal on the inside: the
               // roster is the long axis, and the columns only need to be
               // reachable sideways on a narrow screen.
-              child: SingleChildScrollView(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: DataTable(
-                    columnSpacing: 12,
-                    horizontalMargin: 12,
-                    // Tall enough for a wrapped two-line header; see _head.
-                    headingRowHeight: 56,
-                    // Only the moved/former rows carry a second line, so the
-                    // rest stay at the compact height.
-                    dataRowMinHeight: 36,
-                    dataRowMaxHeight: 56,
-                    // Rows are made tappable via onSelectChanged; suppress the
-                    // leading selection-checkbox column.
-                    showCheckboxColumn: false,
-                    columns: [
-                      DataColumn(label: _head(l10n.reportParticipated)),
-                      DataColumn(label: _head(l10n.reportPublisher)),
-                      DataColumn(
-                          label: _head(l10n.reportStudies, numeric: true),
-                          numeric: true),
-                      DataColumn(label: _head(l10n.statusAuxPioneer)),
-                      DataColumn(
-                          label: _head(l10n.reportHours, numeric: true),
-                          numeric: true),
-                      DataColumn(
-                          label: _head(l10n.reportCredit, numeric: true),
-                          numeric: true),
-                      DataColumn(label: _head(l10n.reportComments)),
-                    ],
-                    rows: [
-                      for (final p in publishers)
-                        _row(p, byId[p.id],
-                            sharedLastMonth: sharedLastMonth.contains(p.id)),
-                    ],
+              child: LayoutBuilder(
+                builder: (context, constraints) => SingleChildScrollView(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      // A flex column grows to the *minWidth* when maxWidth is
+                      // unbounded, which it is inside a horizontal scroll
+                      // view. This floor is therefore what lets the comments
+                      // claim the width the other columns don't need; without
+                      // it the table stays intrinsically sized and leaves the
+                      // right-hand side of a wide screen empty.
+                      constraints:
+                          BoxConstraints(minWidth: constraints.maxWidth),
+                      child: DataTable(
+                        columnSpacing: 12,
+                        horizontalMargin: 12,
+                        // Tall enough for a wrapped two-line header; see
+                        // _head.
+                        headingRowHeight: 56,
+                        // A finite max is not a ceiling: DataTable aligns its
+                        // cell contents, so every row would take the whole of
+                        // it and the roster would stretch out for nothing.
+                        // Unbounded makes the cells shrink-wrap instead, so
+                        // only the rows that need the room — a three-line
+                        // note, a moved publisher's second line — take it.
+                        // The floor is the minimum touch target: every row
+                        // opens the entry dialog when tapped.
+                        dataRowMinHeight: kMinInteractiveDimension,
+                        dataRowMaxHeight: double.infinity,
+                        // Rows are made tappable via onSelectChanged;
+                        // suppress the leading selection-checkbox column.
+                        showCheckboxColumn: false,
+                        columns: [
+                          DataColumn(
+                              label: _head(l10n.reportParticipatedShort),
+                              tooltip: l10n.reportParticipated),
+                          DataColumn(label: _head(l10n.reportPublisher)),
+                          DataColumn(
+                              label: _head(l10n.reportStudiesShort,
+                                  numeric: true),
+                              tooltip: l10n.reportStudies,
+                              numeric: true),
+                          DataColumn(
+                              label: _head(l10n.reportAuxShort),
+                              tooltip: l10n.statusAuxPioneer),
+                          DataColumn(
+                              label: _head(l10n.reportHours, numeric: true),
+                              numeric: true),
+                          DataColumn(
+                              label: _head(l10n.reportCreditShort,
+                                  numeric: true),
+                              tooltip: l10n.reportCredit,
+                              numeric: true),
+                          DataColumn(
+                              label: _head(l10n.reportComments),
+                              columnWidth: _commentsWidth),
+                        ],
+                        rows: [
+                          for (final p in publishers)
+                            _row(p, byId[p.id],
+                                sharedLastMonth:
+                                    sharedLastMonth.contains(p.id)),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),

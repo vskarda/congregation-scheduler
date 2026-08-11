@@ -235,6 +235,10 @@
   "reportHours": "Stunden",
   "reportCredit": "Anrechenbare Stunden",
   "reportComments": "Kommentare",
+  "reportParticipatedShort": "Dienst",
+  "reportStudiesShort": "Studien",
+  "reportAuxShort": "Hilfsp.",
+  "reportCreditShort": "Anrech. Std.",
 
   "s21Export": "S-21 exportieren (PDF)",
   "schedulePdfExport": "Monatsübersicht (PDF)",

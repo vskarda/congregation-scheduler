@@ -235,6 +235,10 @@
   "reportHours": "Ore",
   "reportCredit": "Ore di credito",
   "reportComments": "Commenti",
+  "reportParticipatedShort": "Servizio",
+  "reportStudiesShort": "Studi",
+  "reportAuxShort": "Aus.",
+  "reportCreditShort": "Credito",
 
   "s21Export": "Esporta S-21 (PDF)",
   "schedulePdfExport": "Riepilogo mensile (PDF)",

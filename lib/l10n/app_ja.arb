@@ -235,6 +235,10 @@
   "reportHours": "時間",
   "reportCredit": "認定時間",
   "reportComments": "コメント",
+  "reportParticipatedShort": "参加",
+  "reportStudiesShort": "研究",
+  "reportAuxShort": "補助",
+  "reportCreditShort": "認定",
 
   "s21Export": "S-21をエクスポート（PDF）",
   "schedulePdfExport": "月間予定（PDF）",

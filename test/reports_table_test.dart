@@ -113,4 +113,56 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Enter report — John Adams'), findsOneWidget);
   });
+
+  testWidgets('the narrow columns are headed by an abbreviation that keeps '
+      'the full label as a tooltip', (tester) async {
+    // No report filed, so the only "Shared in Ministry" tooltip in the tree is
+    // the column's — the row icon's says "Not submitted".
+    await tester.pumpWidget(wrap(FakeFirebaseFirestore(), [john]));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Shared'), findsOneWidget);
+    expect(find.text('Aux.'), findsOneWidget);
+    expect(find.text('Credit'), findsOneWidget);
+    expect(find.byTooltip('Shared in Ministry'), findsOneWidget);
+    expect(find.byTooltip('Auxiliary Pioneer'), findsOneWidget);
+    expect(find.byTooltip('Credit hours'), findsOneWidget);
+  });
+
+  testWidgets('the table fills a wide viewport, comments taking the slack',
+      (tester) async {
+    tester.view.physicalSize = const Size(1200, 600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final db = await dbWith(
+        const MinistryReport(participated: true, hours: 9, comments: 'ok'));
+    await tester.pumpWidget(wrap(db, [john]));
+    await tester.pumpAndSettle();
+
+    // Only the flex on the comments column can stretch the table this far;
+    // intrinsically it is roughly half as wide.
+    expect(tester.getSize(find.byType(DataTable)).width, 1200);
+  });
+
+  testWidgets('a long note is capped rather than widening the table without '
+      'end', (tester) async {
+    tester.view.physicalSize = const Size(390, 720);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    final db = await dbWith(MinistryReport(
+        participated: true, hours: 9, comments: 'a very long note ' * 20));
+    await tester.pumpWidget(wrap(db, [john]));
+    await tester.pumpAndSettle();
+
+    // Wider than the phone, so it scrolls sideways as before. The ceiling is
+    // the point: maxIntrinsicWidth of a Text is its *single-line* width no
+    // matter how many lines it may wrap onto, so uncapped this 340-character
+    // note would ask for several thousand pixels and drag every other row
+    // sideways with it.
+    final width = tester.getSize(find.byType(DataTable)).width;
+    expect(width, greaterThan(390));
+    expect(width, lessThan(1500));
+  });
 }

@@ -241,6 +241,10 @@
   "reportHours": "Hours",
   "reportCredit": "Credit hours",
   "reportComments": "Comments",
+  "reportParticipatedShort": "Shared",
+  "reportStudiesShort": "Studies",
+  "reportAuxShort": "Aux.",
+  "reportCreditShort": "Credit",
 
   "s21Export": "Export S-21 (PDF)",
   "schedulePdfExport": "Monthly overview (PDF)",

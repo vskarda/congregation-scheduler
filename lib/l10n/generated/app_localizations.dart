@@ -1440,6 +1440,30 @@ abstract class AppLocalizations {
   /// **'Comments'**
   String get reportComments;
 
+  /// No description provided for @reportParticipatedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared'**
+  String get reportParticipatedShort;
+
+  /// No description provided for @reportStudiesShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Studies'**
+  String get reportStudiesShort;
+
+  /// No description provided for @reportAuxShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Aux.'**
+  String get reportAuxShort;
+
+  /// No description provided for @reportCreditShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit'**
+  String get reportCreditShort;
+
   /// No description provided for @s21Export.
   ///
   /// In en, this message translates to:

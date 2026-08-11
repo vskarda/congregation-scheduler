@@ -717,6 +717,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get reportComments => 'コメント';
 
   @override
+  String get reportParticipatedShort => '参加';
+
+  @override
+  String get reportStudiesShort => '研究';
+
+  @override
+  String get reportAuxShort => '補助';
+
+  @override
+  String get reportCreditShort => '認定';
+
+  @override
   String get s21Export => 'S-21をエクスポート（PDF）';
 
   @override

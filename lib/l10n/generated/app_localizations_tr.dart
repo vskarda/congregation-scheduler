@@ -729,6 +729,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get reportComments => 'Not';
 
   @override
+  String get reportParticipatedShort => 'Hizmet';
+
+  @override
+  String get reportStudiesShort => 'Tetkik';
+
+  @override
+  String get reportAuxShort => 'Yard.';
+
+  @override
+  String get reportCreditShort => 'Kredi';
+
+  @override
   String get s21Export => 'S-21\'i Dışa Aktar (PDF)';
 
   @override

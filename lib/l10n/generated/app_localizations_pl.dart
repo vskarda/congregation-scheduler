@@ -729,6 +729,18 @@ class AppLocalizationsPl extends AppLocalizations {
   String get reportComments => 'Komentarze';
 
   @override
+  String get reportParticipatedShort => 'Służba';
+
+  @override
+  String get reportStudiesShort => 'Kursy';
+
+  @override
+  String get reportAuxShort => 'Pom.';
+
+  @override
+  String get reportCreditShort => 'Zalicz.';
+
+  @override
   String get s21Export => 'Eksportuj S-21 (PDF)';
 
   @override

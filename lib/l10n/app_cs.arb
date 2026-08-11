@@ -235,6 +235,10 @@
   "reportHours": "Hodiny",
   "reportCredit": "Započtené hodiny",
   "reportComments": "Poznámky",
+  "reportParticipatedShort": "Ve službě",
+  "reportStudiesShort": "Studia",
+  "reportAuxShort": "Pomocný",
+  "reportCreditShort": "Započtené",
 
   "s21Export": "Exportovat S-21 (PDF)",
   "schedulePdfExport": "Měsíční přehled (PDF)",

@@ -235,6 +235,10 @@
   "reportHours": "Godziny",
   "reportCredit": "Godziny zaliczone",
   "reportComments": "Komentarze",
+  "reportParticipatedShort": "Służba",
+  "reportStudiesShort": "Kursy",
+  "reportAuxShort": "Pom.",
+  "reportCreditShort": "Zalicz.",
 
   "s21Export": "Eksportuj S-21 (PDF)",
   "schedulePdfExport": "Przegląd miesięczny (PDF)",

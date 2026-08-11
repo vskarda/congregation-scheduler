@@ -235,6 +235,10 @@
   "reportHours": "Horas",
   "reportCredit": "Horas de crédito",
   "reportComments": "Comentarios",
+  "reportParticipatedShort": "Participó",
+  "reportStudiesShort": "Cursos",
+  "reportAuxShort": "Aux.",
+  "reportCreditShort": "Crédito",
 
   "s21Export": "Exportar S-21 (PDF)",
   "schedulePdfExport": "Resumen mensual (PDF)",
