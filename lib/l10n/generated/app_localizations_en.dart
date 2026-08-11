@@ -1702,6 +1702,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statPublisherHours => 'Publisher hours';
 
   @override
+  String get statTerrCompleted => 'Completed';
+
+  @override
+  String get statTerrAvgDays => 'Avg. days to finish';
+
+  @override
+  String get statTerrCovered => 'Worked in the service year';
+
+  @override
+  String get statTerrNotCovered => 'Not worked in the service year';
+
+  @override
+  String get statTerrPerMonth => 'Completed per month';
+
+  @override
   String get statUsageTitle => 'App usage';
 
   @override

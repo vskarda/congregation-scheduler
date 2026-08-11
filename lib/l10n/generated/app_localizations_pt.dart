@@ -1718,6 +1718,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get statPublisherHours => 'Horas dos publicadores';
 
   @override
+  String get statTerrCompleted => 'Concluídos';
+
+  @override
+  String get statTerrAvgDays => 'Média de dias para concluir';
+
+  @override
+  String get statTerrCovered => 'Trabalhados no ano de serviço';
+
+  @override
+  String get statTerrNotCovered => 'Não trabalhados no ano de serviço';
+
+  @override
+  String get statTerrPerMonth => 'Concluídos por mês';
+
+  @override
   String get statUsageTitle => 'Uso do aplicativo';
 
   @override

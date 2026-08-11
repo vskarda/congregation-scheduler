@@ -3180,6 +3180,36 @@ abstract class AppLocalizations {
   /// **'Publisher hours'**
   String get statPublisherHours;
 
+  /// No description provided for @statTerrCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statTerrCompleted;
+
+  /// No description provided for @statTerrAvgDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. days to finish'**
+  String get statTerrAvgDays;
+
+  /// No description provided for @statTerrCovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked in the service year'**
+  String get statTerrCovered;
+
+  /// No description provided for @statTerrNotCovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Not worked in the service year'**
+  String get statTerrNotCovered;
+
+  /// No description provided for @statTerrPerMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed per month'**
+  String get statTerrPerMonth;
+
   /// No description provided for @statUsageTitle.
   ///
   /// In en, this message translates to:

@@ -1724,6 +1724,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String get statPublisherHours => 'Heures des proclamateurs';
 
   @override
+  String get statTerrCompleted => 'Terminés';
+
+  @override
+  String get statTerrAvgDays => 'Moy. jours pour terminer';
+
+  @override
+  String get statTerrCovered => 'Parcourus dans l\'année de service';
+
+  @override
+  String get statTerrNotCovered => 'Non parcourus dans l\'année de service';
+
+  @override
+  String get statTerrPerMonth => 'Terminés par mois';
+
+  @override
   String get statUsageTitle => 'Utilisation de l\'application';
 
   @override

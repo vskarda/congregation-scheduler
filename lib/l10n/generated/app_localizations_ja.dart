@@ -1679,6 +1679,21 @@ class AppLocalizationsJa extends AppLocalizations {
   String get statPublisherHours => '伝道者の時間';
 
   @override
+  String get statTerrCompleted => '完了';
+
+  @override
+  String get statTerrAvgDays => '完了までの平均日数';
+
+  @override
+  String get statTerrCovered => '奉仕年度内に完了した区域';
+
+  @override
+  String get statTerrNotCovered => '奉仕年度内に未完了の区域';
+
+  @override
+  String get statTerrPerMonth => '月別の完了数';
+
+  @override
   String get statUsageTitle => 'アプリの利用状況';
 
   @override

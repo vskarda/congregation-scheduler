@@ -36,6 +36,7 @@ class StatisticsScreen extends ConsumerWidget {
             _AgeCard(),
             _AttendanceCard(),
             _FieldServiceCard(),
+            _TerritoriesCard(),
             _UsageCard(),
           ],
         ),
@@ -130,6 +131,40 @@ class _StatBar extends StatelessWidget {
             ),
           ],
         ),
+      );
+}
+
+/// Service-year stepper for the cards that roll a year up; forward stops at
+/// the year in progress.
+class _ServiceYearHeader extends StatelessWidget {
+  const _ServiceYearHeader({
+    required this.serviceYear,
+    required this.onChanged,
+  });
+
+  final int serviceYear;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          IconButton(
+            icon: const Icon(Icons.chevron_left),
+            onPressed: () => onChanged(serviceYear - 1),
+          ),
+          Expanded(
+            child: Text(
+              context.l10n.statServiceYear('${serviceYear - 1}/$serviceYear'),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.chevron_right),
+            onPressed: serviceYear >= serviceYearOf(DateTime.now())
+                ? null
+                : () => onChanged(serviceYear + 1),
+          ),
+        ],
       );
 }
 
@@ -381,27 +416,10 @@ class _FieldServiceCardState extends ConsumerState<_FieldServiceCard> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final reportsAsync = ref.watch(serviceYearReportsProvider(_serviceYear));
-    final currentYear = serviceYearOf(DateTime.now());
 
-    final header = Row(
-      children: [
-        IconButton(
-          icon: const Icon(Icons.chevron_left),
-          onPressed: () => setState(() => _serviceYear--),
-        ),
-        Expanded(
-          child: Text(
-            l10n.statServiceYear('${_serviceYear - 1}/$_serviceYear'),
-            textAlign: TextAlign.center,
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.chevron_right),
-          onPressed: _serviceYear >= currentYear
-              ? null
-              : () => setState(() => _serviceYear++),
-        ),
-      ],
+    final header = _ServiceYearHeader(
+      serviceYear: _serviceYear,
+      onChanged: (year) => setState(() => _serviceYear = year),
     );
 
     return _asyncCard(context, reportsAsync, l10n.statFieldServiceTitle,
@@ -431,6 +449,83 @@ class _FieldServiceCardState extends ConsumerState<_FieldServiceCard> {
             value: '${stats.publisherHours}',
             fraction: stats.publisherHours / stats.totalHours,
           ),
+        ],
+      ];
+    });
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Territories (per service year)
+// ---------------------------------------------------------------------------
+
+class _TerritoriesCard extends ConsumerStatefulWidget {
+  const _TerritoriesCard();
+
+  @override
+  ConsumerState<_TerritoriesCard> createState() => _TerritoriesCardState();
+}
+
+class _TerritoriesCardState extends ConsumerState<_TerritoriesCard> {
+  late int _serviceYear = serviceYearOf(DateTime.now());
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final locale = Localizations.localeOf(context).toString();
+    final sourcesAsync = ref.watch(territoryStatsSourcesProvider);
+
+    final header = _ServiceYearHeader(
+      serviceYear: _serviceYear,
+      onChanged: (year) => setState(() => _serviceYear = year),
+    );
+
+    return _asyncCard(context, sourcesAsync, l10n.navTerritories, (sources) {
+      final stats = computeTerritories(sources.territories, sources.assignments,
+          serviceYear: _serviceYear);
+      if (stats.total == 0) return [header, const _NoData()];
+      final monthFmt = DateFormat.yMMM(locale);
+      // Months that have already begun: all twelve of a year gone by, the
+      // elapsed part of the one in progress. A month without a single return
+      // is worth a bar of its own — the gaps are the point.
+      final thisMonth = monthKey(DateTime.now());
+      final shown = stats.completionsByMonth.keys
+          .where((m) => m.compareTo(thisMonth) <= 0)
+          .toList();
+      final peak = shown
+          .map((m) => stats.completionsByMonth[m]!)
+          .fold(0, (a, b) => a > b ? a : b);
+
+      return [
+        header,
+        _StatTiles([
+          ('${stats.total}', l10n.terrStatsTotal),
+          ('${stats.currentlyAssigned}', l10n.terrStatsAssigned),
+          ('${stats.completed}', l10n.statTerrCompleted),
+          (
+            stats.averageDaysToComplete?.toStringAsFixed(0) ?? '—',
+            l10n.statTerrAvgDays
+          ),
+        ]),
+        const SizedBox(height: 8),
+        _StatBar(
+          label: l10n.statTerrCovered,
+          value: '${stats.covered} / ${stats.total}',
+          fraction: stats.covered / stats.total,
+        ),
+        _StatBar(
+          label: l10n.statTerrNotCovered,
+          value: '${stats.notCovered} / ${stats.total}',
+          fraction: stats.notCovered / stats.total,
+        ),
+        if (peak > 0) ...[
+          _Subtitle(l10n.statTerrPerMonth),
+          for (final m in shown)
+            _StatBar(
+              label: monthFmt.format(parseMonthKey(m)),
+              value: '${stats.completionsByMonth[m]}',
+              fraction: stats.completionsByMonth[m]! / peak,
+            ),
         ],
       ];
     });

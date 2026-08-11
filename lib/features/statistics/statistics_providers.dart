@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/data/publishers_repository.dart';
 import '../../core/data/reports_repository.dart';
+import '../../core/data/territories_repository.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import '../../core/utils/roster.dart';
@@ -65,6 +66,31 @@ final serviceYearReportsProvider =
   final roster = await _roster(ref);
   return Future.wait(serviceYearMonths(serviceYear).map((month) async =>
       _countableIn(month, await repo.getMonth(month), roster)));
+});
+
+/// The two collections the territory card rolls up. Both are the streams the
+/// Territories screen already runs (a full admin passes the rules' territory
+/// role), paired here so the card shows one loading/error state instead of
+/// two half-drawn ones.
+typedef TerritorySources = ({
+  List<Territory> territories,
+  List<TerritoryAssignment> assignments,
+});
+
+final territoryStatsSourcesProvider =
+    Provider.autoDispose<AsyncValue<TerritorySources>>((ref) {
+  final territories = ref.watch(territoriesProvider);
+  final assignments = ref.watch(allTerritoryAssignmentsProvider);
+  return territories.when(
+    loading: () => const AsyncValue.loading(),
+    error: (e, st) => AsyncValue.error(e, st),
+    data: (territoryList) => assignments.when(
+      loading: () => const AsyncValue.loading(),
+      error: (e, st) => AsyncValue.error(e, st),
+      data: (assignmentList) => AsyncValue.data(
+          (territories: territoryList, assignments: assignmentList)),
+    ),
+  );
 });
 
 /// Previous calendar month's reports — the month whose reporting is

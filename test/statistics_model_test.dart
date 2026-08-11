@@ -246,6 +246,127 @@ void main() {
     });
   });
 
+  group('computeTerritories', () {
+    // Sep 2025 – Aug 2026.
+    const serviceYear = 2026;
+
+    TerritoryAssignment assignment(
+      String territoryId, {
+      String assigned = '2025-09-01',
+      String returned = '',
+    }) =>
+        TerritoryAssignment(
+          territoryId: territoryId,
+          assignedDate: assigned,
+          returnedDate: returned,
+        );
+
+    const territories = [
+      Territory(id: 't1', name: 'Alpha'),
+      Territory(id: 't2', name: 'Beta'),
+      Territory(id: 't3', name: 'Gamma'),
+    ];
+
+    TerritoryStats stats(List<TerritoryAssignment> assignments) =>
+        computeTerritories(territories, assignments,
+            serviceYear: serviceYear);
+
+    test('the year runs September to August', () {
+      final result = stats([
+        assignment('t1', assigned: '2025-08-01', returned: '2025-08-31'),
+        assignment('t1', assigned: '2025-08-15', returned: '2025-09-01'),
+        assignment('t2', assigned: '2026-08-01', returned: '2026-08-31'),
+        assignment('t3', assigned: '2026-08-20', returned: '2026-09-01'),
+      ]);
+
+      // The August before and the September after belong to other years.
+      expect(result.completed, 2);
+      expect(result.completionsByMonth['2025-09'], 1);
+      expect(result.completionsByMonth['2026-08'], 1);
+      expect(result.completionsByMonth.keys.first, '2025-09');
+      expect(result.completionsByMonth.keys.last, '2026-08');
+      expect(result.completionsByMonth, hasLength(12));
+    });
+
+    test('a territory worked twice is covered once', () {
+      final result = stats([
+        assignment('t1', assigned: '2025-09-01', returned: '2025-10-01'),
+        assignment('t1', assigned: '2025-11-01', returned: '2025-12-01'),
+      ]);
+
+      expect(result.completed, 2);
+      expect(result.covered, 1);
+      expect(result.notCovered, 2);
+      expect(result.total, 3);
+    });
+
+    test('a territory still out counts as assigned, never as completed', () {
+      final result = stats([
+        assignment('t1'),
+        assignment('t2', returned: '2025-10-15'),
+      ]);
+
+      expect(result.currentlyAssigned, 1);
+      expect(result.completed, 1);
+      expect(result.covered, 1);
+    });
+
+    test('a deleted territory keeps its history but not its share', () {
+      // The territory is gone, the round of work still happened; the bars
+      // measure against the territories that exist, so neither can overflow.
+      final result = stats([
+        assignment('deleted', assigned: '2025-09-01', returned: '2025-10-01'),
+        assignment('deleted'),
+      ]);
+
+      expect(result.completed, 1);
+      expect(result.completionsByMonth['2025-10'], 1);
+      expect(result.covered, 0);
+      expect(result.currentlyAssigned, 0);
+      expect(result.covered, lessThanOrEqualTo(result.total));
+    });
+
+    test('average span skips what it cannot measure', () {
+      final result = stats([
+        assignment('t1', assigned: '2025-09-01', returned: '2025-09-11'),
+        assignment('t2', assigned: '2025-10-01', returned: '2025-10-21'),
+        // Never recorded as handed out, and a return before the assignment:
+        // both count as completions, neither as a measurable span.
+        assignment('t3', assigned: '', returned: '2025-11-01'),
+        assignment('t3', assigned: '2025-12-10', returned: '2025-12-01'),
+      ]);
+
+      expect(result.completed, 4);
+      expect(result.averageDaysToComplete, closeTo(15, 0.001));
+    });
+
+    test('a span across the spring DST switch keeps its full length', () {
+      // Local midnights lose an hour in between; whole days must not.
+      final result = stats(
+          [assignment('t1', assigned: '2026-03-01', returned: '2026-04-01')]);
+
+      expect(result.averageDaysToComplete, closeTo(31, 0.001));
+    });
+
+    test('a year without returns has no average and only zero months', () {
+      final result = stats([assignment('t1')]);
+
+      expect(result.completed, 0);
+      expect(result.covered, 0);
+      expect(result.averageDaysToComplete, isNull);
+      expect(result.completionsByMonth.values.every((v) => v == 0), isTrue);
+    });
+
+    test('no territories yields zeros', () {
+      final result = computeTerritories(const [], const [],
+          serviceYear: serviceYear);
+
+      expect(result.total, 0);
+      expect(result.currentlyAssigned, 0);
+      expect(result.notCovered, 0);
+    });
+  });
+
   group('computeAppUsage', () {
     test('accounts, admins and self-reporting split', () {
       final stats = computeAppUsage([

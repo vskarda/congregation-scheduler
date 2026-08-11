@@ -1706,6 +1706,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get statPublisherHours => 'Godziny głosicieli';
 
   @override
+  String get statTerrCompleted => 'Ukończone';
+
+  @override
+  String get statTerrAvgDays => 'Śr. dni do ukończenia';
+
+  @override
+  String get statTerrCovered => 'Opracowane w roku służbowym';
+
+  @override
+  String get statTerrNotCovered => 'Nieopracowane w roku służbowym';
+
+  @override
+  String get statTerrPerMonth => 'Ukończone w poszczególnych miesiącach';
+
+  @override
   String get statUsageTitle => 'Korzystanie z aplikacji';
 
   @override

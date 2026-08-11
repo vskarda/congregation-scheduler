@@ -1710,6 +1710,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get statPublisherHours => 'Müjdeci saatleri';
 
   @override
+  String get statTerrCompleted => 'Tamamlanan';
+
+  @override
+  String get statTerrAvgDays => 'Tamamlama için ort. gün';
+
+  @override
+  String get statTerrCovered => 'Hizmet yılında çalışılan';
+
+  @override
+  String get statTerrNotCovered => 'Hizmet yılında çalışılmayan';
+
+  @override
+  String get statTerrPerMonth => 'Aylara göre tamamlanan';
+
+  @override
   String get statUsageTitle => 'Uygulama kullanımı';
 
   @override

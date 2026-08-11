@@ -1,4 +1,5 @@
 import '../../core/models/models.dart';
+import '../../core/utils/dates.dart';
 
 /// Pure statistics computations for the admin Statistics screen.
 ///
@@ -283,6 +284,96 @@ FieldServiceStats computeFieldService(List<List<MinistryReport>> monthReports) {
     reportsSubmitted: submitted,
     participated: participated,
     monthsWithData: monthsWithData,
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Territories (service-year rollup)
+// ---------------------------------------------------------------------------
+
+class TerritoryStats {
+  const TerritoryStats({
+    required this.total,
+    required this.currentlyAssigned,
+    required this.completed,
+    required this.covered,
+    required this.averageDaysToComplete,
+    required this.completionsByMonth,
+  });
+
+  /// Territories that exist today. A territory document carries no history,
+  /// so this and [currentlyAssigned] describe now, whichever year is shown.
+  final int total;
+  final int currentlyAssigned;
+
+  /// Assignments returned inside the service year — every one on record,
+  /// including those whose territory has since been deleted: the territory is
+  /// gone, the round of work still happened. [covered] and [currentlyAssigned]
+  /// count only territories that still exist, so neither can exceed [total].
+  final int completed;
+
+  /// Distinct territories among the completed ones — worked twice counts once.
+  final int covered;
+
+  /// Mean assigned -> returned span in days of the completed assignments;
+  /// null when the year has none to measure.
+  final double? averageDaysToComplete;
+
+  /// month key (yyyy-MM) -> completions, all 12 months of the service year,
+  /// September first, months without a return included as 0.
+  final Map<String, int> completionsByMonth;
+
+  int get notCovered => total - covered;
+}
+
+/// Whole days between two date-only values, measured on UTC copies so a DST
+/// shift inside the span cannot shave a day off it.
+int _daysBetween(DateTime from, DateTime to) =>
+    DateTime.utc(to.year, to.month, to.day)
+        .difference(DateTime.utc(from.year, from.month, from.day))
+        .inDays;
+
+/// An assignment belongs to the service year whose months contain the month
+/// it was returned in; one still out belongs to no year yet.
+TerritoryStats computeTerritories(
+  List<Territory> territories,
+  List<TerritoryAssignment> assignments, {
+  required int serviceYear,
+}) {
+  final completionsByMonth = {
+    for (final month in serviceYearMonths(serviceYear)) month: 0,
+  };
+  final existing = {for (final t in territories) t.id};
+  final covered = <String>{};
+  final out = <String>{};
+  var completed = 0, daySum = 0, dayCount = 0;
+
+  for (final a in assignments) {
+    if (a.isOpen) {
+      if (existing.contains(a.territoryId)) out.add(a.territoryId);
+      continue;
+    }
+    if (a.returnedDate.length < 7) continue;
+    final month = a.returnedDate.substring(0, 7);
+    if (!completionsByMonth.containsKey(month)) continue;
+    completed++;
+    completionsByMonth[month] = completionsByMonth[month]! + 1;
+    if (existing.contains(a.territoryId)) covered.add(a.territoryId);
+    final start = tryParseDateKey(a.assignedDate);
+    final end = tryParseDateKey(a.returnedDate);
+    if (start != null && end != null && !end.isBefore(start)) {
+      daySum += _daysBetween(start, end);
+      dayCount++;
+    }
+  }
+
+  return TerritoryStats(
+    total: territories.length,
+    currentlyAssigned: out.length,
+    completed: completed,
+    covered: covered.length,
+    averageDaysToComplete: dayCount == 0 ? null : daySum / dayCount,
+    completionsByMonth: completionsByMonth,
   );
 }
 

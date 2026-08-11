@@ -1721,6 +1721,21 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statPublisherHours => 'Verkündigerstunden';
 
   @override
+  String get statTerrCompleted => 'Abgeschlossen';
+
+  @override
+  String get statTerrAvgDays => 'Ø Tage bis Abschluss';
+
+  @override
+  String get statTerrCovered => 'Im Dienstjahr bearbeitet';
+
+  @override
+  String get statTerrNotCovered => 'Im Dienstjahr nicht bearbeitet';
+
+  @override
+  String get statTerrPerMonth => 'Abgeschlossen pro Monat';
+
+  @override
   String get statUsageTitle => 'App-Nutzung';
 
   @override

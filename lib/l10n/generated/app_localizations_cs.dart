@@ -1707,6 +1707,21 @@ class AppLocalizationsCs extends AppLocalizations {
   String get statPublisherHours => 'Hodiny zvěstovatelů';
 
   @override
+  String get statTerrCompleted => 'Dokončeno';
+
+  @override
+  String get statTerrAvgDays => 'Prům. dnů do dokončení';
+
+  @override
+  String get statTerrCovered => 'Zpracováno ve služebním roce';
+
+  @override
+  String get statTerrNotCovered => 'Nezpracováno ve služebním roce';
+
+  @override
+  String get statTerrPerMonth => 'Dokončeno podle měsíců';
+
+  @override
   String get statUsageTitle => 'Používání aplikace';
 
   @override
