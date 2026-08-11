@@ -134,18 +134,46 @@ void main() {
     expect(textOf(field('Total'), tester), '35');
   });
 
-  testWidgets('hidden for a meeting that has not happened yet', (tester) async {
+  testWidgets('hidden for a meeting in a future week', (tester) async {
     final db = FakeFirebaseFirestore();
     await tester.pumpWidget(wrap(
         db,
         MeetingAttendanceCard(
-          date: DateTime.now().add(const Duration(days: 1)),
+          // Same weekday next week, so the week always starts later than this
+          // one whatever day the test runs on.
+          date: DateTime.now().add(const Duration(days: 7)),
           meetingType: MeetingType.lmm,
         )));
     await tester.pumpAndSettle();
 
     expect(find.text('Record attendance'), findsNothing);
     expect(find.byType(TextField), findsNothing);
+  });
+
+  testWidgets(
+      'shown from the start of the week, recording against the configured day',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    // This week's Sunday: still ahead unless the test runs on a Sunday, which
+    // is the case a meeting moved earlier in the week has to cover.
+    final sunday = mondayOf(DateTime.now()).add(const Duration(days: 6));
+
+    await tester.pumpWidget(wrap(db,
+        MeetingAttendanceCard(date: sunday, meetingType: MeetingType.weekend)));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Record attendance'), findsOneWidget);
+
+    await tester.enterText(field('Total'), '85');
+    await tester.pump();
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
+
+    // The moved meeting is still filed under the congregation's configured
+    // weekend day, so it fills the slot the history card expects.
+    final docs = (await db.collection('attendance').get()).docs;
+    expect(docs, hasLength(1));
+    expect(docs.single.id, '${dateKey(sunday)}_weekend');
   });
 
   testWidgets('shown today, and only to roles that may record', (tester) async {

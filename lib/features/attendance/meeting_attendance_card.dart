@@ -13,8 +13,8 @@ import 'attendance_form.dart';
 /// week views. Date and meeting type come from the schedule being shown, so
 /// the form carries counts only — there is nothing to pick.
 ///
-/// Hidden entirely for meetings still in the future and for anyone without
-/// the record right.
+/// Hidden entirely for meetings whose week has not started yet, and for
+/// anyone without the record right.
 class MeetingAttendanceCard extends ConsumerWidget {
   const MeetingAttendanceCard({
     super.key,
@@ -36,9 +36,10 @@ class MeetingAttendanceCard extends ConsumerWidget {
     if (!ref.watch(effectiveRolesProvider).canRecordAttendance()) {
       return const SizedBox.shrink();
     }
-    final today = DateTime.now();
-    if (DateTime(date.year, date.month, date.day)
-        .isAfter(DateTime(today.year, today.month, today.day))) {
+    // A meeting moved to an earlier day of its week must still be recordable,
+    // so the card opens with the week rather than on the meeting day itself.
+    // The counts stay filed under the configured weekday either way.
+    if (mondayOf(date).isAfter(mondayOf(DateTime.now()))) {
       return const SizedBox.shrink();
     }
 
