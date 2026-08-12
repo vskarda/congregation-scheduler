@@ -24,7 +24,7 @@ WHAT IT DOES
 - Ministry reports: self-service and admin paper entry, publisher records by service year, and an automatic monthly (S-1) summary
 - Meeting attendance tracking, in-person and online, with monthly averages
 - Publisher management: identity verification, granular per-section admin roles, assignment qualifications, and emergency contact notes
-- Czech, English, and Turkish interface
+- Interface in Czech, English, French, German, Italian, Japanese, Polish, Portuguese, Spanish, and Turkish
 
 HOW SET-UP WORKS
 

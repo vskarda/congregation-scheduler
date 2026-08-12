@@ -42,10 +42,12 @@ fill in before submitting.
 
 ## Notes
 
-- The app currently ships English, Czech, and Turkish UI (`lib/l10n/app_{en,cs,tr}.arb`).
-  Store *listing text* was scoped to English-only for this first pass
-  (confirmed with the user) — both consoles let you add cs/tr listings
-  later without blocking submission.
+- The app ships ten UI languages (`lib/l10n/app_{cs,de,en,es,fr,it,ja,pl,pt,tr}.arb`).
+  Play listing text now covers all ten — see `store-listing/translations/`
+  (`play-listings.md` is the source, `play-listing-translations.csv` the
+  import file, `scripts/build_store_listings.py` validates the character
+  limits). App Store Connect listings are still English-only; the same
+  source file can feed them when you get there.
 - Export compliance is already declared in `ios/Runner/Info.plist`
   (`ITSAppUsesNonExemptEncryption = false`), so no extra App Store Connect
   action is needed there beyond confirming the same answer if asked again
