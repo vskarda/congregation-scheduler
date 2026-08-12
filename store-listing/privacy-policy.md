@@ -1,9 +1,9 @@
 # Privacy Policy — Congregation Scheduler
 
-**Last updated:** [DATE — fill in on publish]
+**Last updated:** 12 August 2026
 
 Congregation Scheduler ("the app") is developed independently by
-[DEVELOPER NAME / PLACEHOLDER] ("we", "us"). This policy explains what data
+Vítězslav Škarda ("we", "us"). This policy explains what data
 the app handles and, importantly, **who controls it** — because of how the
 app is built, that is usually not us.
 
@@ -118,5 +118,4 @@ material changes, we will note it in the app's release notes.
 ## 9. Contact
 
 Questions about the app itself (not your congregation's specific data —
-contact your administrator for that): **[SUPPORT EMAIL — confirm before
-publishing, e.g. vskarda@gmail.com]**.
+contact your administrator for that): **rexervit@gmail.com**.
