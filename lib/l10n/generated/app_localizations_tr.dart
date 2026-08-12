@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appTitle => 'Cemaat Planlayıcı';
+  String get appTitle => 'İbadet Programı Planlayıcı';
 
   @override
   String get commonSave => 'Kaydet';

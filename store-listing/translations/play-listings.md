@@ -333,11 +333,11 @@ O aplicativo é gratuito, não contém anúncios e não coleta dados de análise
 
 ### LOCALE: tr-TR
 ### TITLE
-Cemaat Planlayıcı
+İbadet Programı Planlayıcı
 ### SHORT
-Yehova'nın Şahitleri cemaatleri için planlama. Kendi Firebase projeniz.
+Yehova'nın Şahitleri için ibadet programı planlama. Kendi Firebase projeniz.
 ### FULL
-Cemaat Planlayıcı, Yehova'nın Şahitleri cemaatleri için kendi sunucunuzda barındırılan bir planlama ve yönetim uygulamasıdır. Alışılmış uygulamaların aksine, cemaatinizin verilerini hiçbir şirketin sunucusuna göndermez: her cemaat kendi ücretsiz Firebase projesini çalıştırır ve uygulama doğrudan ona bağlanır. Verilerinizi kendi yöneticileriniz dışında kimse - uygulamanın geliştiricisi bile - göremez.
+İbadet Programı Planlayıcı, Yehova'nın Şahitleri için kendi sunucunuzda barındırılan bir program ve yönetim uygulamasıdır. Alışılmış uygulamaların aksine, verilerinizi hiçbir şirketin sunucusuna göndermez: kendi ücretsiz Firebase projenizi siz çalıştırırsınız ve uygulama doğrudan ona bağlanır. Verilerinizi kendi yöneticileriniz dışında kimse - uygulamanın geliştiricisi bile - göremez.
 
 Bağımsız olarak geliştirilmiştir. Watch Tower Bible and Tract Society ya da Yehova'nın Şahitlerine ait herhangi bir resmi kuruluşla bağlantılı değildir, onlar tarafından desteklenmemekte veya yayımlanmamaktadır.
 
@@ -360,6 +360,6 @@ Bir yönetici ücretsiz bir Firebase projesi oluşturur (yaklaşık 15 dakika, p
 
 NEDEN KENDİ SUNUCUNUZDA
 
-Cemaat kayıtları kişisel bilgiler içerir - isimler, iletişim bilgileri, hizmet faaliyeti - ve bunlar gerçek bir gizliliği hak eder. Her cemaatin verilerini yalnızca o cemaatin kendi yöneticilerinin denetlediği bir Firebase projesinin içinde tutarak Cemaat Planlayıcı, paylaşılan merkezi bir veritabanının tek bir sızıntının hedefi hâline gelmesini önler ve verilerinizin denetimini her zaman sizde bırakır.
+Tutulan kayıtlar kişisel bilgiler içerir - isimler, iletişim bilgileri, hizmet faaliyeti - ve bunlar gerçek bir gizliliği hak eder. Verileri yalnızca kendi yöneticilerinizin denetlediği bir Firebase projesinin içinde saklayarak İbadet Programı Planlayıcı, paylaşılan merkezi bir veritabanının tek bir sızıntının hedefi hâline gelmesini önler ve verilerinizin denetimini her zaman sizde bırakır.
 
 Uygulama ücretsizdir, reklam içermez ve hiçbir türde analiz veya izleme verisi toplamaz.
