@@ -29,6 +29,9 @@ Apple can auto-generate some smaller size classes from your largest
 upload, but it's safer to capture each class natively on a matching
 simulator if you have Xcode access.
 
+Headings and descriptions to put on the framed screenshots are in
+[CAPTIONS.md](CAPTIONS.md), numbered to match the list below.
+
 ## Screens to capture, in this order
 
 1. **Setup / QR invite** — `lib/features/setup` — the "paste or scan
