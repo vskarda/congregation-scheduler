@@ -101,6 +101,26 @@ class PublishersRepository {
   Future<void> setPrivate(String publisherId, PublisherPrivate data) =>
       _privateDoc(publisherId).set(data.toJson());
 
+  /// Private profiles of many publishers, in the order of [publisherIds] and
+  /// null where a record has none yet (admin-created records start without
+  /// one). One document read per publisher is unavoidable — they live in a
+  /// subcollection — so they are fetched in rounds of [batch] rather than all
+  /// at once: a large congregation would otherwise open 150 parallel requests.
+  /// [onRound] fires after each round, for callers showing progress.
+  Future<List<PublisherPrivate?>> getPrivatesBatched(
+    List<String> publisherIds, {
+    int batch = 10,
+    void Function()? onRound,
+  }) async {
+    final result = <PublisherPrivate?>[];
+    for (var i = 0; i < publisherIds.length; i += batch) {
+      final round = publisherIds.skip(i).take(batch);
+      result.addAll(await Future.wait(round.map(getPrivate)));
+      onRound?.call();
+    }
+    return result;
+  }
+
   DocumentReference<Map<String, dynamic>> _awayDoc(String publisherId) =>
       _col.doc(publisherId).collection('away').doc('periods');
 

@@ -10,10 +10,8 @@ import '../../core/utils/dates.dart';
 import '../info_board/file_opener/file_opener.dart';
 import 'publishers_pdf.dart';
 
-/// Private profiles fetched per round. One document read per publisher is
-/// unavoidable (they live in a subcollection), so they are batched rather than
-/// fired all at once — a large congregation would otherwise open 150 parallel
-/// requests.
+/// Private profiles fetched per round; see
+/// [PublishersRepository.getPrivatesBatched] for why they are batched.
 const _privateFetchBatch = 10;
 
 /// Roster action for publisher-admins: exports the publishers currently listed
@@ -67,18 +65,16 @@ class _PublishersPdfButtonState extends ConsumerState<PublishersPdfButton> {
     try {
       final repo = ref.read(publishersRepositoryProvider);
       final publishers = widget.publishers;
-      final rows = <PublisherProfileRow>[];
-      for (var i = 0; i < publishers.length; i += _privateFetchBatch) {
-        final batch = publishers.skip(i).take(_privateFetchBatch).toList();
-        final privates =
-            await Future.wait(batch.map((p) => repo.getPrivate(p.id)));
-        for (var j = 0; j < batch.length; j++) {
-          // A record created before its private profile existed simply
-          // exports with empty personal columns.
-          rows.add(PublisherProfileRow(
-              publisher: batch[j], private: privates[j]));
-        }
-      }
+      final privates = await repo.getPrivatesBatched(
+        [for (final p in publishers) p.id],
+        batch: _privateFetchBatch,
+      );
+      final rows = [
+        // A record created before its private profile existed simply
+        // exports with empty personal columns.
+        for (var i = 0; i < publishers.length; i++)
+          PublisherProfileRow(publisher: publishers[i], private: privates[i]),
+      ];
       final bytes = await buildPublishersPdf(
         rows: rows,
         congregationName: congregationName,

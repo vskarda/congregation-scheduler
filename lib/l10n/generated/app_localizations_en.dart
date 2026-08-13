@@ -747,6 +747,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get s21Export => 'Export S-21 (PDF)';
 
   @override
+  String get s21ExportAll => 'Export S-21 of all (PDF)';
+
+  @override
+  String get s21BatchConfirmTitle => 'Export S-21 of all publishers?';
+
+  @override
+  String s21BatchConfirmBody(int count, String years) {
+    return 'One PDF with $count publisher record cards will be generated, each covering $years. The file contains personal data — dates of birth and baptism, appointment and the whole reporting history. Store it securely and share it only with those who need it. In a large congregation this can take a while.';
+  }
+
+  @override
+  String get s21BatchGenerating => 'Generating S-21 cards…';
+
+  @override
   String get schedulePdfExport => 'Monthly overview (PDF)';
 
   @override

@@ -242,6 +242,11 @@
   "reportCreditShort": "Anrech. Std.",
 
   "s21Export": "S-21 exportieren (PDF)",
+  "s21ExportAll": "S-21 aller exportieren (PDF)",
+  "s21BatchConfirmTitle": "S-21 aller Verkündiger exportieren?",
+  "s21BatchConfirmBody": "Es wird ein PDF mit {count} Verkündigerkarten erstellt, jede für {years}. Die Datei enthält personenbezogene Daten — Geburts- und Taufdaten, Ernennung und den gesamten Berichtsverlauf. Sicher aufbewahren und nur an diejenigen weitergeben, die sie benötigen. In einer großen Versammlung kann das eine Weile dauern.",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "S-21-Karten werden erstellt…",
   "schedulePdfExport": "Monatsübersicht (PDF)",
 
   "pubPdfExport": "Liste exportieren (PDF)",

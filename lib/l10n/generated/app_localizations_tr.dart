@@ -747,6 +747,21 @@ class AppLocalizationsTr extends AppLocalizations {
   String get s21Export => 'S-21\'i Dışa Aktar (PDF)';
 
   @override
+  String get s21ExportAll => 'Herkesin S-21\'ini dışa aktar (PDF)';
+
+  @override
+  String get s21BatchConfirmTitle =>
+      'Bütün müjdecilerin S-21\'i dışa aktarılsın mı?';
+
+  @override
+  String s21BatchConfirmBody(int count, String years) {
+    return '$count müjdeci kayıt kartı tek bir PDF olarak oluşturulacak; her kart $years kapsıyor. Dosya kişisel bilgiler içerir — doğum ve vaftiz tarihleri, tayin ve bütün rapor geçmişi. Dosyayı güvenli şekilde saklayın ve yalnızca ihtiyacı olanlarla paylaşın. Müjdeci sayısı fazlaysa bu işlem biraz sürebilir.';
+  }
+
+  @override
+  String get s21BatchGenerating => 'S-21 kartları oluşturuluyor…';
+
+  @override
   String get schedulePdfExport => 'Aylık program (PDF)';
 
   @override

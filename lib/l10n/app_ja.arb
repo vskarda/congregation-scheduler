@@ -242,6 +242,11 @@
   "reportCreditShort": "認定",
 
   "s21Export": "S-21をエクスポート（PDF）",
+  "s21ExportAll": "全員のS-21をエクスポート（PDF）",
+  "s21BatchConfirmTitle": "全奉仕者のS-21をエクスポートしますか？",
+  "s21BatchConfirmBody": "{count}人分の奉仕者記録カードを1つのPDFにまとめて作成します（各カードは{years}）。このファイルには個人情報（生年月日・バプテスマの日付・任命・報告の全履歴）が含まれます。安全に保管し、必要な人にのみ渡してください。会衆が大きい場合は時間がかかることがあります。",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "S-21カードを作成しています…",
   "schedulePdfExport": "月間予定（PDF）",
 
   "pubPdfExport": "一覧をエクスポート（PDF）",

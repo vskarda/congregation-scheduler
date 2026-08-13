@@ -1476,6 +1476,30 @@ abstract class AppLocalizations {
   /// **'Export S-21 (PDF)'**
   String get s21Export;
 
+  /// No description provided for @s21ExportAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Export S-21 of all (PDF)'**
+  String get s21ExportAll;
+
+  /// No description provided for @s21BatchConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export S-21 of all publishers?'**
+  String get s21BatchConfirmTitle;
+
+  /// No description provided for @s21BatchConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'One PDF with {count} publisher record cards will be generated, each covering {years}. The file contains personal data — dates of birth and baptism, appointment and the whole reporting history. Store it securely and share it only with those who need it. In a large congregation this can take a while.'**
+  String s21BatchConfirmBody(int count, String years);
+
+  /// No description provided for @s21BatchGenerating.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating S-21 cards…'**
+  String get s21BatchGenerating;
+
   /// No description provided for @schedulePdfExport.
   ///
   /// In en, this message translates to:

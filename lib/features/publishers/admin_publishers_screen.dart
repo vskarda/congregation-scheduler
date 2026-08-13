@@ -13,6 +13,7 @@ import 'gender_style.dart';
 import 'invite_dialog.dart';
 import 'publisher_badges.dart';
 import 'publishers_pdf_button.dart';
+import 's21/s21_batch_pdf_button.dart';
 import 's21/s21_import_screen.dart';
 
 class AdminPublishersScreen extends ConsumerStatefulWidget {
@@ -185,10 +186,11 @@ class _AdminPublishersScreenState
     final groups = ref.watch(ministryGroupsProvider).value ?? const [];
     final metaName =
         ref.watch(congregationMetaProvider).value?.name ?? '';
-    // S-21 import writes profile fields and reports, so both roles apply.
+    // S-21 import writes profile fields and reports; the bulk S-21 export
+    // reads private profiles and every month's report entries. Both roles
+    // apply either way.
     final roles = ref.watch(myRolesProvider);
-    final canImportS21 =
-        roles.canEditPublishers() && roles.canEditReports();
+    final canAdminS21 = roles.canEditPublishers() && roles.canEditReports();
     // The export pulls every listed publisher's private profile, which
     // firestore.rules grants to publisher-admins only.
     final canExportPdf = roles.canEditPublishers();
@@ -258,7 +260,7 @@ class _AdminPublishersScreenState
                       onPressed: _addRecord,
                       icon: const Icon(Icons.person_add_alt),
                     ),
-                    if (canImportS21)
+                    if (canAdminS21)
                       IconButton(
                         tooltip: l10n.s21ImportNew,
                         onPressed: () => Navigator.of(context).push(
@@ -268,6 +270,8 @@ class _AdminPublishersScreenState
                         ),
                         icon: const Icon(Icons.upload_file_outlined),
                       ),
+                    if (canAdminS21)
+                      S21BatchPdfButton(publishers: filtered),
                     if (canExportPdf)
                       PublishersPdfButton(publishers: filtered),
                   ],

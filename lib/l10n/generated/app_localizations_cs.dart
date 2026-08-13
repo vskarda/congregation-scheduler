@@ -748,6 +748,20 @@ class AppLocalizationsCs extends AppLocalizations {
   String get s21Export => 'Exportovat S-21 (PDF)';
 
   @override
+  String get s21ExportAll => 'Exportovat S-21 všech (PDF)';
+
+  @override
+  String get s21BatchConfirmTitle => 'Exportovat S-21 všech zvěstovatelů?';
+
+  @override
+  String s21BatchConfirmBody(int count, String years) {
+    return 'Vytvoří se jedno PDF s $count kartami zvěstovatelů, každá za $years. Soubor obsahuje osobní údaje — data narození a křtu, jmenování a celou historii hlášení. Uložte ho bezpečně a sdílejte jen s těmi, kdo ho potřebují. Ve velkém sboru to může chvíli trvat.';
+  }
+
+  @override
+  String get s21BatchGenerating => 'Vytvářejí se karty S-21…';
+
+  @override
   String get schedulePdfExport => 'Měsíční přehled (PDF)';
 
   @override

@@ -22,6 +22,21 @@ class S21YearReports {
   final Map<String, MinistryReport?> reportsByMonth;
 }
 
+/// One publisher's card: everything needed to draw a single S-21 page. The
+/// batch export carries a list of these; the single-publisher export is the
+/// same thing with one entry.
+class S21Card {
+  const S21Card({
+    required this.publisher,
+    required this.private,
+    required this.years,
+  });
+
+  final Publisher publisher;
+  final PublisherPrivate? private;
+  final List<S21YearReports> years;
+}
+
 /// Remarks column text: a "Credit: 12" note when credit hours were reported,
 /// followed by the month's own comment from the record. The note's wording is
 /// what the S-21 import parser looks for, so exported cards re-import with
@@ -46,7 +61,41 @@ Future<Uint8List> buildS21Pdf({
   required AppLocalizations l10n,
   required String locale,
   required PdfFonts fonts,
+}) =>
+    buildS21BatchPdf(
+      cards: [S21Card(publisher: publisher, private: private, years: years)],
+      l10n: l10n,
+      locale: locale,
+      fonts: fonts,
+    );
+
+/// Builds a card set: one S-21 page per entry of [cards], in the order given.
+/// Every publisher keeps a page of their own — the card is meant to be filed
+/// per publisher, so pages are never merged or continued.
+Future<Uint8List> buildS21BatchPdf({
+  required List<S21Card> cards,
+  required AppLocalizations l10n,
+  required String locale,
+  required PdfFonts fonts,
 }) async {
+  final doc = pw.Document();
+  for (final card in cards) {
+    doc.addPage(
+        _s21Page(card: card, l10n: l10n, locale: locale, fonts: fonts));
+  }
+  return doc.save();
+}
+
+/// One publisher's page of the card set.
+pw.Page _s21Page({
+  required S21Card card,
+  required AppLocalizations l10n,
+  required String locale,
+  required PdfFonts fonts,
+}) {
+  final publisher = card.publisher;
+  final private = card.private;
+  final years = card.years;
   final dateFmt = DateFormat.yMd(locale);
   final monthFmt = DateFormat('LLLL', locale);
 
@@ -198,9 +247,7 @@ Future<Uint8List> buildS21Pdf({
     );
   }
 
-  final doc = pw.Document();
-  doc.addPage(
-    pw.Page(
+  return pw.Page(
       pageFormat: PdfPageFormat.a4,
       margin: const pw.EdgeInsets.all(36),
       theme: pw.ThemeData.withFont(
@@ -250,8 +297,5 @@ Future<Uint8List> buildS21Pdf({
           pw.Spacer(),
           pw.Text(l10n.s21FormCode, style: const pw.TextStyle(fontSize: 7)),
         ],
-      ),
-    ),
-  );
-  return doc.save();
+      ));
 }

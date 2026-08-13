@@ -242,6 +242,11 @@
   "reportCreditShort": "Credito",
 
   "s21Export": "Esporta S-21 (PDF)",
+  "s21ExportAll": "Esporta S-21 di tutti (PDF)",
+  "s21BatchConfirmTitle": "Esportare la S-21 di tutti i proclamatori?",
+  "s21BatchConfirmBody": "Verrà generato un unico PDF con {count} schede del proclamatore, ognuna relativa a {years}. Il file contiene dati personali: date di nascita e battesimo, nomina e l’intero storico dei rapporti. Conservalo in modo sicuro e condividilo solo con chi ne ha bisogno. In una congregazione grande può richiedere un po’ di tempo.",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "Generazione delle schede S-21…",
   "schedulePdfExport": "Riepilogo mensile (PDF)",
 
   "pubPdfExport": "Esporta elenco (PDF)",

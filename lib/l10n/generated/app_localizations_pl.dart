@@ -747,6 +747,21 @@ class AppLocalizationsPl extends AppLocalizations {
   String get s21Export => 'Eksportuj S-21 (PDF)';
 
   @override
+  String get s21ExportAll => 'Eksportuj S-21 wszystkich (PDF)';
+
+  @override
+  String get s21BatchConfirmTitle =>
+      'Wyeksportować S-21 wszystkich głosicieli?';
+
+  @override
+  String s21BatchConfirmBody(int count, String years) {
+    return 'Powstanie jeden plik PDF z $count kartami głosiciela, każda za $years. Plik zawiera dane osobowe — daty urodzenia i chrztu, mianowanie oraz całą historię sprawozdań. Przechowuj go bezpiecznie i udostępniaj tylko tym, którzy go potrzebują. W dużym zborze może to chwilę potrwać.';
+  }
+
+  @override
+  String get s21BatchGenerating => 'Tworzenie kart S-21…';
+
+  @override
   String get schedulePdfExport => 'Przegląd miesięczny (PDF)';
 
   @override

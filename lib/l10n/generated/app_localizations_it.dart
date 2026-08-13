@@ -753,6 +753,21 @@ class AppLocalizationsIt extends AppLocalizations {
   String get s21Export => 'Esporta S-21 (PDF)';
 
   @override
+  String get s21ExportAll => 'Esporta S-21 di tutti (PDF)';
+
+  @override
+  String get s21BatchConfirmTitle =>
+      'Esportare la S-21 di tutti i proclamatori?';
+
+  @override
+  String s21BatchConfirmBody(int count, String years) {
+    return 'Verrà generato un unico PDF con $count schede del proclamatore, ognuna relativa a $years. Il file contiene dati personali: date di nascita e battesimo, nomina e l’intero storico dei rapporti. Conservalo in modo sicuro e condividilo solo con chi ne ha bisogno. In una congregazione grande può richiedere un po’ di tempo.';
+  }
+
+  @override
+  String get s21BatchGenerating => 'Generazione delle schede S-21…';
+
+  @override
   String get schedulePdfExport => 'Riepilogo mensile (PDF)';
 
   @override

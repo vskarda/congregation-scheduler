@@ -242,6 +242,11 @@
   "reportCreditShort": "Crédito",
 
   "s21Export": "Exportar S-21 (PDF)",
+  "s21ExportAll": "Exportar S-21 de todos (PDF)",
+  "s21BatchConfirmTitle": "¿Exportar la S-21 de todos los publicadores?",
+  "s21BatchConfirmBody": "Se generará un solo PDF con {count} tarjetas de registro, cada una con {years}. El archivo contiene datos personales: fechas de nacimiento y bautismo, nombramiento y todo el historial de informes. Guárdelo de forma segura y compártalo solo con quienes lo necesiten. En una congregación grande esto puede tardar un poco.",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "Generando tarjetas S-21…",
   "schedulePdfExport": "Resumen mensual (PDF)",
 
   "pubPdfExport": "Exportar lista (PDF)",

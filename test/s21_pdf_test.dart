@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -213,6 +214,60 @@ void main() {
       fonts: loadFontsFromDisk(),
     );
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  group('buildS21BatchPdf', () {
+    // Page objects are written as plain dictionaries (only content streams are
+    // compressed), so the card count is readable straight off the bytes.
+    int pageCount(Uint8List bytes) =>
+        RegExp(r'/Type\s*/Page[^s]').allMatches(latin1.decode(bytes)).length;
+
+    S21Card cardFor(String id) => S21Card(
+          publisher: Publisher(id: id, firstName: 'Ann', lastName: id),
+          private: private,
+          years: [
+            S21YearReports(serviceYear: 2026, reportsByMonth: reports),
+            S21YearReports(serviceYear: 2025, reportsByMonth: priorReports),
+          ],
+        );
+
+    test('draws one page per publisher', () async {
+      final bytes = await buildS21BatchPdf(
+        cards: [for (final id in ['a', 'b', 'c']) cardFor(id)],
+        l10n: lookupAppLocalizations(const Locale('en')),
+        locale: 'en',
+        fonts: loadFontsFromDisk(),
+      );
+      expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+      expect(pageCount(bytes), 3);
+    });
+
+    test('a publisher without profile or reports still gets a page', () async {
+      final bytes = await buildS21BatchPdf(
+        cards: [
+          cardFor('a'),
+          const S21Card(
+            publisher: Publisher(id: 'b', firstName: 'Bea'),
+            private: null,
+            years: [S21YearReports(serviceYear: 2026, reportsByMonth: {})],
+          ),
+        ],
+        l10n: lookupAppLocalizations(const Locale('cs')),
+        locale: 'cs',
+        fonts: loadFontsFromDisk(),
+      );
+      expect(pageCount(bytes), 2);
+    });
+
+    test('no cards yields no pages', () async {
+      final bytes = await buildS21BatchPdf(
+        cards: const [],
+        l10n: lookupAppLocalizations(const Locale('en')),
+        locale: 'en',
+        fonts: loadFontsFromDisk(),
+      );
+      expect(pageCount(bytes), 0);
+    });
   });
 
   group('s21RemarksText', () {

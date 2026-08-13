@@ -242,6 +242,11 @@
   "reportCreditShort": "Započtené",
 
   "s21Export": "Exportovat S-21 (PDF)",
+  "s21ExportAll": "Exportovat S-21 všech (PDF)",
+  "s21BatchConfirmTitle": "Exportovat S-21 všech zvěstovatelů?",
+  "s21BatchConfirmBody": "Vytvoří se jedno PDF s {count} kartami zvěstovatelů, každá za {years}. Soubor obsahuje osobní údaje — data narození a křtu, jmenování a celou historii hlášení. Uložte ho bezpečně a sdílejte jen s těmi, kdo ho potřebují. Ve velkém sboru to může chvíli trvat.",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "Vytvářejí se karty S-21…",
   "schedulePdfExport": "Měsíční přehled (PDF)",
 
   "pubPdfExport": "Exportovat seznam (PDF)",

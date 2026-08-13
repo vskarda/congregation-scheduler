@@ -242,6 +242,11 @@
   "reportCreditShort": "Zalicz.",
 
   "s21Export": "Eksportuj S-21 (PDF)",
+  "s21ExportAll": "Eksportuj S-21 wszystkich (PDF)",
+  "s21BatchConfirmTitle": "Wyeksportować S-21 wszystkich głosicieli?",
+  "s21BatchConfirmBody": "Powstanie jeden plik PDF z {count} kartami głosiciela, każda za {years}. Plik zawiera dane osobowe — daty urodzenia i chrztu, mianowanie oraz całą historię sprawozdań. Przechowuj go bezpiecznie i udostępniaj tylko tym, którzy go potrzebują. W dużym zborze może to chwilę potrwać.",
+  "@s21BatchConfirmBody": {"placeholders": {"count": {"type": "int"}, "years": {"type": "String"}}},
+  "s21BatchGenerating": "Tworzenie kart S-21…",
   "schedulePdfExport": "Przegląd miesięczny (PDF)",
 
   "pubPdfExport": "Eksportuj listę (PDF)",
