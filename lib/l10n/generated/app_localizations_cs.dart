@@ -30,6 +30,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get commonClose => 'Zavřít';
 
   @override
+  String get commonClear => 'Vymazat';
+
+  @override
   String get commonBack => 'Zpět';
 
   @override
@@ -1504,7 +1507,123 @@ class AppLocalizationsCs extends AppLocalizations {
   String get eventTypeMemorial => 'Slavnost';
 
   @override
-  String get eventTypeCoVisit => 'Návštěva krajského dozorce';
+  String get eventTypeCoVisit => 'Návštěva krajského staršího';
+
+  @override
+  String get meetingWeekChanged => 'Změněno pro tento týden';
+
+  @override
+  String get meetingWeekDifferent => 'Jiný den nebo čas v tomto týdnu';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return 'Obvykle $day, $time';
+  }
+
+  @override
+  String get meetingWeekDay => 'Den';
+
+  @override
+  String get meetingWeekTime => 'Čas';
+
+  @override
+  String get coVisitNotPublished =>
+      'Návštěva krajského staršího zatím není zveřejněná.';
+
+  @override
+  String get coVisitNonePlanned => 'Zatím není naplánovaná žádná návštěva.';
+
+  @override
+  String get coVisitSetWeek => 'Vyber týden návštěvy';
+
+  @override
+  String get coVisitDelete => 'Smazat návštěvu';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'Smazat tuto návštěvu i všechno, co je pro ni naplánované? Schůzky před službou v tomto týdnu zůstanou. Tuto akci nelze vrátit.';
+
+  @override
+  String get coVisitVisibleToPublishers => 'Zobrazit zvěstovatelům';
+
+  @override
+  String get coVisitVisibleOn => 'Zvěstovatelé návštěvu vidí.';
+
+  @override
+  String get coVisitVisibleOff => 'Návštěvu vidí jen správci.';
+
+  @override
+  String get coSectionMeal => 'Jídlo na poledne';
+
+  @override
+  String get coSectionShepherding => 'Pastýřské návštěvy';
+
+  @override
+  String get coSectionPioneers => 'Schůzka s průkopníky';
+
+  @override
+  String get coSectionElders => 'Schůzka se staršími a služebními pomocníky';
+
+  @override
+  String get coSectionOther => 'Ostatní';
+
+  @override
+  String get coSectionEmpty => 'Zatím nic naplánovaného.';
+
+  @override
+  String get coSectionHidden => 'Skryto';
+
+  @override
+  String get coSectionHide => 'Skrýt zvěstovatelům';
+
+  @override
+  String get coSectionShow => 'Zobrazit zvěstovatelům';
+
+  @override
+  String get coWithCo => 'V kazatelské službě s krajským starším';
+
+  @override
+  String get coWithCoWife => 'V kazatelské službě s jeho manželkou';
+
+  @override
+  String get coDay => 'Den';
+
+  @override
+  String get coTime => 'Čas';
+
+  @override
+  String get coAddress => 'Adresa';
+
+  @override
+  String get coNote => 'Poznámka';
+
+  @override
+  String get coAssigned => 'Zvěstovatelé';
+
+  @override
+  String get coMinistryOtherAdmins =>
+      'Schůzky před službou upravují jejich vlastní správci.';
+
+  @override
+  String get coMidweekOtherAdmins =>
+      'Den shromáždění v týdnu nastavují správci programu shromáždění v týdnu.';
+
+  @override
+  String get coMidweekNotMoved =>
+      'Shromáždění v týdnu nebylo přesunuto na úterý – to nastavují správci programu shromáždění v týdnu.';
+
+  @override
+  String get coPrintTitle => 'Vytisknout program návštěvy';
+
+  @override
+  String get coPrintIncludeHiddenBody =>
+      'Některé části jsou skryté zvěstovatelům. Vytisknout je také?';
+
+  @override
+  String get coPrintIncludeHidden => 'Včetně skrytých';
+
+  @override
+  String get coPrintVisibleOnly => 'Jen viditelné';
 
   @override
   String get eventTypeOther => 'Jiné';

@@ -75,6 +75,8 @@ const _$LmmPartTypeEnumMap = {
 
 _LmmWeek _$LmmWeekFromJson(Map<String, dynamic> json) => _LmmWeek(
   weekLabel: json['weekLabel'] as String? ?? '',
+  meetingWeekday: (json['meetingWeekday'] as num?)?.toInt(),
+  meetingTime: json['meetingTime'] as String?,
   openingSongTitle: json['openingSongTitle'] as String? ?? '',
   openingSongNo: (json['openingSongNo'] as num?)?.toInt(),
   livingSongTitle: json['livingSongTitle'] as String? ?? '',
@@ -110,6 +112,8 @@ _LmmWeek _$LmmWeekFromJson(Map<String, dynamic> json) => _LmmWeek(
 
 Map<String, dynamic> _$LmmWeekToJson(_LmmWeek instance) => <String, dynamic>{
   'weekLabel': instance.weekLabel,
+  'meetingWeekday': ?instance.meetingWeekday,
+  'meetingTime': ?instance.meetingTime,
   'openingSongTitle': instance.openingSongTitle,
   'openingSongNo': ?instance.openingSongNo,
   'livingSongTitle': instance.livingSongTitle,

@@ -10,6 +10,8 @@ import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
 import '../../core/theme/theme_mode_button.dart';
+import '../co_visit/co_visit_pdf_button.dart';
+import '../co_visit/co_visit_screen.dart';
 import '../field_service_meetings/fsm_delete_from_week_button.dart';
 import '../info_board/clean_info_board_button.dart';
 import '../public_witnessing/pw_delete_from_week_button.dart';
@@ -46,6 +48,10 @@ class AppShell extends ConsumerWidget {
       _Destination('/pw', Icons.storefront_outlined, l10n.navPublicWitnessing),
       _Destination('/fsm', Icons.diversity_3_outlined,
           l10n.navFieldServiceMeetings),
+      // Offered to its admins always, to everyone else once published.
+      if (ref.watch(coVisitVisibleProvider))
+        _Destination(
+            '/co-visit', Icons.co_present_outlined, l10n.eventTypeCoVisit),
       _Destination('/territories', Icons.map_outlined, l10n.navTerritories),
       _Destination('/ministry-groups', Icons.group_work_outlined,
           l10n.navMinistryGroups),
@@ -104,6 +110,8 @@ class AppShell extends ConsumerWidget {
           const PwDeleteFromWeekButton(),
         if (location == '/fsm' && roles.canEditFieldServiceMeetings())
           const FsmDeleteFromWeekButton(),
+        if (location == '/co-visit' && ref.watch(coVisitVisibleProvider))
+          const CoVisitPdfButton(),
         if (location == '/territories' && roles.canEditTerritories())
           IconButton(
             icon: const Icon(Icons.upload_file_outlined),

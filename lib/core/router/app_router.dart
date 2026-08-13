@@ -6,6 +6,7 @@ import '../../features/attendance/attendance_screen.dart';
 import '../../features/auth/auth_service.dart';
 import '../../features/auth/awaiting_screen.dart';
 import '../../features/auth/complete_profile_screen.dart';
+import '../../features/co_visit/co_visit_screen.dart';
 import '../../features/auth/login_screen.dart';
 import '../../features/auth/register_screen.dart';
 import '../../features/events/events_screen.dart';
@@ -121,6 +122,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/weekend', builder: (_, _) => const WeekendScreen()),
           GoRoute(path: '/pw', builder: (_, _) => const PwScreen()),
           GoRoute(path: '/fsm', builder: (_, _) => const FsmScreen()),
+          GoRoute(
+              path: '/co-visit', builder: (_, _) => const CoVisitScreen()),
           GoRoute(
               path: '/territories',
               builder: (_, _) => const TerritoriesScreen()),

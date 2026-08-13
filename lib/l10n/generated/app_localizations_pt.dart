@@ -30,6 +30,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get commonClose => 'Fechar';
 
   @override
+  String get commonClear => 'Limpar';
+
+  @override
   String get commonBack => 'Voltar';
 
   @override
@@ -1516,6 +1519,122 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get eventTypeCoVisit => 'Visita do superintendente de circuito';
+
+  @override
+  String get meetingWeekChanged => 'Alterado nesta semana';
+
+  @override
+  String get meetingWeekDifferent => 'Outro dia ou horário nesta semana';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return 'Normalmente $day, $time';
+  }
+
+  @override
+  String get meetingWeekDay => 'Dia';
+
+  @override
+  String get meetingWeekTime => 'Horário';
+
+  @override
+  String get coVisitNotPublished =>
+      'A visita do superintendente de circuito ainda não foi publicada.';
+
+  @override
+  String get coVisitNonePlanned => 'Nenhuma visita programada ainda.';
+
+  @override
+  String get coVisitSetWeek => 'Escolha a semana da visita';
+
+  @override
+  String get coVisitDelete => 'Excluir a visita';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'Excluir esta visita e tudo o que foi organizado para ela? As reuniões para o serviço de campo dessa semana são mantidas. Isso não pode ser desfeito.';
+
+  @override
+  String get coVisitVisibleToPublishers => 'Mostrar aos publicadores';
+
+  @override
+  String get coVisitVisibleOn => 'Os publicadores veem a visita.';
+
+  @override
+  String get coVisitVisibleOff => 'Somente os administradores veem a visita.';
+
+  @override
+  String get coSectionMeal => 'Almoços';
+
+  @override
+  String get coSectionShepherding => 'Visitas de pastoreio';
+
+  @override
+  String get coSectionPioneers => 'Reunião com os pioneiros';
+
+  @override
+  String get coSectionElders => 'Reunião com os anciãos e servos ministeriais';
+
+  @override
+  String get coSectionOther => 'Outros';
+
+  @override
+  String get coSectionEmpty => 'Nada organizado ainda.';
+
+  @override
+  String get coSectionHidden => 'Oculto';
+
+  @override
+  String get coSectionHide => 'Ocultar dos publicadores';
+
+  @override
+  String get coSectionShow => 'Mostrar aos publicadores';
+
+  @override
+  String get coWithCo => 'Serviço de campo com o superintendente de circuito';
+
+  @override
+  String get coWithCoWife => 'Serviço de campo com a esposa dele';
+
+  @override
+  String get coDay => 'Dia';
+
+  @override
+  String get coTime => 'Horário';
+
+  @override
+  String get coAddress => 'Endereço';
+
+  @override
+  String get coNote => 'Observação';
+
+  @override
+  String get coAssigned => 'Publicadores';
+
+  @override
+  String get coMinistryOtherAdmins =>
+      'As reuniões para o serviço de campo são editadas pelos administradores delas.';
+
+  @override
+  String get coMidweekOtherAdmins =>
+      'O dia da reunião do meio de semana é definido pelos administradores desse programa.';
+
+  @override
+  String get coMidweekNotMoved =>
+      'A reunião do meio de semana não foi movida para terça-feira: isso é definido pelos administradores desse programa.';
+
+  @override
+  String get coPrintTitle => 'Imprimir o programa da visita';
+
+  @override
+  String get coPrintIncludeHiddenBody =>
+      'Algumas seções estão ocultas dos publicadores. Imprimir também?';
+
+  @override
+  String get coPrintIncludeHidden => 'Incluir ocultas';
+
+  @override
+  String get coPrintVisibleOnly => 'Somente visíveis';
 
   @override
   String get eventTypeOther => 'Outro';

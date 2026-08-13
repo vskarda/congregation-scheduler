@@ -30,6 +30,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get commonClose => 'Schließen';
 
   @override
+  String get commonClear => 'Zurücksetzen';
+
+  @override
   String get commonBack => 'Zurück';
 
   @override
@@ -1519,6 +1522,124 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get eventTypeCoVisit => 'Besuch des Kreisaufsehers';
+
+  @override
+  String get meetingWeekChanged => 'Für diese Woche geändert';
+
+  @override
+  String get meetingWeekDifferent =>
+      'Anderer Tag oder andere Uhrzeit in dieser Woche';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return 'Normalerweise $day, $time';
+  }
+
+  @override
+  String get meetingWeekDay => 'Tag';
+
+  @override
+  String get meetingWeekTime => 'Uhrzeit';
+
+  @override
+  String get coVisitNotPublished =>
+      'Der Besuch des Kreisaufsehers ist noch nicht veröffentlicht.';
+
+  @override
+  String get coVisitNonePlanned => 'Noch kein Besuch geplant.';
+
+  @override
+  String get coVisitSetWeek => 'Woche des Besuchs auswählen';
+
+  @override
+  String get coVisitDelete => 'Besuch löschen';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'Diesen Besuch und alles dafür Geplante löschen? Die Zusammenkünfte für den Predigtdienst dieser Woche bleiben erhalten. Das kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get coVisitVisibleToPublishers => 'Für Verkündiger sichtbar';
+
+  @override
+  String get coVisitVisibleOn => 'Verkündiger sehen den Besuch.';
+
+  @override
+  String get coVisitVisibleOff => 'Nur Administratoren sehen den Besuch.';
+
+  @override
+  String get coSectionMeal => 'Mittagessen';
+
+  @override
+  String get coSectionShepherding => 'Hirtenbesuche';
+
+  @override
+  String get coSectionPioneers => 'Besprechung mit den Pionieren';
+
+  @override
+  String get coSectionElders =>
+      'Besprechung mit Ältesten und Dienstamtgehilfen';
+
+  @override
+  String get coSectionOther => 'Sonstiges';
+
+  @override
+  String get coSectionEmpty => 'Noch nichts geplant.';
+
+  @override
+  String get coSectionHidden => 'Ausgeblendet';
+
+  @override
+  String get coSectionHide => 'Für Verkündiger ausblenden';
+
+  @override
+  String get coSectionShow => 'Für Verkündiger einblenden';
+
+  @override
+  String get coWithCo => 'Predigtdienst mit dem Kreisaufseher';
+
+  @override
+  String get coWithCoWife => 'Predigtdienst mit seiner Frau';
+
+  @override
+  String get coDay => 'Tag';
+
+  @override
+  String get coTime => 'Uhrzeit';
+
+  @override
+  String get coAddress => 'Adresse';
+
+  @override
+  String get coNote => 'Notiz';
+
+  @override
+  String get coAssigned => 'Verkündiger';
+
+  @override
+  String get coMinistryOtherAdmins =>
+      'Zusammenkünfte für den Predigtdienst werden von ihren eigenen Administratoren bearbeitet.';
+
+  @override
+  String get coMidweekOtherAdmins =>
+      'Den Tag der Zusammenkunft unter der Woche legen deren Administratoren fest.';
+
+  @override
+  String get coMidweekNotMoved =>
+      'Die Zusammenkunft unter der Woche wurde nicht auf Dienstag verlegt – das legen deren Administratoren fest.';
+
+  @override
+  String get coPrintTitle => 'Besuchsprogramm drucken';
+
+  @override
+  String get coPrintIncludeHiddenBody =>
+      'Einige Bereiche sind für Verkündiger ausgeblendet. Sollen sie mitgedruckt werden?';
+
+  @override
+  String get coPrintIncludeHidden => 'Mit ausgeblendeten';
+
+  @override
+  String get coPrintVisibleOnly => 'Nur sichtbare';
 
   @override
   String get eventTypeOther => 'Sonstiges';

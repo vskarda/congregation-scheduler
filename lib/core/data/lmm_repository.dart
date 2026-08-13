@@ -35,6 +35,24 @@ class LmmRepository {
     return snap.docs.map(_fromDoc).toList();
   }
 
+  /// Weeks in `[fromId, toId]` whose meeting was moved off the congregation's
+  /// regular weekday, as `weekId -> weekday`.
+  ///
+  /// `meetingWeekday` is absent from every week that follows the regular
+  /// setting (`includeIfNull: false`), so this query returns only the handful
+  /// that deviate. The id range is applied here rather than in the query
+  /// because Firestore would need a composite index for the second bound.
+  Future<Map<String, int>> getWeekdayOverrides(
+      String fromId, String toId) async {
+    final snap =
+        await _col.where('meetingWeekday', isGreaterThanOrEqualTo: 1).get();
+    return {
+      for (final doc in snap.docs)
+        if (doc.id.compareTo(fromId) >= 0 && doc.id.compareTo(toId) <= 0)
+          doc.id: _fromDoc(doc).meetingWeekday!,
+    };
+  }
+
   /// All weeks that mention [uid]; caller filters for upcoming (data volume
   /// is small and this avoids composite-index requirements).
   Future<List<LmmWeek>> getAssignedTo(String uid) async {

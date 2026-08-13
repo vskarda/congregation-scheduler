@@ -53,6 +53,27 @@ enum EventType {
   other,
 }
 
+/// Kinds of arrangement made for a circuit overseer's visit. Each is a
+/// section of the visit view that can be shown or hidden on its own.
+///
+/// [ministry] stores nothing of its own: it renders the week's meetings for
+/// field service (`fsm_meetings`), so both views edit the same documents. It
+/// is part of the enum so it can be hidden and printed like the rest.
+enum CoVisitSection {
+  @JsonValue('ministry')
+  ministry,
+  @JsonValue('meal')
+  meal,
+  @JsonValue('shepherding')
+  shepherding,
+  @JsonValue('pioneers')
+  pioneers,
+  @JsonValue('elders')
+  elders,
+  @JsonValue('other')
+  other,
+}
+
 enum InfoItemType {
   @JsonValue('text')
   text,

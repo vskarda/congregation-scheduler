@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/app_config.dart';
+import '../../core/data/co_visit_repository.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/lmm_repository.dart';
@@ -10,7 +11,7 @@ import '../../core/firebase/firebase_providers.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 
-enum AssignmentSource { lmm, weekend, pw, fsm }
+enum AssignmentSource { lmm, weekend, pw, fsm, coVisit }
 
 /// One row of "my upcoming assignments". [roleKey] is localized by the UI
 /// (part-type names, 'assistant', 'speaker', 'wtReader', 'attendants',
@@ -102,7 +103,12 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
   for (final week in lmmWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
-    final date = dateKey(monday.add(Duration(days: meta.lmmWeekday - 1)));
+    // A week may hold its meeting on another day/time than usual (circuit
+    // overseer's visit, assembly) — that is what a reminder must fire for.
+    final date = dateKey(
+      monday.add(Duration(days: week.weekdayOr(meta.lmmWeekday) - 1)),
+    );
+    final time = week.timeOr(meta.lmmTime);
     if (date.compareTo(today) < 0) continue;
     for (final part in week.parts) {
       if (part.assignment.contains(uid)) {
@@ -112,7 +118,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
             date: date,
             roleKey: part.type.name,
             detail: part.title,
-            time: meta.lmmTime,
+            time: time,
           ),
         );
       }
@@ -123,7 +129,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
             date: date,
             roleKey: 'assistant',
             detail: part.title,
-            time: meta.lmmTime,
+            time: time,
           ),
         );
       }
@@ -137,7 +143,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
               date: date,
               roleKey: '${part.type.name}#$c',
               detail: part.title,
-              time: meta.lmmTime,
+              time: time,
             ),
           );
         }
@@ -148,7 +154,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
               date: date,
               roleKey: 'assistant#$c',
               detail: part.title,
-              time: meta.lmmTime,
+              time: time,
             ),
           );
         }
@@ -157,7 +163,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     addSupport(
       AssignmentSource.lmm,
       date,
-      meta.lmmTime,
+      time,
       attendants: week.attendants,
       microphones: week.microphones,
       audioVideo: week.audioVideo,
@@ -171,7 +177,10 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
   for (final week in weekendWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
-    final date = dateKey(monday.add(Duration(days: meta.weekendWeekday - 1)));
+    final date = dateKey(
+      monday.add(Duration(days: week.weekdayOr(meta.weekendWeekday) - 1)),
+    );
+    final time = week.timeOr(meta.weekendTime);
     if (date.compareTo(today) < 0) continue;
     if (week.speaker.contains(uid)) {
       entries.add(
@@ -180,7 +189,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
           date: date,
           roleKey: 'speaker',
           detail: week.talkTitle,
-          time: meta.weekendTime,
+          time: time,
         ),
       );
     }
@@ -190,7 +199,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'weekendChairman',
-          time: meta.weekendTime,
+          time: time,
         ),
       );
     }
@@ -200,7 +209,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
           source: AssignmentSource.weekend,
           date: date,
           roleKey: 'wtReader',
-          time: meta.weekendTime,
+          time: time,
         ),
       );
     }
@@ -212,7 +221,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
             date: date,
             roleKey: 'custom',
             detail: c.label,
-            time: meta.weekendTime,
+            time: time,
           ),
         );
       }
@@ -220,7 +229,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     addSupport(
       AssignmentSource.weekend,
       date,
-      meta.weekendTime,
+      time,
       attendants: week.attendants,
       microphones: week.microphones,
       audioVideo: week.audioVideo,
@@ -256,15 +265,45 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         dateKey(addMonths(DateTime.now(), AppConfig.fsmMaterializeMonthsAhead)),
       );
   for (final meeting in meetings) {
-    entries.add(
-      MyAssignmentEntry(
-        source: AssignmentSource.fsm,
-        date: meeting.date,
-        roleKey: 'fsm',
-        detail: meeting.location,
-        time: meeting.time,
-      ),
-    );
+    // A meeting can name someone in three different ways during a circuit
+    // overseer's visit, and each is its own entry — conducting the meeting
+    // and sharing in the ministry with the overseer are not the same duty.
+    for (final slot in [
+      (roleKey: 'fsm', assignment: meeting.assignment),
+      (roleKey: 'withCo', assignment: meeting.withCo),
+      (roleKey: 'withCoWife', assignment: meeting.withCoWife),
+    ]) {
+      if (!slot.assignment.contains(uid)) continue;
+      entries.add(
+        MyAssignmentEntry(
+          source: AssignmentSource.fsm,
+          date: meeting.date,
+          roleKey: slot.roleKey,
+          detail: meeting.location,
+          time: meeting.time,
+        ),
+      );
+    }
+  }
+
+  // Arrangements for a circuit overseer's visit. A day or a time may still be
+  // missing (nothing about a visit is required); an entry without a time
+  // shows up in the list but schedules no reminder.
+  final visits = await ref.watch(coVisitRepositoryProvider).getAssignedTo(uid);
+  for (final visit in visits) {
+    for (final item in visit.items) {
+      if (!item.assignment.contains(uid)) continue;
+      if (item.date.isEmpty || item.date.compareTo(today) < 0) continue;
+      entries.add(
+        MyAssignmentEntry(
+          source: AssignmentSource.coVisit,
+          date: item.date,
+          roleKey: 'co.${item.section.name}',
+          detail: item.address,
+          time: item.time.isEmpty ? null : item.time,
+        ),
+      );
+    }
   }
 
   entries.sort((a, b) => a.date.compareTo(b.date));

@@ -40,6 +40,12 @@ _FsmMeeting _$FsmMeetingFromJson(Map<String, dynamic> json) => _FsmMeeting(
   assignment: json['assignment'] == null
       ? const Assignment()
       : Assignment.fromJson(json['assignment'] as Map<String, dynamic>),
+  withCo: json['withCo'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['withCo'] as Map<String, dynamic>),
+  withCoWife: json['withCoWife'] == null
+      ? const Assignment()
+      : Assignment.fromJson(json['withCoWife'] as Map<String, dynamic>),
   recurringId: json['recurringId'] as String? ?? '',
   seriesDate: json['seriesDate'] as String? ?? '',
   overrides:
@@ -60,6 +66,8 @@ Map<String, dynamic> _$FsmMeetingToJson(_FsmMeeting instance) =>
       'location': instance.location,
       'note': instance.note,
       'assignment': instance.assignment.toJson(),
+      'withCo': instance.withCo.toJson(),
+      'withCoWife': instance.withCoWife.toJson(),
       'recurringId': instance.recurringId,
       'seriesDate': instance.seriesDate,
       'overrides': instance.overrides,

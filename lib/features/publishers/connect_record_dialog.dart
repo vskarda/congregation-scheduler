@@ -198,6 +198,7 @@ class _ConnectProgressDialogState
       ConnectSection.weekend => l10n.navWeekend,
       ConnectSection.publicWitnessing => l10n.navPublicWitnessing,
       ConnectSection.fieldServiceMeetings => l10n.navFieldServiceMeetings,
+      ConnectSection.coVisit => l10n.eventTypeCoVisit,
       ConnectSection.profile => l10n.pubAdminTabProfile,
     };
   }

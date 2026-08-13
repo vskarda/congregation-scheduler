@@ -22,6 +22,7 @@ the target language and commit them to `example-forms/`:
 | `S-140_<CODE>.docx` | Midweek Meeting Schedule | docx | meeting sections, part names, rooms, chairman/student/assistant, schedule PDF title |
 | `S-1_<CODE>.pdf` | Congregation's Field Service and Meeting Attendance Report | pdf | S-1 screen labels, publisher groups, attendance wording |
 | `S-21_<CODE>.pdf` | Congregation's Publisher Record | pdf | publisher record/profile labels, report columns, statuses, hope, gender, appointments, months of the service year |
+| `S-61_<CODE>.pdf` | Information Needed for Visit of Circuit Overseer | pdf | circuit overseer view: midday meals, shepherding visit, meeting with the elders, sharing in the ministry with the overseer and his wife |
 
 `<CODE>` is the **JW publication language symbol**, not an ISO code:
 `E` = English, `B` = Czech, `TK` = Turkish, etc. (It appears in the form
@@ -118,7 +119,36 @@ official group names in it.
 `statusPublisher` is not on these forms; take it from the S-1 row
 ("Publisher" singular of `s1Publishers`).
 
-### Not derivable from these three forms
+### From the S-61 (circuit overseer's visit)
+
+The terms sit inside the checklist sentences on page 1, not in a label column;
+take the noun phrase and put it in the plural where the app lists several.
+
+| ARB key | Form wording (E / B / TK) |
+|---|---|
+| `coSectionMeal` | "publishers who will host **midday meals**" / "zajišťovat **jídlo na poledne**" / "**öğle yemeğinde** ağırlayacak" |
+| `coSectionShepherding` | "receive a **shepherding visit**" / "mít **pastýřskou návštěvu**" / "**çobanlık ziyareti** yapması" |
+| `coSectionElders` | "**meeting with elders**" / "probrat na **radě starších**" / "**İhtiyarlarla yapılacak buluşma**" + the S-21's ministerial-servant term |
+| `coWithCo`, `coWithCoWife` | "**work in the field ministry with the circuit overseer** and his wife" / "spolupracovat **v kazatelské službě**" / "**tarla hizmetine** çıkmak" |
+
+Things to be aware of:
+
+- **`coSectionPioneers` is not on the S-61.** Compose it from the official
+  pioneer term already in the ARB (`statusRegPioneer` / `s1RegPioneers`) plus
+  the "meeting with" pattern of the elders line.
+- **One name for the circuit overseer per language, and it is the form's.**
+  Czech changed with the 12/25 S-61: "krajský dozorce" became **"krajský
+  starší"**, and `eventTypeCoVisit` was updated with the new keys so one
+  screen never shows two names for the same brother. When a later form
+  revision moves a term again, change every key that carries it in the same
+  commit.
+- Portuguese has no `S-61_T`; the terms come from `S-61_TPO` (European
+  Portuguese) while the app ships pt-BR, and should be reviewed.
+- Japanese `S-61_J` uses a CID-subset font whose text layer does not extract
+  (the same as `S-21_J`), so its circuit-overseer terms come from standard
+  JW-Japanese usage, not the form.
+
+### Not derivable from these forms
 
 Weekend-meeting terms (`weekendTalkTitle`, `weekendSpeaker`, `weekendWtReader`,
 `qPublicTalk`), support roles (`supportAttendants`, `qAttendant`, microphones,

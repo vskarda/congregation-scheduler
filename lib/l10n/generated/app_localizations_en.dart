@@ -30,6 +30,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
+  String get commonClear => 'Clear';
+
+  @override
   String get commonBack => 'Back';
 
   @override
@@ -1500,6 +1503,123 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventTypeCoVisit => 'Circuit overseer\'s visit';
+
+  @override
+  String get meetingWeekChanged => 'Changed for this week';
+
+  @override
+  String get meetingWeekDifferent => 'Different day or time this week';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return 'Normally $day, $time';
+  }
+
+  @override
+  String get meetingWeekDay => 'Day';
+
+  @override
+  String get meetingWeekTime => 'Time';
+
+  @override
+  String get coVisitNotPublished =>
+      'The circuit overseer\'s visit isn\'t published yet.';
+
+  @override
+  String get coVisitNonePlanned => 'No visit planned yet.';
+
+  @override
+  String get coVisitSetWeek => 'Select the week of the visit';
+
+  @override
+  String get coVisitDelete => 'Delete visit';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'Delete this visit and everything arranged for it? The meetings for field service of that week are kept. This can\'t be undone.';
+
+  @override
+  String get coVisitVisibleToPublishers => 'Show to publishers';
+
+  @override
+  String get coVisitVisibleOn => 'Publishers can see the visit.';
+
+  @override
+  String get coVisitVisibleOff => 'Only administrators can see the visit.';
+
+  @override
+  String get coSectionMeal => 'Midday meals';
+
+  @override
+  String get coSectionShepherding => 'Shepherding visits';
+
+  @override
+  String get coSectionPioneers => 'Meeting with the pioneers';
+
+  @override
+  String get coSectionElders =>
+      'Meeting with the elders and ministerial servants';
+
+  @override
+  String get coSectionOther => 'Other';
+
+  @override
+  String get coSectionEmpty => 'Nothing arranged yet.';
+
+  @override
+  String get coSectionHidden => 'Hidden';
+
+  @override
+  String get coSectionHide => 'Hide from publishers';
+
+  @override
+  String get coSectionShow => 'Show to publishers';
+
+  @override
+  String get coWithCo => 'In the ministry with the circuit overseer';
+
+  @override
+  String get coWithCoWife => 'In the ministry with his wife';
+
+  @override
+  String get coDay => 'Day';
+
+  @override
+  String get coTime => 'Time';
+
+  @override
+  String get coAddress => 'Address';
+
+  @override
+  String get coNote => 'Note';
+
+  @override
+  String get coAssigned => 'Publishers';
+
+  @override
+  String get coMinistryOtherAdmins =>
+      'Meetings for field service are edited by their own administrators.';
+
+  @override
+  String get coMidweekOtherAdmins =>
+      'The midweek meeting day is set by the midweek schedule administrators.';
+
+  @override
+  String get coMidweekNotMoved =>
+      'The midweek meeting was not moved to Tuesday: that is set by the midweek schedule administrators.';
+
+  @override
+  String get coPrintTitle => 'Print the visit schedule';
+
+  @override
+  String get coPrintIncludeHiddenBody =>
+      'Some sections are hidden from publishers. Print them as well?';
+
+  @override
+  String get coPrintIncludeHidden => 'Include hidden';
+
+  @override
+  String get coPrintVisibleOnly => 'Visible only';
 
   @override
   String get eventTypeOther => 'Other';

@@ -93,6 +93,14 @@ abstract class LmmWeek with _$LmmWeek {
     /// Human label from the workbook, e.g. "JULY 6-12 | PSALM 45".
     @Default('') String weekLabel,
 
+    /// This week only: the meeting is held on another day / at another time
+    /// than the congregation's regular setting (a circuit overseer's visit
+    /// moves the midweek meeting to Tuesday, an assembly moves it elsewhere).
+    /// Null means "follow the congregation setting", so the keys stay absent
+    /// from documents that never needed them — see [weekdayOr] / [timeOr].
+    @JsonKey(includeIfNull: false) int? meetingWeekday,
+    @JsonKey(includeIfNull: false) String? meetingTime,
+
     /// The three meeting songs at their fixed positions: opening (before
     /// Treasures), the Living-as-Christians song, and the closing song. Each
     /// [*Title] is a snapshot; each [*No] is the catalog number when known
@@ -119,6 +127,15 @@ abstract class LmmWeek with _$LmmWeek {
 
   factory LmmWeek.fromJson(Map<String, dynamic> json) =>
       _$LmmWeekFromJson(json);
+
+  /// The weekday this week's meeting is held on: the week's own override, or
+  /// [fallback] (the congregation setting) when it has none.
+  int weekdayOr(int fallback) => meetingWeekday ?? fallback;
+
+  /// The time this week's meeting starts at; see [weekdayOr].
+  String timeOr(String fallback) => meetingTime ?? fallback;
+
+  bool get hasMeetingOverride => meetingWeekday != null || meetingTime != null;
 
   LmmWeek withRecomputedAssignees() {
     final ids = <String>{

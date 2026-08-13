@@ -34,7 +34,15 @@ class AttendanceHistoryCard extends ConsumerWidget {
   /// Expected meetings (weekday occurrences up to today) merged with the
   /// recorded entries; entries outside the expected pattern (e.g. after a
   /// meeting-day change) are kept too.
-  List<_Slot> _slots(CongregationMeta meta) {
+  ///
+  /// [overrides] moves the expected day for the weeks that were rescheduled,
+  /// so a circuit overseer's Tuesday midweek meeting is expected on the
+  /// Tuesday rather than showing up as an unrecorded Wednesday plus a stray
+  /// extra row.
+  List<_Slot> _slots(
+    CongregationMeta meta,
+    Map<String, ({int? lmm, int? weekend})> overrides,
+  ) {
     final byId = {
       for (final e in entries) AttendanceEntry.docId(e.date, e.meetingType): e,
     };
@@ -42,10 +50,11 @@ class AttendanceHistoryCard extends ConsumerWidget {
     final today = DateTime.now();
     var day = parseDateKey(fromDate);
     while (!day.isAfter(today)) {
+      final override = overrides[weekIdOf(day)];
       for (final type in MeetingType.values) {
         final weekday = type == MeetingType.lmm
-            ? meta.lmmWeekday
-            : meta.weekendWeekday;
+            ? override?.lmm ?? meta.lmmWeekday
+            : override?.weekend ?? meta.weekendWeekday;
         if (day.weekday != weekday) continue;
         final date = dateKey(day);
         final id = AttendanceEntry.docId(date, type);
@@ -119,9 +128,11 @@ class AttendanceHistoryCard extends ConsumerWidget {
     final monthFmt = DateFormat.yMMMM(locale);
     final meta = ref.watch(congregationMetaProvider).value ??
         const CongregationMeta();
+    final overrides = ref.watch(meetingWeekdayOverridesProvider).value ??
+        const <String, ({int? lmm, int? weekend})>{};
 
     final byMonth =
-        groupBy(_slots(meta), (_Slot s) => s.date.substring(0, 7));
+        groupBy(_slots(meta, overrides), (_Slot s) => s.date.substring(0, 7));
     final months = byMonth.keys.toList()..sort((a, b) => b.compareTo(a));
     final currentMonth = monthKey(DateTime.now());
 

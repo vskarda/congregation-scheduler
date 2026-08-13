@@ -40,8 +40,18 @@ abstract final class FsmFields {
   static const location = 'location';
   static const note = 'note';
   static const assignment = 'assignment';
+  static const withCo = 'withCo';
+  static const withCoWife = 'withCoWife';
 
-  static const all = [date, time, location, note, assignment];
+  static const all = [
+    date,
+    time,
+    location,
+    note,
+    assignment,
+    withCo,
+    withCoWife,
+  ];
 }
 
 /// Either a one-off meeting (empty [recurringId], self-contained) or an
@@ -65,6 +75,18 @@ abstract class FsmMeeting with _$FsmMeeting {
     @Default('') String location,
     @Default('') String note,
     @Default(Assignment()) Assignment assignment,
+
+    /// Publishers arranged to share in the ministry with the visiting circuit
+    /// overseer, and with his wife, on this meeting's day. Only filled during
+    /// a circuit overseer's visit ([CoVisit]), and only shown there — an
+    /// ordinary week's meeting never renders them.
+    ///
+    /// A recurring rule has no companions, so these are always the
+    /// occurrence's own: [diffFrom] reports them the moment they are set,
+    /// which is what keeps [FsmRepository.repairAndCompact] from mistaking a
+    /// companion-only exception for a redundant copy of its rule.
+    @Default(Assignment()) Assignment withCo,
+    @Default(Assignment()) Assignment withCoWife,
 
     /// Set when this meeting is an exception to a recurring rule.
     @Default('') String recurringId,
@@ -128,6 +150,12 @@ abstract class FsmMeeting with _$FsmMeeting {
         assignment: hasOverride(FsmFields.assignment)
             ? assignment
             : rule.defaultAssignment,
+        // A rule names no circuit-overseer companions, so "not overridden"
+        // means empty rather than inherited.
+        withCo: hasOverride(FsmFields.withCo) ? withCo : const Assignment(),
+        withCoWife: hasOverride(FsmFields.withCoWife)
+            ? withCoWife
+            : const Assignment(),
       ).withRecomputedAssignees();
 
   /// Which of [FsmFields] differ from what [rule] would produce for this
@@ -139,6 +167,8 @@ abstract class FsmMeeting with _$FsmMeeting {
         if (location != rule.location) FsmFields.location,
         if (note != rule.note) FsmFields.note,
         if (assignment != rule.defaultAssignment) FsmFields.assignment,
+        if (withCo.isNotEmpty) FsmFields.withCo,
+        if (withCoWife.isNotEmpty) FsmFields.withCoWife,
       ];
 
   /// Turns this exception into a stand-alone one-off meeting, freezing the
@@ -158,10 +188,17 @@ abstract class FsmMeeting with _$FsmMeeting {
       );
 
   FsmMeeting withRecomputedAssignees() => copyWith(
-      allAssigneeIds: assignment.publisherIds.toSet().toList()..sort());
+      allAssigneeIds: {
+        ...assignment.publisherIds,
+        ...withCo.publisherIds,
+        ...withCoWife.publisherIds,
+      }.toList()
+        ..sort());
 
   /// Rewrites publisher id [from] to [to] and recomputes [allAssigneeIds].
-  FsmMeeting replaceAssignee(String from, String to) =>
-      copyWith(assignment: assignment.replaceAssignee(from, to))
-          .withRecomputedAssignees();
+  FsmMeeting replaceAssignee(String from, String to) => copyWith(
+        assignment: assignment.replaceAssignee(from, to),
+        withCo: withCo.replaceAssignee(from, to),
+        withCoWife: withCoWife.replaceAssignee(from, to),
+      ).withRecomputedAssignees();
 }

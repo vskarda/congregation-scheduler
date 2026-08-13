@@ -125,6 +125,42 @@ core/          bootstrap, config, theme, l10n, shared widgets
   document, and every path that removes a slot removes its applications too.
   `repairAndCompact` additionally sweeps applications naming slots nothing
   produces any more; past ones are kept as the record of who volunteered.
+- **A week's meeting day is a per-week override.** `lmm_weeks` /
+  `weekend_weeks` may carry `meetingWeekday` + `meetingTime`; absent means
+  "follow `congregation/meta`" (`weekdayOr` / `timeOr`). A circuit overseer's
+  visit sets the midweek one to Tuesday, an assembly moves either. Because the
+  keys are absent on ordinary weeks, the handful that deviate can be found
+  with a single `where('meetingWeekday', >= 1)` query
+  (`getWeekdayOverrides`) — that is how the attendance history knows which day
+  to expect a meeting on, instead of listing the regular day as never recorded
+  and the real one as a stray extra. Every consumer of the meeting date goes
+  through the override: both schedule views, "my assignments" (and so the
+  reminders), and the attendance history. `mergeParsedWeek` carries it across
+  a workbook re-import — the workbook says nothing about when a meeting is
+  held.
+- **Circuit overseer's visit**: one `co_visits/{weekId}` document per visit,
+  keyed by the Monday like the schedule weeks; the visit itself runs Tuesday
+  to Sunday. It holds a flat list of items (meal, shepherding visit, meeting
+  with the pioneers, meeting with the elders and ministerial servants, other),
+  each with an optional day, time, assignment, address and note — *nothing* is
+  required, because a visit is planned in pieces. `hiddenSections` hides a
+  whole section from publishers (and, unless asked for, from the printout);
+  `schedule_config/coVisit` hides the whole view until an admin publishes it.
+  Both are cosmetic: `co_visits` is readable by every verified user, like the
+  schedules.
+  The view spans three roles on purpose and never pretends otherwise. The
+  visit belongs to `events`; the week's **meetings for field service are not
+  copied into it** — the ministry section renders `fsm_meetings` itself, so
+  both views edit one set of documents, under `fieldServiceMeetings`; the
+  midweek meeting day belongs to `lmmSchedule`. An events-admin holding
+  neither of the other two sees both sections and is told who edits them, and
+  `createCoVisit` skips the writes it may not make rather than letting them
+  fail. The two "in the ministry with the circuit overseer / with his wife"
+  slots live on `FsmMeeting` (`withCo`, `withCoWife`) for the same reason:
+  they are properties of that meeting. A rule names no companions, so
+  `diffFrom` reports them the moment they are set — without that,
+  `repairAndCompact` would file a companion-only exception as a redundant copy
+  of its rule and delete it.
 - **Field-service-meeting recurrence**: the rule *is* the meetings. Nothing is
   pre-written — `FsmRepository.expand` builds occurrences from `fsm_recurring`
   on the fly, so a rule edit reaches every one of them at once.

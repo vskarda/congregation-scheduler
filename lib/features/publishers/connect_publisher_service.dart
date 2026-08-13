@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/config/app_config.dart';
+import '../../core/data/co_visit_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/lmm_repository.dart';
 import '../../core/data/ministry_groups_repository.dart';
@@ -23,6 +24,7 @@ enum ConnectSection {
   weekend,
   publicWitnessing,
   fieldServiceMeetings,
+  coVisit,
   profile,
 }
 
@@ -50,6 +52,7 @@ class ConnectPublisherService {
     required this.weekend,
     required this.pw,
     required this.fsm,
+    required this.coVisit,
     required this.scheduleConfig,
   });
 
@@ -61,6 +64,7 @@ class ConnectPublisherService {
   final WeekendRepository weekend;
   final PwRepository pw;
   final FsmRepository fsm;
+  final CoVisitRepository coVisit;
   final ScheduleConfigRepository scheduleConfig;
 
   Future<void> connect({
@@ -105,6 +109,9 @@ class ConnectPublisherService {
 
     onProgress?.call(ConnectSection.fieldServiceMeetings);
     await fsm.replaceAssigneeInAll(recordId, accountUid);
+
+    onProgress?.call(ConnectSection.coVisit);
+    await coVisit.replaceAssigneeInAll(recordId, accountUid);
 
     onProgress?.call(ConnectSection.profile);
     // Registration only ever fills first name, last name and e-mail, and an
@@ -256,6 +263,7 @@ final connectPublisherServiceProvider = Provider<ConnectPublisherService>(
     weekend: ref.watch(weekendRepositoryProvider),
     pw: ref.watch(pwRepositoryProvider),
     fsm: ref.watch(fsmRepositoryProvider),
+    coVisit: ref.watch(coVisitRepositoryProvider),
     scheduleConfig: ref.watch(scheduleConfigRepositoryProvider),
   ),
 );

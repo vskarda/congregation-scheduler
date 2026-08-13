@@ -1,6 +1,7 @@
 export 'assignment.dart';
 export 'attendance.dart';
 export 'away_period.dart';
+export 'co_visit.dart';
 export 'congregation.dart';
 export 'converters.dart';
 export 'enums.dart';

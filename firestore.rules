@@ -239,10 +239,24 @@ service cloud.firestore {
     // Per-meeting schedule configuration (e.g. permanent custom assignments).
     // Doc id names the meeting type; each is writable by that schedule's role
     // so the same admins who edit the schedule manage its permanent slots.
+    // 'coVisit' holds the circuit overseer view's settings and belongs to the
+    // 'events' role, which plans the visit; it lives here rather than on
+    // congregation/meta because meta is full-admin-write-only.
     match /schedule_config/{docId} {
       allow read: if isVerified();
       allow write: if (docId == 'lmm' && hasRole('lmmSchedule'))
-        || (docId == 'weekend' && hasRole('weekendSchedule'));
+        || (docId == 'weekend' && hasRole('weekendSchedule'))
+        || (docId == 'coVisit' && hasRole('events'));
+    }
+
+    // Circuit overseer visits, keyed by the Monday of the visit week. The
+    // meetings for field service arranged during a visit are not stored here
+    // — they stay in fsm_meetings, under the fieldServiceMeetings role, so an
+    // events-admin without that role can plan the visit but not its ministry
+    // meetings (the view reflects that).
+    match /co_visits/{weekId} {
+      allow read: if isVerified();
+      allow write: if hasRole('events');
     }
 
     // Public talk title catalog (S-99); readable by all verified users

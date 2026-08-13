@@ -3,11 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
+import 'publishers_repository.dart';
 
 /// Doc ids in the `schedule_config` collection.
 class ScheduleConfigDoc {
   static const lmm = 'lmm';
   static const weekend = 'weekend';
+
+  /// Circuit overseer view settings ([CoVisitConfig]) — a different shape
+  /// from the other two, written by the `events` role.
+  static const coVisit = 'coVisit';
 }
 
 /// Congregation-level schedule configuration (permanent custom assignments).
@@ -28,6 +33,20 @@ class ScheduleConfigRepository {
 
   Future<void> saveConfig(String docId, ScheduleConfig config) =>
       _col.doc(docId).set(config.toJson());
+
+  /// Circuit overseer view settings. Kept apart from [watchConfig] because
+  /// the document holds a different shape ([CoVisitConfig]), not permanent
+  /// assignments.
+  Stream<CoVisitConfig> watchCoVisitConfig() =>
+      _col.doc(ScheduleConfigDoc.coVisit).snapshots().map((doc) {
+        final data = doc.data();
+        return data == null
+            ? const CoVisitConfig()
+            : CoVisitConfig.fromJson(data);
+      });
+
+  Future<void> saveCoVisitConfig(CoVisitConfig config) =>
+      _col.doc(ScheduleConfigDoc.coVisit).set(config.toJson());
 
   /// Rewrites publisher id [fromId] to [toId] in the permanent
   /// custom-assignment templates of [docId]; used when connecting an
@@ -69,4 +88,14 @@ final weekendPermanentAssignmentsProvider =
       .watch(scheduleConfigRepositoryProvider)
       .watchConfig(ScheduleConfigDoc.weekend)
       .map((c) => c.permanentAssignments);
+});
+
+/// Circuit overseer view settings; defaults (view hidden from publishers)
+/// until an admin writes the document.
+final coVisitConfigProvider = StreamProvider<CoVisitConfig>((ref) {
+  // Mirrors the rule on schedule_config: verified users may read it.
+  if (!ref.watch(isVerifiedProvider)) {
+    return Stream.value(const CoVisitConfig());
+  }
+  return ref.watch(scheduleConfigRepositoryProvider).watchCoVisitConfig();
 });

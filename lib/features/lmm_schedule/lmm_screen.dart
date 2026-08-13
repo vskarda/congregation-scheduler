@@ -16,6 +16,7 @@ import '../../core/utils/dates.dart';
 import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
+import '../../core/widgets/meeting_week_override.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../songs/song_editor.dart';
@@ -117,6 +118,11 @@ class LmmWeekView extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) =>
           Center(child: Text(l10n.commonErrorDetail(e.toString()))),
+      // A week document can exist without a program: planning a circuit
+      // overseer's visit writes one just to move the meeting to Tuesday. It
+      // deliberately still counts as a week — it renders its meeting day and
+      // the attendance card, and a later workbook import merges the program
+      // into it (see mergeParsedWeek, which carries the meeting day over).
       data: (week) => week == null
           ? _EmptyWeekView(weekId: weekId, canEdit: canEdit)
           : _WeekContent(week: week, canEdit: canEdit),
@@ -308,6 +314,28 @@ class _WeekContent extends ConsumerWidget {
     }
   }
 
+  Future<void> _editMeetingWeek(
+    BuildContext context,
+    WidgetRef ref,
+    CongregationMeta meta,
+  ) async {
+    final result = await showMeetingWeekOverrideDialog(
+      context,
+      title: context.l10n.settingsLmmMeeting,
+      current: (weekday: week.meetingWeekday, time: week.meetingTime),
+      defaultWeekday: meta.lmmWeekday,
+      defaultTime: meta.lmmTime,
+    );
+    if (result == null) return;
+    await saveLmmWeek(
+      ref,
+      week.copyWith(
+        meetingWeekday: result.weekday,
+        meetingTime: result.time,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -344,6 +372,17 @@ class _WeekContent extends ConsumerWidget {
           ],
         ),
       ),
+      // Which day and time this week's meeting is actually held — normally
+      // the congregation setting, but a circuit overseer's visit or an
+      // assembly moves it for one week.
+      if (meta != null)
+        MeetingWeekTile(
+          weekday: week.weekdayOr(meta.lmmWeekday),
+          time: week.timeOr(meta.lmmTime),
+          isOverridden: week.hasMeetingOverride,
+          canEdit: canEdit,
+          onTap: () => _editMeetingWeek(context, ref, meta),
+        ),
     ];
 
     if (classCount >= 2) {
@@ -465,7 +504,7 @@ class _WeekContent extends ConsumerWidget {
     // the count under the wrong document id.
     final meetingDate = meta == null
         ? null
-        : meetingDateOf(week.id, meta.lmmWeekday);
+        : meetingDateOf(week.id, week.weekdayOr(meta.lmmWeekday));
     if (meetingDate != null) {
       children.add(
         MeetingAttendanceCard(
@@ -646,7 +685,9 @@ class _PartTile extends ConsumerWidget {
       qualifies: assistant
           ? (p) => p.qualifications.fieldMinistry
           : lmmStudentQualifier(part),
-      date: meta == null ? null : meetingDateOf(week.id, meta.lmmWeekday),
+      date: meta == null
+          ? null
+          : meetingDateOf(week.id, week.weekdayOr(meta.lmmWeekday)),
     );
     if (result == null) return;
     final updated = assistant
@@ -800,7 +841,9 @@ class _SupportCard extends ConsumerWidget {
     final meta = ref.watch(congregationMetaProvider).value;
     return SupportAssignmentsCard(
       canEdit: canEdit,
-      date: meta == null ? null : meetingDateOf(week.id, meta.lmmWeekday),
+      date: meta == null
+          ? null
+          : meetingDateOf(week.id, week.weekdayOr(meta.lmmWeekday)),
       attendants: week.attendants,
       microphones: week.microphones,
       audioVideo: week.audioVideo,

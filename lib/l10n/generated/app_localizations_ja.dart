@@ -30,6 +30,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonClose => '閉じる';
 
   @override
+  String get commonClear => 'クリア';
+
+  @override
   String get commonBack => '戻る';
 
   @override
@@ -1478,6 +1481,117 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get eventTypeCoVisit => '巡回監督の訪問';
+
+  @override
+  String get meetingWeekChanged => 'この週だけ変更';
+
+  @override
+  String get meetingWeekDifferent => 'この週は別の曜日・時刻';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return '通常は$day $time';
+  }
+
+  @override
+  String get meetingWeekDay => '曜日';
+
+  @override
+  String get meetingWeekTime => '時刻';
+
+  @override
+  String get coVisitNotPublished => '巡回監督の訪問はまだ公開されていません。';
+
+  @override
+  String get coVisitNonePlanned => '訪問の予定はまだありません。';
+
+  @override
+  String get coVisitSetWeek => '訪問の週を選ぶ';
+
+  @override
+  String get coVisitDelete => '訪問を削除';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'この訪問と，そのために準備した内容をすべて削除しますか。その週の野外奉仕の集まりは残ります。元に戻せません。';
+
+  @override
+  String get coVisitVisibleToPublishers => '伝道者に表示する';
+
+  @override
+  String get coVisitVisibleOn => '伝道者も訪問を見ることができます。';
+
+  @override
+  String get coVisitVisibleOff => '管理者だけが訪問を見ることができます。';
+
+  @override
+  String get coSectionMeal => '昼食';
+
+  @override
+  String get coSectionShepherding => '牧羊訪問';
+
+  @override
+  String get coSectionPioneers => '開拓者との話し合い';
+
+  @override
+  String get coSectionElders => '長老・奉仕の僕との話し合い';
+
+  @override
+  String get coSectionOther => 'その他';
+
+  @override
+  String get coSectionEmpty => 'まだ何も予定されていません。';
+
+  @override
+  String get coSectionHidden => '非表示';
+
+  @override
+  String get coSectionHide => '伝道者に表示しない';
+
+  @override
+  String get coSectionShow => '伝道者に表示する';
+
+  @override
+  String get coWithCo => '巡回監督との野外奉仕';
+
+  @override
+  String get coWithCoWife => '巡回監督の妻との野外奉仕';
+
+  @override
+  String get coDay => '曜日';
+
+  @override
+  String get coTime => '時刻';
+
+  @override
+  String get coAddress => '住所';
+
+  @override
+  String get coNote => 'メモ';
+
+  @override
+  String get coAssigned => '伝道者';
+
+  @override
+  String get coMinistryOtherAdmins => '野外奉仕の集まりは，その担当の管理者が編集します。';
+
+  @override
+  String get coMidweekOtherAdmins => '週日の集会の曜日は，そのスケジュールの管理者が設定します。';
+
+  @override
+  String get coMidweekNotMoved => '週日の集会は火曜日に変更されていません。変更はそのスケジュールの管理者が行います。';
+
+  @override
+  String get coPrintTitle => '訪問の予定を印刷';
+
+  @override
+  String get coPrintIncludeHiddenBody => '伝道者に非表示の項目があります。それも印刷しますか。';
+
+  @override
+  String get coPrintIncludeHidden => '非表示も含める';
+
+  @override
+  String get coPrintVisibleOnly => '表示中のみ';
 
   @override
   String get eventTypeOther => 'その他';

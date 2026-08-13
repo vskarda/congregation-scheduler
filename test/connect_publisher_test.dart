@@ -1,3 +1,4 @@
+import 'package:congregation_scheduler/core/data/co_visit_repository.dart';
 import 'package:congregation_scheduler/core/data/fsm_repository.dart';
 import 'package:congregation_scheduler/core/data/lmm_repository.dart';
 import 'package:congregation_scheduler/core/data/ministry_groups_repository.dart';
@@ -46,6 +47,7 @@ void main() {
       weekend: WeekendRepository(db),
       pw: PwRepository(db),
       fsm: FsmRepository(db),
+      coVisit: CoVisitRepository(db),
       scheduleConfig: ScheduleConfigRepository(db),
     );
 

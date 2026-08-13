@@ -35,6 +35,7 @@ const REPORTS_ONLY = 'reports-only-uid'; // reports, but not publishers
 const ATTENDANCE_ADMIN = 'attendance-admin-uid';
 const RECORD_ATTENDANCE_ADMIN = 'record-attendance-admin-uid';
 const PW_ADMIN = 'pw-admin-uid';
+const EVENTS_ADMIN = 'events-admin-uid';
 const VERIFIED = 'verified-uid';
 const UNVERIFIED = 'unverified-uid';
 // Still flagged verified, but with a recorded moving date: one already past
@@ -115,6 +116,10 @@ async function seed() {
       ...basePublisher,
       roles: { ...basePublisher.roles, publicWitnessing: true },
     });
+    await setDoc(doc(f, `publishers/${EVENTS_ADMIN}`), {
+      ...basePublisher,
+      roles: { ...basePublisher.roles, events: true },
+    });
     await setDoc(doc(f, `publishers/${QUALIFIED}`), {
       ...basePublisher,
       qualifications: { publicWitnessing: true },
@@ -183,6 +188,11 @@ async function seed() {
       assignment: { publisherIds: [], freeText: '' },
       recurringId: '',
       cancelled: false,
+      allAssigneeIds: [],
+    });
+    await setDoc(doc(f, 'co_visits/2026-04-13'), {
+      items: [],
+      hiddenSections: [],
       allAssigneeIds: [],
     });
     await setDoc(doc(f, 'pw_slots/slot1'), {
@@ -621,6 +631,66 @@ describe('schedule config (permanent custom assignments)', () => {
     await assertFails(
       setDoc(doc(db(WEEKEND_ADMIN), 'schedule_config/lmm'), {
         permanentAssignments: [],
+      }),
+    );
+  });
+});
+
+describe("circuit overseer's visit", () => {
+  it('verified publisher reads visits but cannot write', async () => {
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'co_visits/2026-04-13')));
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'co_visits/2026-10-05'), { items: [] }),
+    );
+  });
+
+  it('unverified user cannot read visits', async () => {
+    await assertFails(getDoc(doc(db(UNVERIFIED), 'co_visits/2026-04-13')));
+  });
+
+  it('events admin plans visits and publishes the view', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(EVENTS_ADMIN), 'co_visits/2026-10-05'), {
+        items: [],
+        hiddenSections: [],
+        allAssigneeIds: [],
+      }),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(EVENTS_ADMIN), 'schedule_config/coVisit'), {
+        visibleToPublishers: true,
+      }),
+    );
+    await assertSucceeds(
+      deleteDoc(doc(db(EVENTS_ADMIN), 'co_visits/2026-10-05')),
+    );
+  });
+
+  // The visit is planned under 'events', but its meetings for field service
+  // and the midweek meeting day are not the events admin's to write. The
+  // circuit overseer view mirrors this: it shows both, and offers edits only
+  // to whoever holds the matching role.
+  it('events admin cannot write the parts owned by other roles', async () => {
+    await assertFails(
+      setDoc(doc(db(EVENTS_ADMIN), 'fsm_meetings/m4'), {
+        date: '2026-04-15',
+        time: '09:00',
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(EVENTS_ADMIN), 'lmm_weeks/2026-04-13'), {
+        meetingWeekday: 2,
+      }),
+    );
+  });
+
+  it('other section admins cannot plan a visit', async () => {
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'co_visits/2026-10-05'), { items: [] }),
+    );
+    await assertFails(
+      setDoc(doc(db(FSM_ADMIN), 'schedule_config/coVisit'), {
+        visibleToPublishers: true,
       }),
     );
   });

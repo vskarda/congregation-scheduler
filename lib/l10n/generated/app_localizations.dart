@@ -156,6 +156,12 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get commonClose;
 
+  /// No description provided for @commonClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get commonClear;
+
   /// No description provided for @commonBack.
   ///
   /// In en, this message translates to:
@@ -2813,6 +2819,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Circuit overseer\'s visit'**
   String get eventTypeCoVisit;
+
+  /// No description provided for @meetingWeekChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Changed for this week'**
+  String get meetingWeekChanged;
+
+  /// No description provided for @meetingWeekDifferent.
+  ///
+  /// In en, this message translates to:
+  /// **'Different day or time this week'**
+  String get meetingWeekDifferent;
+
+  /// No description provided for @meetingWeekFollows.
+  ///
+  /// In en, this message translates to:
+  /// **'Normally {day}, {time}'**
+  String meetingWeekFollows(String day, String time);
+
+  /// No description provided for @meetingWeekDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get meetingWeekDay;
+
+  /// No description provided for @meetingWeekTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get meetingWeekTime;
+
+  /// No description provided for @coVisitNotPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'The circuit overseer\'s visit isn\'t published yet.'**
+  String get coVisitNotPublished;
+
+  /// No description provided for @coVisitNonePlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'No visit planned yet.'**
+  String get coVisitNonePlanned;
+
+  /// No description provided for @coVisitSetWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the week of the visit'**
+  String get coVisitSetWeek;
+
+  /// No description provided for @coVisitDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete visit'**
+  String get coVisitDelete;
+
+  /// No description provided for @coVisitDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this visit and everything arranged for it? The meetings for field service of that week are kept. This can\'t be undone.'**
+  String get coVisitDeleteConfirm;
+
+  /// No description provided for @coVisitVisibleToPublishers.
+  ///
+  /// In en, this message translates to:
+  /// **'Show to publishers'**
+  String get coVisitVisibleToPublishers;
+
+  /// No description provided for @coVisitVisibleOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishers can see the visit.'**
+  String get coVisitVisibleOn;
+
+  /// No description provided for @coVisitVisibleOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Only administrators can see the visit.'**
+  String get coVisitVisibleOff;
+
+  /// No description provided for @coSectionMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Midday meals'**
+  String get coSectionMeal;
+
+  /// No description provided for @coSectionShepherding.
+  ///
+  /// In en, this message translates to:
+  /// **'Shepherding visits'**
+  String get coSectionShepherding;
+
+  /// No description provided for @coSectionPioneers.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting with the pioneers'**
+  String get coSectionPioneers;
+
+  /// No description provided for @coSectionElders.
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting with the elders and ministerial servants'**
+  String get coSectionElders;
+
+  /// No description provided for @coSectionOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get coSectionOther;
+
+  /// No description provided for @coSectionEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing arranged yet.'**
+  String get coSectionEmpty;
+
+  /// No description provided for @coSectionHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden'**
+  String get coSectionHidden;
+
+  /// No description provided for @coSectionHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide from publishers'**
+  String get coSectionHide;
+
+  /// No description provided for @coSectionShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show to publishers'**
+  String get coSectionShow;
+
+  /// No description provided for @coWithCo.
+  ///
+  /// In en, this message translates to:
+  /// **'In the ministry with the circuit overseer'**
+  String get coWithCo;
+
+  /// No description provided for @coWithCoWife.
+  ///
+  /// In en, this message translates to:
+  /// **'In the ministry with his wife'**
+  String get coWithCoWife;
+
+  /// No description provided for @coDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get coDay;
+
+  /// No description provided for @coTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get coTime;
+
+  /// No description provided for @coAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get coAddress;
+
+  /// No description provided for @coNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note'**
+  String get coNote;
+
+  /// No description provided for @coAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishers'**
+  String get coAssigned;
+
+  /// No description provided for @coMinistryOtherAdmins.
+  ///
+  /// In en, this message translates to:
+  /// **'Meetings for field service are edited by their own administrators.'**
+  String get coMinistryOtherAdmins;
+
+  /// No description provided for @coMidweekOtherAdmins.
+  ///
+  /// In en, this message translates to:
+  /// **'The midweek meeting day is set by the midweek schedule administrators.'**
+  String get coMidweekOtherAdmins;
+
+  /// No description provided for @coMidweekNotMoved.
+  ///
+  /// In en, this message translates to:
+  /// **'The midweek meeting was not moved to Tuesday: that is set by the midweek schedule administrators.'**
+  String get coMidweekNotMoved;
+
+  /// No description provided for @coPrintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Print the visit schedule'**
+  String get coPrintTitle;
+
+  /// No description provided for @coPrintIncludeHiddenBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Some sections are hidden from publishers. Print them as well?'**
+  String get coPrintIncludeHiddenBody;
+
+  /// No description provided for @coPrintIncludeHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Include hidden'**
+  String get coPrintIncludeHidden;
+
+  /// No description provided for @coPrintVisibleOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible only'**
+  String get coPrintVisibleOnly;
 
   /// No description provided for @eventTypeOther.
   ///

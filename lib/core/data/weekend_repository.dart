@@ -38,6 +38,20 @@ class WeekendRepository {
     return snap.docs.map(_fromDoc).toList();
   }
 
+  /// Weeks in `[fromId, toId]` whose meeting was moved off the congregation's
+  /// regular weekday, as `weekId -> weekday`. See
+  /// `LmmRepository.getWeekdayOverrides` for why the id range is applied here.
+  Future<Map<String, int>> getWeekdayOverrides(
+      String fromId, String toId) async {
+    final snap =
+        await _col.where('meetingWeekday', isGreaterThanOrEqualTo: 1).get();
+    return {
+      for (final doc in snap.docs)
+        if (doc.id.compareTo(fromId) >= 0 && doc.id.compareTo(toId) <= 0)
+          doc.id: _fromDoc(doc).meetingWeekday!,
+    };
+  }
+
   /// Rewrites talkTitle snapshots on weeks >= [fromWeekId] whose talkNo is in
   /// [titlesByNo] and whose stored title differs. Returns the updated count.
   Future<int> updateTalkTitles(Map<int, String> titlesByNo,

@@ -455,6 +455,76 @@ void main() {
 
       expect(second.map((m) => m.toJson()), first.map((m) => m.toJson()));
     });
+
+    // A rule names no circuit-overseer companions, so an occurrence that
+    // names one deviates from it — otherwise the compaction below would file
+    // it as a redundant copy of the rule and delete somebody's arrangement.
+    test('keeps an occurrence that only names circuit-overseer companions',
+        () async {
+      const rule = FsmRecurring(
+          weekday: DateTime.saturday, time: '09:00', location: 'Hall');
+      await addRule('r1', rule);
+      await db.collection('fsm_meetings').doc('r1_2026-07-11').set(
+          FsmMeeting.fromRule(rule.copyWith(id: 'r1'), '2026-07-11')
+              .copyWith(
+                withCo: const Assignment(publisherIds: ['p1']),
+                seriesDate: '',
+              )
+              .toJson());
+
+      await repo.repairAndCompact();
+
+      final all = await meetings();
+      expect(all, hasLength(1));
+      expect(all.single.withCo.publisherIds, ['p1']);
+      expect(all.single.overrides, contains(FsmFields.withCo));
+      expect(all.single.allAssigneeIds, ['p1'],
+          reason: 'companions must be findable by "my assignments"');
+    });
+  });
+
+  group('FsmMeeting circuit-overseer companions', () {
+    const rule = FsmRecurring(
+        id: 'r1', weekday: DateTime.saturday, time: '09:00', location: 'Hall');
+
+    test('diffFrom reports a companion the moment it is set', () {
+      final plain = FsmMeeting.fromRule(rule, '2026-07-11');
+      expect(plain.diffFrom(rule), isEmpty);
+
+      final withCompanion =
+          plain.copyWith(withCoWife: const Assignment(freeText: 'Anna'));
+      expect(withCompanion.diffFrom(rule), [FsmFields.withCoWife]);
+    });
+
+    test('applyRule keeps overridden companions and clears the rest', () {
+      final meeting = FsmMeeting.fromRule(rule, '2026-07-11').copyWith(
+        withCo: const Assignment(publisherIds: ['p1']),
+        withCoWife: const Assignment(publisherIds: ['p2']),
+        overrides: const [FsmFields.withCo],
+      );
+
+      final applied = meeting.applyRule(rule);
+
+      expect(applied.withCo.publisherIds, ['p1']);
+      expect(applied.withCoWife, const Assignment(),
+          reason: 'a rule names no companions, so an un-overridden slot '
+              'is empty rather than inherited');
+      expect(applied.allAssigneeIds, ['p1']);
+    });
+
+    test('replaceAssignee rewrites both companion slots', () {
+      final meeting = FsmMeeting.fromRule(rule, '2026-07-11').copyWith(
+        assignment: const Assignment(publisherIds: ['old']),
+        withCo: const Assignment(publisherIds: ['old']),
+        withCoWife: const Assignment(publisherIds: ['other', 'old']),
+      );
+
+      final moved = meeting.replaceAssignee('old', 'new');
+
+      expect(moved.withCo.publisherIds, ['new']);
+      expect(moved.withCoWife.publisherIds, ['other', 'new']);
+      expect(moved.allAssigneeIds, ['new', 'other']);
+    });
   });
 
   group('FsmRepository.deleteRecurring', () {

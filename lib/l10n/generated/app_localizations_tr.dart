@@ -30,6 +30,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get commonClose => 'Kapat';
 
   @override
+  String get commonClear => 'Temizle';
+
+  @override
   String get commonBack => 'Geri';
 
   @override
@@ -1508,6 +1511,122 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get eventTypeCoVisit => 'Çevre Gözetmeninin Ziyareti';
+
+  @override
+  String get meetingWeekChanged => 'Bu hafta için değiştirildi';
+
+  @override
+  String get meetingWeekDifferent => 'Bu hafta farklı gün veya saat';
+
+  @override
+  String meetingWeekFollows(String day, String time) {
+    return 'Normalde $day, $time';
+  }
+
+  @override
+  String get meetingWeekDay => 'Gün';
+
+  @override
+  String get meetingWeekTime => 'Saat';
+
+  @override
+  String get coVisitNotPublished =>
+      'Çevre gözetmeninin ziyareti henüz yayınlanmadı.';
+
+  @override
+  String get coVisitNonePlanned => 'Henüz planlanmış ziyaret yok.';
+
+  @override
+  String get coVisitSetWeek => 'Ziyaret haftasını seçin';
+
+  @override
+  String get coVisitDelete => 'Ziyareti sil';
+
+  @override
+  String get coVisitDeleteConfirm =>
+      'Bu ziyaret ve onun için planlanan her şey silinsin mi? O haftanın tarla buluşmaları korunur. Bu işlem geri alınamaz.';
+
+  @override
+  String get coVisitVisibleToPublishers => 'Müjdecilere göster';
+
+  @override
+  String get coVisitVisibleOn => 'Müjdeciler ziyareti görebilir.';
+
+  @override
+  String get coVisitVisibleOff => 'Ziyareti sadece yöneticiler görebilir.';
+
+  @override
+  String get coSectionMeal => 'Öğle yemekleri';
+
+  @override
+  String get coSectionShepherding => 'Çobanlık ziyaretleri';
+
+  @override
+  String get coSectionPioneers => 'Öncülerle buluşma';
+
+  @override
+  String get coSectionElders => 'İhtiyarlar ve hizmet görevlileriyle buluşma';
+
+  @override
+  String get coSectionOther => 'Diğer';
+
+  @override
+  String get coSectionEmpty => 'Henüz bir şey planlanmadı.';
+
+  @override
+  String get coSectionHidden => 'Gizli';
+
+  @override
+  String get coSectionHide => 'Müjdecilerden gizle';
+
+  @override
+  String get coSectionShow => 'Müjdecilere göster';
+
+  @override
+  String get coWithCo => 'Çevre gözetmeniyle tarla hizmeti';
+
+  @override
+  String get coWithCoWife => 'Eşiyle tarla hizmeti';
+
+  @override
+  String get coDay => 'Gün';
+
+  @override
+  String get coTime => 'Saat';
+
+  @override
+  String get coAddress => 'Adres';
+
+  @override
+  String get coNote => 'Not';
+
+  @override
+  String get coAssigned => 'Müjdeciler';
+
+  @override
+  String get coMinistryOtherAdmins =>
+      'Tarla buluşmalarını kendi yöneticileri düzenler.';
+
+  @override
+  String get coMidweekOtherAdmins =>
+      'Hafta içi ibadetinin günü, o programın yöneticileri tarafından belirlenir.';
+
+  @override
+  String get coMidweekNotMoved =>
+      'Hafta içi ibadeti salı gününe alınmadı; bunu o programın yöneticileri belirler.';
+
+  @override
+  String get coPrintTitle => 'Ziyaret programını yazdır';
+
+  @override
+  String get coPrintIncludeHiddenBody =>
+      'Bazı bölümler müjdecilerden gizli. Onlar da yazdırılsın mı?';
+
+  @override
+  String get coPrintIncludeHidden => 'Gizliler dahil';
+
+  @override
+  String get coPrintVisibleOnly => 'Sadece görünenler';
 
   @override
   String get eventTypeOther => 'Diğer';

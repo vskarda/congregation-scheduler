@@ -5,6 +5,34 @@ import '../data/publishers_repository.dart';
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
 
+/// An [AssignmentText] under its own label, for the secondary lines of a list
+/// tile ("In the ministry with the circuit overseer: Jan Novák").
+///
+/// Stacked rather than side by side: these labels are whole phrases in every
+/// language, and a row of label + names has nowhere to go on a phone.
+class LabelledAssignment extends StatelessWidget {
+  const LabelledAssignment({
+    super.key,
+    required this.label,
+    required this.assignment,
+  });
+
+  final String label;
+  final Assignment assignment;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: theme.textTheme.labelSmall),
+        AssignmentText(assignment, style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+}
+
 /// Renders an [Assignment] as names (+ free text), with the current user's
 /// own name highlighted on their device.
 class AssignmentText extends ConsumerWidget {

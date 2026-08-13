@@ -72,5 +72,9 @@ LmmWeek mergeParsedWeek({required LmmWeek existing, required LmmWeek parsed}) {
     microphones: existing.microphones,
     audioVideo: existing.audioVideo,
     customAssignments: existing.customAssignments,
+    // A rescheduled week (circuit overseer's visit, assembly) keeps its day
+    // and time: the workbook says nothing about when the meeting is held.
+    meetingWeekday: existing.meetingWeekday,
+    meetingTime: existing.meetingTime,
   );
 }

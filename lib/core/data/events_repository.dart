@@ -29,7 +29,17 @@ class EventsRepository {
     }
   }
 
+  Future<EventItem?> getOne(String id) async {
+    final doc = await _col.doc(id).get();
+    return doc.data() == null ? null : _fromDoc(doc);
+  }
+
   Future<void> delete(String id) => _col.doc(id).delete();
+
+  /// Deterministic id of the event entry that announces the circuit
+  /// overseer's visit of [weekId] on the events screen. Deterministic so
+  /// re-saving a visit updates the one entry instead of adding another.
+  static String coVisitEventId(String weekId) => 'covisit_$weekId';
 }
 
 final eventsRepositoryProvider = Provider<EventsRepository>(

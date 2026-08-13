@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_config.dart';
 import '../models/models.dart';
 import '../utils/dates.dart';
+import 'co_visit_repository.dart';
 import 'fsm_repository.dart';
 import 'lmm_repository.dart';
 import 'pw_repository.dart';
@@ -22,6 +23,14 @@ abstract final class HistoryKeys {
   static const custom = 'custom';
   static const publicWitnessing = 'pw';
   static const fieldServiceMeetings = 'fsm';
+
+  /// Circuit overseer's visit. Kept per section so the meal hosts and the
+  /// shepherding companions rotate independently of each other.
+  static const coWithCo = 'co.withCo';
+  static const coWithCoWife = 'co.withCoWife';
+
+  /// The sections that name publishers; the others assign nobody.
+  static String coSection(CoVisitSection section) => 'co.${section.name}';
 }
 
 /// historyKey -> (publisherId -> most recent assignment date, incl. future
@@ -110,6 +119,22 @@ final assignmentHistoryProvider =
           meeting.assignment,
           meeting.date,
         );
+        record(HistoryKeys.coWithCo, meeting.withCo, meeting.date);
+        record(HistoryKeys.coWithCoWife, meeting.withCoWife, meeting.date);
+      }
+
+      // Circuit overseer visits are keyed by their Monday, like the schedule
+      // weeks; an item's own day is used when it has one.
+      final visits =
+          await ref.watch(coVisitRepositoryProvider).getRange(from, until);
+      for (final visit in visits) {
+        for (final item in visit.items) {
+          record(
+            HistoryKeys.coSection(item.section),
+            item.assignment,
+            item.date.isEmpty ? visit.id : item.date,
+          );
+        }
       }
 
       return result;

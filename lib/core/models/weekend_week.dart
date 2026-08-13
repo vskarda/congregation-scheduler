@@ -16,6 +16,13 @@ abstract class WeekendWeek with _$WeekendWeek {
     String id,
     @Default('') String talkTitle,
 
+    /// This week only: the meeting is held on another day / at another time
+    /// than the congregation's regular setting. Null means "follow the
+    /// congregation setting", so the keys stay absent from documents that
+    /// never needed them — see [weekdayOr] / [timeOr].
+    @JsonKey(includeIfNull: false) int? meetingWeekday,
+    @JsonKey(includeIfNull: false) String? meetingTime,
+
     /// S-99 talk number when the title was picked from the catalog;
     /// null for free-text titles. The stored [talkTitle] is a snapshot.
     @JsonKey(includeIfNull: false) int? talkNo,
@@ -39,6 +46,15 @@ abstract class WeekendWeek with _$WeekendWeek {
 
   factory WeekendWeek.fromJson(Map<String, dynamic> json) =>
       _$WeekendWeekFromJson(json);
+
+  /// The weekday this week's meeting is held on: the week's own override, or
+  /// [fallback] (the congregation setting) when it has none.
+  int weekdayOr(int fallback) => meetingWeekday ?? fallback;
+
+  /// The time this week's meeting starts at; see [weekdayOr].
+  String timeOr(String fallback) => meetingTime ?? fallback;
+
+  bool get hasMeetingOverride => meetingWeekday != null || meetingTime != null;
 
   WeekendWeek withRecomputedAssignees() {
     final ids = <String>{

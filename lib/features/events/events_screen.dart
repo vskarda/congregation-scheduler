@@ -49,6 +49,11 @@ String assignmentRoleLabel(AppLocalizations l10n, String roleKey) {
     'audioVideo' => l10n.supportAudioVideo,
     'pw' => l10n.rolePw,
     'fsm' => l10n.roleFsm,
+    'withCo' => l10n.coWithCo,
+    'withCoWife' => l10n.coWithCoWife,
+    'co.meal' => l10n.coSectionMeal,
+    'co.shepherding' => l10n.coSectionShepherding,
+    'co.other' => l10n.coSectionOther,
     _ => '',
   };
 }
@@ -70,6 +75,10 @@ const _meetingDuration = Duration(minutes: 105);
 /// Meetings for field service are short; only their start time is stored.
 const _fsmDuration = Duration(minutes: 15);
 
+/// A meal or a shepherding visit during a circuit overseer's week; no end
+/// time is stored, so the calendar entry gets a sensible block.
+const _coVisitDuration = Duration(hours: 1);
+
 Event eventCalendarEvent(AppLocalizations l10n, EventItem event) {
   final start = parseDateKey(event.dateFrom);
   final lastDay = event.dateTo.isNotEmpty ? parseDateKey(event.dateTo) : start;
@@ -89,16 +98,17 @@ Event assignmentCalendarEvent(AppLocalizations l10n, MyAssignmentEntry entry) {
   final start = combineDateAndTime(day, entry.time!);
   final end = entry.endTime != null
       ? combineDateAndTime(day, entry.endTime!)
-      : start.add(
-          entry.source == AssignmentSource.fsm
-              ? _fsmDuration
-              : _meetingDuration,
-        );
+      : start.add(switch (entry.source) {
+          AssignmentSource.fsm => _fsmDuration,
+          AssignmentSource.coVisit => _coVisitDuration,
+          _ => _meetingDuration,
+        });
   return Event(
     title: assignmentTitle(l10n, entry),
     location:
         entry.source == AssignmentSource.pw ||
-            entry.source == AssignmentSource.fsm
+            entry.source == AssignmentSource.fsm ||
+            entry.source == AssignmentSource.coVisit
         ? entry.detail
         : '',
     startDate: start,
@@ -265,6 +275,7 @@ class EventsScreen extends ConsumerWidget {
                         AssignmentSource.weekend => Icons.groups_outlined,
                         AssignmentSource.pw => Icons.storefront_outlined,
                         AssignmentSource.fsm => Icons.diversity_3_outlined,
+                        AssignmentSource.coVisit => Icons.co_present_outlined,
                       }, size: 20),
                       title: Text(assignmentTitle(l10n, entry)),
                       subtitle: Text(
@@ -274,7 +285,9 @@ class EventsScreen extends ConsumerWidget {
                             assignmentTimeLabel(entry)!,
                         ].join('  '),
                       ),
-                      trailing: kIsWeb
+                      // No time, no calendar entry: an arrangement for the
+                      // circuit overseer's visit may not have one yet.
+                      trailing: kIsWeb || entry.time == null
                           ? null
                           : IconButton(
                               icon: const Icon(

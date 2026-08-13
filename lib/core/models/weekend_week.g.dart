@@ -8,6 +8,8 @@ part of 'weekend_week.dart';
 
 _WeekendWeek _$WeekendWeekFromJson(Map<String, dynamic> json) => _WeekendWeek(
   talkTitle: json['talkTitle'] as String? ?? '',
+  meetingWeekday: (json['meetingWeekday'] as num?)?.toInt(),
+  meetingTime: json['meetingTime'] as String?,
   talkNo: (json['talkNo'] as num?)?.toInt(),
   songTitle: json['songTitle'] as String? ?? '',
   songNo: (json['songNo'] as num?)?.toInt(),
@@ -49,6 +51,8 @@ _WeekendWeek _$WeekendWeekFromJson(Map<String, dynamic> json) => _WeekendWeek(
 Map<String, dynamic> _$WeekendWeekToJson(_WeekendWeek instance) =>
     <String, dynamic>{
       'talkTitle': instance.talkTitle,
+      'meetingWeekday': ?instance.meetingWeekday,
+      'meetingTime': ?instance.meetingTime,
       'talkNo': ?instance.talkNo,
       'songTitle': instance.songTitle,
       'songNo': ?instance.songNo,

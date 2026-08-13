@@ -28,6 +28,7 @@ const _flatCollections = [
   'pw_applications',
   'fsm_recurring',
   'fsm_meetings',
+  'co_visits',
   'territories',
   'territory_assignments',
   'ministry_groups',

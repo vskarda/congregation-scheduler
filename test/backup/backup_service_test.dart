@@ -41,6 +41,21 @@ Future<void> _seed(FakeFirebaseFirestore db) async {
     'meetingType': 'weekend',
     'total': 42,
   });
+  await db.collection('co_visits').doc('2026-04-13').set({
+    'items': [
+      {
+        'id': 'a',
+        'section': 'meal',
+        'date': '2026-04-14',
+        'time': '12:00',
+        'assignment': {'publisherIds': ['uid-1'], 'freeText': ''},
+        'address': 'Main street 12',
+        'note': '',
+      },
+    ],
+    'hiddenSections': ['pioneers'],
+    'allAssigneeIds': ['uid-1'],
+  });
 }
 
 void main() {
@@ -101,6 +116,13 @@ void main() {
     final att =
         await target.collection('attendance').doc('2026-06-01_weekend').get();
     expect(att.data()!['total'], 42);
+
+    // The circuit overseer's visit, nested lists and all.
+    final visit = await target.collection('co_visits').doc('2026-04-13').get();
+    expect(visit.data()!['hiddenSections'], ['pioneers']);
+    final items = visit.data()!['items'] as List;
+    expect(items.single['address'], 'Main street 12');
+    expect((items.single['assignment'] as Map)['publisherIds'], ['uid-1']);
   });
 
   test('doc counts cover nested subcollection documents', () async {
@@ -113,6 +135,7 @@ void main() {
     expect(counts['reports'], 1); // the entry, not the phantom month parent
     expect(counts['congregation'], 1);
     expect(counts['attendance'], 1);
+    expect(counts['co_visits'], 1);
   });
 
   test('report month probe fallback finds the same entries', () async {

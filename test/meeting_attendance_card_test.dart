@@ -98,9 +98,14 @@ void main() {
     await tester.tap(find.byIcon(Icons.chevron_left));
     await tester.pumpAndSettle();
 
+    // The weekend list is taller than the test viewport, and the record card
+    // sits at its bottom — scroll it into the build range first.
+    await tester.dragUntilVisible(
+        field('Total'), find.byType(ListView), const Offset(0, -200));
+    await tester.pumpAndSettle();
+
     await tester.enterText(field('Total'), '85');
     await tester.pump();
-    // The weekend list is taller than the test viewport.
     final save = find.widgetWithText(FilledButton, 'Save');
     await tester.ensureVisible(save);
     await tester.pumpAndSettle();

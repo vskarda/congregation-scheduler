@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../firebase/firebase_providers.dart';
 import '../models/models.dart';
 import '../utils/dates.dart';
+import 'lmm_repository.dart';
+import 'weekend_repository.dart';
 
 class AttendanceRepository {
   AttendanceRepository(this._db);
@@ -62,6 +64,27 @@ final attendanceEntriesProvider =
   return ref
       .watch(attendanceRepositoryProvider)
       .watchRange(attendanceHistoryStart(), to);
+});
+
+/// Weeks in the attendance history window whose meeting was held on another
+/// day than usual (a circuit overseer's visit moves the midweek meeting to
+/// Tuesday, an assembly moves the weekend meeting). Keyed by week id; either
+/// entry is null when that meeting kept its regular day.
+///
+/// Without this the history would expect a meeting on the regular day, list
+/// it as never recorded, and show the real one as a stray extra row.
+final meetingWeekdayOverridesProvider =
+    FutureProvider<Map<String, ({int? lmm, int? weekend})>>((ref) async {
+  final from = attendanceHistoryStart();
+  final to = dateKey(DateTime.now());
+  final lmm =
+      await ref.watch(lmmRepositoryProvider).getWeekdayOverrides(from, to);
+  final weekend =
+      await ref.watch(weekendRepositoryProvider).getWeekdayOverrides(from, to);
+  return {
+    for (final weekId in {...lmm.keys, ...weekend.keys})
+      weekId: (lmm: lmm[weekId], weekend: weekend[weekId]),
+  };
 });
 
 /// One meeting's counts, keyed by [AttendanceEntry.docId]. Backs the record

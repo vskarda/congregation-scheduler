@@ -11,6 +11,7 @@ import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
+import '../../core/widgets/meeting_week_override.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
@@ -115,7 +116,9 @@ class _WeekContent extends ConsumerWidget {
         initial: initial,
         historyKey: historyKey,
         qualifies: qualifies,
-        date: meta == null ? null : meetingDateOf(week.id, meta.weekendWeekday));
+        date: meta == null
+            ? null
+            : meetingDateOf(week.id, week.weekdayOr(meta.weekendWeekday)));
     if (result != null) await _save(ref, apply(result));
   }
 
@@ -175,6 +178,25 @@ class _WeekContent extends ConsumerWidget {
     }
   }
 
+  Future<void> _editMeetingWeek(
+    BuildContext context,
+    WidgetRef ref,
+    CongregationMeta meta,
+  ) async {
+    final result = await showMeetingWeekOverrideDialog(
+      context,
+      title: context.l10n.settingsWeekendMeeting,
+      current: (weekday: week.meetingWeekday, time: week.meetingTime),
+      defaultWeekday: meta.weekendWeekday,
+      defaultTime: meta.weekendTime,
+    );
+    if (result == null) return;
+    await _save(
+      ref,
+      week.copyWith(meetingWeekday: result.weekday, meetingTime: result.time),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -184,7 +206,9 @@ class _WeekContent extends ConsumerWidget {
     // for. Without meta the weekday is unknown, and guessing it would write
     // the count under the wrong document id.
     final meetingDate =
-        meta == null ? null : meetingDateOf(week.id, meta.weekendWeekday);
+        meta == null
+            ? null
+            : meetingDateOf(week.id, week.weekdayOr(meta.weekendWeekday));
 
     Widget assignmentRow({
       required String label,
@@ -247,6 +271,17 @@ class _WeekContent extends ConsumerWidget {
                       )
                     : null,
               ),
+              // Which day and time this week's meeting is actually held —
+              // normally the congregation setting, but an assembly or a
+              // circuit overseer's visit can move it for one week.
+              if (meta != null)
+                MeetingWeekTile(
+                  weekday: week.weekdayOr(meta.weekendWeekday),
+                  time: week.timeOr(meta.weekendTime),
+                  isOverridden: week.hasMeetingOverride,
+                  canEdit: canEdit,
+                  onTap: () => _editMeetingWeek(context, ref, meta),
+                ),
               ListTile(
                 dense: true,
                 title: Text(l10n.songLabel),

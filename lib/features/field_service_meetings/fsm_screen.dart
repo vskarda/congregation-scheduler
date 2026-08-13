@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
+import '../../core/data/co_visit_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
@@ -71,6 +72,10 @@ class FsmScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(fsmRepairProvider);
+    // Subscribed here, not read in the dialog: an unlistened stream provider
+    // is still loading the first time it is read, and the meeting dialog
+    // would then miss the circuit-overseer companion slots.
+    ref.watch(coVisitWeekIdsProvider);
     final canEdit =
         ref.watch(effectiveRolesProvider).canEditFieldServiceMeetings();
     final l10n = context.l10n;
@@ -151,6 +156,15 @@ class _FsmWeekView extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AssignmentText(meeting.assignment),
+                      // Shown wherever they are set — which, by construction,
+                      // is only during a circuit overseer's visit.
+                      if (meeting.withCo.isNotEmpty)
+                        LabelledAssignment(
+                            label: l10n.coWithCo, assignment: meeting.withCo),
+                      if (meeting.withCoWife.isNotEmpty)
+                        LabelledAssignment(
+                            label: l10n.coWithCoWife,
+                            assignment: meeting.withCoWife),
                       if (meeting.note.isNotEmpty)
                         Text(meeting.note,
                             style: Theme.of(context).textTheme.bodySmall),
@@ -180,10 +194,18 @@ class _FsmWeekView extends ConsumerWidget {
 /// Create/edit one meeting. Editing an occurrence of a recurring rule writes
 /// an exception recording only the fields that were actually changed, so the
 /// rest keep following the rule.
+///
+/// During a circuit overseer's visit the dialog also offers the two companion
+/// slots — who shares in the ministry with the overseer, and with his wife.
+/// They are stored on the meeting itself, so the circuit overseer view and
+/// this one edit exactly the same documents. [initialDate] seeds a new
+/// meeting (the visit view opens it on a day of the visit).
 Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
-    {FsmMeeting? existing}) async {
+    {FsmMeeting? existing, String? initialDate}) async {
   final l10n = context.l10n;
-  var meeting = existing ?? FsmMeeting(date: dateKey(DateTime.now()));
+  var meeting =
+      existing ?? FsmMeeting(date: initialDate ?? dateKey(DateTime.now()));
+  final coWeeks = ref.read(coVisitWeekIdsProvider);
   final locationCtrl = TextEditingController(text: meeting.location);
   final noteCtrl = TextEditingController(text: meeting.note);
 
@@ -270,6 +292,43 @@ Future<void> showFsmMeetingDialog(BuildContext context, WidgetRef ref,
                     }
                   },
                 ),
+                // Only during a circuit overseer's visit: anyone may share in
+                // the ministry with him, so the picker is not filtered.
+                if (isCoVisitDate(coWeeks, meeting.date)) ...[
+                  const Divider(),
+                  for (final slot in [
+                    (
+                      label: l10n.coWithCo,
+                      value: meeting.withCo,
+                      key: HistoryKeys.coWithCo,
+                      apply: (Assignment a) => meeting.copyWith(withCo: a),
+                    ),
+                    (
+                      label: l10n.coWithCoWife,
+                      value: meeting.withCoWife,
+                      key: HistoryKeys.coWithCoWife,
+                      apply: (Assignment a) => meeting.copyWith(withCoWife: a),
+                    ),
+                  ])
+                    ListTile(
+                      dense: true,
+                      title: Text(slot.label),
+                      subtitle: AssignmentText(slot.value),
+                      onTap: () async {
+                        final result = await showAssignmentEditor(
+                          context,
+                          title: slot.label,
+                          initial: slot.value,
+                          historyKey: slot.key,
+                          qualifies: (_) => true,
+                          date: tryParseDateKey(meeting.date),
+                        );
+                        if (result != null) {
+                          setState(() => meeting = slot.apply(result));
+                        }
+                      },
+                    ),
+                ],
               ],
             ),
             ),
