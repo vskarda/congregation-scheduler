@@ -127,6 +127,34 @@ void main() {
         reason: 'printing everything matches a visit that hides nothing');
   });
 
+  test('hiding the ministry section drops its meetings too', () async {
+    final withMinistry = await build(includeHidden: false);
+    final withoutMinistry = await build(
+        includeHidden: false,
+        source: visit.withSectionHidden(CoVisitSection.ministry, true));
+
+    expect(withoutMinistry.length, lessThan(withMinistry.length));
+  });
+
+  // Every day of the visit is on the sheet, even an empty one — that is what
+  // makes it a calendar rather than a list.
+  test('an arrangement with no day still reaches the sheet', () async {
+    final undated = await build(
+      includeHidden: false,
+      source: const CoVisit(id: weekId, items: [
+        CoVisitItem(
+            id: 'x',
+            section: CoVisitSection.meal,
+            assignment: Assignment(freeText: 'still deciding')),
+      ]),
+    );
+    final empty =
+        await build(includeHidden: false, source: const CoVisit(id: weekId));
+
+    expect(undated.length, greaterThan(empty.length),
+        reason: 'it prints under "not scheduled yet" instead of vanishing');
+  });
+
   test('builds a Czech schedule with diacritics', () async {
     final bytes = await build(includeHidden: true, locale: 'cs');
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');

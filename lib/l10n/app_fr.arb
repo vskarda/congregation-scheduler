@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "Visite du responsable de circonscription",
 
   "meetingWeekChanged": "Modifié pour cette semaine",
+  "weekPickTooltip": "Choisir une semaine",
+  "meetingWeekEditTooltip": "Changer le jour et l'heure de cette semaine",
+  "coNotScheduledYet": "Pas encore programmé",
   "meetingWeekDifferent": "Autre jour ou autre heure cette semaine",
   "meetingWeekFollows": "Habituellement {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

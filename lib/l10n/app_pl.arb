@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "Wizyta nadzorcy obwodu",
 
   "meetingWeekChanged": "Zmienione na ten tydzień",
+  "weekPickTooltip": "Wybierz tydzień",
+  "meetingWeekEditTooltip": "Zmień dzień i godzinę w tym tygodniu",
+  "coNotScheduledYet": "Termin jeszcze nieustalony",
   "meetingWeekDifferent": "Inny dzień lub godzina w tym tygodniu",
   "meetingWeekFollows": "Zwykle {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

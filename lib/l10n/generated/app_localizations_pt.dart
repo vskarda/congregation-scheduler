@@ -1539,6 +1539,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get meetingWeekChanged => 'Alterado nesta semana';
 
   @override
+  String get weekPickTooltip => 'Escolher uma semana';
+
+  @override
+  String get meetingWeekEditTooltip => 'Alterar o dia e o horário desta semana';
+
+  @override
+  String get coNotScheduledYet => 'Ainda sem data';
+
+  @override
   String get meetingWeekDifferent => 'Outro dia ou horário nesta semana';
 
   @override

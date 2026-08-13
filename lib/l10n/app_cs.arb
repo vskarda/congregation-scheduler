@@ -493,6 +493,9 @@
   "eventTypeCoVisit": "Návštěva krajského staršího",
 
   "meetingWeekChanged": "Změněno pro tento týden",
+  "weekPickTooltip": "Vybrat týden",
+  "meetingWeekEditTooltip": "Změnit den a čas v tomto týdnu",
+  "coNotScheduledYet": "Zatím bez termínu",
   "meetingWeekDifferent": "Jiný den nebo čas v tomto týdnu",
   "meetingWeekFollows": "Obvykle {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

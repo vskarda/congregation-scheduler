@@ -1527,6 +1527,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get meetingWeekChanged => 'Změněno pro tento týden';
 
   @override
+  String get weekPickTooltip => 'Vybrat týden';
+
+  @override
+  String get meetingWeekEditTooltip => 'Změnit den a čas v tomto týdnu';
+
+  @override
+  String get coNotScheduledYet => 'Zatím bez termínu';
+
+  @override
   String get meetingWeekDifferent => 'Jiný den nebo čas v tomto týdnu';
 
   @override

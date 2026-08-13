@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "Visita del sorvegliante di circoscrizione",
 
   "meetingWeekChanged": "Modificato per questa settimana",
+  "weekPickTooltip": "Scegli una settimana",
+  "meetingWeekEditTooltip": "Cambia giorno e ora di questa settimana",
+  "coNotScheduledYet": "Non ancora in programma",
   "meetingWeekDifferent": "Giorno o orario diversi questa settimana",
   "meetingWeekFollows": "Di solito {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

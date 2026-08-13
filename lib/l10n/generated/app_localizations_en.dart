@@ -1522,6 +1522,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get meetingWeekChanged => 'Changed for this week';
 
   @override
+  String get weekPickTooltip => 'Choose a week';
+
+  @override
+  String get meetingWeekEditTooltip => 'Change this week\'s day and time';
+
+  @override
+  String get coNotScheduledYet => 'Not scheduled yet';
+
+  @override
   String get meetingWeekDifferent => 'Different day or time this week';
 
   @override

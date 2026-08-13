@@ -133,7 +133,10 @@ core/          bootstrap, config, theme, l10n, shared widgets
   with a single `where('meetingWeekday', >= 1)` query
   (`getWeekdayOverrides`) — that is how the attendance history knows which day
   to expect a meeting on, instead of listing the regular day as never recorded
-  and the real one as a stray extra. Every consumer of the meeting date goes
+  and the real one as a stray extra, and how the week picker can label 25
+  weeks with their real meeting dates in one read. Both schedules are headed
+  by that date (`MeetingWeekHeader`): tapping it picks another week, the
+  pencil beside it moves this one. Every consumer of the meeting date goes
   through the override: both schedule views, "my assignments" (and so the
   reminders), and the attendance history. `mergeParsedWeek` carries it across
   a workbook re-import — the workbook says nothing about when a meeting is

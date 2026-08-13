@@ -39,6 +39,17 @@ DateTime? meetingDateOf(String weekId, int weekday) {
   return monday.add(Duration(days: weekday - 1));
 }
 
+/// A sensible day inside the week starting at [monday]: today when it falls
+/// in that week, otherwise the Monday itself. Used to seed a date picker with
+/// a day from the week being looked at rather than from today.
+DateTime dayInWeek(DateTime monday, {DateTime? now}) {
+  final today = now ?? DateTime.now();
+  final start = DateTime(monday.year, monday.month, monday.day);
+  final end = DateTime(monday.year, monday.month, monday.day + 7);
+  final day = DateTime(today.year, today.month, today.day);
+  return !day.isBefore(start) && day.isBefore(end) ? day : start;
+}
+
 /// Monday 00:00 of the week containing [d].
 DateTime mondayOf(DateTime d) {
   final day = DateTime(d.year, d.month, d.day);

@@ -16,7 +16,7 @@ import '../../core/utils/dates.dart';
 import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
-import '../../core/widgets/meeting_week_override.dart';
+import '../../core/widgets/meeting_week_header.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../songs/song_editor.dart';
@@ -29,6 +29,11 @@ class LmmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WeekNavigator(
+      headerBuilder: (context, weekId, goTo) => MeetingWeekHeader(
+        weekId: weekId,
+        kind: MeetingKind.midweek,
+        goTo: goTo,
+      ),
       contentBuilder: (context, weekId) => LmmWeekView(weekId: weekId),
     );
   }
@@ -314,28 +319,6 @@ class _WeekContent extends ConsumerWidget {
     }
   }
 
-  Future<void> _editMeetingWeek(
-    BuildContext context,
-    WidgetRef ref,
-    CongregationMeta meta,
-  ) async {
-    final result = await showMeetingWeekOverrideDialog(
-      context,
-      title: context.l10n.settingsLmmMeeting,
-      current: (weekday: week.meetingWeekday, time: week.meetingTime),
-      defaultWeekday: meta.lmmWeekday,
-      defaultTime: meta.lmmTime,
-    );
-    if (result == null) return;
-    await saveLmmWeek(
-      ref,
-      week.copyWith(
-        meetingWeekday: result.weekday,
-        meetingTime: result.time,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -372,17 +355,6 @@ class _WeekContent extends ConsumerWidget {
           ],
         ),
       ),
-      // Which day and time this week's meeting is actually held — normally
-      // the congregation setting, but a circuit overseer's visit or an
-      // assembly moves it for one week.
-      if (meta != null)
-        MeetingWeekTile(
-          weekday: week.weekdayOr(meta.lmmWeekday),
-          time: week.timeOr(meta.lmmTime),
-          isOverridden: week.hasMeetingOverride,
-          canEdit: canEdit,
-          onTap: () => _editMeetingWeek(context, ref, meta),
-        ),
     ];
 
     if (classCount >= 2) {

@@ -84,7 +84,10 @@ class FsmScreen extends ConsumerWidget {
       floatingActionButton: canEdit
           ? FloatingActionButton(
               tooltip: l10n.fsmAddMeeting,
-              onPressed: () => showFsmMeetingDialog(context, ref),
+              // A new meeting lands in the week being looked at, not on
+              // today — read at tap time, so paging the navigator moves it.
+              onPressed: () => showFsmMeetingDialog(context, ref,
+                  initialDate: dateKey(dayInWeek(ref.read(viewedWeekProvider)))),
               child: const Icon(Icons.add),
             )
           : null,

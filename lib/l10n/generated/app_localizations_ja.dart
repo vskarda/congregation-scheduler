@@ -1500,6 +1500,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get meetingWeekChanged => 'この週だけ変更';
 
   @override
+  String get weekPickTooltip => '週を選ぶ';
+
+  @override
+  String get meetingWeekEditTooltip => 'この週の曜日と時刻を変更';
+
+  @override
+  String get coNotScheduledYet => '日程未定';
+
+  @override
   String get meetingWeekDifferent => 'この週は別の曜日・時刻';
 
   @override

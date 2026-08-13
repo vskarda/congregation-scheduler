@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "Visita do superintendente de circuito",
 
   "meetingWeekChanged": "Alterado nesta semana",
+  "weekPickTooltip": "Escolher uma semana",
+  "meetingWeekEditTooltip": "Alterar o dia e o horário desta semana",
+  "coNotScheduledYet": "Ainda sem data",
   "meetingWeekDifferent": "Outro dia ou horário nesta semana",
   "meetingWeekFollows": "Normalmente {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "Besuch des Kreisaufsehers",
 
   "meetingWeekChanged": "Für diese Woche geändert",
+  "weekPickTooltip": "Woche auswählen",
+  "meetingWeekEditTooltip": "Tag und Uhrzeit dieser Woche ändern",
+  "coNotScheduledYet": "Noch ohne Termin",
   "meetingWeekDifferent": "Anderer Tag oder andere Uhrzeit in dieser Woche",
   "meetingWeekFollows": "Normalerweise {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

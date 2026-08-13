@@ -486,6 +486,9 @@
   "eventTypeCoVisit": "巡回監督の訪問",
 
   "meetingWeekChanged": "この週だけ変更",
+  "weekPickTooltip": "週を選ぶ",
+  "meetingWeekEditTooltip": "この週の曜日と時刻を変更",
+  "coNotScheduledYet": "日程未定",
   "meetingWeekDifferent": "この週は別の曜日・時刻",
   "meetingWeekFollows": "通常は{day} {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

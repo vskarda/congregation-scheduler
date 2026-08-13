@@ -1531,6 +1531,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get meetingWeekChanged => 'Bu hafta için değiştirildi';
 
   @override
+  String get weekPickTooltip => 'Hafta seçin';
+
+  @override
+  String get meetingWeekEditTooltip => 'Bu haftanın gününü ve saatini değiştir';
+
+  @override
+  String get coNotScheduledYet => 'Henüz tarihi yok';
+
+  @override
   String get meetingWeekDifferent => 'Bu hafta farklı gün veya saat';
 
   @override

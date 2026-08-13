@@ -2850,6 +2850,24 @@ abstract class AppLocalizations {
   /// **'Changed for this week'**
   String get meetingWeekChanged;
 
+  /// No description provided for @weekPickTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a week'**
+  String get weekPickTooltip;
+
+  /// No description provided for @meetingWeekEditTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change this week\'s day and time'**
+  String get meetingWeekEditTooltip;
+
+  /// No description provided for @coNotScheduledYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not scheduled yet'**
+  String get coNotScheduledYet;
+
   /// No description provided for @meetingWeekDifferent.
   ///
   /// In en, this message translates to:

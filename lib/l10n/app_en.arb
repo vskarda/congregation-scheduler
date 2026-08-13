@@ -518,6 +518,9 @@
   "eventTypeCoVisit": "Circuit overseer's visit",
 
   "meetingWeekChanged": "Changed for this week",
+  "weekPickTooltip": "Choose a week",
+  "meetingWeekEditTooltip": "Change this week's day and time",
+  "coNotScheduledYet": "Not scheduled yet",
   "meetingWeekDifferent": "Different day or time this week",
   "meetingWeekFollows": "Normally {day}, {time}",
   "@meetingWeekFollows": {"placeholders": {"day": {"type": "String"}, "time": {"type": "String"}}},

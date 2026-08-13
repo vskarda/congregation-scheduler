@@ -11,7 +11,7 @@ import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
-import '../../core/widgets/meeting_week_override.dart';
+import '../../core/widgets/meeting_week_header.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
@@ -24,6 +24,11 @@ class WeekendScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WeekNavigator(
+      headerBuilder: (context, weekId, goTo) => MeetingWeekHeader(
+        weekId: weekId,
+        kind: MeetingKind.weekend,
+        goTo: goTo,
+      ),
       contentBuilder: (context, weekId) => _WeekendWeekView(weekId: weekId),
     );
   }
@@ -178,25 +183,6 @@ class _WeekContent extends ConsumerWidget {
     }
   }
 
-  Future<void> _editMeetingWeek(
-    BuildContext context,
-    WidgetRef ref,
-    CongregationMeta meta,
-  ) async {
-    final result = await showMeetingWeekOverrideDialog(
-      context,
-      title: context.l10n.settingsWeekendMeeting,
-      current: (weekday: week.meetingWeekday, time: week.meetingTime),
-      defaultWeekday: meta.weekendWeekday,
-      defaultTime: meta.weekendTime,
-    );
-    if (result == null) return;
-    await _save(
-      ref,
-      week.copyWith(meetingWeekday: result.weekday, meetingTime: result.time),
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
@@ -271,17 +257,6 @@ class _WeekContent extends ConsumerWidget {
                       )
                     : null,
               ),
-              // Which day and time this week's meeting is actually held —
-              // normally the congregation setting, but an assembly or a
-              // circuit overseer's visit can move it for one week.
-              if (meta != null)
-                MeetingWeekTile(
-                  weekday: week.weekdayOr(meta.weekendWeekday),
-                  time: week.timeOr(meta.weekendTime),
-                  isOverridden: week.hasMeetingOverride,
-                  canEdit: canEdit,
-                  onTap: () => _editMeetingWeek(context, ref, meta),
-                ),
               ListTile(
                 dense: true,
                 title: Text(l10n.songLabel),
