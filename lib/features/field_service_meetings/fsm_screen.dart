@@ -7,11 +7,13 @@ import '../../core/data/assignment_history.dart';
 import '../../core/data/co_visit_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/publishers_repository.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
+import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import 'fsm_recurring_screen.dart';
 
@@ -132,6 +134,10 @@ class _FsmWeekView extends ConsumerWidget {
     final locale = Localizations.localeOf(context).toString();
     final dayFmt = DateFormat.EEEE(locale);
     final dateFmt = DateFormat.MMMd(locale);
+    // Off for this week, a publisher gets the days, times and places without
+    // who is taking them. Always true for this schedule's admins.
+    final showNames = ref.watch(
+        weekAssigneesVisibleProvider((kind: ScheduleKind.fsm, weekId: weekId)));
 
     return meetings.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -143,6 +149,7 @@ class _FsmWeekView extends ConsumerWidget {
         }
         return ListView(
           children: [
+            ShowToPublishersSwitch(kind: ScheduleKind.fsm, weekId: weekId),
             for (final meeting in list)
               Card(
                 child: ListTile(
@@ -158,16 +165,19 @@ class _FsmWeekView extends ConsumerWidget {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AssignmentText(meeting.assignment),
-                      // Shown wherever they are set — which, by construction,
-                      // is only during a circuit overseer's visit.
-                      if (meeting.withCo.isNotEmpty)
-                        LabelledAssignment(
-                            label: l10n.coWithCo, assignment: meeting.withCo),
-                      if (meeting.withCoWife.isNotEmpty)
-                        LabelledAssignment(
-                            label: l10n.coWithCoWife,
-                            assignment: meeting.withCoWife),
+                      if (showNames) ...[
+                        AssignmentText(meeting.assignment),
+                        // Shown wherever they are set — which, by
+                        // construction, is only during a circuit overseer's
+                        // visit.
+                        if (meeting.withCo.isNotEmpty)
+                          LabelledAssignment(
+                              label: l10n.coWithCo, assignment: meeting.withCo),
+                        if (meeting.withCoWife.isNotEmpty)
+                          LabelledAssignment(
+                              label: l10n.coWithCoWife,
+                              assignment: meeting.withCoWife),
+                      ],
                       if (meeting.note.isNotEmpty)
                         Text(meeting.note,
                             style: Theme.of(context).textTheme.bodySmall),

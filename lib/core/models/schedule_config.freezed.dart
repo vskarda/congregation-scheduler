@@ -15,7 +15,14 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ScheduleConfig {
 
- List<CustomAssignment> get permanentAssignments;
+ List<CustomAssignment> get permanentAssignments;/// Monday keys (yyyy-MM-dd) whose assigned names are hidden from
+/// publishers. Absent means shown, so only the weeks an admin switched
+/// off are listed and an untouched congregation shows everything.
+///
+/// Cosmetic, like `CoVisit.hiddenSections`: the week documents stay
+/// readable by every verified user (firestore.rules cannot hide
+/// individual fields).
+ List<String> get hiddenWeeks;
 /// Create a copy of ScheduleConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +35,16 @@ $ScheduleConfigCopyWith<ScheduleConfig> get copyWith => _$ScheduleConfigCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduleConfig&&const DeepCollectionEquality().equals(other.permanentAssignments, permanentAssignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ScheduleConfig&&const DeepCollectionEquality().equals(other.permanentAssignments, permanentAssignments)&&const DeepCollectionEquality().equals(other.hiddenWeeks, hiddenWeeks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(permanentAssignments));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(permanentAssignments),const DeepCollectionEquality().hash(hiddenWeeks));
 
 @override
 String toString() {
-  return 'ScheduleConfig(permanentAssignments: $permanentAssignments)';
+  return 'ScheduleConfig(permanentAssignments: $permanentAssignments, hiddenWeeks: $hiddenWeeks)';
 }
 
 
@@ -48,7 +55,7 @@ abstract mixin class $ScheduleConfigCopyWith<$Res>  {
   factory $ScheduleConfigCopyWith(ScheduleConfig value, $Res Function(ScheduleConfig) _then) = _$ScheduleConfigCopyWithImpl;
 @useResult
 $Res call({
- List<CustomAssignment> permanentAssignments
+ List<CustomAssignment> permanentAssignments, List<String> hiddenWeeks
 });
 
 
@@ -65,10 +72,11 @@ class _$ScheduleConfigCopyWithImpl<$Res>
 
 /// Create a copy of ScheduleConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? permanentAssignments = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? permanentAssignments = null,Object? hiddenWeeks = null,}) {
   return _then(_self.copyWith(
 permanentAssignments: null == permanentAssignments ? _self.permanentAssignments : permanentAssignments // ignore: cast_nullable_to_non_nullable
-as List<CustomAssignment>,
+as List<CustomAssignment>,hiddenWeeks: null == hiddenWeeks ? _self.hiddenWeeks : hiddenWeeks // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 
@@ -153,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<CustomAssignment> permanentAssignments)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<CustomAssignment> permanentAssignments,  List<String> hiddenWeeks)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ScheduleConfig() when $default != null:
-return $default(_that.permanentAssignments);case _:
+return $default(_that.permanentAssignments,_that.hiddenWeeks);case _:
   return orElse();
 
 }
@@ -174,10 +182,10 @@ return $default(_that.permanentAssignments);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<CustomAssignment> permanentAssignments)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<CustomAssignment> permanentAssignments,  List<String> hiddenWeeks)  $default,) {final _that = this;
 switch (_that) {
 case _ScheduleConfig():
-return $default(_that.permanentAssignments);case _:
+return $default(_that.permanentAssignments,_that.hiddenWeeks);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +202,10 @@ return $default(_that.permanentAssignments);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<CustomAssignment> permanentAssignments)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<CustomAssignment> permanentAssignments,  List<String> hiddenWeeks)?  $default,) {final _that = this;
 switch (_that) {
 case _ScheduleConfig() when $default != null:
-return $default(_that.permanentAssignments);case _:
+return $default(_that.permanentAssignments,_that.hiddenWeeks);case _:
   return null;
 
 }
@@ -208,8 +216,8 @@ return $default(_that.permanentAssignments);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _ScheduleConfig implements ScheduleConfig {
-  const _ScheduleConfig({final  List<CustomAssignment> permanentAssignments = const <CustomAssignment>[]}): _permanentAssignments = permanentAssignments;
+class _ScheduleConfig extends ScheduleConfig {
+  const _ScheduleConfig({final  List<CustomAssignment> permanentAssignments = const <CustomAssignment>[], final  List<String> hiddenWeeks = const <String>[]}): _permanentAssignments = permanentAssignments,_hiddenWeeks = hiddenWeeks,super._();
   factory _ScheduleConfig.fromJson(Map<String, dynamic> json) => _$ScheduleConfigFromJson(json);
 
  final  List<CustomAssignment> _permanentAssignments;
@@ -217,6 +225,27 @@ class _ScheduleConfig implements ScheduleConfig {
   if (_permanentAssignments is EqualUnmodifiableListView) return _permanentAssignments;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_permanentAssignments);
+}
+
+/// Monday keys (yyyy-MM-dd) whose assigned names are hidden from
+/// publishers. Absent means shown, so only the weeks an admin switched
+/// off are listed and an untouched congregation shows everything.
+///
+/// Cosmetic, like `CoVisit.hiddenSections`: the week documents stay
+/// readable by every verified user (firestore.rules cannot hide
+/// individual fields).
+ final  List<String> _hiddenWeeks;
+/// Monday keys (yyyy-MM-dd) whose assigned names are hidden from
+/// publishers. Absent means shown, so only the weeks an admin switched
+/// off are listed and an untouched congregation shows everything.
+///
+/// Cosmetic, like `CoVisit.hiddenSections`: the week documents stay
+/// readable by every verified user (firestore.rules cannot hide
+/// individual fields).
+@override@JsonKey() List<String> get hiddenWeeks {
+  if (_hiddenWeeks is EqualUnmodifiableListView) return _hiddenWeeks;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_hiddenWeeks);
 }
 
 
@@ -233,16 +262,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduleConfig&&const DeepCollectionEquality().equals(other._permanentAssignments, _permanentAssignments));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ScheduleConfig&&const DeepCollectionEquality().equals(other._permanentAssignments, _permanentAssignments)&&const DeepCollectionEquality().equals(other._hiddenWeeks, _hiddenWeeks));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_permanentAssignments));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_permanentAssignments),const DeepCollectionEquality().hash(_hiddenWeeks));
 
 @override
 String toString() {
-  return 'ScheduleConfig(permanentAssignments: $permanentAssignments)';
+  return 'ScheduleConfig(permanentAssignments: $permanentAssignments, hiddenWeeks: $hiddenWeeks)';
 }
 
 
@@ -253,7 +282,7 @@ abstract mixin class _$ScheduleConfigCopyWith<$Res> implements $ScheduleConfigCo
   factory _$ScheduleConfigCopyWith(_ScheduleConfig value, $Res Function(_ScheduleConfig) _then) = __$ScheduleConfigCopyWithImpl;
 @override @useResult
 $Res call({
- List<CustomAssignment> permanentAssignments
+ List<CustomAssignment> permanentAssignments, List<String> hiddenWeeks
 });
 
 
@@ -270,10 +299,11 @@ class __$ScheduleConfigCopyWithImpl<$Res>
 
 /// Create a copy of ScheduleConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? permanentAssignments = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? permanentAssignments = null,Object? hiddenWeeks = null,}) {
   return _then(_ScheduleConfig(
 permanentAssignments: null == permanentAssignments ? _self._permanentAssignments : permanentAssignments // ignore: cast_nullable_to_non_nullable
-as List<CustomAssignment>,
+as List<CustomAssignment>,hiddenWeeks: null == hiddenWeeks ? _self._hiddenWeeks : hiddenWeeks // ignore: cast_nullable_to_non_nullable
+as List<String>,
   ));
 }
 

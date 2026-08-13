@@ -6,12 +6,14 @@ import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/assignment_history.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/data/pw_repository.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
+import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import 'pw_recurring_screen.dart';
 
@@ -177,6 +179,10 @@ class _PwWeekView extends ConsumerWidget {
         ? ref.watch(pwWeekApplicationsProvider(weekId))
         : const <String, List<PwApplication>>{};
     final todayKey = dateKey(DateTime.now());
+    // Off for this week, a publisher gets the slots without who is on them —
+    // but still applies for and withdraws from them. Always true for admins.
+    final showNames = ref.watch(
+        weekAssigneesVisibleProvider((kind: ScheduleKind.pw, weekId: weekId)));
 
     return slots.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -188,6 +194,7 @@ class _PwWeekView extends ConsumerWidget {
         }
         return ListView(
           children: [
+            ShowToPublishersSwitch(kind: ScheduleKind.pw, weekId: weekId),
             for (final slot in list)
               Card(
                 child: ListTile(
@@ -201,7 +208,8 @@ class _PwWeekView extends ConsumerWidget {
                   ),
                   title: Text(
                       '${slot.startTime}–${slot.endTime}  ${slot.location}'),
-                  subtitle: AssignmentText(slot.assignment),
+                  subtitle:
+                      showNames ? AssignmentText(slot.assignment) : null,
                   trailing: canEdit
                       ? _adminTrailing(context, ref, slot,
                           weekApplications[slot.id]?.length ?? 0)
@@ -246,14 +254,18 @@ class _PwWeekView extends ConsumerWidget {
   }
 
   /// Apply/withdraw toggle for qualified publishers; a plain applied marker
-  /// on past slots; nothing when already assigned (the highlighted own name
-  /// in the subtitle says it all) or not qualified.
+  /// on past slots; nothing for someone not qualified.
+  ///
+  /// Offered on every slot, assigned ones included: on a week whose names are
+  /// hidden a publisher cannot see that they are already on a slot, and even
+  /// when they can, an application and an assignment are two different things
+  /// — withdrawing one leaves the other exactly as the admin set it.
   Widget? _applyTrailing(BuildContext context, WidgetRef ref, PwSlot slot,
       {required String? uid,
       required Publisher? me,
       required bool hasApplied,
       required bool isPast}) {
-    if (uid == null || slot.allAssigneeIds.contains(uid)) return null;
+    if (uid == null) return null;
     if (hasApplied) {
       if (isPast) {
         return Icon(Icons.front_hand, color: Theme.of(context).disabledColor);

@@ -1075,6 +1075,15 @@ class AppLocalizationsPl extends AppLocalizations {
   String get weekDelete => 'Usuń ten tydzień';
 
   @override
+  String get weekShowToPublishers => 'Pokaż głosicielom';
+
+  @override
+  String get weekShowToPublishersOn => 'Głosiciele widzą, kto ma zadanie.';
+
+  @override
+  String get weekShowToPublishersOff => 'Głosiciele widzą program bez nazwisk.';
+
+  @override
   String get lmmSongs => 'Pieśni';
 
   @override

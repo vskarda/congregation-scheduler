@@ -1,6 +1,7 @@
 import 'package:congregation_scheduler/core/data/admin_mode_provider.dart';
 import 'package:congregation_scheduler/core/data/congregation_repository.dart';
 import 'package:congregation_scheduler/core/data/publishers_repository.dart';
+import 'package:congregation_scheduler/core/data/schedule_config_repository.dart';
 import 'package:congregation_scheduler/core/firebase/firebase_providers.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
 import 'package:congregation_scheduler/features/co_visit/co_visit_screen.dart';
@@ -132,6 +133,40 @@ void main() {
 
     expect(find.text(l10n().coMinistryOtherAdmins), findsNothing);
     expect(find.text(l10n().coMidweekOtherAdmins), findsNothing);
+  });
+
+  // The ministry section renders fsm_meetings, so it obeys that view's own
+  // per-week switch: the same documents must not be readable here after
+  // being hidden there.
+  testWidgets('the ministry names follow the field-service switch',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    await seedVisit(db);
+    await seedVisibility(db, true);
+    await db.collection('fsm_meetings').doc('m1').set(const FsmMeeting(
+          id: 'm1',
+          date: '2026-04-14',
+          time: '09:30',
+          location: 'Kingdom Hall',
+          assignment: Assignment(freeText: 'Petr Svoboda'),
+        ).toJson());
+
+    await tester.pumpWidget(wrap(db, const Roles()));
+    await tester.pumpAndSettle();
+    expect(find.text('09:30  ·  Kingdom Hall'), findsOneWidget);
+    expect(find.text('Petr Svoboda'), findsOneWidget);
+
+    await ScheduleConfigRepository(db)
+        .setWeekAssigneesVisible(ScheduleConfigDoc.fsm, weekId, false);
+    await tester.pumpWidget(wrap(db, const Roles()));
+    await tester.pumpAndSettle();
+    expect(find.text('09:30  ·  Kingdom Hall'), findsOneWidget);
+    expect(find.text('Petr Svoboda'), findsNothing);
+
+    // Its own admins go on planning it.
+    await tester.pumpWidget(wrap(db, const Roles(fieldServiceMeetings: true)));
+    await tester.pumpAndSettle();
+    expect(find.text('Petr Svoboda'), findsOneWidget);
   });
 
   testWidgets('the visit week shows the midweek meeting it moved',

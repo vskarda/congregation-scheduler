@@ -634,6 +634,32 @@ describe('schedule config (permanent custom assignments)', () => {
       }),
     );
   });
+
+  // Public witnessing and the meetings for field service keep no permanent
+  // assignments; their config documents exist for the weeks whose assigned
+  // names are hidden from publishers.
+  it('public witnessing and field-service admins hide their own weeks', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(PW_ADMIN), 'schedule_config/pw'), {
+        hiddenWeeks: ['2026-08-10'],
+      }),
+    );
+    await assertSucceeds(
+      setDoc(doc(db(FSM_ADMIN), 'schedule_config/fsm'), {
+        hiddenWeeks: ['2026-08-10'],
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(PW_ADMIN), 'schedule_config/fsm'), { hiddenWeeks: [] }),
+    );
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'schedule_config/pw'), { hiddenWeeks: [] }),
+    );
+    await assertFails(
+      setDoc(doc(db(VERIFIED), 'schedule_config/pw'), { hiddenWeeks: [] }),
+    );
+    await assertSucceeds(getDoc(doc(db(VERIFIED), 'schedule_config/fsm')));
+  });
 });
 
 describe("circuit overseer's visit", () => {

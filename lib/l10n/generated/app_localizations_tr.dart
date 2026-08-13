@@ -1075,6 +1075,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get weekDelete => 'Bu Haftayı Sil';
 
   @override
+  String get weekShowToPublishers => 'Müjdecilere göster';
+
+  @override
+  String get weekShowToPublishersOn =>
+      'Müjdeciler kimin görevli olduğunu görebilir.';
+
+  @override
+  String get weekShowToPublishersOff =>
+      'Müjdeciler programı isimler olmadan görür.';
+
+  @override
   String get lmmSongs => 'İlahiler';
 
   @override

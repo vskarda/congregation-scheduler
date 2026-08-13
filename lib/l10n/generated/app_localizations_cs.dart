@@ -1074,6 +1074,15 @@ class AppLocalizationsCs extends AppLocalizations {
   String get weekDelete => 'Smazat tento týden';
 
   @override
+  String get weekShowToPublishers => 'Zobrazit zvěstovatelům';
+
+  @override
+  String get weekShowToPublishersOn => 'Zvěstovatelé vidí, kdo je přidělen.';
+
+  @override
+  String get weekShowToPublishersOff => 'Zvěstovatelé vidí program bez jmen.';
+
+  @override
   String get lmmSongs => 'Písně';
 
   @override

@@ -12,6 +12,7 @@ import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/meeting_week_header.dart';
+import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
@@ -195,6 +196,14 @@ class _WeekContent extends ConsumerWidget {
         meta == null
             ? null
             : meetingDateOf(week.id, week.weekdayOr(meta.weekendWeekday));
+    // Off for this week, a publisher gets the talk and the song without the
+    // names. Always true for the schedule's admins.
+    final showNames = ref.watch(
+      weekAssigneesVisibleProvider((
+        kind: ScheduleKind.weekend,
+        weekId: week.id,
+      )),
+    );
 
     Widget assignmentRow({
       required String label,
@@ -225,6 +234,7 @@ class _WeekContent extends ConsumerWidget {
 
     return ListView(
       children: [
+        ShowToPublishersSwitch(kind: ScheduleKind.weekend, weekId: week.id),
         Card(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,43 +273,47 @@ class _WeekContent extends ConsumerWidget {
                 subtitle: Text(songDisplayText(week.songNo, week.songTitle)),
                 onTap: canEdit ? () => _editSong(context, ref) : null,
               ),
-              assignmentRow(
-                label: l10n.weekendSpeaker,
-                assignment: week.speaker,
-                historyKey: HistoryKeys.weekendSpeaker,
-                qualifies: (p) => p.qualifications.publicTalk,
-                apply: (a) => week.copyWith(speaker: a),
-              ),
-              assignmentRow(
-                label: l10n.weekendChairmanLabel,
-                assignment: week.chairman,
-                historyKey: HistoryKeys.weekendChairman,
-                qualifies: (p) => p.qualifications.weekendChairman,
-                apply: (a) => week.copyWith(chairman: a),
-              ),
-              assignmentRow(
-                label: l10n.weekendWtReader,
-                assignment: week.wtReader,
-                historyKey: HistoryKeys.weekendWtReader,
-                qualifies: (p) => p.qualifications.wtReader,
-                apply: (a) => week.copyWith(wtReader: a),
-              ),
-              for (var i = 0; i < week.customFields.length; i++)
+              // Every row below carries a name and nothing else, the speaker
+              // included: a week switched off keeps the talk and the song.
+              if (showNames) ...[
                 assignmentRow(
-                  label: week.customFields[i].label,
-                  assignment: week.customFields[i].assignment,
-                  historyKey: HistoryKeys.custom,
-                  qualifies: (_) => true,
-                  apply: (a) {
-                    final updated = [...week.customFields];
-                    updated[i] = updated[i].copyWith(assignment: a);
-                    return week.copyWith(customFields: updated);
-                  },
-                  onDelete: () {
-                    final updated = [...week.customFields]..removeAt(i);
-                    _save(ref, week.copyWith(customFields: updated));
-                  },
+                  label: l10n.weekendSpeaker,
+                  assignment: week.speaker,
+                  historyKey: HistoryKeys.weekendSpeaker,
+                  qualifies: (p) => p.qualifications.publicTalk,
+                  apply: (a) => week.copyWith(speaker: a),
                 ),
+                assignmentRow(
+                  label: l10n.weekendChairmanLabel,
+                  assignment: week.chairman,
+                  historyKey: HistoryKeys.weekendChairman,
+                  qualifies: (p) => p.qualifications.weekendChairman,
+                  apply: (a) => week.copyWith(chairman: a),
+                ),
+                assignmentRow(
+                  label: l10n.weekendWtReader,
+                  assignment: week.wtReader,
+                  historyKey: HistoryKeys.weekendWtReader,
+                  qualifies: (p) => p.qualifications.wtReader,
+                  apply: (a) => week.copyWith(wtReader: a),
+                ),
+                for (var i = 0; i < week.customFields.length; i++)
+                  assignmentRow(
+                    label: week.customFields[i].label,
+                    assignment: week.customFields[i].assignment,
+                    historyKey: HistoryKeys.custom,
+                    qualifies: (_) => true,
+                    apply: (a) {
+                      final updated = [...week.customFields];
+                      updated[i] = updated[i].copyWith(assignment: a);
+                      return week.copyWith(customFields: updated);
+                    },
+                    onDelete: () {
+                      final updated = [...week.customFields]..removeAt(i);
+                      _save(ref, week.copyWith(customFields: updated));
+                    },
+                  ),
+              ],
               if (canEdit)
                 Padding(
                   padding: const EdgeInsets.all(8),
@@ -312,50 +326,53 @@ class _WeekContent extends ConsumerWidget {
             ],
           ),
         ),
-        Builder(
-          builder: (context) {
-            final permanent =
-                ref.watch(weekendPermanentAssignmentsProvider).value ??
-                    const [];
-            final configRepo = ref.read(scheduleConfigRepositoryProvider);
-            return SupportAssignmentsCard(
-              canEdit: canEdit,
-              date: meetingDate,
-              attendants: week.attendants,
-              microphones: week.microphones,
-              audioVideo: week.audioVideo,
-              customAssignments: week.customAssignments,
-              permanentAssignments: permanent,
-              onAddPermanent: (template) => configRepo.saveConfig(
-                ScheduleConfigDoc.weekend,
-                ScheduleConfig(permanentAssignments: [...permanent, template]),
-              ),
-              onRemovePermanent: (id) => configRepo.saveConfig(
-                ScheduleConfigDoc.weekend,
-                ScheduleConfig(
-                  permanentAssignments:
-                      permanent.where((c) => c.id != id).toList(),
+        // Nothing but names: it has no program of its own to show a publisher.
+        if (showNames)
+          Builder(
+            builder: (context) {
+              final permanent =
+                  ref.watch(weekendPermanentAssignmentsProvider).value ??
+                      const [];
+              final configRepo = ref.read(scheduleConfigRepositoryProvider);
+              return SupportAssignmentsCard(
+                canEdit: canEdit,
+                date: meetingDate,
+                attendants: week.attendants,
+                microphones: week.microphones,
+                audioVideo: week.audioVideo,
+                customAssignments: week.customAssignments,
+                permanentAssignments: permanent,
+                onAddPermanent: (template) => configRepo.saveConfig(
+                  ScheduleConfigDoc.weekend,
+                  ScheduleConfig(
+                      permanentAssignments: [...permanent, template]),
                 ),
-              ),
-              onChanged: ({
-                attendants,
-                microphones,
-                audioVideo,
-                customAssignments,
-              }) =>
-                  _save(
-                ref,
-                week.copyWith(
-                  attendants: attendants ?? week.attendants,
-                  microphones: microphones ?? week.microphones,
-                  audioVideo: audioVideo ?? week.audioVideo,
-                  customAssignments:
-                      customAssignments ?? week.customAssignments,
+                onRemovePermanent: (id) => configRepo.saveConfig(
+                  ScheduleConfigDoc.weekend,
+                  ScheduleConfig(
+                    permanentAssignments:
+                        permanent.where((c) => c.id != id).toList(),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
+                onChanged: ({
+                  attendants,
+                  microphones,
+                  audioVideo,
+                  customAssignments,
+                }) =>
+                    _save(
+                  ref,
+                  week.copyWith(
+                    attendants: attendants ?? week.attendants,
+                    microphones: microphones ?? week.microphones,
+                    audioVideo: audioVideo ?? week.audioVideo,
+                    customAssignments:
+                        customAssignments ?? week.customAssignments,
+                  ),
+                ),
+              );
+            },
+          ),
         if (meetingDate != null)
           MeetingAttendanceCard(
             date: meetingDate,

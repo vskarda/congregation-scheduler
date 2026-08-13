@@ -13,6 +13,11 @@ _ScheduleConfig _$ScheduleConfigFromJson(Map<String, dynamic> json) =>
               ?.map((e) => CustomAssignment.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <CustomAssignment>[],
+      hiddenWeeks:
+          (json['hiddenWeeks'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const <String>[],
     );
 
 Map<String, dynamic> _$ScheduleConfigToJson(_ScheduleConfig instance) =>
@@ -20,4 +25,5 @@ Map<String, dynamic> _$ScheduleConfigToJson(_ScheduleConfig instance) =>
       'permanentAssignments': instance.permanentAssignments
           .map((e) => e.toJson())
           .toList(),
+      'hiddenWeeks': instance.hiddenWeeks,
     };

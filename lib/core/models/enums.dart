@@ -74,6 +74,11 @@ enum CoVisitSection {
   other,
 }
 
+/// The four schedules whose weeks can be shown to publishers with or without
+/// the names assigned in them. Each owns one `schedule_config` document and
+/// one editing role; see `ScheduleConfig.hiddenWeeks`.
+enum ScheduleKind { lmm, weekend, pw, fsm }
+
 enum InfoItemType {
   @JsonValue('text')
   text,

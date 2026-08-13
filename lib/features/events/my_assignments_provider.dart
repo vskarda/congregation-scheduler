@@ -5,7 +5,9 @@ import '../../core/data/co_visit_repository.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/fsm_repository.dart';
 import '../../core/data/lmm_repository.dart';
+import '../../core/data/publishers_repository.dart';
 import '../../core/data/pw_repository.dart';
+import '../../core/data/schedule_config_repository.dart';
 import '../../core/data/weekend_repository.dart';
 import '../../core/firebase/firebase_providers.dart';
 import '../../core/models/models.dart';
@@ -44,6 +46,21 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
       ref.watch(congregationMetaProvider).value ?? const CongregationMeta();
   final today = dateKey(DateTime.now());
   final entries = <MyAssignmentEntry>[];
+
+  // A week whose names are hidden is not announced to the publisher at all:
+  // it contributes no line here, and so schedules no reminder either. Read
+  // with the real roles rather than the effective ones — an admin who hides
+  // the admin UI must not lose their own reminders while previewing.
+  final roles = ref.watch(myRolesProvider);
+  final configRepo = ref.watch(scheduleConfigRepositoryProvider);
+  final configs = <ScheduleKind, ScheduleConfig>{};
+  for (final kind in ScheduleKind.values) {
+    configs[kind] = canEditSchedule(roles, kind)
+        ? const ScheduleConfig()
+        : await configRepo.getConfig(ScheduleConfigDoc.of(kind));
+  }
+  bool shown(ScheduleKind kind, String weekId) =>
+      configs[kind]!.showsAssignees(weekId);
 
   void addSupport(
     AssignmentSource source,
@@ -103,6 +120,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
   for (final week in lmmWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
+    if (!shown(ScheduleKind.lmm, week.id)) continue;
     // A week may hold its meeting on another day/time than usual (circuit
     // overseer's visit, assembly) — that is what a reminder must fire for.
     final date = dateKey(
@@ -177,6 +195,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
   for (final week in weekendWeeks) {
     final monday = tryParseDateKey(week.id);
     if (monday == null) continue;
+    if (!shown(ScheduleKind.weekend, week.id)) continue;
     final date = dateKey(
       monday.add(Duration(days: week.weekdayOr(meta.weekendWeekday) - 1)),
     );
@@ -245,6 +264,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         dateKey(addMonths(DateTime.now(), AppConfig.pwMaterializeMonthsAhead)),
       );
   for (final slot in slots) {
+    if (!shown(ScheduleKind.pw, weekIdOf(parseDateKey(slot.date)))) continue;
     entries.add(
       MyAssignmentEntry(
         source: AssignmentSource.pw,
@@ -265,6 +285,9 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         dateKey(addMonths(DateTime.now(), AppConfig.fsmMaterializeMonthsAhead)),
       );
   for (final meeting in meetings) {
+    if (!shown(ScheduleKind.fsm, weekIdOf(parseDateKey(meeting.date)))) {
+      continue;
+    }
     // A meeting can name someone in three different ways during a circuit
     // overseer's visit, and each is its own entry — conducting the meeting
     // and sharing in the ministry with the overseer are not the same duty.

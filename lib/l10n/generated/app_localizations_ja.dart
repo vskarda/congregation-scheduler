@@ -1054,6 +1054,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get weekDelete => 'この週を削除';
 
   @override
+  String get weekShowToPublishers => '伝道者に表示する';
+
+  @override
+  String get weekShowToPublishersOn => '伝道者は割り当てられた人を見ることができます。';
+
+  @override
+  String get weekShowToPublishersOff => '伝道者は名前なしで予定を見ます。';
+
+  @override
   String get lmmSongs => '歌';
 
   @override

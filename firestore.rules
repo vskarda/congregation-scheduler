@@ -236,9 +236,12 @@ service cloud.firestore {
       allow write: if hasRole('weekendSchedule');
     }
 
-    // Per-meeting schedule configuration (e.g. permanent custom assignments).
-    // Doc id names the meeting type; each is writable by that schedule's role
-    // so the same admins who edit the schedule manage its permanent slots.
+    // Per-schedule configuration: permanent custom assignments, and the weeks
+    // whose assigned names are hidden from publishers ('hiddenWeeks'). Doc id
+    // names the schedule; each is writable by that schedule's role so the same
+    // admins who edit the schedule decide what is shown of it. 'pw' and 'fsm'
+    // hold nothing but the hidden weeks — their occurrences are expanded from
+    // the recurring rules and have no week document to carry the flag.
     // 'coVisit' holds the circuit overseer view's settings and belongs to the
     // 'events' role, which plans the visit; it lives here rather than on
     // congregation/meta because meta is full-admin-write-only.
@@ -246,6 +249,8 @@ service cloud.firestore {
       allow read: if isVerified();
       allow write: if (docId == 'lmm' && hasRole('lmmSchedule'))
         || (docId == 'weekend' && hasRole('weekendSchedule'))
+        || (docId == 'pw' && hasRole('publicWitnessing'))
+        || (docId == 'fsm' && hasRole('fieldServiceMeetings'))
         || (docId == 'coVisit' && hasRole('events'));
     }
 

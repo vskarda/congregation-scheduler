@@ -2034,6 +2034,24 @@ abstract class AppLocalizations {
   /// **'Delete this week'**
   String get weekDelete;
 
+  /// No description provided for @weekShowToPublishers.
+  ///
+  /// In en, this message translates to:
+  /// **'Show to publishers'**
+  String get weekShowToPublishers;
+
+  /// No description provided for @weekShowToPublishersOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishers see who is assigned.'**
+  String get weekShowToPublishersOn;
+
+  /// No description provided for @weekShowToPublishersOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishers see the program without names.'**
+  String get weekShowToPublishersOff;
+
   /// No description provided for @lmmSongs.
   ///
   /// In en, this message translates to:

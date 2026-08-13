@@ -1085,6 +1085,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get weekDelete => 'Supprimer cette semaine';
 
   @override
+  String get weekShowToPublishers => 'Montrer aux proclamateurs';
+
+  @override
+  String get weekShowToPublishersOn =>
+      'Les proclamateurs voient qui est assigné.';
+
+  @override
+  String get weekShowToPublishersOff =>
+      'Les proclamateurs voient le programme sans les noms.';
+
+  @override
   String get lmmSongs => 'Cantiques';
 
   @override

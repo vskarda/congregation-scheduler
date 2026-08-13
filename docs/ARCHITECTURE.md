@@ -141,6 +141,31 @@ core/          bootstrap, config, theme, l10n, shared widgets
   reminders), and the attendance history. `mergeParsedWeek` carries it across
   a workbook re-import — the workbook says nothing about when a meeting is
   held.
+- **A week's names are shown or hidden per week**, for each of the four
+  schedules that name anyone: `schedule_config/{lmm,weekend,pw,fsm}` carries
+  `hiddenWeeks`, the Monday keys switched off. Absent means shown, so only the
+  weeks that deviate are listed and an untouched congregation keeps showing
+  everything. It lives there rather than on the week document because two of
+  the four have no week document at all — public witnessing and the meetings
+  for field service expand their occurrences from the recurring rules — and
+  one mechanism for all four is one provider
+  (`weekAssigneesVisibleProvider`) and one switch widget. Off, a publisher
+  still gets the whole program — titles, songs, times, locations, notes — and
+  no name at all, their own included: the assignment rows, the support-
+  assignments card and the week's lines in "my assignments" all go, and with
+  them the reminders, because an assignment that is not announced must not
+  buzz. The schedule's own admins always see the names, which is why the
+  provider keys on `effectiveRolesProvider` — "view as publisher" previews
+  exactly what the congregation sees, while the reminders keep using the real
+  roles so previewing never cancels an admin's own. The circuit overseer view
+  renders `fsm_meetings` itself, so its ministry rows follow the
+  meetings-for-field-service switch, not the visit's. Public witnessing keeps
+  its apply/withdraw hand on every slot, assigned ones included: an
+  application and an assignment are different things, and on a hidden week the
+  hand is the only handle a publisher has. Cosmetic, exactly like
+  `CoVisit.hiddenSections` below: the week documents stay readable by every
+  verified user, because rules cannot hide individual fields and there are no
+  Cloud Functions to project them.
 - **Circuit overseer's visit**: one `co_visits/{weekId}` document per visit,
   keyed by the Monday like the schedule weeks; the visit itself runs Tuesday
   to Sunday. It holds a flat list of items (meal, shepherding visit, meeting

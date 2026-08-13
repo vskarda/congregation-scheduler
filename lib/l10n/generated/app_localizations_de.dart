@@ -1083,6 +1083,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get weekDelete => 'Diese Woche löschen';
 
   @override
+  String get weekShowToPublishers => 'Für Verkündiger anzeigen';
+
+  @override
+  String get weekShowToPublishersOn => 'Verkündiger sehen, wer zugeteilt ist.';
+
+  @override
+  String get weekShowToPublishersOff =>
+      'Verkündiger sehen das Programm ohne Namen.';
+
+  @override
   String get lmmSongs => 'Lieder';
 
   @override

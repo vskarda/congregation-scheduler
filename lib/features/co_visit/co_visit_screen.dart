@@ -541,6 +541,9 @@ class _DayBlock extends StatelessWidget {
 /// The week's meetings for field service, rendered from `fsm_meetings` — the
 /// very documents the meetings-for-field-service view edits. Monday is left
 /// out: the visit starts on Tuesday.
+///
+/// The names follow that view's own per-week switch, not the visit's: the
+/// same documents must not be readable here after being hidden there.
 class _MinistryRows extends ConsumerWidget {
   const _MinistryRows({required this.weekId, required this.canEdit});
 
@@ -554,6 +557,8 @@ class _MinistryRows extends ConsumerWidget {
     final locale = Localizations.localeOf(context).toString();
     final meetings = ref.watch(fsmWeekMeetingsProvider(weekId));
     final firstDay = dateKey(CoVisit.startOf(parseDateKey(weekId)));
+    final showNames = ref.watch(
+        weekAssigneesVisibleProvider((kind: ScheduleKind.fsm, weekId: weekId)));
 
     return meetings.when(
       loading: () => const Padding(
@@ -587,17 +592,19 @@ class _MinistryRows extends ConsumerWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (meeting.assignment.isNotEmpty)
-                      LabelledAssignment(
-                          label: l10n.fsmConductor,
-                          assignment: meeting.assignment),
-                    if (meeting.withCo.isNotEmpty)
-                      LabelledAssignment(
-                          label: l10n.coWithCo, assignment: meeting.withCo),
-                    if (meeting.withCoWife.isNotEmpty)
-                      LabelledAssignment(
-                          label: l10n.coWithCoWife,
-                          assignment: meeting.withCoWife),
+                    if (showNames) ...[
+                      if (meeting.assignment.isNotEmpty)
+                        LabelledAssignment(
+                            label: l10n.fsmConductor,
+                            assignment: meeting.assignment),
+                      if (meeting.withCo.isNotEmpty)
+                        LabelledAssignment(
+                            label: l10n.coWithCo, assignment: meeting.withCo),
+                      if (meeting.withCoWife.isNotEmpty)
+                        LabelledAssignment(
+                            label: l10n.coWithCoWife,
+                            assignment: meeting.withCoWife),
+                    ],
                     if (meeting.note.isNotEmpty)
                       Text(meeting.note, style: theme.textTheme.bodySmall),
                   ],

@@ -17,6 +17,7 @@ import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/meeting_week_header.dart';
+import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../songs/song_editor.dart';
@@ -328,6 +329,15 @@ class _WeekContent extends ConsumerWidget {
     final classIndex = classCount >= 2
         ? ref.watch(lmmSelectedClassProvider).clamp(1, classCount)
         : 1;
+    // Off for this week, a publisher gets the program without the names on
+    // it. Always true for the schedule's admins, so it doubles as "this user
+    // is a publisher" at the places that drop a name.
+    final showNames = ref.watch(
+      weekAssigneesVisibleProvider((
+        kind: ScheduleKind.lmm,
+        weekId: week.id,
+      )),
+    );
 
     final children = <Widget>[
       Padding(
@@ -355,6 +365,7 @@ class _WeekContent extends ConsumerWidget {
           ],
         ),
       ),
+      ShowToPublishersSwitch(kind: ScheduleKind.lmm, weekId: week.id),
     ];
 
     if (classCount >= 2) {
@@ -464,12 +475,14 @@ class _WeekContent extends ConsumerWidget {
             part: part,
             canEdit: canEdit,
             classIndex: classIndex,
+            showNames: showNames,
           ),
         );
       }
     }
 
-    children.add(_SupportCard(week: week, canEdit: canEdit));
+    // Nothing but names: it has no program of its own to show a publisher.
+    if (showNames) children.add(_SupportCard(week: week, canEdit: canEdit));
 
     // Attendance is recorded against the meeting date this week's schedule is
     // for. Without meta the weekday is unknown, and guessing it would write
@@ -622,11 +635,16 @@ class _PartTile extends ConsumerWidget {
     required this.part,
     required this.canEdit,
     required this.classIndex,
+    required this.showNames,
   });
 
   final LmmWeek week;
   final LmmPart part;
   final bool canEdit;
+
+  /// False for a publisher on a week switched off: the part still renders,
+  /// its assignee and assistant lines do not.
+  final bool showNames;
 
   /// Class selected in the schedule view; only student parts store separate
   /// assignments per class (see [_effectiveClass]).
@@ -712,8 +730,9 @@ class _PartTile extends ConsumerWidget {
     final hasAssistant = isMinistryPart && !isStudentTalk(part);
     final assignment = part.assignmentFor(_effectiveClass);
     final assistantAssignment = part.assistantFor(_effectiveClass);
-    final showAssistant =
-        hasAssistant && (canEdit || assistantAssignment.isNotEmpty);
+    final showAssistant = showNames &&
+        hasAssistant &&
+        (canEdit || assistantAssignment.isNotEmpty);
 
     return ListTile(
       dense: true,
@@ -728,7 +747,7 @@ class _PartTile extends ConsumerWidget {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-          AssignmentText(assignment),
+          if (showNames) AssignmentText(assignment),
           if (showAssistant)
             // Tapping the assistant line assigns the assistant directly, so
             // admins don't have to open the overflow menu first.

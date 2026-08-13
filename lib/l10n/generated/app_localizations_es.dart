@@ -1086,6 +1086,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get weekDelete => 'Eliminar esta semana';
 
   @override
+  String get weekShowToPublishers => 'Mostrar a los publicadores';
+
+  @override
+  String get weekShowToPublishersOn =>
+      'Los publicadores ven quién está asignado.';
+
+  @override
+  String get weekShowToPublishersOff =>
+      'Los publicadores ven el programa sin nombres.';
+
+  @override
   String get lmmSongs => 'Canciones';
 
   @override
