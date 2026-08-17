@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- Firebase (Auth + Firestore) needs network access in release builds;
          only the debug/profile manifests add it automatically. -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -7,6 +8,23 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- open_filex declares READ_MEDIA_IMAGES/VIDEO/AUDIO in its library
+         manifest so it can open files from shared storage. This app only ever
+         hands it a file it just wrote into its own cache directory
+         (getTemporaryDirectory()) — see file_opener_io.dart and
+         backup_download_io.dart — where the plugin's pathRequiresPermission()
+         returns false and no runtime permission is ever requested. Strip the
+         declarations so the merged manifest satisfies Google Play's photo and
+         video permissions policy; system pickers are sufficient here, since
+         file_picker uses ACTION_OPEN_DOCUMENT / ACTION_GET_CONTENT.
+         Enforced by a gate in .github/workflows/release.yml — if you ever need
+         to open a file from shared storage, that gate must change too. -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"
+        tools:node="remove"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"
+        tools:node="remove"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"
+        tools:node="remove"/>
     <!-- usesCleartextTraffic: already the platform default at this targetSdk;
          declared so a merged library manifest cannot opt the app back in.
          The backup rules keep the Firestore offline cache (which holds the

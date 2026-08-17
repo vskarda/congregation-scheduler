@@ -101,6 +101,50 @@ jobs:
           --build-name=${{ steps.ver.outputs.version_name }}
           --build-number=${{ steps.ver.outputs.build_number }}
 
+      # Google Play policy: apps targeting API 33+ may not declare
+      # READ_MEDIA_IMAGES / READ_MEDIA_VIDEO when system pickers suffice.
+      # open_filex declares them in its library manifest, so any dependency
+      # bump can reintroduce them into the merged manifest and get the release
+      # rejected — see the tools:node="remove" overrides in
+      # android/app/src/main/AndroidManifest.xml. Fail here, not in review.
+      - name: Verify no broad media permissions in the release manifest
+        run: |
+          AAB=build/app/outputs/bundle/release/app-release.aab
+          AAB_MANIFEST="$RUNNER_TEMP/aab-manifest.bin"
+          # `|| true` so a missing intermediates/ dir reaches the explanatory
+          # error below instead of aborting the step under `set -e`.
+          MANIFEST=$(find build/app/intermediates -path '*merged_manifest*' \
+            -path '*release*' -name AndroidManifest.xml -print -quit 2>/dev/null || true)
+          if [ -z "$MANIFEST" ]; then
+            echo "::error title=Manifest check::Merged release manifest not found under build/app/intermediates — the AGP output path changed. Update the find glob in this step; do not remove the check."
+            exit 1
+          fi
+          echo "Merged manifest: $MANIFEST"
+          echo "Declared permissions:"
+          grep -o 'android.permission.[A-Z_]*' "$MANIFEST" | sort -u || true
+          if grep -q 'android.permission.READ_MEDIA_' "$MANIFEST"; then
+            echo "::error title=Play policy violation::READ_MEDIA_* present in the merged manifest."
+            grep -n 'READ_MEDIA_' "$MANIFEST"
+            exit 1
+          fi
+          # Second gate on the artifact that actually ships to Play. The AAB's
+          # manifest is protobuf, but permission names are contiguous UTF-8.
+          # Extract to a file first: piping unzip straight into grep would make a
+          # failed extraction look like a clean result.
+          if ! unzip -p "$AAB" base/manifest/AndroidManifest.xml > "$AAB_MANIFEST"; then
+            echo "::error title=Manifest check::Could not read base/manifest/AndroidManifest.xml out of $AAB — the bundle layout changed. Update this check; do not remove it."
+            exit 1
+          fi
+          if [ ! -s "$AAB_MANIFEST" ]; then
+            echo "::error title=Manifest check::Extracted AAB manifest is empty — refusing to treat that as a pass."
+            exit 1
+          fi
+          if grep -aq 'READ_MEDIA_' "$AAB_MANIFEST"; then
+            echo "::error title=Play policy violation::READ_MEDIA_* present in the AAB manifest."
+            exit 1
+          fi
+          echo "OK: no READ_MEDIA_* permissions in the merged manifest or the AAB."
+
       - name: Build APK (for the GitHub Release)
         run: >-
           flutter build apk --release

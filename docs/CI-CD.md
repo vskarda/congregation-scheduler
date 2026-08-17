@@ -228,6 +228,19 @@ Recommended first runs:
   still pending. The workflow's "Explain Play upload failure" step spells this
   out in the run log. The AAB to upload manually is attached to the failed run
   (Artifacts) and to the GitHub Release it created just before the Play step.
+- **Broad media permissions are gated**: `open_filex` declares
+  `READ_MEDIA_IMAGES` / `READ_MEDIA_VIDEO` / `READ_MEDIA_AUDIO` in its library
+  manifest, and Google Play rejects apps targeting API 33+ that request them
+  when a system picker would do. The app manifest strips all three with
+  `tools:node="remove"`, and the "Verify no broad media permissions in the
+  release manifest" step re-checks both the merged manifest and the AAB *before*
+  the Play upload. **Symptom if a dependency bump reintroduces one:** that step
+  fails with a `Play policy violation` annotation naming the permission — fix
+  the manifest rather than deleting the check. The step also fails if it can't
+  locate the merged manifest at all (AGP moves that path between versions);
+  update the `find` glob in that case. The app is safe to strip these because it
+  only ever opens files it just wrote into its own cache directory — if that ever
+  changes, both the manifest overrides and this gate need revisiting.
 - **iOS "Processing" + compliance**: the app declares
   `ITSAppUsesNonExemptEncryption = false` in `Info.plist`, so TestFlight won't
   prompt for export compliance. The first build may still need you to accept
