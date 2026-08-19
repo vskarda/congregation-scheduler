@@ -183,6 +183,48 @@ class AuthService {
     await user.updatePassword(newPassword);
   }
 
+  /// Starts a change of the sign-in e-mail. The current password
+  /// re-authenticates the (possibly stale) session so Firebase permits the
+  /// change, and fails fast on a wrong password before any mail goes out.
+  ///
+  /// Firebase then mails a confirmation link to [newEmail] — never to the old
+  /// address — and the sign-in e-mail only changes once that link is opened.
+  /// That is what makes this work for somebody who can no longer reach their
+  /// old mailbox. Opening the link also invalidates this session, so the
+  /// publisher signs in again with the new address (the dialog says so).
+  ///
+  /// The contact copy in private/profile is moved along, but only while it
+  /// still holds the address being replaced, so an address the publisher or
+  /// an admin deliberately set to something else is never overwritten. That
+  /// write is best-effort: the link has already gone out, and a congregation
+  /// still running the previous firestore.rules would deny it.
+  Future<void> startEmailChange({
+    required String password,
+    required String newEmail,
+  }) async {
+    final user = _auth.currentUser!;
+    final current = user.email;
+    if (current != null && current.isNotEmpty) {
+      final cred =
+          EmailAuthProvider.credential(email: current, password: password);
+      await user.reauthenticateWithCredential(cred);
+    }
+    final target = newEmail.trim();
+    await user.verifyBeforeUpdateEmail(target);
+    try {
+      final profile = await _publishers.getPrivate(user.uid);
+      if (profile != null && _sameAddress(profile.email, current)) {
+        await _publishers.setPrivate(
+            user.uid, profile.copyWith(email: target));
+      }
+    } on FirebaseException catch (_) {
+      // Contact copy only; the sign-in change is already under way.
+    }
+  }
+
+  static bool _sameAddress(String a, String? b) =>
+      a.trim().toLowerCase() == (b ?? '').trim().toLowerCase();
+
   Future<void> _createProfileDocs(
     String uid,
     String email,

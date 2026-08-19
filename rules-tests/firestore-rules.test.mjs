@@ -887,10 +887,24 @@ describe('private profiles', () => {
     );
   });
 
-  it('email is immutable for account holders', async () => {
-    await assertFails(
+  // Contact data, not the sign-in identity (that one lives in Firebase Auth),
+  // so it is editable like the phone number — including on account holders,
+  // whose mailbox may have become unreachable. VERIFIED is seeded with
+  // hasAccount: true.
+  it('email is editable by self and by a publishers-admin', async () => {
+    await assertSucceeds(
       updateDoc(doc(db(VERIFIED), `publishers/${VERIFIED}/private/profile`), {
         email: 'other@example.com',
+      }),
+    );
+    await assertSucceeds(
+      updateDoc(doc(db(ADMIN), `publishers/${VERIFIED}/private/profile`), {
+        email: 'fixed-by-admin@example.com',
+      }),
+    );
+    await assertFails(
+      updateDoc(doc(db(LMM_ADMIN), `publishers/${VERIFIED}/private/profile`), {
+        email: 'nope@example.com',
       }),
     );
     await assertSucceeds(

@@ -462,6 +462,37 @@ class AppLocalizationsEs extends AppLocalizations {
   String get changePasswordSuccess => 'Contraseña actualizada.';
 
   @override
+  String get changeEmailAction => 'Cambiar el correo de acceso';
+
+  @override
+  String get changeEmailBody =>
+      'Enviamos un enlace de confirmación a la nueva dirección. No se envía nada a la anterior, así que esto también funciona si ya no puedes abrir tu buzón antiguo.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Tendrás que iniciar sesión de nuevo. El cambio solo se aplica cuando abres el enlace en el nuevo buzón; este dispositivo cerrará tu sesión y entrarás con la nueva dirección y tu contraseña actual.';
+
+  @override
+  String get changeEmailNewLabel => 'Nueva dirección de correo';
+
+  @override
+  String get changeEmailPasswordLabel => 'Escribe tu contraseña para confirmar';
+
+  @override
+  String get changeEmailConfirm => 'Enviar enlace de confirmación';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Enlace de confirmación enviado a $email. Ábrelo para terminar el cambio y vuelve a iniciar sesión con la nueva dirección.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Esa no es una dirección de correo válida.';
+
+  @override
+  String get changeEmailSameAsCurrent => 'Esa ya es tu dirección de acceso.';
+
+  @override
   String get navInfoBoard => 'Tablón de anuncios';
 
   @override
@@ -592,6 +623,14 @@ class AppLocalizationsEs extends AppLocalizations {
       'Abre Predicación pública, busca un turno y toca el icono de mano para ofrecerte; tócalo de nuevo para retirarte. Si no ves el icono, pide a un administrador que active la habilitación «Predicación pública» en tu registro.';
 
   @override
+  String get helpChangeEmailTitle =>
+      'Cambiar el correo con el que inicias sesión';
+
+  @override
+  String get helpChangeEmailBody =>
+      '¿No puedes abrir el buzón con el que te registraste? En Mi perfil, pulsa \"Cambiar el correo de acceso\" e indica la nueva dirección y tu contraseña. El enlace de confirmación llega solo al nuevo buzón: ábrelo y vuelve a iniciar sesión con la nueva dirección. El campo de correo que aparece más arriba en el perfil es solo una dirección de contacto; cambiarlo no cambia cómo inicias sesión.';
+
+  @override
   String get helpPwAssignTitle =>
       'Asignar publicadores a la predicación pública';
 
@@ -618,6 +657,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Mostrar opciones de administración';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Dirección de contacto para la congregación. Para cambiar la dirección con la que inicias sesión, usa \"Cambiar el correo de acceso\" más abajo.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Dirección de contacto. Cambiarla aquí no cambia la dirección con la que este publicador inicia sesión.';
 
   @override
   String get profilePhone => 'Número de teléfono';

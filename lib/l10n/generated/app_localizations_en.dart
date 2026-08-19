@@ -455,6 +455,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changePasswordSuccess => 'Password updated.';
 
   @override
+  String get changeEmailAction => 'Change sign-in e-mail';
+
+  @override
+  String get changeEmailBody =>
+      'We send a confirmation link to the new address. Nothing goes to the old one, so this also works when you can no longer open your old mailbox.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'You will have to sign in again. The change takes effect only when you open the link in the new mailbox — this device then signs you out, and you sign in with the new address and your current password.';
+
+  @override
+  String get changeEmailNewLabel => 'New e-mail address';
+
+  @override
+  String get changeEmailPasswordLabel => 'Enter your password to confirm';
+
+  @override
+  String get changeEmailConfirm => 'Send confirmation link';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Confirmation link sent to $email. Open it to finish the change, then sign in again with the new address.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'That is not a valid e-mail address.';
+
+  @override
+  String get changeEmailSameAsCurrent =>
+      'This is already your sign-in address.';
+
+  @override
   String get navInfoBoard => 'Information board';
 
   @override
@@ -584,6 +616,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Open Public Witnessing, find a slot, and tap the hand icon to volunteer; tap it again to withdraw. If you don\'t see the icon, ask an administrator to turn on the \"Public witnessing\" qualification on your record.';
 
   @override
+  String get helpChangeEmailTitle => 'Change the e-mail you sign in with';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Can\'t open the mailbox you registered with? On My profile, tap \"Change sign-in e-mail\", enter the new address and your password. The confirmation link goes to the new mailbox only — open it, then sign in again with the new address. The e-mail field higher up on the profile is only a contact address; changing it does not change how you sign in.';
+
+  @override
   String get helpPwAssignTitle => 'Assign publishers to public witnessing';
 
   @override
@@ -609,6 +648,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Show admin options';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Contact address for the congregation. To change the address you sign in with, use \"Change sign-in e-mail\" below.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Contact address. Changing it here does not change the address this publisher signs in with.';
 
   @override
   String get profilePhone => 'Phone number';

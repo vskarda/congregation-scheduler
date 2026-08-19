@@ -461,6 +461,39 @@ class AppLocalizationsDe extends AppLocalizations {
   String get changePasswordSuccess => 'Passwort aktualisiert.';
 
   @override
+  String get changeEmailAction => 'Anmelde-E-Mail ändern';
+
+  @override
+  String get changeEmailBody =>
+      'Wir senden einen Bestätigungslink an die neue Adresse. An die alte wird nichts gesendet, deshalb funktioniert das auch, wenn du dein altes Postfach nicht mehr öffnen kannst.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Du musst dich danach neu anmelden. Die Änderung wird erst wirksam, wenn du den Link im neuen Postfach öffnest — dieses Gerät meldet dich dann ab und du meldest dich mit der neuen Adresse und deinem bisherigen Passwort an.';
+
+  @override
+  String get changeEmailNewLabel => 'Neue E-Mail-Adresse';
+
+  @override
+  String get changeEmailPasswordLabel =>
+      'Zur Bestätigung dein Passwort eingeben';
+
+  @override
+  String get changeEmailConfirm => 'Bestätigungslink senden';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Bestätigungslink an $email gesendet. Öffne ihn, um die Änderung abzuschließen, und melde dich dann mit der neuen Adresse neu an.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Das ist keine gültige E-Mail-Adresse.';
+
+  @override
+  String get changeEmailSameAsCurrent =>
+      'Das ist bereits deine Anmeldeadresse.';
+
+  @override
   String get navInfoBoard => 'Anschlagbrett';
 
   @override
@@ -591,6 +624,13 @@ class AppLocalizationsDe extends AppLocalizations {
       'Öffne Öffentliches Zeugnisgeben, suche einen Termin und tippe auf das Hand-Symbol, um dich zu melden; tippe erneut, um dich zurückzuziehen. Wenn du das Symbol nicht siehst, bitte einen Administrator, die Befähigung «Öffentliches Zeugnisgeben» in deinem Datensatz zu aktivieren.';
 
   @override
+  String get helpChangeEmailTitle => 'Die E-Mail zum Anmelden ändern';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Du kommst nicht mehr an das Postfach, mit dem du dich registriert hast? Tippe unter Mein Profil auf „Anmelde-E-Mail ändern“ und gib die neue Adresse und dein Passwort ein. Der Bestätigungslink geht nur an das neue Postfach — öffne ihn und melde dich dann mit der neuen Adresse neu an. Das E-Mail-Feld weiter oben im Profil ist nur eine Kontaktadresse; es zu ändern ändert nicht, womit du dich anmeldest.';
+
+  @override
   String get helpPwAssignTitle =>
       'Verkündiger zum öffentlichen Zeugnisgeben einteilen';
 
@@ -617,6 +657,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Verwaltungsoptionen anzeigen';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Kontaktadresse für die Versammlung. Um die Adresse zu ändern, mit der du dich anmeldest, nutze unten „Anmelde-E-Mail ändern“.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Kontaktadresse. Eine Änderung hier ändert nicht die Adresse, mit der sich dieser Verkündiger anmeldet.';
 
   @override
   String get profilePhone => 'Telefonnummer';

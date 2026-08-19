@@ -215,6 +215,18 @@ See header comment of [`firestore.rules`](../firestore.rules). Highlights:
 - Sensitive personal data (e-mail, phone, birth date, emergency note) lives
   in `publishers/{uid}/private/profile`, readable only by the publisher and
   publisher-admins, because Firestore rules cannot hide individual fields.
+- The `email` in that document is **contact data, not the sign-in identity**.
+  The identity lives in Firebase Auth, and with no Cloud Functions on the
+  Spark plan only its owner can change it: "Change sign-in e-mail" on the
+  profile re-authenticates with the password and calls
+  `verifyBeforeUpdateEmail`, which mails the confirmation link to the *new*
+  address — nothing goes to the old one, which is what makes it work for a
+  mailbox nobody can reach any more. The change lands when that link is
+  opened, ending the session, so the publisher signs in again with the new
+  address. `AuthService.startEmailChange` moves the contact copy along, but
+  only while it still holds the address being replaced, and best-effort: the
+  link is already out, and a congregation still on the previous rules would
+  deny the write.
 - First-admin bootstrap relies on Firestore `create` matching only
   non-existing docs: whoever creates `congregation/meta` first is the
   founder; second racers are rejected by the `update` rule.

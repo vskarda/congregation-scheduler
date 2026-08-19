@@ -924,6 +924,60 @@ abstract class AppLocalizations {
   /// **'Password updated.'**
   String get changePasswordSuccess;
 
+  /// No description provided for @changeEmailAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Change sign-in e-mail'**
+  String get changeEmailAction;
+
+  /// No description provided for @changeEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'We send a confirmation link to the new address. Nothing goes to the old one, so this also works when you can no longer open your old mailbox.'**
+  String get changeEmailBody;
+
+  /// No description provided for @changeEmailReloginWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You will have to sign in again. The change takes effect only when you open the link in the new mailbox — this device then signs you out, and you sign in with the new address and your current password.'**
+  String get changeEmailReloginWarning;
+
+  /// No description provided for @changeEmailNewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'New e-mail address'**
+  String get changeEmailNewLabel;
+
+  /// No description provided for @changeEmailPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to confirm'**
+  String get changeEmailPasswordLabel;
+
+  /// No description provided for @changeEmailConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Send confirmation link'**
+  String get changeEmailConfirm;
+
+  /// No description provided for @changeEmailSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmation link sent to {email}. Open it to finish the change, then sign in again with the new address.'**
+  String changeEmailSent(String email);
+
+  /// No description provided for @changeEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'That is not a valid e-mail address.'**
+  String get changeEmailInvalid;
+
+  /// No description provided for @changeEmailSameAsCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'This is already your sign-in address.'**
+  String get changeEmailSameAsCurrent;
+
   /// No description provided for @navInfoBoard.
   ///
   /// In en, this message translates to:
@@ -1164,6 +1218,18 @@ abstract class AppLocalizations {
   /// **'Open Public Witnessing, find a slot, and tap the hand icon to volunteer; tap it again to withdraw. If you don\'t see the icon, ask an administrator to turn on the \"Public witnessing\" qualification on your record.'**
   String get helpPwApplyBody;
 
+  /// No description provided for @helpChangeEmailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Change the e-mail you sign in with'**
+  String get helpChangeEmailTitle;
+
+  /// No description provided for @helpChangeEmailBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t open the mailbox you registered with? On My profile, tap \"Change sign-in e-mail\", enter the new address and your password. The confirmation link goes to the new mailbox only — open it, then sign in again with the new address. The e-mail field higher up on the profile is only a contact address; changing it does not change how you sign in.'**
+  String get helpChangeEmailBody;
+
   /// No description provided for @helpPwAssignTitle.
   ///
   /// In en, this message translates to:
@@ -1211,6 +1277,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show admin options'**
   String get adminToggleShow;
+
+  /// No description provided for @profileEmailSelfHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact address for the congregation. To change the address you sign in with, use \"Change sign-in e-mail\" below.'**
+  String get profileEmailSelfHint;
+
+  /// No description provided for @profileEmailAdminHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact address. Changing it here does not change the address this publisher signs in with.'**
+  String get profileEmailAdminHint;
 
   /// No description provided for @profilePhone.
   ///

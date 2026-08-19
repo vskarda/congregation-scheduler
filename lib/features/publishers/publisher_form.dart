@@ -8,7 +8,11 @@ import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 
 /// Profile editor shared by "My profile" and the admin's publisher detail.
-/// The e-mail is locked whenever the publisher has an app account.
+///
+/// The e-mail here is contact data, not the sign-in identity — that one lives
+/// in Firebase Auth and only its owner can change it ("Change sign-in e-mail"
+/// on the profile screen). Both are editable, so an address nobody can reach
+/// any more can be corrected; the helper text says which is which.
 class PublisherForm extends ConsumerStatefulWidget {
   const PublisherForm({
     super.key,
@@ -20,7 +24,9 @@ class PublisherForm extends ConsumerStatefulWidget {
   final Publisher publisher;
   final PublisherPrivate? private;
 
-  /// Appointment (elder/MS) is maintained by publisher-admins only.
+  /// Appointment (elder/MS) is maintained by publisher-admins only; the flag
+  /// therefore also marks this as the admin's copy of the form rather than
+  /// somebody's own profile.
   final bool showAppointment;
 
   @override
@@ -183,7 +189,6 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final emailLocked = widget.publisher.hasAccount;
     return Form(
       key: _formKey,
       child: Column(
@@ -204,11 +209,19 @@ class _PublisherFormState extends ConsumerState<PublisherForm> {
           const SizedBox(height: 12),
           TextFormField(
             controller: _email,
-            enabled: !emailLocked,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: l10n.authEmail,
-              helperText: emailLocked ? null : null,
+              helperText: widget.showAppointment
+                  ? l10n.profileEmailAdminHint
+                  : l10n.profileEmailSelfHint,
+              helperMaxLines: 3,
             ),
+            // Records for members without a login often have no address at
+            // all, so empty stays valid; anything typed must look like one.
+            validator: (v) => (v == null || v.trim().isEmpty || v.contains('@'))
+                ? null
+                : l10n.changeEmailInvalid,
           ),
           const SizedBox(height: 12),
           TextFormField(

@@ -457,6 +457,37 @@ class AppLocalizationsPt extends AppLocalizations {
   String get changePasswordSuccess => 'Senha atualizada.';
 
   @override
+  String get changeEmailAction => 'Alterar o e-mail de acesso';
+
+  @override
+  String get changeEmailBody =>
+      'Enviamos um link de confirmação para o novo endereço. Nada é enviado para o antigo, por isso isto funciona mesmo que você já não consiga abrir a sua caixa de correio antiga.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Você terá de entrar novamente. A alteração só passa a valer quando você abrir o link na nova caixa de correio — este dispositivo encerra a sua sessão e você entra com o novo endereço e a sua senha atual.';
+
+  @override
+  String get changeEmailNewLabel => 'Novo endereço de e-mail';
+
+  @override
+  String get changeEmailPasswordLabel => 'Digite sua senha para confirmar';
+
+  @override
+  String get changeEmailConfirm => 'Enviar link de confirmação';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Link de confirmação enviado para $email. Abra-o para concluir a alteração e depois entre novamente com o novo endereço.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Esse não é um endereço de e-mail válido.';
+
+  @override
+  String get changeEmailSameAsCurrent => 'Esse já é o seu endereço de acesso.';
+
+  @override
   String get navInfoBoard => 'Mural de avisos';
 
   @override
@@ -588,6 +619,13 @@ class AppLocalizationsPt extends AppLocalizations {
       'Abra Testemunho público, encontre um horário e toque no ícone de mão para se voluntariar; toque novamente para se retirar. Se você não vir o ícone, peça a um administrador para ativar a habilitação «Testemunho público» no seu registro.';
 
   @override
+  String get helpChangeEmailTitle => 'Alterar o e-mail com que você entra';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Não consegue abrir a caixa de correio com que se registrou? Em Meu perfil, toque em \"Alterar o e-mail de acesso\" e informe o novo endereço e a sua senha. O link de confirmação vai apenas para a nova caixa de correio: abra-o e depois entre novamente com o novo endereço. O campo de e-mail mais acima no perfil é só um endereço de contato; alterá-lo não muda como você entra.';
+
+  @override
   String get helpPwAssignTitle =>
       'Designar publicadores para o testemunho público';
 
@@ -614,6 +652,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Mostrar opções de administração';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Endereço de contato para a congregação. Para alterar o endereço com que você entra, use \"Alterar o e-mail de acesso\" abaixo.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Endereço de contato. Alterá-lo aqui não muda o endereço com que este publicador entra.';
 
   @override
   String get profilePhone => 'Número de telefone';

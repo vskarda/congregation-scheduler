@@ -456,6 +456,37 @@ class AppLocalizationsCs extends AppLocalizations {
   String get changePasswordSuccess => 'Heslo bylo aktualizováno.';
 
   @override
+  String get changeEmailAction => 'Změnit přihlašovací e-mail';
+
+  @override
+  String get changeEmailBody =>
+      'Na novou adresu pošleme potvrzovací odkaz. Na starou adresu se nic neposílá, takže to funguje, i když se do své staré schránky už nedostanete.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Budete se muset znovu přihlásit. Změna se projeví, až otevřete odkaz v nové schránce — toto zařízení vás pak odhlásí a přihlásíte se novou adresou a svým dosavadním heslem.';
+
+  @override
+  String get changeEmailNewLabel => 'Nová e-mailová adresa';
+
+  @override
+  String get changeEmailPasswordLabel => 'Pro potvrzení zadejte své heslo';
+
+  @override
+  String get changeEmailConfirm => 'Odeslat potvrzovací odkaz';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Potvrzovací odkaz byl odeslán na $email. Otevřete jej a dokončete změnu, pak se znovu přihlaste novou adresou.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Toto není platná e-mailová adresa.';
+
+  @override
+  String get changeEmailSameAsCurrent => 'Toto už je vaše přihlašovací adresa.';
+
+  @override
   String get navInfoBoard => 'Informační deska';
 
   @override
@@ -585,6 +616,13 @@ class AppLocalizationsCs extends AppLocalizations {
       'Otevři Veřejné svědectví, najdi termín a klepni na ikonu ruky, čímž se přihlásíš; dalším klepnutím se odhlásíš. Pokud ikonu nevidíš, požádej administrátora, aby ti ve tvém záznamu zapnul kvalifikaci „Veřejné svědectví“.';
 
   @override
+  String get helpChangeEmailTitle => 'Změna e-mailu, kterým se přihlašujete';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Nedostanete se do schránky, se kterou jste se registrovali? V Můj profil klepněte na „Změnit přihlašovací e-mail“, zadejte novou adresu a své heslo. Potvrzovací odkaz přijde jen do nové schránky — otevřete jej a pak se znovu přihlaste novou adresou. Pole s e-mailem výše v profilu je jen kontaktní adresa; jeho změna nemění, čím se přihlašujete.';
+
+  @override
   String get helpPwAssignTitle => 'Přidělení zvěstovatelů na veřejné svědectví';
 
   @override
@@ -610,6 +648,14 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Zobrazit možnosti správce';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Kontaktní adresa pro sbor. Chcete-li změnit adresu, kterou se přihlašujete, použijte níže „Změnit přihlašovací e-mail“.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Kontaktní adresa. Její změna zde nemění adresu, kterou se tento zvěstovatel přihlašuje.';
 
   @override
   String get profilePhone => 'Telefonní číslo';

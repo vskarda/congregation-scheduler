@@ -459,6 +459,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get changePasswordSuccess => 'Mot de passe mis à jour.';
 
   @override
+  String get changeEmailAction => 'Changer l\'e-mail de connexion';
+
+  @override
+  String get changeEmailBody =>
+      'Nous envoyons un lien de confirmation à la nouvelle adresse. Rien n\'est envoyé à l\'ancienne, cela fonctionne donc même si tu ne peux plus ouvrir ton ancienne boîte mail.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Tu devras te reconnecter. Le changement ne prend effet que lorsque tu ouvres le lien dans la nouvelle boîte mail ; cet appareil te déconnecte alors et tu te connectes avec la nouvelle adresse et ton mot de passe actuel.';
+
+  @override
+  String get changeEmailNewLabel => 'Nouvelle adresse e-mail';
+
+  @override
+  String get changeEmailPasswordLabel =>
+      'Saisis ton mot de passe pour confirmer';
+
+  @override
+  String get changeEmailConfirm => 'Envoyer le lien de confirmation';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Lien de confirmation envoyé à $email. Ouvre-le pour terminer le changement, puis reconnecte-toi avec la nouvelle adresse.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Ce n\'est pas une adresse e-mail valide.';
+
+  @override
+  String get changeEmailSameAsCurrent =>
+      'C\'est déjà ton adresse de connexion.';
+
+  @override
   String get navInfoBoard => 'Tableau d\'affichage';
 
   @override
@@ -592,6 +625,13 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ouvre Témoignage public, trouve un créneau et appuie sur l\'icône de main pour te porter volontaire ; appuie de nouveau pour te retirer. Si tu ne vois pas l\'icône, demande à un administrateur d\'activer l\'aptitude « Témoignage public » sur ta fiche.';
 
   @override
+  String get helpChangeEmailTitle => 'Changer l\'e-mail de connexion';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Tu n\'arrives plus à ouvrir la boîte mail avec laquelle tu t\'es inscrit ? Dans Mon profil, touche « Changer l\'e-mail de connexion », saisis la nouvelle adresse et ton mot de passe. Le lien de confirmation part uniquement vers la nouvelle boîte mail : ouvre-le, puis reconnecte-toi avec la nouvelle adresse. Le champ e-mail plus haut dans le profil n\'est qu\'une adresse de contact ; le modifier ne change pas ta façon de te connecter.';
+
+  @override
   String get helpPwAssignTitle =>
       'Attribuer des proclamateurs au témoignage public';
 
@@ -618,6 +658,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Afficher les options d\'administration';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Adresse de contact pour l\'assemblée. Pour changer l\'adresse avec laquelle tu te connectes, utilise « Changer l\'e-mail de connexion » ci-dessous.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Adresse de contact. La modifier ici ne change pas l\'adresse avec laquelle ce proclamateur se connecte.';
 
   @override
   String get profilePhone => 'Numéro de téléphone';

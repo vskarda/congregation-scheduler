@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/data/admin_mode_provider.dart';
 import '../../core/data/co_visit_repository.dart';
 import '../../core/data/congregation_repository.dart';
 import '../../core/data/fsm_repository.dart';
@@ -17,9 +16,10 @@ import 'co_visit_item_dialog.dart';
 import 'co_visit_pdf.dart';
 import 'co_visit_screen.dart';
 
-/// App-bar action: prints the visit currently on screen. Admins are asked
-/// whether the sections hidden from publishers should be on the sheet too;
-/// everyone else prints what they can see.
+/// App-bar action for the visit's planners: prints the visit currently on
+/// screen, asking first whether the sections hidden from publishers should be
+/// on the sheet too. Only offered to events-admins (see [AppShell]) —
+/// publishers read the visit in the app rather than printing it.
 class CoVisitPdfButton extends ConsumerStatefulWidget {
   const CoVisitPdfButton({super.key});
 
@@ -67,8 +67,7 @@ class _CoVisitPdfButtonState extends ConsumerState<CoVisitPdfButton> {
         .firstOrNull;
     if (visit == null) return;
 
-    final canPlan = ref.read(effectiveRolesProvider).canEditEvents();
-    final includeHidden = canPlan ? await _askIncludeHidden(visit) : false;
+    final includeHidden = await _askIncludeHidden(visit);
     if (includeHidden == null) return; // cancelled
 
     setState(() => _busy = true);

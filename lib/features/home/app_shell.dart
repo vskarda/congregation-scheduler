@@ -110,7 +110,9 @@ class AppShell extends ConsumerWidget {
           const PwDeleteFromWeekButton(),
         if (location == '/fsm' && roles.canEditFieldServiceMeetings())
           const FsmDeleteFromWeekButton(),
-        if (location == '/co-visit' && ref.watch(coVisitVisibleProvider))
+        // The printout belongs to the visit's planners, like the schedule
+        // PDFs above: publishers read the visit on screen, they don't print it.
+        if (location == '/co-visit' && roles.canEditEvents())
           const CoVisitPdfButton(),
         if (location == '/territories' && roles.canEditTerritories())
           IconButton(

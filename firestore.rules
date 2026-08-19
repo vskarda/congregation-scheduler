@@ -151,17 +151,17 @@ service cloud.firestore {
         allow create: if hasRole('publishers')
           || (isSignedIn() && request.auth.uid == publisherId
               && request.resource.data.get('appointment', 'none') == 'none');
-        // E-mail is the login identity; it may only change on records of
-        // members without an app account (hasAccount != true).
+        // The e-mail here is contact data, not the sign-in identity: that one
+        // lives in Firebase Auth and only its owner can change it (the app
+        // uses verifyBeforeUpdateEmail, which mails the confirmation link to
+        // the new address). So it is edited like the phone number — by the
+        // publisher and by publisher-admins, account holders included, so an
+        // address nobody can reach any more can be corrected.
         // Appointment may not change on self-edits; get() with a default
         // tolerates legacy docs that predate the field (the client always
         // writes the full document).
         allow update: if (isSignedIn()
             && (request.auth.uid == publisherId || hasRole('publishers')))
-          && (!('email' in resource.data)
-              || request.resource.data.email == resource.data.email
-              || get(/databases/$(database)/documents/publishers/$(publisherId))
-                  .data.hasAccount != true)
           && (hasRole('publishers')
               || request.resource.data.get('appointment', 'none')
                   == resource.data.get('appointment', 'none'));

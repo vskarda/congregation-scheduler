@@ -459,6 +459,38 @@ class AppLocalizationsIt extends AppLocalizations {
   String get changePasswordSuccess => 'Password aggiornata.';
 
   @override
+  String get changeEmailAction => 'Cambia l\'e-mail di accesso';
+
+  @override
+  String get changeEmailBody =>
+      'Inviamo un link di conferma al nuovo indirizzo. Al vecchio non viene inviato nulla, quindi funziona anche se non riesci più ad aprire la vecchia casella.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Dovrai accedere di nuovo. La modifica ha effetto solo quando apri il link nella nuova casella: questo dispositivo ti disconnette e accedi con il nuovo indirizzo e la password attuale.';
+
+  @override
+  String get changeEmailNewLabel => 'Nuovo indirizzo e-mail';
+
+  @override
+  String get changeEmailPasswordLabel => 'Inserisci la password per confermare';
+
+  @override
+  String get changeEmailConfirm => 'Invia il link di conferma';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Link di conferma inviato a $email. Aprilo per completare la modifica, poi accedi di nuovo con il nuovo indirizzo.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Questo non è un indirizzo e-mail valido.';
+
+  @override
+  String get changeEmailSameAsCurrent =>
+      'Questo è già il tuo indirizzo di accesso.';
+
+  @override
   String get navInfoBoard => 'Bacheca';
 
   @override
@@ -589,6 +621,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'Apri Testimonianza pubblica, trova un turno e tocca l\'icona della mano per offrirti; toccala di nuovo per ritirarti. Se non vedi l\'icona, chiedi a un amministratore di attivare l\'abilitazione «Testimonianza pubblica» sul tuo profilo.';
 
   @override
+  String get helpChangeEmailTitle => 'Cambiare l\'e-mail con cui accedi';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Non riesci più ad aprire la casella con cui ti sei registrato? In Il mio profilo tocca \"Cambia l\'e-mail di accesso\", inserisci il nuovo indirizzo e la tua password. Il link di conferma arriva solo alla nuova casella: aprilo, poi accedi di nuovo con il nuovo indirizzo. Il campo e-mail più in alto nel profilo è solo un indirizzo di contatto; cambiarlo non cambia il modo in cui accedi.';
+
+  @override
   String get helpPwAssignTitle =>
       'Assegna i proclamatori alla testimonianza pubblica';
 
@@ -615,6 +654,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Mostra opzioni di amministrazione';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Indirizzo di contatto per la congregazione. Per cambiare l\'indirizzo con cui accedi, usa \"Cambia l\'e-mail di accesso\" qui sotto.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Indirizzo di contatto. Cambiarlo qui non cambia l\'indirizzo con cui questo proclamatore accede.';
 
   @override
   String get profilePhone => 'Numero di telefono';

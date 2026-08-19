@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/data/publishers_repository.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
+import '../auth/change_email.dart';
 import '../auth/change_password.dart';
 import '../auth/delete_account.dart';
 import 'away_periods_section.dart';
@@ -52,6 +53,7 @@ class ProfileScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
+                    ChangeEmailButton(),
                     ChangePasswordButton(),
                     DeleteAccountButton(),
                   ],

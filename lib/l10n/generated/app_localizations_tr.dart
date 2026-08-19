@@ -454,6 +454,37 @@ class AppLocalizationsTr extends AppLocalizations {
   String get changePasswordSuccess => 'Parola güncellendi.';
 
   @override
+  String get changeEmailAction => 'Giriş e-postasını değiştir';
+
+  @override
+  String get changeEmailBody =>
+      'Onay bağlantısını yeni adrese göndeririz. Eski adrese hiçbir şey gönderilmez; bu yüzden eski posta kutunuzu artık açamıyorsanız bile işe yarar.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Yeniden giriş yapmanız gerekecek. Değişiklik ancak yeni posta kutusundaki bağlantıyı açtığınızda geçerli olur — bu cihaz oturumunuzu kapatır ve yeni adres ile mevcut parolanızla giriş yaparsınız.';
+
+  @override
+  String get changeEmailNewLabel => 'Yeni e-posta adresi';
+
+  @override
+  String get changeEmailPasswordLabel => 'Onaylamak için parolanızı girin';
+
+  @override
+  String get changeEmailConfirm => 'Onay bağlantısı gönder';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Onay bağlantısı $email adresine gönderildi. Değişikliği tamamlamak için bağlantıyı açın, sonra yeni adresle tekrar giriş yapın.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'Bu geçerli bir e-posta adresi değil.';
+
+  @override
+  String get changeEmailSameAsCurrent => 'Bu zaten giriş adresiniz.';
+
+  @override
   String get navInfoBoard => 'İlan Panosu';
 
   @override
@@ -583,6 +614,13 @@ class AppLocalizationsTr extends AppLocalizations {
       'Halka Açık Şahitlik\'i açın, bir zaman aralığı bulun ve gönüllü olmak için el simgesine dokunun; geri çekilmek için tekrar dokunun. Simgeyi görmüyorsanız, bir yöneticiden kaydınızda \"Halka açık yerde şahitlik\" niteliğini açmasını isteyin.';
 
   @override
+  String get helpChangeEmailTitle => 'Giriş yaptığınız e-postayı değiştirme';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Kayıt olduğunuz posta kutusunu açamıyor musunuz? Profilim\'de \"Giriş e-postasını değiştir\" seçeneğine dokunun, yeni adresi ve parolanızı girin. Onay bağlantısı yalnızca yeni posta kutusuna gider — bağlantıyı açın, sonra yeni adresle tekrar giriş yapın. Profilde daha yukarıdaki e-posta alanı yalnızca bir iletişim adresidir; onu değiştirmek nasıl giriş yaptığınızı değiştirmez.';
+
+  @override
   String get helpPwAssignTitle => 'Müjdecileri halka açık şahitliğe atama';
 
   @override
@@ -609,6 +647,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Yönetici seçeneklerini göster';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Cemaat için iletişim adresi. Giriş yaptığınız adresi değiştirmek için aşağıdaki \"Giriş e-postasını değiştir\" seçeneğini kullanın.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'İletişim adresi. Burada değiştirilmesi bu müjdecinin giriş yaptığı adresi değiştirmez.';
 
   @override
   String get profilePhone => 'Telefon numarası';

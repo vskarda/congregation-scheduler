@@ -454,6 +454,37 @@ class AppLocalizationsPl extends AppLocalizations {
   String get changePasswordSuccess => 'Hasło zostało zmienione.';
 
   @override
+  String get changeEmailAction => 'Zmień e-mail logowania';
+
+  @override
+  String get changeEmailBody =>
+      'Wysyłamy link potwierdzający na nowy adres. Na stary adres nic nie jest wysyłane, więc zadziała to również wtedy, gdy nie możesz już otworzyć starej skrzynki.';
+
+  @override
+  String get changeEmailReloginWarning =>
+      'Trzeba będzie zalogować się ponownie. Zmiana zadziała dopiero po otwarciu linku w nowej skrzynce — to urządzenie wyloguje cię i zalogujesz się nowym adresem oraz dotychczasowym hasłem.';
+
+  @override
+  String get changeEmailNewLabel => 'Nowy adres e-mail';
+
+  @override
+  String get changeEmailPasswordLabel => 'Podaj hasło, aby potwierdzić';
+
+  @override
+  String get changeEmailConfirm => 'Wyślij link potwierdzający';
+
+  @override
+  String changeEmailSent(String email) {
+    return 'Link potwierdzający wysłany na $email. Otwórz go, aby dokończyć zmianę, a potem zaloguj się ponownie nowym adresem.';
+  }
+
+  @override
+  String get changeEmailInvalid => 'To nie jest prawidłowy adres e-mail.';
+
+  @override
+  String get changeEmailSameAsCurrent => 'To już jest twój adres logowania.';
+
+  @override
   String get navInfoBoard => 'Tablica ogłoszeń';
 
   @override
@@ -583,6 +614,13 @@ class AppLocalizationsPl extends AppLocalizations {
       'Otwórz Świadczenie publiczne, znajdź termin i dotknij ikony dłoni, aby się zgłosić; dotknij ponownie, aby się wycofać. Jeśli nie widzisz ikony, poproś administratora o włączenie kwalifikacji «Świadczenie publiczne» w twojej karcie.';
 
   @override
+  String get helpChangeEmailTitle => 'Zmiana adresu e-mail do logowania';
+
+  @override
+  String get helpChangeEmailBody =>
+      'Nie możesz otworzyć skrzynki, na którą się zarejestrowałeś? W Mój profil dotknij „Zmień e-mail logowania”, podaj nowy adres i swoje hasło. Link potwierdzający trafia tylko do nowej skrzynki — otwórz go, a potem zaloguj się ponownie nowym adresem. Pole e-mail wyżej w profilu to tylko adres kontaktowy; jego zmiana nie zmienia sposobu logowania.';
+
+  @override
   String get helpPwAssignTitle =>
       'Przydziel głosicieli do świadczenia publicznego';
 
@@ -609,6 +647,14 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get adminToggleShow => 'Pokaż opcje administratora';
+
+  @override
+  String get profileEmailSelfHint =>
+      'Adres kontaktowy dla zboru. Aby zmienić adres, którym się logujesz, użyj poniżej „Zmień e-mail logowania”.';
+
+  @override
+  String get profileEmailAdminHint =>
+      'Adres kontaktowy. Zmiana tutaj nie zmienia adresu, którym loguje się ten głosiciel.';
 
   @override
   String get profilePhone => 'Numer telefonu';

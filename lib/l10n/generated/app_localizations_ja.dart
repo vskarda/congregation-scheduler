@@ -444,6 +444,37 @@ class AppLocalizationsJa extends AppLocalizations {
   String get changePasswordSuccess => 'パスワードを更新しました。';
 
   @override
+  String get changeEmailAction => 'ログイン用メールアドレスを変更';
+
+  @override
+  String get changeEmailBody =>
+      '確認リンクを新しいアドレスに送信します。古いアドレスには何も送られないので、古いメールボックスを開けなくなった場合でも変更できます。';
+
+  @override
+  String get changeEmailReloginWarning =>
+      '変更後は再度ログインが必要です。新しいメールボックスでリンクを開いたときに初めて変更が反映され、この端末からはログアウトされ、新しいアドレスと現在のパスワードでログインします。';
+
+  @override
+  String get changeEmailNewLabel => '新しいメールアドレス';
+
+  @override
+  String get changeEmailPasswordLabel => '確認のためパスワードを入力してください';
+
+  @override
+  String get changeEmailConfirm => '確認リンクを送信';
+
+  @override
+  String changeEmailSent(String email) {
+    return '$email に確認リンクを送信しました。リンクを開いて変更を完了し、新しいアドレスで再度ログインしてください。';
+  }
+
+  @override
+  String get changeEmailInvalid => '有効なメールアドレスではありません。';
+
+  @override
+  String get changeEmailSameAsCurrent => 'これはすでに現在のログイン用アドレスです。';
+
+  @override
   String get navInfoBoard => '掲示板';
 
   @override
@@ -572,6 +603,13 @@ class AppLocalizationsJa extends AppLocalizations {
       '公の証しを開き、時間帯を見つけて手のアイコンをタップすると志願できます。もう一度タップすると取り消せます。アイコンが見当たらない場合は、管理者に自分の記録の「公の証し」の資格を有効にしてもらってください。';
 
   @override
+  String get helpChangeEmailTitle => 'ログインに使うメールアドレスを変更する';
+
+  @override
+  String get helpChangeEmailBody =>
+      '登録に使ったメールボックスを開けなくなりましたか。「マイプロフィール」で「ログイン用メールアドレスを変更」をタップし、新しいアドレスとパスワードを入力してください。確認リンクは新しいメールボックスにのみ届きます。リンクを開いたあと、新しいアドレスで再度ログインしてください。プロフィール上部のメール欄は連絡先アドレスにすぎず、変更してもログイン方法は変わりません。';
+
+  @override
   String get helpPwAssignTitle => '伝道者を公の証しに割り当てる';
 
   @override
@@ -597,6 +635,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get adminToggleShow => '管理オプションを表示';
+
+  @override
+  String get profileEmailSelfHint =>
+      '会衆用の連絡先アドレスです。ログインに使うアドレスを変更するには、下の「ログイン用メールアドレスを変更」を使ってください。';
+
+  @override
+  String get profileEmailAdminHint =>
+      '連絡先アドレスです。ここで変更しても、この伝道者がログインに使うアドレスは変わりません。';
 
   @override
   String get profilePhone => '電話番号';

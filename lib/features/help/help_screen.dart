@@ -48,6 +48,11 @@ class HelpScreen extends ConsumerWidget {
               title: l10n.helpPwApplyTitle,
               body: l10n.helpPwApplyBody,
             ),
+            _HelpTopic(
+              icon: Icons.alternate_email,
+              title: l10n.helpChangeEmailTitle,
+              body: l10n.helpChangeEmailBody,
+            ),
             if (roles.any) ...[
               const Divider(height: 32),
               _SectionHeader(l10n.helpAdminSection),
