@@ -49,13 +49,13 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot '_tools.ps1')
 
 $repo = Get-RepoRoot
-$appManifest = Join-Path $repo 'android\app\src\main\AndroidManifest.xml'
+$appManifest = Join-Path $repo 'android/app/src/main/AndroidManifest.xml'
 if (-not (Test-Path $appManifest)) { throw "Missing $appManifest." }
 
 # ---------------------------------------------------------------- versions --
 
 if (-not $AgpVersion) {
-    $settings = Get-Content (Join-Path $repo 'android\settings.gradle.kts') -Raw
+    $settings = Get-Content (Join-Path $repo 'android/settings.gradle.kts') -Raw
     $m = [regex]::Match($settings,
         'id\("com\.android\.application"\)\s+version\s+"([\d.]+)"')
     if (-not $m.Success) {
@@ -110,7 +110,8 @@ foreach ($a in $artifacts) {
     $jarPaths += $path
 }
 if ($downloaded -eq 0) { Write-Host "    jars cached in $cache" }
-$classpath = $jarPaths -join ';'
+# ';' on Windows, ':' elsewhere — this script also runs on the Linux CI runner.
+$classpath = $jarPaths -join [IO.Path]::PathSeparator
 
 # -------------------------------------------------------- library manifest --
 
@@ -121,13 +122,13 @@ $openFilexVersion = $m.Groups[1].Value
 
 $pubRoots = @()
 if ($env:PUB_CACHE) { $pubRoots += $env:PUB_CACHE }
-$pubRoots += (Join-Path $env:LOCALAPPDATA 'Pub\Cache')
-$pubRoots += (Join-Path $env:USERPROFILE '.pub-cache')
+if ($env:LOCALAPPDATA) { $pubRoots += (Join-Path $env:LOCALAPPDATA 'Pub/Cache') }
+$pubRoots += (Join-Path (Get-UserHome) '.pub-cache')
 
 $libSource = $null
 foreach ($root in $pubRoots) {
     $candidate = Join-Path $root `
-        "hosted\pub.dev\open_filex-$openFilexVersion\android\src\main\AndroidManifest.xml"
+        "hosted/pub.dev/open_filex-$openFilexVersion/android/src/main/AndroidManifest.xml"
     if (Test-Path $candidate) { $libSource = $candidate; break }
 }
 if (-not $libSource) {

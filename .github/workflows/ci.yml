@@ -46,6 +46,47 @@ jobs:
       - name: Test
         run: flutter test
 
+  # release.yml gates this too, but only on a release run — by which point a
+  # non-compliant build has already been made. open_filex declares
+  # READ_MEDIA_* in its library manifest and any dependency bump can carry
+  # them into the merged manifest, so the check belongs on every PR.
+  #
+  # Reuses scripts/verify-manifest.ps1 (pwsh is preinstalled on the runners)
+  # rather than reimplementing the merge in bash: one source of truth, and the
+  # local script stays honest because CI exercises it.
+  android-manifest:
+    name: Android manifest permissions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      # The manifest-merger is a Java tool.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # Populates ~/.pub-cache, where the script reads open_filex's library
+      # manifest at the version pinned in pubspec.lock.
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Cache manifest-merger jars
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/congregation-scheduler-tools
+          key: manifest-merger-${{ hashFiles('android/settings.gradle.kts') }}
+
+      - name: Verify no broad media permissions in the merged manifest
+        shell: pwsh
+        run: ./scripts/verify-manifest.ps1
+
   firestore-rules:
     name: Firestore rules tests
     runs-on: ubuntu-latest

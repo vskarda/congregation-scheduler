@@ -27,19 +27,29 @@ function Get-RepoRoot {
     return (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 }
 
+function Get-UserHome {
+    <#
+    .SYNOPSIS
+    The user's home directory, on Windows and on the Linux CI runners alike.
+    #>
+    if ($env:USERPROFILE) { return $env:USERPROFILE }
+    return $HOME
+}
+
 function Get-FlutterExe {
     <#
     .SYNOPSIS
-    Path to flutter.bat: PATH first, then the standard user-profile install.
+    Path to the flutter launcher: PATH first, then the user-profile install.
     #>
     $onPath = Get-Command flutter -ErrorAction SilentlyContinue
     if ($onPath) { return $onPath.Source }
 
-    $profileCopy = Join-Path $env:USERPROFILE 'flutter\bin\flutter.bat'
+    # This dev box has Flutter under the user profile and not on PATH for
+    # shells opened before the install. On CI it is always on PATH.
+    $profileCopy = Join-Path (Get-UserHome) 'flutter/bin/flutter.bat'
     if (Test-Path $profileCopy) { return $profileCopy }
 
-    throw 'Flutter not found. Install it, or put flutter.bat on PATH ' +
-          "(looked for $profileCopy)."
+    throw 'Flutter not found. Install it, or put flutter on PATH.'
 }
 
 function Get-JavaHome {
@@ -48,7 +58,13 @@ function Get-JavaHome {
     A JDK/JRE home: $env:JAVA_HOME, then java on PATH, then the newest
     portable Temurin build under ~/java.
     #>
-    if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME 'bin\java.exe'))) {
+    # $IsWindows exists only in PowerShell 6+; 5.1 is Windows by definition,
+    # and StrictMode would throw on the bare reference.
+    $onWindows = $true
+    if (Test-Path Variable:IsWindows) { $onWindows = $IsWindows }
+    $exe = if ($onWindows) { 'java.exe' } else { 'java' }
+
+    if ($env:JAVA_HOME -and (Test-Path (Join-Path $env:JAVA_HOME "bin/$exe"))) {
         return $env:JAVA_HOME
     }
 
@@ -57,18 +73,19 @@ function Get-JavaHome {
         return (Split-Path -Parent (Split-Path -Parent $onPath.Source))
     }
 
-    # Portable JRE, e.g. ~/java/jdk-21.0.11+10-jre. Newest name wins.
-    $portable = Get-ChildItem (Join-Path $env:USERPROFILE 'java') -Directory `
+    # Portable JRE, e.g. ~/java/jdk-21.0.11+10-jre. Globbed, not pinned: the
+    # directory carries its version. Newest name wins.
+    $portable = Get-ChildItem (Join-Path (Get-UserHome) 'java') -Directory `
         -Filter 'jdk-*' -ErrorAction SilentlyContinue |
         Sort-Object Name -Descending
     foreach ($dir in $portable) {
-        if (Test-Path (Join-Path $dir.FullName 'bin\java.exe')) {
+        if (Test-Path (Join-Path $dir.FullName "bin/$exe")) {
             return $dir.FullName
         }
     }
 
     throw 'No JDK found. Set JAVA_HOME, put java on PATH, or unpack a ' +
-          "portable Temurin build under $env:USERPROFILE\java\jdk-<version>."
+          'portable Temurin build under ~/java/jdk-<version>.'
 }
 
 function Use-JavaHome {
@@ -96,7 +113,9 @@ function Get-ToolCacheDir {
     #>
     param([string]$Name)
 
-    $dir = Join-Path $env:LOCALAPPDATA 'congregation-scheduler-tools'
+    $base = $env:LOCALAPPDATA
+    if (-not $base) { $base = Join-Path (Get-UserHome) '.cache' }
+    $dir = Join-Path $base 'congregation-scheduler-tools'
     if ($Name) { $dir = Join-Path $dir $Name }
     if (-not (Test-Path $dir)) {
         New-Item -ItemType Directory -Force -Path $dir | Out-Null

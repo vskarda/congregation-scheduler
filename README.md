@@ -43,11 +43,18 @@ flutter run -d chrome         # or an Android/iOS device
 
 ## Tests
 
-```sh
+```powershell
 flutter test                  # unit + widget tests
-cd rules-tests && npm install && npm test   # Firestore rules (needs Java 11+)
+scripts\rules-test.ps1        # Firestore rules against the emulator
+scripts\verify-manifest.ps1   # no broad media permissions in the merged manifest
+scripts\serve-web.ps1         # build + serve the web app to click through
+scripts\shot.ps1              # render a login-gated screen to a PNG
 scripts\live-test.ps1         # against a real congregation (needs .credits/)
 ```
+
+The scripts locate their own toolchain — this machine has no Android SDK and
+no Java on PATH — and say what to install when they cannot. What each one
+covers, and what CI does *not*, is in [docs/VERIFYING.md](docs/VERIFYING.md).
 
 The live suite verifies a new feature against real rules and real data; see
 [docs/TESTING-LIVE.md](docs/TESTING-LIVE.md). It skips without credentials.
