@@ -142,6 +142,19 @@ final weekendPermanentAssignmentsProvider =
       .map((c) => c.permanentAssignments);
 });
 
+/// One-shot twin of the two providers above, for the month PDF export.
+///
+/// Both are StreamProviders, and a StreamProvider's `.future` only completes
+/// while something is listening. The screens watch them from inside a
+/// conditional branch (the weekend card is built only when names are shown),
+/// so the export cannot rely on a listener being there.
+final permanentAssignmentsOnceProvider =
+    FutureProvider.family<List<CustomAssignment>, String>((ref, docId) async {
+  final config = await ref.watch(scheduleConfigRepositoryProvider)
+      .getConfig(docId);
+  return config.permanentAssignments;
+});
+
 /// Configuration document of one schedule, for the per-week visibility
 /// flags. Kept apart from the two permanent-assignment providers above so
 /// those keep their `.future` behaviour for the PDF export.

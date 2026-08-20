@@ -26,6 +26,15 @@ class PublishersRepository {
         return list;
       });
 
+  /// One-shot twin of [watchAll], for callbacks that need the roster once
+  /// (the PDF exports) rather than a subscription.
+  Future<List<Publisher>> getAll() async {
+    final snap = await _col.get();
+    final list = snap.docs.map(_fromDoc).toList();
+    list.sort((a, b) => collate(a.listName, b.listName));
+    return list;
+  }
+
   Stream<Publisher?> watchOne(String id) => _col
       .doc(id)
       .snapshots()
@@ -197,6 +206,21 @@ final formerPublishersProvider = StreamProvider<List<FormerPublisher>>((ref) {
 /// Quick id -> publisher lookup for rendering assignment names.
 final publishersByIdProvider = Provider<Map<String, Publisher>>((ref) {
   final all = ref.watch(allPublishersProvider).value ?? const [];
+  return {for (final p in all) p.id: p};
+});
+
+/// One-shot twin of [publishersByIdProvider], for the PDF exports.
+///
+/// [allPublishersProvider] is a StreamProvider, and a StreamProvider's
+/// `.future` only completes while something is listening to it. On the
+/// schedule screens the only listener is `AssignmentText`, which skips the
+/// watch when an assignment is empty — so exporting a month that has nothing
+/// assigned yet (exactly when a blank sheet is wanted) would otherwise wait
+/// forever. Mirrors the verified guard on [allPublishersProvider].
+final publishersByIdOnceProvider =
+    FutureProvider<Map<String, Publisher>>((ref) async {
+  if (!ref.watch(isVerifiedProvider)) return const {};
+  final all = await ref.watch(publishersRepositoryProvider).getAll();
   return {for (final p in all) p.id: p};
 });
 

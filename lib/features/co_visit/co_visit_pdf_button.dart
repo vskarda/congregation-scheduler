@@ -72,10 +72,10 @@ class _CoVisitPdfButtonState extends ConsumerState<CoVisitPdfButton> {
 
     setState(() => _busy = true);
     try {
-      // The publisher stream may not have produced a value yet on a cold
-      // start; the names on the sheet come from it.
-      await ref.read(allPublishersProvider.future);
-      final byId = ref.read(publishersByIdProvider);
+      // One-shot: the streaming roster only resolves while something listens
+      // to it, and on this screen that is AssignmentText, which skips the
+      // watch when an assignment is empty.
+      final byId = await ref.read(publishersByIdOnceProvider.future);
       final meta =
           ref.read(congregationMetaProvider).value ?? const CongregationMeta();
       final monday = parseDateKey(weekId);

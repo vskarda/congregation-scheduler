@@ -40,10 +40,13 @@ class _SchedulePdfButtonState extends ConsumerState<SchedulePdfButton> {
       final month = DateTime(monday.year, monday.month, 1);
       final mondays = mondaysInMonth(month);
 
-      // Ensure the publishers stream has produced a value before reading the
-      // derived id->publisher map (it is empty on a cold start).
-      await ref.read(allPublishersProvider.future);
-      final byId = ref.read(publishersByIdProvider);
+      // One-shot reads throughout: this button must not depend on which
+      // providers the screen underneath happens to be listening to. The
+      // streaming twins only resolve while something watches them, and both
+      // the roster (AssignmentText, skipped on empty assignments) and the
+      // permanent assignments (built only when names are shown) can go
+      // unwatched on exactly the months worth exporting blank.
+      final byId = await ref.read(publishersByIdOnceProvider.future);
       final fonts = await loadPdfFonts();
 
       final bytes = switch (widget.kind) {
@@ -62,8 +65,8 @@ class _SchedulePdfButtonState extends ConsumerState<SchedulePdfButton> {
                             ?.lmmClassCount ??
                         1)
                     .clamp(1, 3),
-            permanentAssignments:
-                await ref.read(lmmPermanentAssignmentsProvider.future),
+            permanentAssignments: await ref.read(
+                permanentAssignmentsOnceProvider(ScheduleConfigDoc.lmm).future),
             l10n: l10n,
             locale: locale,
             fonts: fonts,
@@ -78,8 +81,9 @@ class _SchedulePdfButtonState extends ConsumerState<SchedulePdfButton> {
                 w.id: w,
             },
             publishersById: byId,
-            permanentAssignments:
-                await ref.read(weekendPermanentAssignmentsProvider.future),
+            permanentAssignments: await ref.read(
+                permanentAssignmentsOnceProvider(ScheduleConfigDoc.weekend)
+                    .future),
             l10n: l10n,
             locale: locale,
             fonts: fonts,

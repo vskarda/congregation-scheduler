@@ -47,8 +47,11 @@ class _PublisherRecordViewState extends ConsumerState<PublisherRecordView> {
       final publisher =
           await ref.read(publisherProvider(widget.publisherId).future);
       if (publisher == null) throw StateError('publisher not found');
-      final private =
-          await ref.read(publisherPrivateProvider(widget.publisherId).future);
+      // The one-shot twin, not publisherPrivateProvider: nothing on this tab
+      // listens to the streaming one, and an unlistened StreamProvider's
+      // `.future` never completes.
+      final private = await ref
+          .read(publisherPrivateOnceProvider(widget.publisherId).future);
       // The S-21 card covers the selected service year (on top) and the one
       // before it (beneath), following the on-screen year dropdown.
       final years = [
