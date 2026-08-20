@@ -47,6 +47,12 @@ app.*.map.json
 # Local test credentials (never commit)
 .credits/
 
+# Screenshot probes of login-gated screens (scripts\shot.ps1). The harness and
+# the .shot.dart files are committed; the PNGs are not — Flutter renders
+# differently here than on Linux CI, so they are a picture to look at, never a
+# golden to compare against.
+test/shots/out/
+
 # Congregation backups: real personal data (names, addresses, phones,
 # birth dates, emergency notes) — keep them off the remote.
 congregation-backup-*.json
