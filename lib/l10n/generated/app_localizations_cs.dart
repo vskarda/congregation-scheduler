@@ -836,6 +836,28 @@ class AppLocalizationsCs extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Zkontrolujte, co se vyexportuje';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'Export zahrne $count záznamů, které jsou právě v seznamu.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing z $total zvěstovatelů ve sboru je odfiltrováno.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count záznamů v seznamu nejsou aktivní zvěstovatelé — služební postavení „-“ nebo se přestěhovali.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Zapněte filtr „Zvěstovatelé“ a ostatní zrušte, aby export zahrnul všechny.';
+
+  @override
   String get lmmScheduleTitle => 'Program shromáždění v týdnu';
 
   @override
@@ -1010,6 +1032,9 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Do toho dne zůstává plnohodnotným členem: programy, seznamy zpráv i přístup do aplikace se nemění.';
+
+  @override
+  String get pubFilterPublishers => 'Zvěstovatelé';
 
   @override
   String get pubFilterPioneers => 'Průkopníci';

@@ -836,6 +836,28 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Neyin dışa aktarılacağını kontrol edin';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'Dışa aktarma, şu anda listelenen $count kaydı kapsıyor.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return 'Cemaatteki $total müjdeciden $missing tanesi filtre dışında kaldı.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return 'Listelenen $count kayıt etkin müjdeci değil — hizmet durumu “-” veya taşınmış.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Hepsini kapsamak için “Müjdeciler” filtresini açın ve diğerlerini temizleyin.';
+
+  @override
   String get lmmScheduleTitle => 'Hafta İçi İbadeti Programı';
 
   @override
@@ -1010,6 +1032,9 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'O güne kadar tam üye olarak kalır: programlar, rapor listeleri ve uygulama erişimi değişmez.';
+
+  @override
+  String get pubFilterPublishers => 'Müjdeciler';
 
   @override
   String get pubFilterPioneers => 'Öncüler';

@@ -847,6 +847,28 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Vérifiez ce qui sera exporté';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'L\'export porte sur les $count fiches actuellement affichées.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing des $total proclamateurs de l\'assemblée sont filtrés.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count fiches affichées ne sont pas des proclamateurs actifs : situation de service « - » ou déménagés.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Activez le filtre « Proclamateurs » et effacez les autres pour tous les couvrir.';
+
+  @override
   String get lmmScheduleTitle => 'Programme de la réunion de semaine';
 
   @override
@@ -1021,6 +1043,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Jusqu\'à ce jour, il reste membre à part entière : les programmes, les listes de rapports et l\'accès à l\'application ne changent pas.';
+
+  @override
+  String get pubFilterPublishers => 'Proclamateurs';
 
   @override
   String get pubFilterPioneers => 'Pionniers';

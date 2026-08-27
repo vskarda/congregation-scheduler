@@ -13,6 +13,7 @@ import 'gender_style.dart';
 import 'invite_dialog.dart';
 import 'publisher_badges.dart';
 import 'publishers_pdf_button.dart';
+import 'roster_export_scope.dart';
 import 's21/s21_batch_pdf_button.dart';
 import 's21/s21_import_screen.dart';
 
@@ -30,6 +31,7 @@ class _AdminPublishersScreenState
   bool _showMoved = false;
 
   // Overview filters (null / false = "any").
+  bool _publishersOnly = false;
   bool _pioneerOnly = false;
   Gender? _genderFilter;
   Appointment? _appointmentFilter;
@@ -72,6 +74,7 @@ class _AdminPublishersScreenState
   }
 
   bool get _anyFilterActive =>
+      _publishersOnly ||
       _pioneerOnly ||
       _genderFilter != null ||
       _appointmentFilter != null ||
@@ -80,6 +83,7 @@ class _AdminPublishersScreenState
       _showMoved;
 
   void _clearFilters() => setState(() {
+        _publishersOnly = false;
         _pioneerOnly = false;
         _genderFilter = null;
         _appointmentFilter = null;
@@ -214,6 +218,9 @@ class _AdminPublishersScreenState
           final hasMoved = all.any((p) => p.hasMovedBy(today));
           final matched = all.where((p) {
             if (p.hasMovedBy(today) && !_showMoved) return false;
+            if (_publishersOnly && p.status == PublisherStatus.none) {
+              return false;
+            }
             if (_pioneerOnly && !p.isPioneer) return false;
             if (_genderFilter != null && p.gender != _genderFilter) {
               return false;
@@ -239,6 +246,11 @@ class _AdminPublishersScreenState
             ...matched.where((p) => !p.hasMovedBy(today)),
             ...matched.where((p) => p.hasMovedBy(today)),
           ];
+          // What the bulk exports would actually cover. Compared against the
+          // whole roster rather than read off the chips, so a search term
+          // narrows it just as a filter does.
+          final exportScope = RosterExportScope.of(
+              all: all, listed: filtered, today: today);
           return Column(
             children: [
               Padding(
@@ -271,9 +283,11 @@ class _AdminPublishersScreenState
                         icon: const Icon(Icons.upload_file_outlined),
                       ),
                     if (canAdminS21)
-                      S21BatchPdfButton(publishers: filtered),
+                      S21BatchPdfButton(
+                          publishers: filtered, scope: exportScope),
                     if (canExportPdf)
-                      PublishersPdfButton(publishers: filtered),
+                      PublishersPdfButton(
+                          publishers: filtered, scope: exportScope),
                   ],
                 ),
               ),
@@ -285,6 +299,11 @@ class _AdminPublishersScreenState
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     _groupFilterChip(l10n, groups),
+                    FilterChip(
+                      label: Text(l10n.pubFilterPublishers),
+                      selected: _publishersOnly,
+                      onSelected: (v) => setState(() => _publishersOnly = v),
+                    ),
                     FilterChip(
                       label: Text(l10n.pubFilterPioneers),
                       selected: _pioneerOnly,

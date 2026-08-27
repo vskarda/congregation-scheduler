@@ -9,6 +9,7 @@ import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/dates.dart';
 import '../info_board/file_opener/file_opener.dart';
 import 'publishers_pdf.dart';
+import 'roster_export_scope.dart';
 
 /// Private profiles fetched per round; see
 /// [PublishersRepository.getPrivatesBatched] for why they are batched.
@@ -17,13 +18,18 @@ const _privateFetchBatch = 10;
 /// Roster action for publisher-admins: exports the publishers currently listed
 /// (search and filters included) as a PDF table of their profile details.
 class PublishersPdfButton extends ConsumerStatefulWidget {
-  const PublishersPdfButton({super.key, required this.publishers});
+  const PublishersPdfButton(
+      {super.key, required this.publishers, required this.scope});
 
   /// The list the screen is showing, already filtered and sorted. Passed in
   /// rather than re-read from a provider so the export matches what the admin
   /// sees — and because reading a provider's future inside a callback has no
   /// live listener to keep it alive.
   final List<Publisher> publishers;
+
+  /// How [publishers] relates to the whole roster, so the confirmation can
+  /// warn when the file will not simply hold every publisher.
+  final RosterExportScope scope;
 
   @override
   ConsumerState<PublishersPdfButton> createState() =>
@@ -37,8 +43,17 @@ class _PublishersPdfButtonState extends ConsumerState<PublishersPdfButton> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        scrollable: true,
         title: Text(l10n.pubPdfConfirmTitle),
-        content: Text(l10n.pubPdfConfirmBody(widget.publishers.length)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!widget.scope.isEveryPublisher)
+              RosterExportScopeWarning(scope: widget.scope),
+            Text(l10n.pubPdfConfirmBody(widget.publishers.length)),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),

@@ -845,6 +845,28 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Prüfe, was exportiert wird';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'Der Export umfasst die $count gerade aufgelisteten Einträge.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing von $total Verkündigern der Versammlung sind ausgefiltert.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count aufgelistete Einträge sind keine aktiven Verkündiger — Dienststatus «-» oder weggezogen.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Schalte den Filter «Verkündiger» ein und entferne die anderen, um alle zu erfassen.';
+
+  @override
   String get lmmScheduleTitle => 'Zusammenkunft unter der Woche';
 
   @override
@@ -1020,6 +1042,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Bis zu diesem Tag bleibt er vollwertiges Mitglied: Pläne, Berichtslisten und der Zugriff auf die App ändern sich nicht.';
+
+  @override
+  String get pubFilterPublishers => 'Verkündiger';
 
   @override
   String get pubFilterPioneers => 'Pioniere';

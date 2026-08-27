@@ -836,6 +836,28 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Sprawdź, co zostanie wyeksportowane';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'Eksport obejmie $count rekordów obecnie widocznych na liście.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing z $total głosicieli w zborze jest odfiltrowanych.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count rekordów na liście to nie są czynni głosiciele — rodzaj służby «-» lub osoby przeniesione.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Włącz filtr «Głosiciele» i wyczyść pozostałe, aby objąć wszystkich.';
+
+  @override
   String get lmmScheduleTitle => 'Plan zebrań w tygodniu';
 
   @override
@@ -1010,6 +1032,9 @@ class AppLocalizationsPl extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Do tego dnia pozostaje pełnoprawnym członkiem: plany, listy sprawozdań i dostęp do aplikacji nie zmieniają się.';
+
+  @override
+  String get pubFilterPublishers => 'Głosiciele';
 
   @override
   String get pubFilterPioneers => 'Pionierzy';

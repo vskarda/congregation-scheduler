@@ -2,6 +2,7 @@ import 'package:congregation_scheduler/core/data/congregation_repository.dart';
 import 'package:congregation_scheduler/core/data/reports_repository.dart';
 import 'package:congregation_scheduler/core/firebase/firebase_providers.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
+import 'package:congregation_scheduler/features/publishers/roster_export_scope.dart';
 import 'package:congregation_scheduler/features/publishers/s21/s21_batch_pdf_button.dart';
 import 'package:congregation_scheduler/l10n/generated/app_localizations.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -34,7 +35,15 @@ void main() {
         locale: const Locale('en'),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(body: S21BatchPdfButton(publishers: list)),
+        home: Scaffold(
+          body: S21BatchPdfButton(
+            publishers: list,
+            // Whether the listing is the whole roster is the export-scope
+            // warning's business; see export_scope_warning_test.dart.
+            scope: RosterExportScope.of(
+                all: list, listed: list, today: DateTime.now()),
+          ),
+        ),
       ),
     );
   }

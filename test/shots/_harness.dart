@@ -40,11 +40,15 @@ Widget appFrame(Widget screen, {Locale locale = const Locale('en')}) =>
 /// be a parameter here because Riverpod 3 does not export the `Override`
 /// type, so an explicitly typed `List<Override>` fails to compile. Building
 /// the scope at the call site lets the list literal infer instead.
+///
+/// Pass [after] to drive the screen before the picture is taken -- opening a
+/// dialog, say, which is otherwise unreachable from a bare pump.
 Future<void> shoot(
   WidgetTester tester,
   Widget app, {
   required String name,
   Size size = const Size(1000, 620),
+  Future<void> Function(WidgetTester tester)? after,
 }) async {
   tester.view.physicalSize = size;
   tester.view.devicePixelRatio = 1.0;
@@ -53,6 +57,10 @@ Future<void> shoot(
 
   await tester.pumpWidget(app);
   await tester.pumpAndSettle();
+  if (after != null) {
+    await after(tester);
+    await tester.pumpAndSettle();
+  }
 
   await expectLater(
     find.byType(MaterialApp),

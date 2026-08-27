@@ -823,6 +823,27 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'エクスポートされる内容をご確認ください';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return '現在表示されている $count 件の記録がエクスポートされます。';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '会衆の伝道者 $total 人のうち $missing 人が絞り込みで除外されています。';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '表示中の $count 件は現役の伝道者ではありません（奉仕の状況が「-」、または転出）。';
+  }
+
+  @override
+  String get pubExportScopeHint => '全員を対象にするには、「伝道者」フィルターをオンにし、ほかを解除してください。';
+
+  @override
   String get lmmScheduleTitle => '週日の集会の予定';
 
   @override
@@ -994,6 +1015,9 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'その日までは通常の成員のままです。予定、報告リスト、アプリの利用はそのままです。';
+
+  @override
+  String get pubFilterPublishers => '伝道者';
 
   @override
   String get pubFilterPioneers => '開拓者';

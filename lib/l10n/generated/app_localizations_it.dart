@@ -843,6 +843,28 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Controlla che cosa verrà esportato';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'L\'esportazione comprende i $count record attualmente elencati.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing dei $total proclamatori della congregazione sono esclusi dal filtro.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count record elencati non sono proclamatori attivi: condizione di servizio «-» o trasferiti.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Attiva il filtro «Proclamatori» e cancella gli altri per comprenderli tutti.';
+
+  @override
   String get lmmScheduleTitle => 'Programma dell’adunanza infrasettimanale';
 
   @override
@@ -1017,6 +1039,9 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Fino a quel giorno resta membro a tutti gli effetti: programmi, elenchi dei rapporti e accesso all\'app non cambiano.';
+
+  @override
+  String get pubFilterPublishers => 'Proclamatori';
 
   @override
   String get pubFilterPioneers => 'Pionieri';

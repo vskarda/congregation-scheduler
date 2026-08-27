@@ -847,6 +847,28 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get pubExportScopeTitle => 'Compruebe qué se va a exportar';
+
+  @override
+  String pubExportScopeListed(int count) {
+    return 'La exportación incluye los $count registros que aparecen ahora en la lista.';
+  }
+
+  @override
+  String pubExportScopeMissing(int missing, int total) {
+    return '$missing de los $total publicadores de la congregación quedan fuera del filtro.';
+  }
+
+  @override
+  String pubExportScopeExtra(int count) {
+    return '$count registros de la lista no son publicadores activos: situación de servicio «-» o se mudaron.';
+  }
+
+  @override
+  String get pubExportScopeHint =>
+      'Active el filtro «Publicadores» y borre los demás para incluirlos a todos.';
+
+  @override
   String get lmmScheduleTitle => 'Programa para la reunión de entre semana';
 
   @override
@@ -1022,6 +1044,9 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get pubAdminMovePendingHint =>
       'Hasta ese día sigue siendo miembro pleno: los programas, las listas de informes y el acceso a la aplicación no cambian.';
+
+  @override
+  String get pubFilterPublishers => 'Publicadores';
 
   @override
   String get pubFilterPioneers => 'Precursores';

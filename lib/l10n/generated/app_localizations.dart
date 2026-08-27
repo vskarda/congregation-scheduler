@@ -1626,6 +1626,36 @@ abstract class AppLocalizations {
   /// **'The PDF will contain personal data of {count} publishers — addresses, phone numbers, birth and baptism dates and emergency notes. Store it securely and share it only with those who need it.'**
   String pubPdfConfirmBody(int count);
 
+  /// No description provided for @pubExportScopeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check what will be exported'**
+  String get pubExportScopeTitle;
+
+  /// No description provided for @pubExportScopeListed.
+  ///
+  /// In en, this message translates to:
+  /// **'The export covers the {count} records listed right now.'**
+  String pubExportScopeListed(int count);
+
+  /// No description provided for @pubExportScopeMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'{missing} of the congregation’s {total} publishers are filtered out.'**
+  String pubExportScopeMissing(int missing, int total);
+
+  /// No description provided for @pubExportScopeExtra.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} listed records are not active publishers — service status “-”, or moved away.'**
+  String pubExportScopeExtra(int count);
+
+  /// No description provided for @pubExportScopeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on the “Publishers” filter and clear the others to cover everyone.'**
+  String get pubExportScopeHint;
+
   /// No description provided for @lmmScheduleTitle.
   ///
   /// In en, this message translates to:
@@ -1931,6 +1961,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Until that day they stay a full member: schedules, report lists and app access are unchanged.'**
   String get pubAdminMovePendingHint;
+
+  /// No description provided for @pubFilterPublishers.
+  ///
+  /// In en, this message translates to:
+  /// **'Publishers'**
+  String get pubFilterPublishers;
 
   /// No description provided for @pubFilterPioneers.
   ///

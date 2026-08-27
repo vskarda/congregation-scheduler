@@ -9,6 +9,7 @@ import '../../../core/models/models.dart';
 import '../../../core/pdf/pdf_fonts.dart';
 import '../../../core/utils/dates.dart';
 import '../../info_board/file_opener/file_opener.dart';
+import '../roster_export_scope.dart';
 import 's21_batch_export.dart';
 import 's21_pdf.dart';
 
@@ -17,13 +18,18 @@ import 's21_pdf.dart';
 /// each. The card set covers the running service year and the one before it,
 /// matching the two-year card the single-publisher export produces.
 class S21BatchPdfButton extends ConsumerStatefulWidget {
-  const S21BatchPdfButton({super.key, required this.publishers});
+  const S21BatchPdfButton(
+      {super.key, required this.publishers, required this.scope});
 
   /// The list the screen is showing, already filtered and sorted. Passed in
   /// rather than re-read from a provider so the export matches what the admin
   /// sees — and because reading a provider's future inside a callback has no
   /// live listener to keep it alive.
   final List<Publisher> publishers;
+
+  /// How [publishers] relates to the whole roster, so the confirmation can
+  /// warn when the file will not simply hold every publisher.
+  final RosterExportScope scope;
 
   @override
   ConsumerState<S21BatchPdfButton> createState() => _S21BatchPdfButtonState();
@@ -51,9 +57,17 @@ class _S21BatchPdfButtonState extends ConsumerState<S21BatchPdfButton> {
     final ok = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
+        scrollable: true,
         title: Text(l10n.s21BatchConfirmTitle),
-        content: Text(
-            l10n.s21BatchConfirmBody(widget.publishers.length, years)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (!widget.scope.isEveryPublisher)
+              RosterExportScopeWarning(scope: widget.scope),
+            Text(l10n.s21BatchConfirmBody(widget.publishers.length, years)),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
