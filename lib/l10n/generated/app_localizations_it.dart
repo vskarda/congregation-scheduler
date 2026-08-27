@@ -84,6 +84,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get commonExport => 'Esporta';
 
   @override
+  String get exportServiceYear => 'Anno di servizio';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1876,6 +1879,33 @@ class AppLocalizationsIt extends AppLocalizations {
   String get attSaved => 'Presenze salvate.';
 
   @override
+  String get attRecordExport => 'Esporta la registrazione dei presenti (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Esporta la registrazione dei presenti';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Comprende $years';
+  }
+
+  @override
+  String get attRecordTitle =>
+      'REGISTRAZIONE DEI PRESENTI ALLE ADUNANZE DI CONGREGAZIONE';
+
+  @override
+  String get attRecordColMeetings => 'Numero di adunanze';
+
+  @override
+  String get attRecordColTotal => 'Totale dei presenti';
+
+  @override
+  String get attRecordColAvgWeek => 'Media dei presenti ogni settimana';
+
+  @override
+  String get attRecordRowAvgMonth => 'Media dei presenti ogni mese';
+
+  @override
   String get statMembershipTitle => 'Proclamatori';
 
   @override
@@ -2120,6 +2150,37 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Ancora nessuno storico delle assegnazioni.';
+
+  @override
+  String get terrRecordExport =>
+      'Esporta la registrazione delle assegnazioni del territorio (PDF)';
+
+  @override
+  String get terrRecordDialogTitle =>
+      'Esporta la registrazione delle assegnazioni del territorio';
+
+  @override
+  String get terrRecordTitle =>
+      'REGISTRAZIONE DELLE ASSEGNAZIONI DEL TERRITORIO';
+
+  @override
+  String get terrRecordColTerritory => 'Territorio';
+
+  @override
+  String get terrRecordColLastCompleted => 'Restituito l’ultima volta il*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Assegnato a';
+
+  @override
+  String get terrRecordColDateAssigned => 'Assegnato il';
+
+  @override
+  String get terrRecordColDateCompleted => 'Restituito il';
+
+  @override
+  String get terrRecordFootnote =>
+      '*Quando si inizia un nuovo foglio, registrare in questa colonna l’ultima data in cui è stato restituito ogni territorio.';
 
   @override
   String get mgEmpty => 'Ancora nessun gruppo di servizio.';

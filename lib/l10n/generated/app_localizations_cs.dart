@@ -83,6 +83,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get commonExport => 'Exportovat';
 
   @override
+  String get exportServiceYear => 'Služební rok';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1861,6 +1864,32 @@ class AppLocalizationsCs extends AppLocalizations {
   String get attSaved => 'Návštěvnost uložena.';
 
   @override
+  String get attRecordExport => 'Exportovat zprávu o návštěvnosti (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Exportovat zprávu o návštěvnosti';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Obsahuje $years';
+  }
+
+  @override
+  String get attRecordTitle => 'ZPRÁVA O NÁVŠTĚVNOSTI SHROMÁŽDĚNÍ';
+
+  @override
+  String get attRecordColMeetings => 'Počet shromáždění';
+
+  @override
+  String get attRecordColTotal => 'Celková účast';
+
+  @override
+  String get attRecordColAvgWeek => 'Průměrná týdenní účast';
+
+  @override
+  String get attRecordRowAvgMonth => 'Průměrná týdenní účast za rok';
+
+  @override
   String get statMembershipTitle => 'Zvěstovatelé';
 
   @override
@@ -2106,6 +2135,34 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Zatím žádná historie přidělení.';
+
+  @override
+  String get terrRecordExport => 'Exportovat záznam o přidělení obvodu (PDF)';
+
+  @override
+  String get terrRecordDialogTitle => 'Exportovat záznam o přidělení obvodu';
+
+  @override
+  String get terrRecordTitle => 'ZÁZNAM O PŘIDĚLENÍ OBVODU';
+
+  @override
+  String get terrRecordColTerritory => 'Obvod';
+
+  @override
+  String get terrRecordColLastCompleted => 'Datum posledního propracování*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Jméno zvěstovatele';
+
+  @override
+  String get terrRecordColDateAssigned => 'Datum přidělení';
+
+  @override
+  String get terrRecordColDateCompleted => 'Datum dokončení';
+
+  @override
+  String get terrRecordFootnote =>
+      '*Když začínáte novou stránku, do tohoto sloupce uveďte datum, kdy byl obvod naposledy propracován.';
 
   @override
   String get mgEmpty => 'Zatím žádné skupiny služby.';

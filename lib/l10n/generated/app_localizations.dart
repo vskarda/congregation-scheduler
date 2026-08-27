@@ -258,6 +258,12 @@ abstract class AppLocalizations {
   /// **'Export'**
   String get commonExport;
 
+  /// No description provided for @exportServiceYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Service year'**
+  String get exportServiceYear;
+
   /// No description provided for @commonNotAssigned.
   ///
   /// In en, this message translates to:
@@ -3462,6 +3468,54 @@ abstract class AppLocalizations {
   /// **'Attendance saved.'**
   String get attSaved;
 
+  /// No description provided for @attRecordExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export attendance record (PDF)'**
+  String get attRecordExport;
+
+  /// No description provided for @attRecordDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export attendance record'**
+  String get attRecordDialogTitle;
+
+  /// No description provided for @attRecordCovers.
+  ///
+  /// In en, this message translates to:
+  /// **'Covers {years}'**
+  String attRecordCovers(String years);
+
+  /// No description provided for @attRecordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CONGREGATION MEETING ATTENDANCE RECORD'**
+  String get attRecordTitle;
+
+  /// No description provided for @attRecordColMeetings.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Meetings'**
+  String get attRecordColMeetings;
+
+  /// No description provided for @attRecordColTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Attendance'**
+  String get attRecordColTotal;
+
+  /// No description provided for @attRecordColAvgWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Attendance Each Week'**
+  String get attRecordColAvgWeek;
+
+  /// No description provided for @attRecordRowAvgMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Average Attendance Each Month'**
+  String get attRecordRowAvgMonth;
+
   /// No description provided for @statMembershipTitle.
   ///
   /// In en, this message translates to:
@@ -3898,6 +3952,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No assignment history yet.'**
   String get terrHistoryEmpty;
+
+  /// No description provided for @terrRecordExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export territory record (PDF)'**
+  String get terrRecordExport;
+
+  /// No description provided for @terrRecordDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export territory record'**
+  String get terrRecordDialogTitle;
+
+  /// No description provided for @terrRecordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'TERRITORY ASSIGNMENT RECORD'**
+  String get terrRecordTitle;
+
+  /// No description provided for @terrRecordColTerritory.
+  ///
+  /// In en, this message translates to:
+  /// **'Territory'**
+  String get terrRecordColTerritory;
+
+  /// No description provided for @terrRecordColLastCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Last date completed*'**
+  String get terrRecordColLastCompleted;
+
+  /// No description provided for @terrRecordColAssignedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to'**
+  String get terrRecordColAssignedTo;
+
+  /// No description provided for @terrRecordColDateAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Date assigned'**
+  String get terrRecordColDateAssigned;
+
+  /// No description provided for @terrRecordColDateCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Date completed'**
+  String get terrRecordColDateCompleted;
+
+  /// No description provided for @terrRecordFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'*When beginning a new sheet, use this column to record the date on which each territory was last completed.'**
+  String get terrRecordFootnote;
 
   /// No description provided for @mgEmpty.
   ///

@@ -83,6 +83,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get commonExport => 'Dışa aktar';
 
   @override
+  String get exportServiceYear => 'Hizmet yılı';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1867,6 +1870,32 @@ class AppLocalizationsTr extends AppLocalizations {
   String get attSaved => 'Katılım kaydedildi.';
 
   @override
+  String get attRecordExport => 'Katılım kaydını dışa aktar (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Katılım kaydını dışa aktar';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Kapsam: $years';
+  }
+
+  @override
+  String get attRecordTitle => 'CEMAAT İBADETLERİNE KATILIM KAYDI';
+
+  @override
+  String get attRecordColMeetings => 'İbadet Sayısı';
+
+  @override
+  String get attRecordColTotal => 'Katılanların Toplamı';
+
+  @override
+  String get attRecordColAvgWeek => 'Katılanların Haftalık Ortalaması';
+
+  @override
+  String get attRecordRowAvgMonth => 'Katılanların Aylık Ortalaması';
+
+  @override
   String get statMembershipTitle => 'Müjdeciler';
 
   @override
@@ -2111,6 +2140,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Henüz atama geçmişi yok.';
+
+  @override
+  String get terrRecordExport => 'Saha tayin kaydını dışa aktar (PDF)';
+
+  @override
+  String get terrRecordDialogTitle => 'Saha tayin kaydını dışa aktar';
+
+  @override
+  String get terrRecordTitle => 'SAHA TAYİN KAYDI';
+
+  @override
+  String get terrRecordColTerritory => 'Saha';
+
+  @override
+  String get terrRecordColLastCompleted => 'Son işlendiği tarih*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Müjdecinin adı';
+
+  @override
+  String get terrRecordColDateAssigned => 'Verildiği tarih';
+
+  @override
+  String get terrRecordColDateCompleted => 'İade tarihi';
+
+  @override
+  String get terrRecordFootnote =>
+      '*Yeni bir sayfaya başlarken, her sahanın en son ne zaman işlendiğini bu sütuna yazın.';
 
   @override
   String get mgEmpty => 'Henüz tarla hizmeti grubu yok.';

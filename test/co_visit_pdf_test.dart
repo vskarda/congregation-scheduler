@@ -59,7 +59,10 @@ void main() {
       address: 'Kingdom Hall',
     ),
     // Nothing but a note, and no day at all — every field is optional.
-    CoVisitItem(id: 'd', section: CoVisitSection.other, note: 'Bring the S-88'),
+    CoVisitItem(
+        id: 'd',
+        section: CoVisitSection.other,
+        note: 'Bring the attendance figures'),
   ]);
 
   const ministry = [

@@ -83,6 +83,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get commonExport => 'Exportar';
 
   @override
+  String get exportServiceYear => 'Ano de serviço';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1875,6 +1878,33 @@ class AppLocalizationsPt extends AppLocalizations {
   String get attSaved => 'Assistência registrada.';
 
   @override
+  String get attRecordExport => 'Exportar registro de assistência (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Exportar registro de assistência';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Inclui $years';
+  }
+
+  @override
+  String get attRecordTitle =>
+      'REGISTRO DE ASSISTÊNCIA ÀS REUNIÕES CONGREGACIONAIS';
+
+  @override
+  String get attRecordColMeetings => 'Número de Reuniões';
+
+  @override
+  String get attRecordColTotal => 'Assistência Total';
+
+  @override
+  String get attRecordColAvgWeek => 'Assistência Média Por Semana';
+
+  @override
+  String get attRecordRowAvgMonth => 'Assistência Média Cada Mês';
+
+  @override
   String get statMembershipTitle => 'Publicadores';
 
   @override
@@ -2120,6 +2150,36 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Ainda não há histórico de designações.';
+
+  @override
+  String get terrRecordExport =>
+      'Exportar registro de designação de território (PDF)';
+
+  @override
+  String get terrRecordDialogTitle =>
+      'Exportar registro de designação de território';
+
+  @override
+  String get terrRecordTitle => 'REGISTRO DE DESIGNAÇÃO DE TERRITÓRIO';
+
+  @override
+  String get terrRecordColTerritory => 'Território';
+
+  @override
+  String get terrRecordColLastCompleted => 'Última data em que foi trabalhado*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Nome do publicador';
+
+  @override
+  String get terrRecordColDateAssigned => 'Levantado em';
+
+  @override
+  String get terrRecordColDateCompleted => 'Devolvido em';
+
+  @override
+  String get terrRecordFootnote =>
+      '*Quando começar uma nova folha, use esta coluna para registrar a última data em que cada território foi trabalhado.';
 
   @override
   String get mgEmpty => 'Ainda não há grupos de serviço de campo.';

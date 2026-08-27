@@ -10,12 +10,14 @@ import '../../core/l10n/l10n.dart';
 import '../../core/l10n/language_menu_button.dart';
 import '../../core/models/models.dart';
 import '../../core/theme/theme_mode_button.dart';
+import '../attendance/attendance_record_pdf_button.dart';
 import '../co_visit/co_visit_pdf_button.dart';
 import '../co_visit/co_visit_screen.dart';
 import '../field_service_meetings/fsm_delete_from_week_button.dart';
 import '../info_board/clean_info_board_button.dart';
 import '../public_witnessing/pw_delete_from_week_button.dart';
 import '../territories/territory_import_screen.dart';
+import '../territories/territory_record_pdf_button.dart';
 import 'schedule_pdf_button.dart';
 
 class _Destination {
@@ -121,6 +123,12 @@ class AppShell extends ConsumerWidget {
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => const TerritoryImportScreen())),
           ),
+        if (location == '/territories' && roles.canEditTerritories())
+          const TerritoryRecordPdfButton(),
+        // Record-only rights never reach this screen, so the sheet stays with
+        // the admins who own the averages and the history it prints.
+        if (location == '/admin/attendance' && roles.canEditAttendance())
+          const AttendanceRecordPdfButton(),
         if (realRoles.any)
           IconButton(
             // Icon shows the action: pencil = enable editing, slash = hide it.

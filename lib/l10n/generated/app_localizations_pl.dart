@@ -83,6 +83,9 @@ class AppLocalizationsPl extends AppLocalizations {
   String get commonExport => 'Eksportuj';
 
   @override
+  String get exportServiceYear => 'Rok służbowy';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1861,6 +1864,32 @@ class AppLocalizationsPl extends AppLocalizations {
   String get attSaved => 'Zapisano obecność.';
 
   @override
+  String get attRecordExport => 'Eksportuj zestawienie obecności (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Eksportuj zestawienie obecności';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Obejmuje $years';
+  }
+
+  @override
+  String get attRecordTitle => 'ZESTAWIENIE OBECNOŚCI NA ZEBRANIACH ZBOROWYCH';
+
+  @override
+  String get attRecordColMeetings => 'Liczba zebrań';
+
+  @override
+  String get attRecordColTotal => 'Ogółem obecnych';
+
+  @override
+  String get attRecordColAvgWeek => 'Śr. obecnych w każdym tygodniu';
+
+  @override
+  String get attRecordRowAvgMonth => 'Śr. obecności w każdym miesiącu';
+
+  @override
   String get statMembershipTitle => 'Głosiciele';
 
   @override
@@ -2108,6 +2137,36 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Brak jeszcze historii przydziałów.';
+
+  @override
+  String get terrRecordExport =>
+      'Eksportuj zestawienie przydziałów terenów (PDF)';
+
+  @override
+  String get terrRecordDialogTitle =>
+      'Eksportuj zestawienie przydziałów terenów';
+
+  @override
+  String get terrRecordTitle => 'ZESTAWIENIE PRZYDZIAŁÓW TERENÓW';
+
+  @override
+  String get terrRecordColTerritory => 'Teren';
+
+  @override
+  String get terrRecordColLastCompleted => 'Data ostatniego opracowania*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Przydzielono:';
+
+  @override
+  String get terrRecordColDateAssigned => 'Data przydziału';
+
+  @override
+  String get terrRecordColDateCompleted => 'Data opracowania';
+
+  @override
+  String get terrRecordFootnote =>
+      '* Rozpoczynając nowy arkusz, wpisz w tej kolumnie datę, kiedy ostatnio opracowano każdy teren.';
 
   @override
   String get mgEmpty => 'Brak jeszcze grup służby.';

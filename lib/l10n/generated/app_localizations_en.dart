@@ -83,6 +83,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonExport => 'Export';
 
   @override
+  String get exportServiceYear => 'Service year';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1859,6 +1862,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attSaved => 'Attendance saved.';
 
   @override
+  String get attRecordExport => 'Export attendance record (PDF)';
+
+  @override
+  String get attRecordDialogTitle => 'Export attendance record';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Covers $years';
+  }
+
+  @override
+  String get attRecordTitle => 'CONGREGATION MEETING ATTENDANCE RECORD';
+
+  @override
+  String get attRecordColMeetings => 'Number of Meetings';
+
+  @override
+  String get attRecordColTotal => 'Total Attendance';
+
+  @override
+  String get attRecordColAvgWeek => 'Average Attendance Each Week';
+
+  @override
+  String get attRecordRowAvgMonth => 'Average Attendance Each Month';
+
+  @override
   String get statMembershipTitle => 'Publishers';
 
   @override
@@ -2103,6 +2132,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'No assignment history yet.';
+
+  @override
+  String get terrRecordExport => 'Export territory record (PDF)';
+
+  @override
+  String get terrRecordDialogTitle => 'Export territory record';
+
+  @override
+  String get terrRecordTitle => 'TERRITORY ASSIGNMENT RECORD';
+
+  @override
+  String get terrRecordColTerritory => 'Territory';
+
+  @override
+  String get terrRecordColLastCompleted => 'Last date completed*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Assigned to';
+
+  @override
+  String get terrRecordColDateAssigned => 'Date assigned';
+
+  @override
+  String get terrRecordColDateCompleted => 'Date completed';
+
+  @override
+  String get terrRecordFootnote =>
+      '*When beginning a new sheet, use this column to record the date on which each territory was last completed.';
 
   @override
   String get mgEmpty => 'No ministry groups yet.';

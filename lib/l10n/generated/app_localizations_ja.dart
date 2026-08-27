@@ -83,6 +83,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get commonExport => 'エクスポート';
 
   @override
+  String get exportServiceYear => '奉仕年度';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1828,6 +1831,32 @@ class AppLocalizationsJa extends AppLocalizations {
   String get attSaved => '出席を記録しました。';
 
   @override
+  String get attRecordExport => '集会出席者数記録を書き出す（PDF）';
+
+  @override
+  String get attRecordDialogTitle => '集会出席者数記録を書き出す';
+
+  @override
+  String attRecordCovers(String years) {
+    return '対象: $years';
+  }
+
+  @override
+  String get attRecordTitle => '会衆の集会出席者数記録';
+
+  @override
+  String get attRecordColMeetings => '集会の数';
+
+  @override
+  String get attRecordColTotal => '出席者合計';
+
+  @override
+  String get attRecordColAvgWeek => '週ごとの平均出席者数';
+
+  @override
+  String get attRecordRowAvgMonth => '月ごとの平均出席者数';
+
+  @override
   String get statMembershipTitle => '伝道者';
 
   @override
@@ -2069,6 +2098,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => '割り当ての履歴はまだありません。';
+
+  @override
+  String get terrRecordExport => '区域割り当ての記録を書き出す（PDF）';
+
+  @override
+  String get terrRecordDialogTitle => '区域割り当ての記録を書き出す';
+
+  @override
+  String get terrRecordTitle => '区域割り当ての記録';
+
+  @override
+  String get terrRecordColTerritory => '区域';
+
+  @override
+  String get terrRecordColLastCompleted => '前回完了した日付*';
+
+  @override
+  String get terrRecordColAssignedTo => '伝道者の名前';
+
+  @override
+  String get terrRecordColDateAssigned => '割り当てた日付';
+
+  @override
+  String get terrRecordColDateCompleted => '完了した日付';
+
+  @override
+  String get terrRecordFootnote =>
+      '*新しいシートを使い始める時には，各区域の前回完了した日付をこの欄に記入してください。';
 
   @override
   String get mgEmpty => '奉仕グループがまだありません。';

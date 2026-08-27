@@ -23,6 +23,8 @@ the target language and commit them to `example-forms/`:
 | `S-1_<CODE>.pdf` | Congregation's Field Service and Meeting Attendance Report | pdf | S-1 screen labels, publisher groups, attendance wording |
 | `S-21_<CODE>.pdf` | Congregation's Publisher Record | pdf | publisher record/profile labels, report columns, statuses, hope, gender, appointments, months of the service year |
 | `S-61_<CODE>.pdf` | Information Needed for Visit of Circuit Overseer | pdf | circuit overseer view: midday meals, shepherding visit, meeting with the elders, sharing in the ministry with the overseer and his wife |
+| `S-13_<CODE>.pdf` | Territory Assignment Record | pdf | the territory record sheet exported from the Territories view: its title, column headings and footnote |
+| `S-88_<CODE>.pdf` | Congregation Meeting Attendance Record | pdf | the attendance record sheet exported from the Attendance view: its title, column headings and year line |
 
 `<CODE>` is the **JW publication language symbol**, not an ISO code:
 `E` = English, `B` = Czech, `TK` = Turkish, etc. (It appears in the form
@@ -148,6 +150,46 @@ Things to be aware of:
   (the same as `S-21_J`), so its circuit-overseer terms come from standard
   JW-Japanese usage, not the form.
 
+### From the S-13 (territory record) — everything here prints on the exported PDF
+
+The sheet the Territories view exports. Its first column is the one deviation
+from the official form: the app has no territory number, so the column carries
+the territory's **name** and `terrRecordColTerritory` is the singular noun from
+the form's "Terr. no." / "Obvod č." / "Geb.-Nr." stem, without the number word.
+
+| ARB key | Form label (E / B / TK) |
+|---|---|
+| `terrRecordTitle` | TERRITORY ASSIGNMENT RECORD / ZÁZNAM O PŘIDĚLENÍ OBVODU / SAHA TAYİN KAYDI |
+| `terrRecordColTerritory` | Terr. no. / Obvod č. / Saha No. — the noun only |
+| `terrRecordColLastCompleted` | Last date completed* / Datum posledního propracování* / — keep the asterisk, the footnote refers to it |
+| `terrRecordColAssignedTo` | Assigned to / Jméno zvěstovatele / Müjdecinin adı |
+| `terrRecordColDateAssigned` | Date assigned / Datum přidělení / Verildiği tarih |
+| `terrRecordColDateCompleted` | Date completed / Datum dokončení / İade tarihi |
+| `terrRecordFootnote` | the whole asterisk note under the table, verbatim |
+
+- **`S-13_TK` is the 7/98 revision**, a completely different layout from the
+  1/22 sheet every other language ships. Use it for wording only — the export
+  follows the English layout. It has no counterpart for
+  `terrRecordColLastCompleted` or `terrRecordFootnote`; both Turkish strings
+  are composed from the sheet's own vocabulary and are **not** sourced.
+
+### From the S-88 (attendance record) — everything here prints on the exported PDF
+
+The sheet the Attendance view exports. Its two section headings and the service
+year reuse keys that already exist, so nothing new is needed for them.
+
+| ARB key | Form label (E / B / TK) |
+|---|---|
+| `attRecordTitle` | CONGREGATION MEETING ATTENDANCE RECORD / ZPRÁVA O NÁVŠTĚVNOSTI SHROMÁŽDĚNÍ / CEMAAT İBADETLERİNE KATILIM KAYDI |
+| `attRecordColMeetings` | Number of Meetings / Počet shromáždění / İbadet Sayısı |
+| `attRecordColTotal` | Total Attendance / Celková účast / Katılanların Toplamı |
+| `attRecordColAvgWeek` | Average Attendance Each Week / Průměrná týdenní účast / Katılanların Haftalık Ortalaması |
+| `attRecordRowAvgMonth` | the year line under the twelve months — several languages word it as "for the year" rather than "each month" (cs "Průměrná týdenní účast za rok", fr "Assistance moyenne pour l’année"); follow the form |
+| `attMeetingLmm` / `attMeetingWeekend` | already the section headings on this sheet in nine of ten languages — reuse them rather than adding keys. Czech is the exception: the sheet heads its second section "Shromáždění o víkendu" where the app says "Víkendové shromáždění", and the app's own wording is kept so one screen never shows two names for the same meeting |
+
+The month rows come from `DateFormat('LLLL', locale)` and are capitalized the
+way the S-21 export capitalizes them, so nothing needs translating there.
+
 ### Not derivable from these forms
 
 Weekend-meeting terms (`weekendTalkTitle`, `weekendSpeaker`, `weekendWtReader`,
@@ -213,6 +255,12 @@ real S-21 PDF in that language, not from your ARB translations.
   term**, adjusting only casing/number.
 - Explanatory app additions are welcome *around* the official term, in
   parentheses — see `s1Active`, `s1Hours` — never instead of it.
+- **Copy the wording, never the form code.** `S-13`, `S-88` and `S-61` must
+  not appear anywhere a user can see them — no label, no tooltip, no export
+  file name, and no footer on a generated PDF. Note that this is the opposite
+  of the S-21 export, which prints `s21FormCode` on purpose: `S-1` and `S-21`
+  are the two the app names openly. `test/form_code_guard_test.dart` fails the
+  build if a banned code reaches any locale's strings.
 
 ## 7. Verification checklist
 
@@ -228,6 +276,14 @@ real S-21 PDF in that language, not from your ARB translations.
 5. Export the S-21 and the midweek schedule PDF in the new language and
    diff every label against `example-forms/S-21_<CODE>.pdf` and
    `S-140_<CODE>.docx`.
+6. Export the territory and attendance record sheets in the new language and
+   diff them against `S-13_<CODE>.pdf` and `S-88_<CODE>.pdf`. Both sheets fit
+   long headings by wrapping, so check the text layer rather than trusting the
+   page: `pdftotext -enc UTF-8 -raw sheet.pdf -` and confirm every heading
+   comes back whole. A heading broken mid-word ("Zusammenkü nfte") means the
+   column is too narrow for the language and the type size or the column
+   widths in `attendance_record_pdf.dart` / `territory_record_pdf.dart` need
+   adjusting — German, Polish and Japanese each forced one such change.
 
 ## 8. Shipped languages and cross-language pitfalls
 

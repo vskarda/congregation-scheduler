@@ -84,6 +84,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get commonExport => 'Exportieren';
 
   @override
+  String get exportServiceYear => 'Dienstjahr';
+
+  @override
   String get commonNotAssigned => '—';
 
   @override
@@ -1880,6 +1883,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String get attSaved => 'Anwesenheit gespeichert.';
 
   @override
+  String get attRecordExport =>
+      'Bericht über den Besuch der Zusammenkünfte exportieren (PDF)';
+
+  @override
+  String get attRecordDialogTitle =>
+      'Bericht über den Besuch der Zusammenkünfte exportieren';
+
+  @override
+  String attRecordCovers(String years) {
+    return 'Enthält $years';
+  }
+
+  @override
+  String get attRecordTitle => 'BERICHT ÜBER DEN BESUCH DER ZUSAMMENKÜNFTE';
+
+  @override
+  String get attRecordColMeetings => 'Zahl der Zusammenkünfte';
+
+  @override
+  String get attRecordColTotal => 'Gesamtzahl Anwesende im Monat';
+
+  @override
+  String get attRecordColAvgWeek =>
+      'Durchschnittliche Anwesendenzahl pro Woche';
+
+  @override
+  String get attRecordRowAvgMonth =>
+      'Durchschnittliche Anwesendenzahl pro Monat';
+
+  @override
   String get statMembershipTitle => 'Verkündiger';
 
   @override
@@ -2125,6 +2158,34 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get terrHistoryEmpty => 'Noch kein Zuweisungsverlauf.';
+
+  @override
+  String get terrRecordExport => 'Gebietszuteilungskarte exportieren (PDF)';
+
+  @override
+  String get terrRecordDialogTitle => 'Gebietszuteilungskarte exportieren';
+
+  @override
+  String get terrRecordTitle => 'GEBIETSZUTEILUNGSKARTE';
+
+  @override
+  String get terrRecordColTerritory => 'Gebiet';
+
+  @override
+  String get terrRecordColLastCompleted => 'Datum der letzten Bearbeitung*';
+
+  @override
+  String get terrRecordColAssignedTo => 'Gebiet ausgegeben an';
+
+  @override
+  String get terrRecordColDateAssigned => 'ausgegeben am';
+
+  @override
+  String get terrRecordColDateCompleted => 'bearbeitet am';
+
+  @override
+  String get terrRecordFootnote =>
+      '*Beginnst du ein neues Blatt, trage in diese Spalte ein, wann jedes Gebiet zuletzt bearbeitet wurde.';
 
   @override
   String get mgEmpty => 'Noch keine Dienstgruppen.';

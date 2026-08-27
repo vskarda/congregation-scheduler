@@ -29,6 +29,16 @@ class TerritoriesRepository {
         return list;
       });
 
+  /// One-shot twin of [watchAll], for the record-sheet export. A PDF button
+  /// runs in a callback with no live listener, and a StreamProvider's
+  /// `.future` only completes while something is watching it.
+  Future<List<Territory>> getAll() async {
+    final snap = await _territories.get();
+    final list = snap.docs.map(_territoryFromDoc).toList();
+    list.sort((a, b) => collate(a.name, b.name));
+    return list;
+  }
+
   Future<void> saveTerritory(Territory territory) async {
     if (territory.id.isEmpty) {
       await _territories.add(territory.toJson());
@@ -60,6 +70,14 @@ class TerritoriesRepository {
         list.sort((a, b) => b.assignedDate.compareTo(a.assignedDate));
         return list;
       });
+
+  /// One-shot twin of [watchAllAssignments], for the record-sheet export.
+  Future<List<TerritoryAssignment>> getAllAssignments() async {
+    final snap = await _assignments.get();
+    final list = snap.docs.map(_assignmentFromDoc).toList();
+    list.sort((a, b) => b.assignedDate.compareTo(a.assignedDate));
+    return list;
+  }
 
   /// Publisher view: only own assignments (rules enforce the filter).
   Stream<List<TerritoryAssignment>> watchMyAssignments(String uid) =>
