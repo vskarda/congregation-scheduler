@@ -23,6 +23,7 @@ _TerritoryAssignment _$TerritoryAssignmentFromJson(Map<String, dynamic> json) =>
     _TerritoryAssignment(
       territoryId: json['territoryId'] as String? ?? '',
       publisherId: json['publisherId'] as String? ?? '',
+      freeText: json['freeText'] as String? ?? '',
       assignedDate: json['assignedDate'] as String? ?? '',
       returnedDate: json['returnedDate'] as String? ?? '',
       returnNotes: json['returnNotes'] as String? ?? '',
@@ -33,6 +34,7 @@ Map<String, dynamic> _$TerritoryAssignmentToJson(
 ) => <String, dynamic>{
   'territoryId': instance.territoryId,
   'publisherId': instance.publisherId,
+  'freeText': instance.freeText,
   'assignedDate': instance.assignedDate,
   'returnedDate': instance.returnedDate,
   'returnNotes': instance.returnNotes,

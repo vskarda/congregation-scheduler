@@ -2118,10 +2118,53 @@ class AppLocalizationsJa extends AppLocalizations {
   String get terrSortByDate => '割り当て日';
 
   @override
+  String get terrHolderDeleted => '削除された伝道者';
+
+  @override
   String get terrHistoryOngoing => '現在';
 
   @override
   String get terrHistoryEmpty => '割り当ての履歴はまだありません。';
+
+  @override
+  String get terrAsgAddPast => '過去の割り当てを追加';
+
+  @override
+  String get terrAsgEdit => '割り当てを編集';
+
+  @override
+  String get terrAsgHolder => '伝道者';
+
+  @override
+  String get terrAsgHolderNone => '伝道者を選択…';
+
+  @override
+  String get terrAsgPickTitle => '区域を持っていたのはだれですか';
+
+  @override
+  String get terrAsgDateAssigned => '割り当て日';
+
+  @override
+  String get terrAsgDateReturned => '返却日';
+
+  @override
+  String get terrAsgStillOut => '未返却';
+
+  @override
+  String get terrAsgErrHolderRequired => '伝道者を選ぶか、名前を入力してください。';
+
+  @override
+  String get terrAsgErrDateRequired => '区域を割り当てた日付を選んでください。';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned => '返却日は割り当て日より前にはできません。';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'この区域はすでに割り当てられています。この割り当てに返却日を入れるか、先に現在の割り当てを返却してください。';
+
+  @override
+  String get terrAsgDeleteConfirm => 'この割り当てを区域の履歴から削除しますか？　取り消せません。';
 
   @override
   String get terrRecordExport => '区域割り当ての記録を書き出す（PDF）';

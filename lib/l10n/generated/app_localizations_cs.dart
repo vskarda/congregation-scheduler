@@ -2156,10 +2156,56 @@ class AppLocalizationsCs extends AppLocalizations {
   String get terrSortByDate => 'Datum přidělení';
 
   @override
+  String get terrHolderDeleted => 'Smazaný zvěstovatel';
+
+  @override
   String get terrHistoryOngoing => 'Aktuální';
 
   @override
   String get terrHistoryEmpty => 'Zatím žádná historie přidělení.';
+
+  @override
+  String get terrAsgAddPast => 'Přidat dřívější přidělení';
+
+  @override
+  String get terrAsgEdit => 'Upravit přidělení';
+
+  @override
+  String get terrAsgHolder => 'Zvěstovatel';
+
+  @override
+  String get terrAsgHolderNone => 'Vybrat zvěstovatele…';
+
+  @override
+  String get terrAsgPickTitle => 'Kdo měl obvod přidělený?';
+
+  @override
+  String get terrAsgDateAssigned => 'Datum přidělení';
+
+  @override
+  String get terrAsgDateReturned => 'Datum vrácení';
+
+  @override
+  String get terrAsgStillOut => 'Dosud nevrácen';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Vyberte zvěstovatele nebo zadejte jméno.';
+
+  @override
+  String get terrAsgErrDateRequired => 'Vyberte datum, kdy byl obvod přidělen.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'Datum vrácení nemůže být dřívější než datum přidělení.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Tento obvod je právě přidělený. Zadejte u tohoto přidělení datum vrácení, nebo nejprve vraťte to současné.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Smazat toto přidělení z historie obvodu? Tuto akci nelze vrátit zpět.';
 
   @override
   String get terrRecordExport => 'Exportovat záznam o přidělení obvodu (PDF)';

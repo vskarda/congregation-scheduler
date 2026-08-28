@@ -2153,10 +2153,56 @@ class AppLocalizationsEn extends AppLocalizations {
   String get terrSortByDate => 'Date assigned';
 
   @override
+  String get terrHolderDeleted => 'Deleted publisher';
+
+  @override
   String get terrHistoryOngoing => 'Current';
 
   @override
   String get terrHistoryEmpty => 'No assignment history yet.';
+
+  @override
+  String get terrAsgAddPast => 'Add past assignment';
+
+  @override
+  String get terrAsgEdit => 'Edit assignment';
+
+  @override
+  String get terrAsgHolder => 'Publisher';
+
+  @override
+  String get terrAsgHolderNone => 'Choose a publisher…';
+
+  @override
+  String get terrAsgPickTitle => 'Who held the territory?';
+
+  @override
+  String get terrAsgDateAssigned => 'Date assigned';
+
+  @override
+  String get terrAsgDateReturned => 'Date returned';
+
+  @override
+  String get terrAsgStillOut => 'Still out';
+
+  @override
+  String get terrAsgErrHolderRequired => 'Choose a publisher or type a name.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Pick the date the territory was assigned.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'The return date cannot be before the date assigned.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'This territory is already out. Give this assignment a return date, or return the current one first.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Delete this assignment from the territory\'s history? This can\'t be undone.';
 
   @override
   String get terrRecordExport => 'Export territory record (PDF)';

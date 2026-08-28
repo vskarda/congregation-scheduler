@@ -3977,6 +3977,12 @@ abstract class AppLocalizations {
   /// **'Date assigned'**
   String get terrSortByDate;
 
+  /// No description provided for @terrHolderDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted publisher'**
+  String get terrHolderDeleted;
+
   /// No description provided for @terrHistoryOngoing.
   ///
   /// In en, this message translates to:
@@ -3988,6 +3994,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No assignment history yet.'**
   String get terrHistoryEmpty;
+
+  /// No description provided for @terrAsgAddPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Add past assignment'**
+  String get terrAsgAddPast;
+
+  /// No description provided for @terrAsgEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit assignment'**
+  String get terrAsgEdit;
+
+  /// No description provided for @terrAsgHolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Publisher'**
+  String get terrAsgHolder;
+
+  /// No description provided for @terrAsgHolderNone.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a publisher…'**
+  String get terrAsgHolderNone;
+
+  /// No description provided for @terrAsgPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Who held the territory?'**
+  String get terrAsgPickTitle;
+
+  /// No description provided for @terrAsgDateAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Date assigned'**
+  String get terrAsgDateAssigned;
+
+  /// No description provided for @terrAsgDateReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Date returned'**
+  String get terrAsgDateReturned;
+
+  /// No description provided for @terrAsgStillOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Still out'**
+  String get terrAsgStillOut;
+
+  /// No description provided for @terrAsgErrHolderRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a publisher or type a name.'**
+  String get terrAsgErrHolderRequired;
+
+  /// No description provided for @terrAsgErrDateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the date the territory was assigned.'**
+  String get terrAsgErrDateRequired;
+
+  /// No description provided for @terrAsgErrReturnBeforeAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'The return date cannot be before the date assigned.'**
+  String get terrAsgErrReturnBeforeAssigned;
+
+  /// No description provided for @terrAsgErrAlreadyOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'This territory is already out. Give this assignment a return date, or return the current one first.'**
+  String get terrAsgErrAlreadyOpen;
+
+  /// No description provided for @terrAsgDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this assignment from the territory\'s history? This can\'t be undone.'**
+  String get terrAsgDeleteConfirm;
 
   /// No description provided for @terrRecordExport.
   ///

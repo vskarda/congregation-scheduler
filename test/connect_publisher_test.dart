@@ -94,7 +94,7 @@ void main() {
     await reports.submit(const MinistryReport(
         publisherId: recordId, month: '2015-03', hours: 5));
 
-    await TerritoriesRepository(db).assign(const TerritoryAssignment(
+    await TerritoriesRepository(db).saveAssignment(const TerritoryAssignment(
         territoryId: 't1', publisherId: recordId, assignedDate: '2026-01-10'));
 
     await MinistryGroupsRepository(db).saveGroup(const MinistryGroup(

@@ -10,6 +10,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/collation.dart';
+import 'territory_holder.dart';
 
 /// Assignment slots printed next to each other on one line of the sheet. The
 /// official form prints four; a territory that went out more often continues
@@ -105,9 +106,9 @@ List<TerritoryRecordRow> territoryRecordRows({
     final slots = [
       for (final a in inYear)
         TerritorySlot(
-          // A deleted publisher record leaves the name blank; the dates beside
-          // it still happened and stay on the sheet.
-          publisherName: publishersById[a.publisherId]?.fullName ?? '',
+          // A publisher deleted before the name was kept leaves it blank; the
+          // dates beside it still happened and stay on the sheet.
+          publisherName: territoryHolderName(a, publishersById),
           assignedDate: a.assignedDate,
           completedDate: a.returnedDate,
         ),

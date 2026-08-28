@@ -38,6 +38,7 @@ void main() {
     String id, {
     String territoryId = 't1',
     String publisherId = 'p1',
+    String freeText = '',
     required String assigned,
     String returned = '',
   }) =>
@@ -45,6 +46,7 @@ void main() {
         id: id,
         territoryId: territoryId,
         publisherId: publisherId,
+        freeText: freeText,
         assignedDate: assigned,
         returnedDate: returned,
       );
@@ -120,6 +122,23 @@ void main() {
 
     expect(rows.first.slots.first.publisherName, '');
     expect(rows.first.slots.first.assignedDate, '2025-09-15');
+  });
+
+  test('a hand-typed holder prints where the roster has nobody', () {
+    final rows = rowsFor([
+      assignment('a',
+          assigned: '2025-09-15',
+          publisherId: '',
+          freeText: 'Marie Svobodová'),
+      // A live record still wins: the roster has the current spelling.
+      assignment('b',
+          assigned: '2025-10-20', freeText: 'Stale Name'),
+    ]);
+
+    expect(rows.first.slots.take(2).map((s) => s.publisherName), [
+      'Marie Svobodová',
+      'Jan Novák',
+    ]);
   });
 
   test('a fifth assignment continues the territory on another line', () {

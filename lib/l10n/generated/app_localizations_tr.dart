@@ -2161,10 +2161,55 @@ class AppLocalizationsTr extends AppLocalizations {
   String get terrSortByDate => 'Atanma tarihi';
 
   @override
+  String get terrHolderDeleted => 'Silinmiş müjdeci';
+
+  @override
   String get terrHistoryOngoing => 'Devam ediyor';
 
   @override
   String get terrHistoryEmpty => 'Henüz atama geçmişi yok.';
+
+  @override
+  String get terrAsgAddPast => 'Geçmiş atama ekle';
+
+  @override
+  String get terrAsgEdit => 'Atamayı düzenle';
+
+  @override
+  String get terrAsgHolder => 'Müjdeci';
+
+  @override
+  String get terrAsgHolderNone => 'Müjdeci seç…';
+
+  @override
+  String get terrAsgPickTitle => 'Sahayı kim almıştı?';
+
+  @override
+  String get terrAsgDateAssigned => 'Verildiği tarih';
+
+  @override
+  String get terrAsgDateReturned => 'İade tarihi';
+
+  @override
+  String get terrAsgStillOut => 'Henüz iade edilmedi';
+
+  @override
+  String get terrAsgErrHolderRequired => 'Bir müjdeci seçin veya bir ad yazın.';
+
+  @override
+  String get terrAsgErrDateRequired => 'Sahanın verildiği tarihi seçin.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'İade tarihi, verildiği tarihten önce olamaz.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Bu saha zaten verilmiş durumda. Bu atamaya bir iade tarihi girin veya önce mevcut atamayı iade edin.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Bu atama sahanın geçmişinden silinsin mi? Bu işlem geri alınamaz.';
 
   @override
   String get terrRecordExport => 'Saha tayin kaydını dışa aktar (PDF)';

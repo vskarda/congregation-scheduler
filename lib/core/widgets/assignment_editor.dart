@@ -18,16 +18,24 @@ import '../utils/dates.dart';
 /// application order) marks publishers who applied for this assignment;
 /// they are pinned to the top of the qualified list with a badge.
 ///
+/// Both are optional, for a slot that has neither. Without [qualifies] there
+/// is nothing to qualify for, so the "qualified" view is dropped and the
+/// dialog opens on all publishers; without [historyKey] there is no rotation
+/// to read, so the history is not fetched and no "last assigned" line is
+/// shown. The territory holder is both.
+///
 /// [date] is the calendar date this assignment is for; when given, candidates
 /// who declared an away period covering it are flagged with a warning (they
-/// stay selectable). Pass null for template/recurring editors that have no
-/// single date.
+/// stay selectable), and availability is judged as of that day rather than
+/// today — which is what lets a past assignment name somebody who has since
+/// moved away. Pass null for template/recurring editors that have no single
+/// date.
 Future<Assignment?> showAssignmentEditor(
   BuildContext context, {
   required String title,
   required Assignment initial,
-  required String historyKey,
-  required bool Function(Publisher) qualifies,
+  String? historyKey,
+  bool Function(Publisher)? qualifies,
   bool multi = true,
   List<String> applicantIds = const [],
   DateTime? date,
@@ -61,8 +69,8 @@ class _AssignmentEditorDialog extends ConsumerStatefulWidget {
 
   final String title;
   final Assignment initial;
-  final String historyKey;
-  final bool Function(Publisher) qualifies;
+  final String? historyKey;
+  final bool Function(Publisher)? qualifies;
   final bool multi;
   final List<String> applicantIds;
   final DateTime? date;
@@ -85,7 +93,7 @@ class _AssignmentEditorDialogState
     _freeText = TextEditingController(text: widget.initial.freeText);
     _mode = widget.initial.freeText.trim().isNotEmpty && _selected.isEmpty
         ? _Mode.freeText
-        : _Mode.qualified;
+        : (widget.qualifies == null ? _Mode.all : _Mode.qualified);
   }
 
   @override
@@ -112,9 +120,13 @@ class _AssignmentEditorDialogState
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final publishers = ref.watch(allPublishersProvider).value ?? const [];
-    final history =
-        ref.watch(assignmentHistoryProvider).value?[widget.historyKey] ??
-            const <String, String>{};
+    final historyKey = widget.historyKey;
+    // Not watched at all without a key: the rollup reads five collections,
+    // and a caller with no rotation to show has no reason to pay for them.
+    final history = historyKey == null
+        ? const <String, String>{}
+        : (ref.watch(assignmentHistoryProvider).value?[historyKey] ??
+            const <String, String>{});
     final locale = Localizations.localeOf(context).toString();
     final dateFmt = DateFormat.yMMMd(locale);
 
@@ -132,8 +144,9 @@ class _AssignmentEditorDialogState
     List<Publisher> visible;
     switch (_mode) {
       case _Mode.qualified:
+        final qualifies = widget.qualifies ?? (_) => true;
         visible = publishers
-            .where((p) => available(p) && widget.qualifies(p))
+            .where((p) => available(p) && qualifies(p))
             .toList()
           // Applicants first (in application order), then least recently
           // assigned; never-assigned to the very top.
@@ -176,9 +189,10 @@ class _AssignmentEditorDialogState
           children: [
             SegmentedButton<_Mode>(
               segments: [
-                ButtonSegment(
-                    value: _Mode.qualified,
-                    label: Text(l10n.pickerQualified)),
+                if (widget.qualifies != null)
+                  ButtonSegment(
+                      value: _Mode.qualified,
+                      label: Text(l10n.pickerQualified)),
                 ButtonSegment(value: _Mode.all, label: Text(l10n.pickerAll)),
                 ButtonSegment(
                     value: _Mode.freeText, label: Text(l10n.pickerFreeText)),
@@ -202,12 +216,13 @@ class _AssignmentEditorDialogState
                       itemBuilder: (context, i) {
                         final p = visible[i];
                         final last = history[p.id];
-                        final lastLine = _mode == _Mode.qualified
-                            ? (last == null
-                                ? l10n.pickerNever
-                                : l10n.pickerLastAssigned(
-                                    dateFmt.format(parseDateKey(last))))
-                            : null;
+                        final lastLine =
+                            _mode == _Mode.qualified && historyKey != null
+                                ? (last == null
+                                    ? l10n.pickerNever
+                                    : l10n.pickerLastAssigned(
+                                        dateFmt.format(parseDateKey(last))))
+                                : null;
                         return CheckboxListTile(
                           dense: true,
                           value: _selected.contains(p.id),

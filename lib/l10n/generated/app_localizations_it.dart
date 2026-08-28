@@ -2171,10 +2171,57 @@ class AppLocalizationsIt extends AppLocalizations {
   String get terrSortByDate => 'Data di assegnazione';
 
   @override
+  String get terrHolderDeleted => 'Proclamatore eliminato';
+
+  @override
   String get terrHistoryOngoing => 'In corso';
 
   @override
   String get terrHistoryEmpty => 'Ancora nessuno storico delle assegnazioni.';
+
+  @override
+  String get terrAsgAddPast => 'Aggiungi assegnazione passata';
+
+  @override
+  String get terrAsgEdit => 'Modifica assegnazione';
+
+  @override
+  String get terrAsgHolder => 'Proclamatore';
+
+  @override
+  String get terrAsgHolderNone => 'Scegli un proclamatore…';
+
+  @override
+  String get terrAsgPickTitle => 'Chi aveva il territorio?';
+
+  @override
+  String get terrAsgDateAssigned => 'Data di assegnazione';
+
+  @override
+  String get terrAsgDateReturned => 'Data di restituzione';
+
+  @override
+  String get terrAsgStillOut => 'Non ancora restituito';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Scegli un proclamatore o digita un nome.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Scegli la data in cui il territorio è stato assegnato.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'La data di restituzione non può precedere la data di assegnazione.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Questo territorio è già assegnato. Indica una data di restituzione per questa assegnazione oppure restituisci prima quella attuale.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Eliminare questa assegnazione dallo storico del territorio? Questa azione non può essere annullata.';
 
   @override
   String get terrRecordExport =>

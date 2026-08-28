@@ -2171,10 +2171,57 @@ class AppLocalizationsPt extends AppLocalizations {
   String get terrSortByDate => 'Data de designação';
 
   @override
+  String get terrHolderDeleted => 'Publicador excluído';
+
+  @override
   String get terrHistoryOngoing => 'Atual';
 
   @override
   String get terrHistoryEmpty => 'Ainda não há histórico de designações.';
+
+  @override
+  String get terrAsgAddPast => 'Adicionar designação anterior';
+
+  @override
+  String get terrAsgEdit => 'Editar designação';
+
+  @override
+  String get terrAsgHolder => 'Publicador';
+
+  @override
+  String get terrAsgHolderNone => 'Escolher um publicador…';
+
+  @override
+  String get terrAsgPickTitle => 'Quem estava com o território?';
+
+  @override
+  String get terrAsgDateAssigned => 'Data de designação';
+
+  @override
+  String get terrAsgDateReturned => 'Data de devolução';
+
+  @override
+  String get terrAsgStillOut => 'Ainda não devolvido';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Escolha um publicador ou digite um nome.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Escolha a data em que o território foi designado.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'A data de devolução não pode ser anterior à data de designação.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Este território já está designado. Coloque uma data de devolução nesta designação ou devolva primeiro a atual.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Excluir esta designação do histórico do território? Isso não pode ser desfeito.';
 
   @override
   String get terrRecordExport =>

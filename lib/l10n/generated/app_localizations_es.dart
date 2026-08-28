@@ -2178,10 +2178,57 @@ class AppLocalizationsEs extends AppLocalizations {
   String get terrSortByDate => 'Fecha de asignación';
 
   @override
+  String get terrHolderDeleted => 'Publicador eliminado';
+
+  @override
   String get terrHistoryOngoing => 'Actual';
 
   @override
   String get terrHistoryEmpty => 'Todavía no hay historial de asignaciones.';
+
+  @override
+  String get terrAsgAddPast => 'Añadir asignación anterior';
+
+  @override
+  String get terrAsgEdit => 'Editar asignación';
+
+  @override
+  String get terrAsgHolder => 'Publicador';
+
+  @override
+  String get terrAsgHolderNone => 'Elegir un publicador…';
+
+  @override
+  String get terrAsgPickTitle => '¿Quién tenía el territorio?';
+
+  @override
+  String get terrAsgDateAssigned => 'Fecha de asignación';
+
+  @override
+  String get terrAsgDateReturned => 'Fecha de devolución';
+
+  @override
+  String get terrAsgStillOut => 'Sin devolver';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Elija un publicador o escriba un nombre.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Elija la fecha en que se asignó el territorio.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'La fecha de devolución no puede ser anterior a la fecha de asignación.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Este territorio ya está asignado. Ponga una fecha de devolución a esta asignación o devuelva primero la actual.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      '¿Eliminar esta asignación del historial del territorio? Esto no se puede deshacer.';
 
   @override
   String get terrRecordExport =>

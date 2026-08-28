@@ -31,6 +31,16 @@ abstract class TerritoryAssignment with _$TerritoryAssignment {
     @Default('') String territoryId,
     @Default('') String publisherId,
 
+    /// Free-text holder, for whoever the roster cannot name: someone who was
+    /// in the congregation before the app, or a past holder whose record has
+    /// since been deleted. Typed by an admin and never written automatically
+    /// — deleting a publisher leaves their assignments' dates and takes the
+    /// name with it.
+    ///
+    /// The same idea as [Assignment.freeText] on the schedules, and shown the
+    /// same way: in italics, next to or instead of a publisher's name.
+    @Default('') String freeText,
+
     /// yyyy-MM-dd
     @Default('') String assignedDate,
     @Default('') String returnedDate,

@@ -2180,11 +2180,58 @@ class AppLocalizationsFr extends AppLocalizations {
   String get terrSortByDate => 'Date d\'attribution';
 
   @override
+  String get terrHolderDeleted => 'Proclamateur supprimé';
+
+  @override
   String get terrHistoryOngoing => 'En cours';
 
   @override
   String get terrHistoryEmpty =>
       'Aucun historique d\'attribution pour l\'instant.';
+
+  @override
+  String get terrAsgAddPast => 'Ajouter une attribution passée';
+
+  @override
+  String get terrAsgEdit => 'Modifier l’attribution';
+
+  @override
+  String get terrAsgHolder => 'Proclamateur';
+
+  @override
+  String get terrAsgHolderNone => 'Choisir un proclamateur…';
+
+  @override
+  String get terrAsgPickTitle => 'Qui avait le territoire ?';
+
+  @override
+  String get terrAsgDateAssigned => 'Date d’attribution';
+
+  @override
+  String get terrAsgDateReturned => 'Date de restitution';
+
+  @override
+  String get terrAsgStillOut => 'Pas encore rendu';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Choisissez un proclamateur ou saisissez un nom.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Choisissez la date à laquelle le territoire a été attribué.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'La date de restitution ne peut pas précéder la date d’attribution.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Ce territoire est déjà attribué. Indiquez une date de restitution pour cette attribution, ou rendez d’abord celle en cours.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Supprimer cette attribution de l’historique du territoire ? Cette action est irréversible.';
 
   @override
   String get terrRecordExport =>

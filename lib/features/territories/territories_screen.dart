@@ -11,6 +11,8 @@ import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/collation.dart';
 import '../../core/utils/dates.dart';
+import '../../core/widgets/assignment_editor.dart';
+import 'territory_holder.dart';
 
 class TerritoriesScreen extends ConsumerWidget {
   const TerritoriesScreen({super.key});
@@ -231,7 +233,8 @@ class _StatsSectionState extends ConsumerState<_StatsSection> {
 typedef _TerritoryRow = ({
   Territory territory,
   TerritoryAssignment? current,
-  Publisher? holder,
+  /// Empty when the territory is free, or when nothing names who has it.
+  String holderName,
 });
 
 enum _TerritorySort { territory, publisher, date }
@@ -270,7 +273,7 @@ class _AllTerritoriesSectionState
       ),
     );
     if (selected != null) {
-      await ref.read(territoriesRepositoryProvider).assign(
+      await ref.read(territoriesRepositoryProvider).saveAssignment(
             TerritoryAssignment(
               territoryId: territory.id,
               publisherId: selected.id,
@@ -297,10 +300,10 @@ class _AllTerritoriesSectionState
         final result = collate(a.territory.name, b.territory.name);
         return _sortAscending ? result : -result;
       case _TerritorySort.publisher:
-        if (a.holder == null && b.holder == null) return 0;
-        if (a.holder == null) return 1;
-        if (b.holder == null) return -1;
-        final result = collate(a.holder!.fullName, b.holder!.fullName);
+        if (a.holderName.isEmpty && b.holderName.isEmpty) return 0;
+        if (a.holderName.isEmpty) return 1;
+        if (b.holderName.isEmpty) return -1;
+        final result = collate(a.holderName, b.holderName);
         return _sortAscending ? result : -result;
       case _TerritorySort.date:
         final ad = a.current?.assignedDate ?? '';
@@ -329,6 +332,7 @@ class _AllTerritoriesSectionState
     final assignments =
         ref.watch(allTerritoryAssignmentsProvider).value ?? const [];
     final byId = ref.watch(publishersByIdProvider);
+    final rosterLoaded = ref.watch(allPublishersProvider).hasValue;
     final locale = Localizations.localeOf(context).toString();
     final dateFmt = DateFormat.yMMMd(locale);
 
@@ -339,7 +343,8 @@ class _AllTerritoriesSectionState
       rows.add((
         territory: territory,
         current: current,
-        holder: current == null ? null : byId[current.publisherId],
+        holderName:
+            current == null ? '' : territoryHolderName(current, byId),
       ));
     }
 
@@ -347,9 +352,8 @@ class _AllTerritoriesSectionState
     final filtered = query.isEmpty
         ? rows
         : rows.where((r) {
-            final holderName = r.holder?.fullName.toLowerCase() ?? '';
             return r.territory.name.toLowerCase().contains(query) ||
-                holderName.contains(query);
+                r.holderName.toLowerCase().contains(query);
           }).toList();
     filtered.sort(_compareRows);
 
@@ -386,7 +390,6 @@ class _AllTerritoriesSectionState
           Builder(builder: (context) {
             final territory = row.territory;
             final current = row.current;
-            final holder = row.holder;
             final expanded = _expandedIds.contains(territory.id);
             final history = assignments
                 .where((a) => a.territoryId == territory.id)
@@ -406,7 +409,8 @@ class _AllTerritoriesSectionState
                     subtitle: current == null
                         ? Text(l10n.terrFree)
                         : Text(l10n.terrHolder(
-                            holder?.fullName ?? '…',
+                            territoryHolderLabel(context, current, byId,
+                                rosterLoaded: rosterLoaded),
                             current.assignedDate.isEmpty
                                 ? '—'
                                 : dateFmt.format(
@@ -486,6 +490,15 @@ class _AllTerritoriesSectionState
                                 style: Theme.of(context).textTheme.bodySmall),
                             const SizedBox(height: 8),
                           ],
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextButton.icon(
+                              onPressed: () =>
+                                  _showAssignmentDialog(context, territory),
+                              icon: const Icon(Icons.history, size: 18),
+                              label: Text(l10n.terrAsgAddPast),
+                            ),
+                          ),
                           if (history.isEmpty)
                             Text(l10n.terrHistoryEmpty,
                                 style: Theme.of(context).textTheme.bodySmall)
@@ -497,8 +510,7 @@ class _AllTerritoriesSectionState
                                   ListTile(
                                     dense: true,
                                     contentPadding: EdgeInsets.zero,
-                                    title: Text(
-                                        byId[a.publisherId]?.fullName ?? '…'),
+                                    title: TerritoryHolderText(a),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -513,6 +525,27 @@ class _AllTerritoriesSectionState
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall),
+                                      ],
+                                    ),
+                                    trailing: PopupMenuButton<String>(
+                                      onSelected: (v) async {
+                                        switch (v) {
+                                          case 'edit':
+                                            await _showAssignmentDialog(
+                                                context, territory,
+                                                existing: a);
+                                          case 'delete':
+                                            await _confirmDeleteAssignment(
+                                                context, ref, a);
+                                        }
+                                      },
+                                      itemBuilder: (_) => [
+                                        PopupMenuItem(
+                                            value: 'edit',
+                                            child: Text(l10n.commonEdit)),
+                                        PopupMenuItem(
+                                            value: 'delete',
+                                            child: Text(l10n.commonDelete)),
                                       ],
                                     ),
                                   ),
@@ -647,6 +680,266 @@ class _TerritoryDialogState extends ConsumerState<_TerritoryDialog> {
                 maxLines: 2,
                 decoration: InputDecoration(labelText: l10n.terrNotes),
               ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(l10n.commonCancel)),
+        FilledButton(onPressed: _save, child: Text(l10n.commonSave)),
+      ],
+    );
+  }
+}
+
+Future<void> _confirmDeleteAssignment(
+    BuildContext context, WidgetRef ref, TerritoryAssignment assignment) async {
+  final l10n = context.l10n;
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.commonConfirmDeleteTitle),
+      content: Text(l10n.terrAsgDeleteConfirm),
+      actions: [
+        TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.commonCancel)),
+        FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.commonDelete)),
+      ],
+    ),
+  );
+  if (confirmed == true) {
+    await ref.read(territoriesRepositoryProvider).deleteAssignment(
+          assignment.id,
+        );
+  }
+}
+
+Future<void> _showAssignmentDialog(BuildContext context, Territory territory,
+    {TerritoryAssignment? existing}) {
+  return showDialog<void>(
+    context: context,
+    builder: (_) =>
+        _AssignmentDialog(territory: territory, existing: existing),
+  );
+}
+
+/// Add or edit one round of a territory going out: who held it, when it was
+/// given out and when it came back.
+///
+/// The same dialog writes history and the assignment that is still open —
+/// "current" is only an assignment with no return date — so a mistyped date or
+/// the wrong holder can be corrected wherever it sits. An assignment left with
+/// no return date while another one on the same territory is already open is
+/// refused: the list picks the current holder with `firstWhereOrNull`, and the
+/// second open row would quietly disappear.
+class _AssignmentDialog extends ConsumerStatefulWidget {
+  const _AssignmentDialog({required this.territory, this.existing});
+
+  final Territory territory;
+  final TerritoryAssignment? existing;
+
+  @override
+  ConsumerState<_AssignmentDialog> createState() => _AssignmentDialogState();
+}
+
+class _AssignmentDialogState extends ConsumerState<_AssignmentDialog> {
+  late String _publisherId = widget.existing?.publisherId ?? '';
+  late String _freeText = widget.existing?.freeText ?? '';
+  late final _notesCtrl =
+      TextEditingController(text: widget.existing?.returnNotes ?? '');
+  late String _assignedDate =
+      widget.existing?.assignedDate ?? dateKey(DateTime.now());
+  late String _returnedDate = widget.existing?.returnedDate ?? '';
+  String? _error;
+
+  @override
+  void dispose() {
+    _notesCtrl.dispose();
+    super.dispose();
+  }
+
+  /// A date picker seeded inside its own range: a stored date can sit outside
+  /// it (imported history, a record from before the app), and an initialDate
+  /// out of bounds throws rather than opening.
+  Future<String?> _pickDate(
+      String current, DateTime first, DateTime last) async {
+    final seed = tryParseDateKey(current) ?? DateTime.now();
+    final initial = seed.isBefore(first)
+        ? first
+        : (seed.isAfter(last) ? last : seed);
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: first,
+      lastDate: last,
+    );
+    return picked == null ? null : dateKey(picked);
+  }
+
+  Future<void> _pickAssigned() async {
+    final picked =
+        await _pickDate(_assignedDate, DateTime(2000), DateTime.now());
+    if (picked != null) {
+      setState(() {
+        _assignedDate = picked;
+        _error = null;
+      });
+    }
+  }
+
+  Future<void> _pickReturned() async {
+    final first = tryParseDateKey(_assignedDate) ?? DateTime(2000);
+    final picked = await _pickDate(_returnedDate, first, DateTime.now());
+    if (picked != null) {
+      setState(() {
+        _returnedDate = picked;
+        _error = null;
+      });
+    }
+  }
+
+  /// The app's own assignment editor, so a territory is handed out the same
+  /// way a meeting part is — publishers, or the "Text" field for whoever the
+  /// roster cannot name.
+  ///
+  /// Territories carry no qualification and no rotation history, so both are
+  /// left out and the dialog opens on all publishers. The date is this
+  /// assignment's own: availability is judged as of the day the territory
+  /// went out, which is what lets a past round name somebody who has moved
+  /// away since.
+  Future<void> _pickHolder() async {
+    final result = await showAssignmentEditor(
+      context,
+      title: context.l10n.terrAsgPickTitle,
+      initial: Assignment(
+        publisherIds: [if (_publisherId.isNotEmpty) _publisherId],
+        freeText: _freeText,
+      ),
+      multi: false,
+      date: tryParseDateKey(_assignedDate),
+    );
+    if (result == null || !mounted) return;
+    setState(() {
+      _publisherId = result.publisherIds.firstOrNull ?? '';
+      _freeText = result.freeText;
+      _error = null;
+    });
+  }
+
+  Future<void> _save() async {
+    final l10n = context.l10n;
+    final freeText = _freeText.trim();
+    if (_publisherId.isEmpty && freeText.isEmpty) {
+      setState(() => _error = l10n.terrAsgErrHolderRequired);
+      return;
+    }
+    if (_assignedDate.isEmpty) {
+      setState(() => _error = l10n.terrAsgErrDateRequired);
+      return;
+    }
+    if (_returnedDate.isNotEmpty &&
+        _returnedDate.compareTo(_assignedDate) < 0) {
+      setState(() => _error = l10n.terrAsgErrReturnBeforeAssigned);
+      return;
+    }
+    if (_returnedDate.isEmpty) {
+      final assignments =
+          ref.read(allTerritoryAssignmentsProvider).value ?? const [];
+      final otherOpen = assignments.any((a) =>
+          a.territoryId == widget.territory.id &&
+          a.isOpen &&
+          a.id != widget.existing?.id);
+      if (otherOpen) {
+        setState(() => _error = l10n.terrAsgErrAlreadyOpen);
+        return;
+      }
+    }
+    await ref.read(territoriesRepositoryProvider).saveAssignment(
+          (widget.existing ?? const TerritoryAssignment()).copyWith(
+            territoryId: widget.territory.id,
+            publisherId: _publisherId,
+            freeText: freeText,
+            assignedDate: _assignedDate,
+            returnedDate: _returnedDate,
+            returnNotes: _notesCtrl.text.trim(),
+          ),
+        );
+    if (mounted) Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final locale = Localizations.localeOf(context).toString();
+    final dateFmt = DateFormat.yMMMd(locale);
+    final chosen = TerritoryAssignment(
+      publisherId: _publisherId,
+      freeText: _freeText,
+    );
+    return AlertDialog(
+      title: Text(
+          widget.existing == null ? l10n.terrAsgAddPast : l10n.terrAsgEdit),
+      content: SizedBox(
+        width: 380,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(widget.territory.name,
+                  style: Theme.of(context).textTheme.titleSmall),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.terrAsgHolder),
+                subtitle: _publisherId.isEmpty && _freeText.trim().isEmpty
+                    ? Text(l10n.terrAsgHolderNone)
+                    : TerritoryHolderText(chosen),
+                trailing: const Icon(Icons.person_search_outlined),
+                onTap: _pickHolder,
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.terrAsgDateAssigned),
+                subtitle: Text(_assignedDate.isEmpty
+                    ? '—'
+                    : dateFmt.format(parseDateKey(_assignedDate))),
+                trailing: const Icon(Icons.event_outlined),
+                onTap: _pickAssigned,
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.terrAsgDateReturned),
+                subtitle: Text(_returnedDate.isEmpty
+                    ? l10n.terrAsgStillOut
+                    : dateFmt.format(parseDateKey(_returnedDate))),
+                trailing: _returnedDate.isEmpty
+                    ? const Icon(Icons.event_outlined)
+                    : IconButton(
+                        tooltip: l10n.commonClear,
+                        icon: const Icon(Icons.clear),
+                        onPressed: () => setState(() {
+                          _returnedDate = '';
+                          _error = null;
+                        }),
+                      ),
+                onTap: _pickReturned,
+              ),
+              TextField(
+                controller: _notesCtrl,
+                maxLines: 2,
+                decoration: InputDecoration(labelText: l10n.terrReturnNotes),
+              ),
+              if (_error != null) ...[
+                const SizedBox(height: 12),
+                Text(_error!,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.error)),
+              ],
             ],
           ),
         ),

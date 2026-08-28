@@ -289,7 +289,15 @@ as String,
 /// @nodoc
 mixin _$TerritoryAssignment {
 
-@JsonKey(includeFromJson: false, includeToJson: false) String get id; String get territoryId; String get publisherId;/// yyyy-MM-dd
+@JsonKey(includeFromJson: false, includeToJson: false) String get id; String get territoryId; String get publisherId;/// Free-text holder, for whoever the roster cannot name: someone who was
+/// in the congregation before the app, or a past holder whose record has
+/// since been deleted. Typed by an admin and never written automatically
+/// — deleting a publisher leaves their assignments' dates and takes the
+/// name with it.
+///
+/// The same idea as [Assignment.freeText] on the schedules, and shown the
+/// same way: in italics, next to or instead of a publisher's name.
+ String get freeText;/// yyyy-MM-dd
  String get assignedDate; String get returnedDate; String get returnNotes;
 /// Create a copy of TerritoryAssignment
 /// with the given fields replaced by the non-null parameter values.
@@ -303,16 +311,16 @@ $TerritoryAssignmentCopyWith<TerritoryAssignment> get copyWith => _$TerritoryAss
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TerritoryAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.territoryId, territoryId) || other.territoryId == territoryId)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.assignedDate, assignedDate) || other.assignedDate == assignedDate)&&(identical(other.returnedDate, returnedDate) || other.returnedDate == returnedDate)&&(identical(other.returnNotes, returnNotes) || other.returnNotes == returnNotes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TerritoryAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.territoryId, territoryId) || other.territoryId == territoryId)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.freeText, freeText) || other.freeText == freeText)&&(identical(other.assignedDate, assignedDate) || other.assignedDate == assignedDate)&&(identical(other.returnedDate, returnedDate) || other.returnedDate == returnedDate)&&(identical(other.returnNotes, returnNotes) || other.returnNotes == returnNotes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,territoryId,publisherId,assignedDate,returnedDate,returnNotes);
+int get hashCode => Object.hash(runtimeType,id,territoryId,publisherId,freeText,assignedDate,returnedDate,returnNotes);
 
 @override
 String toString() {
-  return 'TerritoryAssignment(id: $id, territoryId: $territoryId, publisherId: $publisherId, assignedDate: $assignedDate, returnedDate: $returnedDate, returnNotes: $returnNotes)';
+  return 'TerritoryAssignment(id: $id, territoryId: $territoryId, publisherId: $publisherId, freeText: $freeText, assignedDate: $assignedDate, returnedDate: $returnedDate, returnNotes: $returnNotes)';
 }
 
 
@@ -323,7 +331,7 @@ abstract mixin class $TerritoryAssignmentCopyWith<$Res>  {
   factory $TerritoryAssignmentCopyWith(TerritoryAssignment value, $Res Function(TerritoryAssignment) _then) = _$TerritoryAssignmentCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String territoryId, String publisherId, String assignedDate, String returnedDate, String returnNotes
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String territoryId, String publisherId, String freeText, String assignedDate, String returnedDate, String returnNotes
 });
 
 
@@ -340,11 +348,12 @@ class _$TerritoryAssignmentCopyWithImpl<$Res>
 
 /// Create a copy of TerritoryAssignment
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? territoryId = null,Object? publisherId = null,Object? assignedDate = null,Object? returnedDate = null,Object? returnNotes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? territoryId = null,Object? publisherId = null,Object? freeText = null,Object? assignedDate = null,Object? returnedDate = null,Object? returnNotes = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,territoryId: null == territoryId ? _self.territoryId : territoryId // ignore: cast_nullable_to_non_nullable
 as String,publisherId: null == publisherId ? _self.publisherId : publisherId // ignore: cast_nullable_to_non_nullable
+as String,freeText: null == freeText ? _self.freeText : freeText // ignore: cast_nullable_to_non_nullable
 as String,assignedDate: null == assignedDate ? _self.assignedDate : assignedDate // ignore: cast_nullable_to_non_nullable
 as String,returnedDate: null == returnedDate ? _self.returnedDate : returnedDate // ignore: cast_nullable_to_non_nullable
 as String,returnNotes: null == returnNotes ? _self.returnNotes : returnNotes // ignore: cast_nullable_to_non_nullable
@@ -433,10 +442,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String assignedDate,  String returnedDate,  String returnNotes)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String freeText,  String assignedDate,  String returnedDate,  String returnNotes)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TerritoryAssignment() when $default != null:
-return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
+return $default(_that.id,_that.territoryId,_that.publisherId,_that.freeText,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
   return orElse();
 
 }
@@ -454,10 +463,10 @@ return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String assignedDate,  String returnedDate,  String returnNotes)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String freeText,  String assignedDate,  String returnedDate,  String returnNotes)  $default,) {final _that = this;
 switch (_that) {
 case _TerritoryAssignment():
-return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
+return $default(_that.id,_that.territoryId,_that.publisherId,_that.freeText,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -474,10 +483,10 @@ return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String assignedDate,  String returnedDate,  String returnNotes)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String territoryId,  String publisherId,  String freeText,  String assignedDate,  String returnedDate,  String returnNotes)?  $default,) {final _that = this;
 switch (_that) {
 case _TerritoryAssignment() when $default != null:
-return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
+return $default(_that.id,_that.territoryId,_that.publisherId,_that.freeText,_that.assignedDate,_that.returnedDate,_that.returnNotes);case _:
   return null;
 
 }
@@ -489,12 +498,21 @@ return $default(_that.id,_that.territoryId,_that.publisherId,_that.assignedDate,
 @JsonSerializable()
 
 class _TerritoryAssignment extends TerritoryAssignment {
-  const _TerritoryAssignment({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.territoryId = '', this.publisherId = '', this.assignedDate = '', this.returnedDate = '', this.returnNotes = ''}): super._();
+  const _TerritoryAssignment({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.territoryId = '', this.publisherId = '', this.freeText = '', this.assignedDate = '', this.returnedDate = '', this.returnNotes = ''}): super._();
   factory _TerritoryAssignment.fromJson(Map<String, dynamic> json) => _$TerritoryAssignmentFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
 @override@JsonKey() final  String territoryId;
 @override@JsonKey() final  String publisherId;
+/// Free-text holder, for whoever the roster cannot name: someone who was
+/// in the congregation before the app, or a past holder whose record has
+/// since been deleted. Typed by an admin and never written automatically
+/// — deleting a publisher leaves their assignments' dates and takes the
+/// name with it.
+///
+/// The same idea as [Assignment.freeText] on the schedules, and shown the
+/// same way: in italics, next to or instead of a publisher's name.
+@override@JsonKey() final  String freeText;
 /// yyyy-MM-dd
 @override@JsonKey() final  String assignedDate;
 @override@JsonKey() final  String returnedDate;
@@ -513,16 +531,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TerritoryAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.territoryId, territoryId) || other.territoryId == territoryId)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.assignedDate, assignedDate) || other.assignedDate == assignedDate)&&(identical(other.returnedDate, returnedDate) || other.returnedDate == returnedDate)&&(identical(other.returnNotes, returnNotes) || other.returnNotes == returnNotes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TerritoryAssignment&&(identical(other.id, id) || other.id == id)&&(identical(other.territoryId, territoryId) || other.territoryId == territoryId)&&(identical(other.publisherId, publisherId) || other.publisherId == publisherId)&&(identical(other.freeText, freeText) || other.freeText == freeText)&&(identical(other.assignedDate, assignedDate) || other.assignedDate == assignedDate)&&(identical(other.returnedDate, returnedDate) || other.returnedDate == returnedDate)&&(identical(other.returnNotes, returnNotes) || other.returnNotes == returnNotes));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,territoryId,publisherId,assignedDate,returnedDate,returnNotes);
+int get hashCode => Object.hash(runtimeType,id,territoryId,publisherId,freeText,assignedDate,returnedDate,returnNotes);
 
 @override
 String toString() {
-  return 'TerritoryAssignment(id: $id, territoryId: $territoryId, publisherId: $publisherId, assignedDate: $assignedDate, returnedDate: $returnedDate, returnNotes: $returnNotes)';
+  return 'TerritoryAssignment(id: $id, territoryId: $territoryId, publisherId: $publisherId, freeText: $freeText, assignedDate: $assignedDate, returnedDate: $returnedDate, returnNotes: $returnNotes)';
 }
 
 
@@ -533,7 +551,7 @@ abstract mixin class _$TerritoryAssignmentCopyWith<$Res> implements $TerritoryAs
   factory _$TerritoryAssignmentCopyWith(_TerritoryAssignment value, $Res Function(_TerritoryAssignment) _then) = __$TerritoryAssignmentCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String territoryId, String publisherId, String assignedDate, String returnedDate, String returnNotes
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String territoryId, String publisherId, String freeText, String assignedDate, String returnedDate, String returnNotes
 });
 
 
@@ -550,11 +568,12 @@ class __$TerritoryAssignmentCopyWithImpl<$Res>
 
 /// Create a copy of TerritoryAssignment
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? territoryId = null,Object? publisherId = null,Object? assignedDate = null,Object? returnedDate = null,Object? returnNotes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? territoryId = null,Object? publisherId = null,Object? freeText = null,Object? assignedDate = null,Object? returnedDate = null,Object? returnNotes = null,}) {
   return _then(_TerritoryAssignment(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,territoryId: null == territoryId ? _self.territoryId : territoryId // ignore: cast_nullable_to_non_nullable
 as String,publisherId: null == publisherId ? _self.publisherId : publisherId // ignore: cast_nullable_to_non_nullable
+as String,freeText: null == freeText ? _self.freeText : freeText // ignore: cast_nullable_to_non_nullable
 as String,assignedDate: null == assignedDate ? _self.assignedDate : assignedDate // ignore: cast_nullable_to_non_nullable
 as String,returnedDate: null == returnedDate ? _self.returnedDate : returnedDate // ignore: cast_nullable_to_non_nullable
 as String,returnNotes: null == returnNotes ? _self.returnNotes : returnNotes // ignore: cast_nullable_to_non_nullable

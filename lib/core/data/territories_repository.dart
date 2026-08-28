@@ -90,8 +90,16 @@ class TerritoriesRepository {
         return list;
       });
 
-  Future<void> assign(TerritoryAssignment assignment) =>
-      _assignments.add(assignment.toJson()).then((_) {});
+  /// Creates when [assignment] has no id, otherwise overwrites the whole doc.
+  /// Territory-admin only (firestore.rules); the publisher-side path is
+  /// [returnTerritory], which may touch nothing but the return fields.
+  Future<void> saveAssignment(TerritoryAssignment assignment) async {
+    if (assignment.id.isEmpty) {
+      await _assignments.add(assignment.toJson());
+    } else {
+      await _assignments.doc(assignment.id).set(assignment.toJson());
+    }
+  }
 
   /// Publishers may only touch returnedDate/returnNotes (rules-enforced).
   Future<void> returnTerritory(

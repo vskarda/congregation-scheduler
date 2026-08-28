@@ -2158,10 +2158,56 @@ class AppLocalizationsPl extends AppLocalizations {
   String get terrSortByDate => 'Data przydziału';
 
   @override
+  String get terrHolderDeleted => 'Usunięty głosiciel';
+
+  @override
   String get terrHistoryOngoing => 'Bieżący';
 
   @override
   String get terrHistoryEmpty => 'Brak jeszcze historii przydziałów.';
+
+  @override
+  String get terrAsgAddPast => 'Dodaj wcześniejszy przydział';
+
+  @override
+  String get terrAsgEdit => 'Edytuj przydział';
+
+  @override
+  String get terrAsgHolder => 'Głosiciel';
+
+  @override
+  String get terrAsgHolderNone => 'Wybierz głosiciela…';
+
+  @override
+  String get terrAsgPickTitle => 'Kto miał ten teren?';
+
+  @override
+  String get terrAsgDateAssigned => 'Data przydziału';
+
+  @override
+  String get terrAsgDateReturned => 'Data zwrotu';
+
+  @override
+  String get terrAsgStillOut => 'Jeszcze nie zwrócony';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Wybierz głosiciela lub wpisz imię i nazwisko.';
+
+  @override
+  String get terrAsgErrDateRequired => 'Wybierz datę przydzielenia terenu.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'Data zwrotu nie może być wcześniejsza niż data przydziału.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Ten teren jest już przydzielony. Podaj datę zwrotu dla tego przydziału albo najpierw zwróć bieżący.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Usunąć ten przydział z historii terenu? Tej operacji nie można cofnąć.';
 
   @override
   String get terrRecordExport =>

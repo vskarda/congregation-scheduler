@@ -2179,10 +2179,57 @@ class AppLocalizationsDe extends AppLocalizations {
   String get terrSortByDate => 'Zuweisungsdatum';
 
   @override
+  String get terrHolderDeleted => 'Gelöschter Verkündiger';
+
+  @override
   String get terrHistoryOngoing => 'Aktuell';
 
   @override
   String get terrHistoryEmpty => 'Noch kein Zuweisungsverlauf.';
+
+  @override
+  String get terrAsgAddPast => 'Frühere Zuweisung hinzufügen';
+
+  @override
+  String get terrAsgEdit => 'Zuweisung bearbeiten';
+
+  @override
+  String get terrAsgHolder => 'Verkündiger';
+
+  @override
+  String get terrAsgHolderNone => 'Verkündiger auswählen…';
+
+  @override
+  String get terrAsgPickTitle => 'Wer hatte das Gebiet?';
+
+  @override
+  String get terrAsgDateAssigned => 'Zuweisungsdatum';
+
+  @override
+  String get terrAsgDateReturned => 'Rückgabedatum';
+
+  @override
+  String get terrAsgStillOut => 'Noch nicht zurückgegeben';
+
+  @override
+  String get terrAsgErrHolderRequired =>
+      'Wähle einen Verkündiger aus oder gib einen Namen ein.';
+
+  @override
+  String get terrAsgErrDateRequired =>
+      'Wähle das Datum aus, an dem das Gebiet zugewiesen wurde.';
+
+  @override
+  String get terrAsgErrReturnBeforeAssigned =>
+      'Das Rückgabedatum kann nicht vor dem Zuweisungsdatum liegen.';
+
+  @override
+  String get terrAsgErrAlreadyOpen =>
+      'Dieses Gebiet ist bereits ausgegeben. Gib dieser Zuweisung ein Rückgabedatum oder gib zuerst die aktuelle zurück.';
+
+  @override
+  String get terrAsgDeleteConfirm =>
+      'Diese Zuweisung aus dem Verlauf des Gebiets löschen? Das kann nicht rückgängig gemacht werden.';
 
   @override
   String get terrRecordExport => 'Gebietszuteilungskarte exportieren (PDF)';
