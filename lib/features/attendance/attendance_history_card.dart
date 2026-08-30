@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../core/data/attendance_repository.dart';
 import '../../core/data/congregation_repository.dart';
+import '../../core/l10n/enum_labels.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
@@ -35,13 +36,16 @@ class AttendanceHistoryCard extends ConsumerWidget {
   /// recorded entries; entries outside the expected pattern (e.g. after a
   /// meeting-day change) are kept too.
   ///
-  /// [overrides] moves the expected day for the weeks that were rescheduled,
-  /// so a circuit overseer's Tuesday midweek meeting is expected on the
-  /// Tuesday rather than showing up as an unrecorded Wednesday plus a stray
-  /// extra row.
+  /// [overrides] carries what a week deviates in. It moves the expected day
+  /// for the weeks that were rescheduled, so a circuit overseer's Tuesday
+  /// midweek meeting is expected on the Tuesday rather than showing up as an
+  /// unrecorded Wednesday plus a stray extra row — and it drops the meeting
+  /// altogether for a week with nothing planned, or turns it into the
+  /// Memorial, so neither is chased for a count it will never have.
   List<_Slot> _slots(
     CongregationMeta meta,
-    Map<String, ({int? lmm, int? weekend})> overrides,
+    Map<String, ({MeetingWeekState lmm, MeetingWeekState weekend})>
+        overrides,
   ) {
     final byId = {
       for (final e in entries) AttendanceEntry.docId(e.date, e.meetingType): e,
@@ -51,14 +55,22 @@ class AttendanceHistoryCard extends ConsumerWidget {
     var day = parseDateKey(fromDate);
     while (!day.isAfter(today)) {
       final override = overrides[weekIdOf(day)];
-      for (final type in MeetingType.values) {
-        final weekday = type == MeetingType.lmm
-            ? override?.lmm ?? meta.lmmWeekday
-            : override?.weekend ?? meta.weekendWeekday;
+      for (final type in kCountedMeetingTypes) {
+        final forType = type == MeetingType.lmm
+            ? override?.lmm ?? kRegularMeetingWeek
+            : override?.weekend ?? kRegularMeetingWeek;
+        if (forType.kind == MeetingProgramKind.nothingPlanned) continue;
+        final weekday = forType.weekday ??
+            (type == MeetingType.lmm ? meta.lmmWeekday : meta.weekendWeekday);
         if (day.weekday != weekday) continue;
+        // The Memorial replaces whichever meeting it falls on: the count is
+        // expected under its own type, and is never one of the two averaged.
+        final slotType = forType.kind == MeetingProgramKind.memorial
+            ? MeetingType.memorial
+            : type;
         final date = dateKey(day);
-        final id = AttendanceEntry.docId(date, type);
-        slots[id] = (date: date, type: type, entry: byId[id]);
+        final id = AttendanceEntry.docId(date, slotType);
+        slots[id] = (date: date, type: slotType, entry: byId[id]);
       }
       day = DateTime(day.year, day.month, day.day + 1);
     }
@@ -128,8 +140,9 @@ class AttendanceHistoryCard extends ConsumerWidget {
     final monthFmt = DateFormat.yMMMM(locale);
     final meta = ref.watch(congregationMetaProvider).value ??
         const CongregationMeta();
-    final overrides = ref.watch(meetingWeekdayOverridesProvider).value ??
-        const <String, ({int? lmm, int? weekend})>{};
+    final overrides = ref.watch(meetingWeekOverridesProvider).value ??
+        const <String,
+            ({MeetingWeekState lmm, MeetingWeekState weekend})>{};
 
     final byMonth =
         groupBy(_slots(meta, overrides), (_Slot s) => s.date.substring(0, 7));
@@ -170,7 +183,7 @@ class AttendanceHistoryCard extends ConsumerWidget {
                   ListTile(
                     dense: true,
                     title: Text(
-                        '${slot.date}  ·  ${slot.type == MeetingType.lmm ? l10n.attMeetingLmm : l10n.attMeetingWeekend}'),
+                        '${slot.date}  ·  ${meetingTypeLabel(l10n, slot.type)}'),
                     subtitle: (slot.entry?.hasData ?? false)
                         ? Text(subtitleFor(slot.entry!))
                         : Text(l10n.attNotFilled,
@@ -181,13 +194,8 @@ class AttendanceHistoryCard extends ConsumerWidget {
                         ? const Icon(Icons.edit_outlined, size: 18)
                         : null,
                     onTap: canEdit
-                        ? () => _edit(
-                            context,
-                            ref,
-                            slot,
-                            slot.type == MeetingType.lmm
-                                ? l10n.attMeetingLmm
-                                : l10n.attMeetingWeekend)
+                        ? () => _edit(context, ref, slot,
+                            meetingTypeLabel(l10n, slot.type))
                         : null,
                   ),
               ],

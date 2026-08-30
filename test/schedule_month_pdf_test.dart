@@ -149,6 +149,58 @@ void main() {
     expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
   });
 
+  test('LMM PDF prints the note of a week with nothing planned', () async {
+    final bytes = await buildLmmMonthPdf(
+      month: month,
+      mondays: mondays,
+      weeksById: {
+        '2026-07-06': lmmWeek.copyWith(
+          programKind: MeetingProgramKind.nothingPlanned,
+          programNote: 'Regional convention',
+        ),
+      },
+      publishersById: publishers,
+      classCount: 1,
+      permanentAssignments: const [],
+      l10n: lookupAppLocalizations(const Locale('en')),
+      locale: 'en',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
+  test('LMM PDF prints the Memorial in place of the program', () async {
+    final bytes = await buildLmmMonthPdf(
+      month: month,
+      mondays: mondays,
+      weeksById: {
+        '2026-07-06': lmmWeek.copyWith(
+          programKind: MeetingProgramKind.memorial,
+          memorial: const MemorialProgram(
+            songNo: 18,
+            chairman: Assignment(publisherIds: ['p1']),
+            speaker: Assignment(freeText: 'Visiting brother'),
+            breadPrayer: Assignment(publisherIds: ['p2']),
+            winePrayer: Assignment(publisherIds: ['p3']),
+            customFields: [
+              CustomAssignment(
+                label: 'Emblems',
+                assignment: Assignment(publisherIds: ['p1']),
+              ),
+            ],
+          ),
+        ),
+      },
+      publishersById: publishers,
+      classCount: 3,
+      permanentAssignments: const [],
+      l10n: lookupAppLocalizations(const Locale('cs')),
+      locale: 'cs',
+      fonts: loadFontsFromDisk(),
+    );
+    expect(String.fromCharCodes(bytes.take(5)), '%PDF-');
+  });
+
   test('LMM PDF merges permanent custom assignments (assigned + blank)',
       () async {
     const permanent = [

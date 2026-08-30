@@ -172,6 +172,68 @@ void main() {
     expect((await db.collection('attendance').doc(id).get()).exists, isFalse);
   });
 
+  // What a week runs decides which meeting the history expects of it: an
+  // assembly week is not chased for a count it will never have, and a
+  // Memorial is expected under its own meeting type.
+  testWidgets('a week with nothing planned expects no midweek meeting',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    final prevMonth = addMonths(DateTime.now(), -1);
+    final fromDate = '${monthKey(prevMonth)}-01';
+    var day = prevMonth;
+    while (day.weekday != DateTime.tuesday) {
+      day = DateTime(day.year, day.month, day.day + 1);
+    }
+    final date = dateKey(day);
+    await db.collection('lmm_weeks').doc(weekIdOf(day)).set(
+          LmmWeek(
+            id: weekIdOf(day),
+            programKind: MeetingProgramKind.nothingPlanned,
+          ).toJson(),
+        );
+
+    await tester.pumpWidget(wrapCard(db, const [], fromDate));
+    await tester.pumpAndSettle();
+
+    final monthTitle = find.text(DateFormat.yMMMM('en').format(prevMonth));
+    await tester.ensureVisible(monthTitle);
+    await tester.tap(monthTitle);
+    await tester.pumpAndSettle();
+
+    expect(find.text('$date  ·  Midweek meeting'), findsNothing);
+    // Every other Tuesday of the month is still expected.
+    expect(find.textContaining('Midweek meeting'), findsWidgets);
+  });
+
+  testWidgets('a Memorial week is expected under its own meeting type',
+      (tester) async {
+    final db = FakeFirebaseFirestore();
+    final prevMonth = addMonths(DateTime.now(), -1);
+    final fromDate = '${monthKey(prevMonth)}-01';
+    var day = prevMonth;
+    while (day.weekday != DateTime.tuesday) {
+      day = DateTime(day.year, day.month, day.day + 1);
+    }
+    final date = dateKey(day);
+    await db.collection('lmm_weeks').doc(weekIdOf(day)).set(
+          LmmWeek(
+            id: weekIdOf(day),
+            programKind: MeetingProgramKind.memorial,
+          ).toJson(),
+        );
+
+    await tester.pumpWidget(wrapCard(db, const [], fromDate));
+    await tester.pumpAndSettle();
+
+    final monthTitle = find.text(DateFormat.yMMMM('en').format(prevMonth));
+    await tester.ensureVisible(monthTitle);
+    await tester.tap(monthTitle);
+    await tester.pumpAndSettle();
+
+    expect(find.text('$date  ·  Memorial'), findsOneWidget);
+    expect(find.text('$date  ·  Midweek meeting'), findsNothing);
+  });
+
   testWidgets('record-attendance-only role sees nothing on this screen',
       (tester) async {
     final db = FakeFirebaseFirestore();

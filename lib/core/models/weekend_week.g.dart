@@ -13,6 +13,13 @@ _WeekendWeek _$WeekendWeekFromJson(Map<String, dynamic> json) => _WeekendWeek(
   talkNo: (json['talkNo'] as num?)?.toInt(),
   songTitle: json['songTitle'] as String? ?? '',
   songNo: (json['songNo'] as num?)?.toInt(),
+  programKind:
+      $enumDecodeNullable(_$MeetingProgramKindEnumMap, json['programKind']) ??
+      MeetingProgramKind.regular,
+  programNote: json['programNote'] as String? ?? '',
+  memorial: json['memorial'] == null
+      ? null
+      : MemorialProgram.fromJson(json['memorial'] as Map<String, dynamic>),
   speaker: json['speaker'] == null
       ? const Assignment()
       : Assignment.fromJson(json['speaker'] as Map<String, dynamic>),
@@ -56,6 +63,9 @@ Map<String, dynamic> _$WeekendWeekToJson(_WeekendWeek instance) =>
       'talkNo': ?instance.talkNo,
       'songTitle': instance.songTitle,
       'songNo': ?instance.songNo,
+      'programKind': _$MeetingProgramKindEnumMap[instance.programKind]!,
+      'programNote': instance.programNote,
+      'memorial': ?instance.memorial?.toJson(),
       'speaker': instance.speaker.toJson(),
       'chairman': instance.chairman.toJson(),
       'wtReader': instance.wtReader.toJson(),
@@ -68,3 +78,9 @@ Map<String, dynamic> _$WeekendWeekToJson(_WeekendWeek instance) =>
           .toList(),
       'allAssigneeIds': instance.allAssigneeIds,
     };
+
+const _$MeetingProgramKindEnumMap = {
+  MeetingProgramKind.regular: 'regular',
+  MeetingProgramKind.nothingPlanned: 'nothingPlanned',
+  MeetingProgramKind.memorial: 'memorial',
+};

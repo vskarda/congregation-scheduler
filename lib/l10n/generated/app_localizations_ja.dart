@@ -2452,4 +2452,61 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get qMinistryMeetingConductor => '野外奉仕の集まりの司会者';
+
+  @override
+  String get programKindRegular => '通常のプログラム';
+
+  @override
+  String get programKindNothingPlanned => '予定なし';
+
+  @override
+  String get programKindMemorial => '記念式';
+
+  @override
+  String get weekNothingPlannedHint => '今週は集会が開かれません。';
+
+  @override
+  String get weekProgramSwitchConfirm => '現在のプログラムは保存され、元に戻すと再び表示されます。';
+
+  @override
+  String get weekRestoreProgram => '通常のプログラムに戻す';
+
+  @override
+  String get weekNoteLabel => '伝道者へのお知らせ';
+
+  @override
+  String get weekNoteEdit => 'お知らせを編集';
+
+  @override
+  String get memorialBreadPrayer => 'パンについての祈り';
+
+  @override
+  String get memorialWinePrayer => 'ぶどう酒についての祈り';
+
+  @override
+  String get memorialAttendance => '記念式の出席者数';
+
+  @override
+  String get memorialPastTitle => '過去の記念式';
+
+  @override
+  String get attMeetingMemorial => '記念式';
+
+  @override
+  String get keepOnImport => 'インポート時に保持';
+
+  @override
+  String get keepOnImportHint => 'ワークブックのインポートで上書きされません。';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return '編集内容を保持します: $parts 個の割り当て、$songs 曲';
+  }
+
+  @override
+  String get helpProgramKindTitle => '集会のない週と記念式';
+
+  @override
+  String get helpProgramKindBody =>
+      '週の画面では、週の横のメニューから「予定なし」（大会や巡回大会の週。伝道者にはプログラムの代わりにあなたのお知らせが表示され、出席者数も求められません）や記念式に切り替えられます。記念式は週日でも週末でも構いません。切り替え前のプログラムは保存され、戻すとそのまま復元されます。記念式の日時は週見出しの鉛筆から設定し、出席者数はその週に記録されます。集会の平均には決して含まれません。';
 }

@@ -53,10 +53,14 @@ class _OverviewCard extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
     final monthFmt = DateFormat.yMMM(locale);
 
-    // month -> type -> totals (in-person + online always combined).
+    // month -> type -> totals (in-person + online always combined). Only the
+    // two congregation meetings: a Memorial is recorded in the same
+    // collection but is not averaged with them, and a month holding nothing
+    // else must not appear here as an empty row.
     final byMonth = <String, Map<MeetingType, List<int>>>{};
     for (final e in entries) {
       if (e.date.length < 7 || !e.hasData) continue;
+      if (!kCountedMeetingTypes.contains(e.meetingType)) continue;
       final month = e.date.substring(0, 7);
       byMonth
           .putIfAbsent(month, () => {})

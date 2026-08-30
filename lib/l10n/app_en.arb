@@ -843,5 +843,24 @@
   "qMicrophone": "Microphones",
   "qAudioVideo": "Audio/video",
   "qPublicWitnessing": "Public witnessing",
-  "qMinistryMeetingConductor": "Ministry meeting conductor"
+  "qMinistryMeetingConductor": "Ministry meeting conductor",
+
+  "programKindRegular": "Regular program",
+  "programKindNothingPlanned": "Nothing planned",
+  "programKindMemorial": "Memorial",
+  "weekNothingPlannedHint": "No meeting is held this week.",
+  "weekProgramSwitchConfirm": "The current program is kept and comes back when you switch back.",
+  "weekRestoreProgram": "Restore regular program",
+  "weekNoteLabel": "Note for publishers",
+  "weekNoteEdit": "Edit note",
+  "memorialBreadPrayer": "Prayer for the bread",
+  "memorialWinePrayer": "Prayer for the wine",
+  "memorialAttendance": "Memorial attendance",
+  "memorialPastTitle": "Past Memorials",
+  "attMeetingMemorial": "Memorial",
+  "keepOnImport": "Keep on import",
+  "keepOnImportHint": "A workbook import won't overwrite this.",
+  "importKeepsEdits": "Your edits are kept: {parts} parts, {songs} songs", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Weeks with no meeting, and the Memorial",
+  "helpProgramKindBody": "In the midweek or weekend view, the menu next to the week switches it to “Nothing planned” (an assembly or convention week — publishers see your note instead of a program and no attendance is expected) or to the Memorial, which can fall on either day. Whatever you switch away from is kept and comes back when you switch back. The Memorial’s own day and time are set with the pencil in the week header, and its attendance is recorded on the week itself — never counted into the midweek or weekend averages."
 }

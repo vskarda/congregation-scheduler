@@ -4606,6 +4606,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ministry meeting conductor'**
   String get qMinistryMeetingConductor;
+
+  /// No description provided for @programKindRegular.
+  ///
+  /// In en, this message translates to:
+  /// **'Regular program'**
+  String get programKindRegular;
+
+  /// No description provided for @programKindNothingPlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing planned'**
+  String get programKindNothingPlanned;
+
+  /// No description provided for @programKindMemorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorial'**
+  String get programKindMemorial;
+
+  /// No description provided for @weekNothingPlannedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'No meeting is held this week.'**
+  String get weekNothingPlannedHint;
+
+  /// No description provided for @weekProgramSwitchConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'The current program is kept and comes back when you switch back.'**
+  String get weekProgramSwitchConfirm;
+
+  /// No description provided for @weekRestoreProgram.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore regular program'**
+  String get weekRestoreProgram;
+
+  /// No description provided for @weekNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note for publishers'**
+  String get weekNoteLabel;
+
+  /// No description provided for @weekNoteEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit note'**
+  String get weekNoteEdit;
+
+  /// No description provided for @memorialBreadPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer for the bread'**
+  String get memorialBreadPrayer;
+
+  /// No description provided for @memorialWinePrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer for the wine'**
+  String get memorialWinePrayer;
+
+  /// No description provided for @memorialAttendance.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorial attendance'**
+  String get memorialAttendance;
+
+  /// No description provided for @memorialPastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Past Memorials'**
+  String get memorialPastTitle;
+
+  /// No description provided for @attMeetingMemorial.
+  ///
+  /// In en, this message translates to:
+  /// **'Memorial'**
+  String get attMeetingMemorial;
+
+  /// No description provided for @keepOnImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep on import'**
+  String get keepOnImport;
+
+  /// No description provided for @keepOnImportHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A workbook import won\'t overwrite this.'**
+  String get keepOnImportHint;
+
+  /// No description provided for @importKeepsEdits.
+  ///
+  /// In en, this message translates to:
+  /// **'Your edits are kept: {parts} parts, {songs} songs'**
+  String importKeepsEdits(int parts, int songs);
+
+  /// No description provided for @helpProgramKindTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weeks with no meeting, and the Memorial'**
+  String get helpProgramKindTitle;
+
+  /// No description provided for @helpProgramKindBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In the midweek or weekend view, the menu next to the week switches it to “Nothing planned” (an assembly or convention week — publishers see your note instead of a program and no attendance is expected) or to the Memorial, which can fall on either day. Whatever you switch away from is kept and comes back when you switch back. The Memorial’s own day and time are set with the pencil in the week header, and its attendance is recorded on the week itself — never counted into the midweek or weekend averages.'**
+  String get helpProgramKindBody;
 }
 
 class _AppLocalizationsDelegate

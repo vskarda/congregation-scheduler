@@ -54,6 +54,10 @@ String assignmentRoleLabel(AppLocalizations l10n, String roleKey) {
     'co.meal' => l10n.coSectionMeal,
     'co.shepherding' => l10n.coSectionShepherding,
     'co.other' => l10n.coSectionOther,
+    'memorialChairman' => l10n.partChairman,
+    'memorialSpeaker' => l10n.weekendSpeaker,
+    'memorialBreadPrayer' => l10n.memorialBreadPrayer,
+    'memorialWinePrayer' => l10n.memorialWinePrayer,
     _ => '',
   };
 }
@@ -276,6 +280,8 @@ class EventsScreen extends ConsumerWidget {
                         AssignmentSource.pw => Icons.storefront_outlined,
                         AssignmentSource.fsm => Icons.diversity_3_outlined,
                         AssignmentSource.coVisit => Icons.co_present_outlined,
+                        AssignmentSource.memorial =>
+                          Icons.local_florist_outlined,
                       }, size: 20),
                       title: Text(assignmentTitle(l10n, entry)),
                       subtitle: Text(

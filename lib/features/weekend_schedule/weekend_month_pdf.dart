@@ -9,6 +9,7 @@ import '../../core/models/models.dart';
 import '../../core/pdf/pdf_fonts.dart';
 import '../../core/utils/assignment_names.dart';
 import '../../core/utils/dates.dart';
+import '../lmm_schedule/lmm_month_pdf.dart' show programKindBlock;
 import '../songs/song_editor.dart' show songDisplayText;
 
 const _gray = PdfColor.fromInt(0xFF757575);
@@ -76,6 +77,21 @@ Future<Uint8List> buildWeekendMonthPdf({
         padding: const pw.EdgeInsets.only(left: 6, bottom: 6),
         child: pw.Text(l10n.weekNoSchedule,
             style: const pw.TextStyle(fontSize: 9, color: _gray)),
+      ));
+      continue;
+    }
+
+    // A week that runs no weekend program prints what it does run instead;
+    // the dormant talk and assignments below stay out of the sheet.
+    if (week.programKind != MeetingProgramKind.regular) {
+      widgets.addAll(programKindBlock(
+        kind: week.programKind,
+        programNote: week.programNote,
+        memorial: week.memorialOrEmpty,
+        attendants: week.attendants,
+        audioVideo: week.audioVideo,
+        names: (a) => formatAssignmentNames(a, publishersById),
+        l10n: l10n,
       ));
       continue;
     }

@@ -789,5 +789,24 @@
   "qMicrophone": "Micrófonos",
   "qAudioVideo": "Audio y video",
   "qPublicWitnessing": "Predicación pública",
-  "qMinistryMeetingConductor": "Conductor de la reunión para predicar"
+  "qMinistryMeetingConductor": "Conductor de la reunión para predicar",
+
+  "programKindRegular": "Programa habitual",
+  "programKindNothingPlanned": "Nada previsto",
+  "programKindMemorial": "Conmemoración",
+  "weekNothingPlannedHint": "Esta semana no hay reunión.",
+  "weekProgramSwitchConfirm": "El programa actual se conserva y vuelve cuando cambies de nuevo.",
+  "weekRestoreProgram": "Restaurar el programa habitual",
+  "weekNoteLabel": "Nota para los publicadores",
+  "weekNoteEdit": "Editar la nota",
+  "memorialBreadPrayer": "Oración por el pan",
+  "memorialWinePrayer": "Oración por el vino",
+  "memorialAttendance": "Asistencia a la Conmemoración",
+  "memorialPastTitle": "Conmemoraciones anteriores",
+  "attMeetingMemorial": "Conmemoración",
+  "keepOnImport": "Conservar al importar",
+  "keepOnImportHint": "La importación de la guía de actividades no lo sobrescribirá.",
+  "importKeepsEdits": "Se conservan tus cambios: {parts} partes, {songs} canciones", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Semanas sin reunión y la Conmemoración",
+  "helpProgramKindBody": "En la vista de la semana, el menú junto a la semana la cambia a «Nada previsto» (una semana de asamblea o congreso: los publicadores ven tu nota en lugar del programa y no se espera asistencia) o a la Conmemoración, que puede caer en cualquiera de los dos días. Lo que dejas se conserva y vuelve al cambiar de nuevo. El día y la hora de la Conmemoración se fijan con el lápiz del encabezado de la semana, y su asistencia se registra en ella misma: nunca cuenta en los promedios de las reuniones."
 }

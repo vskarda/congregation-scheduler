@@ -73,6 +73,12 @@ class HelpScreen extends ConsumerWidget {
                   title: l10n.helpPdfExportTitle,
                   body: l10n.helpPdfExportBody,
                 ),
+              if (roles.canEditLmm() || roles.canEditWeekend())
+                _HelpTopic(
+                  icon: Icons.event_busy_outlined,
+                  title: l10n.helpProgramKindTitle,
+                  body: l10n.helpProgramKindBody,
+                ),
               if (roles.canEditPublicWitnessing())
                 _HelpTopic(
                   icon: Icons.groups_outlined,

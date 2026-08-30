@@ -789,5 +789,24 @@
   "qMicrophone": "Mikrofony",
   "qAudioVideo": "Audio-wideo",
   "qPublicWitnessing": "Świadczenie publiczne",
-  "qMinistryMeetingConductor": "Prowadzący zbiórkę do służby"
+  "qMinistryMeetingConductor": "Prowadzący zbiórkę do służby",
+
+  "programKindRegular": "Zwykły program",
+  "programKindNothingPlanned": "Nic nie zaplanowano",
+  "programKindMemorial": "Pamiątka",
+  "weekNothingPlannedHint": "W tym tygodniu nie ma zebrania.",
+  "weekProgramSwitchConfirm": "Obecny program zostanie zachowany i wróci po przełączeniu z powrotem.",
+  "weekRestoreProgram": "Przywróć zwykły program",
+  "weekNoteLabel": "Uwaga dla głosicieli",
+  "weekNoteEdit": "Edytuj uwagę",
+  "memorialBreadPrayer": "Modlitwa przy chlebie",
+  "memorialWinePrayer": "Modlitwa przy winie",
+  "memorialAttendance": "Obecność na Pamiątce",
+  "memorialPastTitle": "Poprzednie Pamiątki",
+  "attMeetingMemorial": "Pamiątka",
+  "keepOnImport": "Zachowaj przy imporcie",
+  "keepOnImportHint": "Import ze skoroszytu tego nie nadpisze.",
+  "importKeepsEdits": "Twoje zmiany zostaną zachowane: {parts} punktów, {songs} pieśni", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Tygodnie bez zebrania i Pamiątka",
+  "helpProgramKindBody": "W widoku tygodnia menu obok tygodnia przełącza go na „Nic nie zaplanowano” (tydzień zgromadzenia albo kongresu – głosiciele widzą Twoją uwagę zamiast programu i nie oczekuje się obecności) albo na Pamiątkę, która może wypaść w każdy z tych dni. To, co opuszczasz, zostaje zachowane i wraca po przełączeniu z powrotem. Dzień i godzinę Pamiątki ustawiasz ołówkiem w nagłówku tygodnia, a jej obecność zapisuje się przy niej samej – nigdy nie wlicza się do średnich zebrań."
 }

@@ -789,5 +789,24 @@
   "qMicrophone": "マイク",
   "qAudioVideo": "音響・映像",
   "qPublicWitnessing": "公の証し",
-  "qMinistryMeetingConductor": "野外奉仕の集まりの司会者"
+  "qMinistryMeetingConductor": "野外奉仕の集まりの司会者",
+
+  "programKindRegular": "通常のプログラム",
+  "programKindNothingPlanned": "予定なし",
+  "programKindMemorial": "記念式",
+  "weekNothingPlannedHint": "今週は集会が開かれません。",
+  "weekProgramSwitchConfirm": "現在のプログラムは保存され、元に戻すと再び表示されます。",
+  "weekRestoreProgram": "通常のプログラムに戻す",
+  "weekNoteLabel": "伝道者へのお知らせ",
+  "weekNoteEdit": "お知らせを編集",
+  "memorialBreadPrayer": "パンについての祈り",
+  "memorialWinePrayer": "ぶどう酒についての祈り",
+  "memorialAttendance": "記念式の出席者数",
+  "memorialPastTitle": "過去の記念式",
+  "attMeetingMemorial": "記念式",
+  "keepOnImport": "インポート時に保持",
+  "keepOnImportHint": "ワークブックのインポートで上書きされません。",
+  "importKeepsEdits": "編集内容を保持します: {parts} 個の割り当て、{songs} 曲", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "集会のない週と記念式",
+  "helpProgramKindBody": "週の画面では、週の横のメニューから「予定なし」（大会や巡回大会の週。伝道者にはプログラムの代わりにあなたのお知らせが表示され、出席者数も求められません）や記念式に切り替えられます。記念式は週日でも週末でも構いません。切り替え前のプログラムは保存され、戻すとそのまま復元されます。記念式の日時は週見出しの鉛筆から設定し、出席者数はその週に記録されます。集会の平均には決して含まれません。"
 }

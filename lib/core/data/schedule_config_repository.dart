@@ -37,6 +37,25 @@ bool canEditSchedule(Roles roles, ScheduleKind kind) => switch (kind) {
       ScheduleKind.fsm => roles.canEditFieldServiceMeetings(),
     };
 
+/// Whether [roles] may edit one week of the schedule [kind], given the
+/// [programKind] that week runs.
+///
+/// The Memorial replaces whichever meeting it falls on, and the same brothers
+/// arrange it wherever it lands — so both meeting-schedule roles may edit a
+/// memorial week, in either schedule. firestore.rules grants exactly this;
+/// keeping the check here means the UI never offers a write the rules deny.
+bool canEditProgram(
+  Roles roles,
+  ScheduleKind kind,
+  MeetingProgramKind programKind,
+) {
+  if (programKind == MeetingProgramKind.memorial &&
+      (kind == ScheduleKind.lmm || kind == ScheduleKind.weekend)) {
+    return roles.canEditLmm() || roles.canEditWeekend();
+  }
+  return canEditSchedule(roles, kind);
+}
+
 /// Congregation-level schedule configuration (permanent custom assignments).
 /// One document per meeting type; see [ScheduleConfig].
 class ScheduleConfigRepository {

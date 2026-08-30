@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'assignment.dart';
+import 'enums.dart';
+import 'memorial.dart';
 
 part 'weekend_week.freezed.dart';
 part 'weekend_week.g.dart';
@@ -31,6 +33,19 @@ abstract class WeekendWeek with _$WeekendWeek {
     /// when picked from the song list, null for free text.
     @Default('') String songTitle,
     @JsonKey(includeIfNull: false) int? songNo,
+
+    /// Which program this week's meeting runs. The regular program below is
+    /// kept whatever this says, so switching to (and back from) a Memorial or
+    /// a week with nothing planned never destroys scheduling work.
+    @Default(MeetingProgramKind.regular) MeetingProgramKind programKind,
+
+    /// What publishers are shown instead of the program when the week has
+    /// [MeetingProgramKind.nothingPlanned] — "assembly in Brno", and so on.
+    @Default('') String programNote,
+
+    /// The Memorial program, when this week runs one. Kept (like the regular
+    /// program) even while another kind is selected.
+    @JsonKey(includeIfNull: false) MemorialProgram? memorial,
     @Default(Assignment()) Assignment speaker,
     @Default(Assignment()) Assignment chairman,
     @Default(Assignment()) Assignment wtReader,
@@ -56,6 +71,15 @@ abstract class WeekendWeek with _$WeekendWeek {
 
   bool get hasMeetingOverride => meetingWeekday != null || meetingTime != null;
 
+  /// Whether the regular public talk / Watchtower study is what this week
+  /// actually runs.
+  bool get isRegular => programKind == MeetingProgramKind.regular;
+
+  /// The Memorial program, defaulted so the view never has to null-check it.
+  MemorialProgram get memorialOrEmpty => memorial ?? const MemorialProgram();
+
+  /// Covers every stored slot, dormant program kinds included — see
+  /// [LmmWeek.withRecomputedAssignees] for why.
   WeekendWeek withRecomputedAssignees() {
     final ids = <String>{
       ...speaker.publisherIds,
@@ -66,6 +90,7 @@ abstract class WeekendWeek with _$WeekendWeek {
       ...microphones.publisherIds,
       ...audioVideo.publisherIds,
       for (final c in customAssignments) ...c.assignment.publisherIds,
+      ...?memorial?.publisherIds,
     };
     return copyWith(allAssigneeIds: ids.toList()..sort());
   }
@@ -88,5 +113,6 @@ abstract class WeekendWeek with _$WeekendWeek {
           for (final c in customAssignments)
             c.copyWith(assignment: c.assignment.replaceAssignee(from, to)),
         ],
+        memorial: memorial?.replaceAssignee(from, to),
       ).withRecomputedAssignees();
 }

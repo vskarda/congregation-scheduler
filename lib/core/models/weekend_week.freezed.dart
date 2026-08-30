@@ -23,7 +23,14 @@ mixin _$WeekendWeek {
 /// null for free-text titles. The stored [talkTitle] is a snapshot.
 @JsonKey(includeIfNull: false) int? get talkNo;/// Opening song. [songTitle] is a snapshot; [songNo] is the catalog number
 /// when picked from the song list, null for free text.
- String get songTitle;@JsonKey(includeIfNull: false) int? get songNo; Assignment get speaker; Assignment get chairman; Assignment get wtReader;/// Extra program fields (label + assignment/free text).
+ String get songTitle;@JsonKey(includeIfNull: false) int? get songNo;/// Which program this week's meeting runs. The regular program below is
+/// kept whatever this says, so switching to (and back from) a Memorial or
+/// a week with nothing planned never destroys scheduling work.
+ MeetingProgramKind get programKind;/// What publishers are shown instead of the program when the week has
+/// [MeetingProgramKind.nothingPlanned] — "assembly in Brno", and so on.
+ String get programNote;/// The Memorial program, when this week runs one. Kept (like the regular
+/// program) even while another kind is selected.
+@JsonKey(includeIfNull: false) MemorialProgram? get memorial; Assignment get speaker; Assignment get chairman; Assignment get wtReader;/// Extra program fields (label + assignment/free text).
  List<CustomAssignment> get customFields; Assignment get attendants; Assignment get microphones; Assignment get audioVideo; List<CustomAssignment> get customAssignments; List<String> get allAssigneeIds;
 /// Create a copy of WeekendWeek
 /// with the given fields replaced by the non-null parameter values.
@@ -37,16 +44,16 @@ $WeekendWeekCopyWith<WeekendWeek> get copyWith => _$WeekendWeekCopyWithImpl<Week
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeekendWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle)&&(identical(other.meetingWeekday, meetingWeekday) || other.meetingWeekday == meetingWeekday)&&(identical(other.meetingTime, meetingTime) || other.meetingTime == meetingTime)&&(identical(other.talkNo, talkNo) || other.talkNo == talkNo)&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&const DeepCollectionEquality().equals(other.customFields, customFields)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other.customAssignments, customAssignments)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WeekendWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle)&&(identical(other.meetingWeekday, meetingWeekday) || other.meetingWeekday == meetingWeekday)&&(identical(other.meetingTime, meetingTime) || other.meetingTime == meetingTime)&&(identical(other.talkNo, talkNo) || other.talkNo == talkNo)&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.programKind, programKind) || other.programKind == programKind)&&(identical(other.programNote, programNote) || other.programNote == programNote)&&(identical(other.memorial, memorial) || other.memorial == memorial)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&const DeepCollectionEquality().equals(other.customFields, customFields)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other.customAssignments, customAssignments)&&const DeepCollectionEquality().equals(other.allAssigneeIds, allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,talkTitle,meetingWeekday,meetingTime,talkNo,songTitle,songNo,speaker,chairman,wtReader,const DeepCollectionEquality().hash(customFields),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(customAssignments),const DeepCollectionEquality().hash(allAssigneeIds));
+int get hashCode => Object.hashAll([runtimeType,id,talkTitle,meetingWeekday,meetingTime,talkNo,songTitle,songNo,programKind,programNote,memorial,speaker,chairman,wtReader,const DeepCollectionEquality().hash(customFields),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(customAssignments),const DeepCollectionEquality().hash(allAssigneeIds)]);
 
 @override
 String toString() {
-  return 'WeekendWeek(id: $id, talkTitle: $talkTitle, meetingWeekday: $meetingWeekday, meetingTime: $meetingTime, talkNo: $talkNo, songTitle: $songTitle, songNo: $songNo, speaker: $speaker, chairman: $chairman, wtReader: $wtReader, customFields: $customFields, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
+  return 'WeekendWeek(id: $id, talkTitle: $talkTitle, meetingWeekday: $meetingWeekday, meetingTime: $meetingTime, talkNo: $talkNo, songTitle: $songTitle, songNo: $songNo, programKind: $programKind, programNote: $programNote, memorial: $memorial, speaker: $speaker, chairman: $chairman, wtReader: $wtReader, customFields: $customFields, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -57,11 +64,11 @@ abstract mixin class $WeekendWeekCopyWith<$Res>  {
   factory $WeekendWeekCopyWith(WeekendWeek value, $Res Function(WeekendWeek) _then) = _$WeekendWeekCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String talkTitle,@JsonKey(includeIfNull: false) int? meetingWeekday,@JsonKey(includeIfNull: false) String? meetingTime,@JsonKey(includeIfNull: false) int? talkNo, String songTitle,@JsonKey(includeIfNull: false) int? songNo, Assignment speaker, Assignment chairman, Assignment wtReader, List<CustomAssignment> customFields, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String talkTitle,@JsonKey(includeIfNull: false) int? meetingWeekday,@JsonKey(includeIfNull: false) String? meetingTime,@JsonKey(includeIfNull: false) int? talkNo, String songTitle,@JsonKey(includeIfNull: false) int? songNo, MeetingProgramKind programKind, String programNote,@JsonKey(includeIfNull: false) MemorialProgram? memorial, Assignment speaker, Assignment chairman, Assignment wtReader, List<CustomAssignment> customFields, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
 });
 
 
-$AssignmentCopyWith<$Res> get speaker;$AssignmentCopyWith<$Res> get chairman;$AssignmentCopyWith<$Res> get wtReader;$AssignmentCopyWith<$Res> get attendants;$AssignmentCopyWith<$Res> get microphones;$AssignmentCopyWith<$Res> get audioVideo;
+$MemorialProgramCopyWith<$Res>? get memorial;$AssignmentCopyWith<$Res> get speaker;$AssignmentCopyWith<$Res> get chairman;$AssignmentCopyWith<$Res> get wtReader;$AssignmentCopyWith<$Res> get attendants;$AssignmentCopyWith<$Res> get microphones;$AssignmentCopyWith<$Res> get audioVideo;
 
 }
 /// @nodoc
@@ -74,7 +81,7 @@ class _$WeekendWeekCopyWithImpl<$Res>
 
 /// Create a copy of WeekendWeek
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? talkTitle = null,Object? meetingWeekday = freezed,Object? meetingTime = freezed,Object? talkNo = freezed,Object? songTitle = null,Object? songNo = freezed,Object? speaker = null,Object? chairman = null,Object? wtReader = null,Object? customFields = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? talkTitle = null,Object? meetingWeekday = freezed,Object? meetingTime = freezed,Object? talkNo = freezed,Object? songTitle = null,Object? songNo = freezed,Object? programKind = null,Object? programNote = null,Object? memorial = freezed,Object? speaker = null,Object? chairman = null,Object? wtReader = null,Object? customFields = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,talkTitle: null == talkTitle ? _self.talkTitle : talkTitle // ignore: cast_nullable_to_non_nullable
@@ -83,7 +90,10 @@ as int?,meetingTime: freezed == meetingTime ? _self.meetingTime : meetingTime //
 as String?,talkNo: freezed == talkNo ? _self.talkNo : talkNo // ignore: cast_nullable_to_non_nullable
 as int?,songTitle: null == songTitle ? _self.songTitle : songTitle // ignore: cast_nullable_to_non_nullable
 as String,songNo: freezed == songNo ? _self.songNo : songNo // ignore: cast_nullable_to_non_nullable
-as int?,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
+as int?,programKind: null == programKind ? _self.programKind : programKind // ignore: cast_nullable_to_non_nullable
+as MeetingProgramKind,programNote: null == programNote ? _self.programNote : programNote // ignore: cast_nullable_to_non_nullable
+as String,memorial: freezed == memorial ? _self.memorial : memorial // ignore: cast_nullable_to_non_nullable
+as MemorialProgram?,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
 as Assignment,chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as Assignment,wtReader: null == wtReader ? _self.wtReader : wtReader // ignore: cast_nullable_to_non_nullable
 as Assignment,customFields: null == customFields ? _self.customFields : customFields // ignore: cast_nullable_to_non_nullable
@@ -96,6 +106,18 @@ as List<String>,
   ));
 }
 /// Create a copy of WeekendWeek
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MemorialProgramCopyWith<$Res>? get memorial {
+    if (_self.memorial == null) {
+    return null;
+  }
+
+  return $MemorialProgramCopyWith<$Res>(_self.memorial!, (value) {
+    return _then(_self.copyWith(memorial: value));
+  });
+}/// Create a copy of WeekendWeek
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
@@ -231,10 +253,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  MeetingProgramKind programKind,  String programNote, @JsonKey(includeIfNull: false)  MemorialProgram? memorial,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WeekendWeek() when $default != null:
-return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.programKind,_that.programNote,_that.memorial,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   return orElse();
 
 }
@@ -252,10 +274,10 @@ return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  MeetingProgramKind programKind,  String programNote, @JsonKey(includeIfNull: false)  MemorialProgram? memorial,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)  $default,) {final _that = this;
 switch (_that) {
 case _WeekendWeek():
-return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.programKind,_that.programNote,_that.memorial,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -272,10 +294,10 @@ return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(includeFromJson: false, includeToJson: false)  String id,  String talkTitle, @JsonKey(includeIfNull: false)  int? meetingWeekday, @JsonKey(includeIfNull: false)  String? meetingTime, @JsonKey(includeIfNull: false)  int? talkNo,  String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  MeetingProgramKind programKind,  String programNote, @JsonKey(includeIfNull: false)  MemorialProgram? memorial,  Assignment speaker,  Assignment chairman,  Assignment wtReader,  List<CustomAssignment> customFields,  Assignment attendants,  Assignment microphones,  Assignment audioVideo,  List<CustomAssignment> customAssignments,  List<String> allAssigneeIds)?  $default,) {final _that = this;
 switch (_that) {
 case _WeekendWeek() when $default != null:
-return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
+return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,_that.talkNo,_that.songTitle,_that.songNo,_that.programKind,_that.programNote,_that.memorial,_that.speaker,_that.chairman,_that.wtReader,_that.customFields,_that.attendants,_that.microphones,_that.audioVideo,_that.customAssignments,_that.allAssigneeIds);case _:
   return null;
 
 }
@@ -287,7 +309,7 @@ return $default(_that.id,_that.talkTitle,_that.meetingWeekday,_that.meetingTime,
 @JsonSerializable()
 
 class _WeekendWeek extends WeekendWeek {
-  const _WeekendWeek({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.talkTitle = '', @JsonKey(includeIfNull: false) this.meetingWeekday, @JsonKey(includeIfNull: false) this.meetingTime, @JsonKey(includeIfNull: false) this.talkNo, this.songTitle = '', @JsonKey(includeIfNull: false) this.songNo, this.speaker = const Assignment(), this.chairman = const Assignment(), this.wtReader = const Assignment(), final  List<CustomAssignment> customFields = const <CustomAssignment>[], this.attendants = const Assignment(), this.microphones = const Assignment(), this.audioVideo = const Assignment(), final  List<CustomAssignment> customAssignments = const <CustomAssignment>[], final  List<String> allAssigneeIds = const <String>[]}): _customFields = customFields,_customAssignments = customAssignments,_allAssigneeIds = allAssigneeIds,super._();
+  const _WeekendWeek({@JsonKey(includeFromJson: false, includeToJson: false) this.id = '', this.talkTitle = '', @JsonKey(includeIfNull: false) this.meetingWeekday, @JsonKey(includeIfNull: false) this.meetingTime, @JsonKey(includeIfNull: false) this.talkNo, this.songTitle = '', @JsonKey(includeIfNull: false) this.songNo, this.programKind = MeetingProgramKind.regular, this.programNote = '', @JsonKey(includeIfNull: false) this.memorial, this.speaker = const Assignment(), this.chairman = const Assignment(), this.wtReader = const Assignment(), final  List<CustomAssignment> customFields = const <CustomAssignment>[], this.attendants = const Assignment(), this.microphones = const Assignment(), this.audioVideo = const Assignment(), final  List<CustomAssignment> customAssignments = const <CustomAssignment>[], final  List<String> allAssigneeIds = const <String>[]}): _customFields = customFields,_customAssignments = customAssignments,_allAssigneeIds = allAssigneeIds,super._();
   factory _WeekendWeek.fromJson(Map<String, dynamic> json) => _$WeekendWeekFromJson(json);
 
 @override@JsonKey(includeFromJson: false, includeToJson: false) final  String id;
@@ -305,6 +327,16 @@ class _WeekendWeek extends WeekendWeek {
 /// when picked from the song list, null for free text.
 @override@JsonKey() final  String songTitle;
 @override@JsonKey(includeIfNull: false) final  int? songNo;
+/// Which program this week's meeting runs. The regular program below is
+/// kept whatever this says, so switching to (and back from) a Memorial or
+/// a week with nothing planned never destroys scheduling work.
+@override@JsonKey() final  MeetingProgramKind programKind;
+/// What publishers are shown instead of the program when the week has
+/// [MeetingProgramKind.nothingPlanned] — "assembly in Brno", and so on.
+@override@JsonKey() final  String programNote;
+/// The Memorial program, when this week runs one. Kept (like the regular
+/// program) even while another kind is selected.
+@override@JsonKey(includeIfNull: false) final  MemorialProgram? memorial;
 @override@JsonKey() final  Assignment speaker;
 @override@JsonKey() final  Assignment chairman;
 @override@JsonKey() final  Assignment wtReader;
@@ -348,16 +380,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeekendWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle)&&(identical(other.meetingWeekday, meetingWeekday) || other.meetingWeekday == meetingWeekday)&&(identical(other.meetingTime, meetingTime) || other.meetingTime == meetingTime)&&(identical(other.talkNo, talkNo) || other.talkNo == talkNo)&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&const DeepCollectionEquality().equals(other._customFields, _customFields)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other._customAssignments, _customAssignments)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WeekendWeek&&(identical(other.id, id) || other.id == id)&&(identical(other.talkTitle, talkTitle) || other.talkTitle == talkTitle)&&(identical(other.meetingWeekday, meetingWeekday) || other.meetingWeekday == meetingWeekday)&&(identical(other.meetingTime, meetingTime) || other.meetingTime == meetingTime)&&(identical(other.talkNo, talkNo) || other.talkNo == talkNo)&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.programKind, programKind) || other.programKind == programKind)&&(identical(other.programNote, programNote) || other.programNote == programNote)&&(identical(other.memorial, memorial) || other.memorial == memorial)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.wtReader, wtReader) || other.wtReader == wtReader)&&const DeepCollectionEquality().equals(other._customFields, _customFields)&&(identical(other.attendants, attendants) || other.attendants == attendants)&&(identical(other.microphones, microphones) || other.microphones == microphones)&&(identical(other.audioVideo, audioVideo) || other.audioVideo == audioVideo)&&const DeepCollectionEquality().equals(other._customAssignments, _customAssignments)&&const DeepCollectionEquality().equals(other._allAssigneeIds, _allAssigneeIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,talkTitle,meetingWeekday,meetingTime,talkNo,songTitle,songNo,speaker,chairman,wtReader,const DeepCollectionEquality().hash(_customFields),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(_customAssignments),const DeepCollectionEquality().hash(_allAssigneeIds));
+int get hashCode => Object.hashAll([runtimeType,id,talkTitle,meetingWeekday,meetingTime,talkNo,songTitle,songNo,programKind,programNote,memorial,speaker,chairman,wtReader,const DeepCollectionEquality().hash(_customFields),attendants,microphones,audioVideo,const DeepCollectionEquality().hash(_customAssignments),const DeepCollectionEquality().hash(_allAssigneeIds)]);
 
 @override
 String toString() {
-  return 'WeekendWeek(id: $id, talkTitle: $talkTitle, meetingWeekday: $meetingWeekday, meetingTime: $meetingTime, talkNo: $talkNo, songTitle: $songTitle, songNo: $songNo, speaker: $speaker, chairman: $chairman, wtReader: $wtReader, customFields: $customFields, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
+  return 'WeekendWeek(id: $id, talkTitle: $talkTitle, meetingWeekday: $meetingWeekday, meetingTime: $meetingTime, talkNo: $talkNo, songTitle: $songTitle, songNo: $songNo, programKind: $programKind, programNote: $programNote, memorial: $memorial, speaker: $speaker, chairman: $chairman, wtReader: $wtReader, customFields: $customFields, attendants: $attendants, microphones: $microphones, audioVideo: $audioVideo, customAssignments: $customAssignments, allAssigneeIds: $allAssigneeIds)';
 }
 
 
@@ -368,11 +400,11 @@ abstract mixin class _$WeekendWeekCopyWith<$Res> implements $WeekendWeekCopyWith
   factory _$WeekendWeekCopyWith(_WeekendWeek value, $Res Function(_WeekendWeek) _then) = __$WeekendWeekCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(includeFromJson: false, includeToJson: false) String id, String talkTitle,@JsonKey(includeIfNull: false) int? meetingWeekday,@JsonKey(includeIfNull: false) String? meetingTime,@JsonKey(includeIfNull: false) int? talkNo, String songTitle,@JsonKey(includeIfNull: false) int? songNo, Assignment speaker, Assignment chairman, Assignment wtReader, List<CustomAssignment> customFields, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
+@JsonKey(includeFromJson: false, includeToJson: false) String id, String talkTitle,@JsonKey(includeIfNull: false) int? meetingWeekday,@JsonKey(includeIfNull: false) String? meetingTime,@JsonKey(includeIfNull: false) int? talkNo, String songTitle,@JsonKey(includeIfNull: false) int? songNo, MeetingProgramKind programKind, String programNote,@JsonKey(includeIfNull: false) MemorialProgram? memorial, Assignment speaker, Assignment chairman, Assignment wtReader, List<CustomAssignment> customFields, Assignment attendants, Assignment microphones, Assignment audioVideo, List<CustomAssignment> customAssignments, List<String> allAssigneeIds
 });
 
 
-@override $AssignmentCopyWith<$Res> get speaker;@override $AssignmentCopyWith<$Res> get chairman;@override $AssignmentCopyWith<$Res> get wtReader;@override $AssignmentCopyWith<$Res> get attendants;@override $AssignmentCopyWith<$Res> get microphones;@override $AssignmentCopyWith<$Res> get audioVideo;
+@override $MemorialProgramCopyWith<$Res>? get memorial;@override $AssignmentCopyWith<$Res> get speaker;@override $AssignmentCopyWith<$Res> get chairman;@override $AssignmentCopyWith<$Res> get wtReader;@override $AssignmentCopyWith<$Res> get attendants;@override $AssignmentCopyWith<$Res> get microphones;@override $AssignmentCopyWith<$Res> get audioVideo;
 
 }
 /// @nodoc
@@ -385,7 +417,7 @@ class __$WeekendWeekCopyWithImpl<$Res>
 
 /// Create a copy of WeekendWeek
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? talkTitle = null,Object? meetingWeekday = freezed,Object? meetingTime = freezed,Object? talkNo = freezed,Object? songTitle = null,Object? songNo = freezed,Object? speaker = null,Object? chairman = null,Object? wtReader = null,Object? customFields = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? talkTitle = null,Object? meetingWeekday = freezed,Object? meetingTime = freezed,Object? talkNo = freezed,Object? songTitle = null,Object? songNo = freezed,Object? programKind = null,Object? programNote = null,Object? memorial = freezed,Object? speaker = null,Object? chairman = null,Object? wtReader = null,Object? customFields = null,Object? attendants = null,Object? microphones = null,Object? audioVideo = null,Object? customAssignments = null,Object? allAssigneeIds = null,}) {
   return _then(_WeekendWeek(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,talkTitle: null == talkTitle ? _self.talkTitle : talkTitle // ignore: cast_nullable_to_non_nullable
@@ -394,7 +426,10 @@ as int?,meetingTime: freezed == meetingTime ? _self.meetingTime : meetingTime //
 as String?,talkNo: freezed == talkNo ? _self.talkNo : talkNo // ignore: cast_nullable_to_non_nullable
 as int?,songTitle: null == songTitle ? _self.songTitle : songTitle // ignore: cast_nullable_to_non_nullable
 as String,songNo: freezed == songNo ? _self.songNo : songNo // ignore: cast_nullable_to_non_nullable
-as int?,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
+as int?,programKind: null == programKind ? _self.programKind : programKind // ignore: cast_nullable_to_non_nullable
+as MeetingProgramKind,programNote: null == programNote ? _self.programNote : programNote // ignore: cast_nullable_to_non_nullable
+as String,memorial: freezed == memorial ? _self.memorial : memorial // ignore: cast_nullable_to_non_nullable
+as MemorialProgram?,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
 as Assignment,chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as Assignment,wtReader: null == wtReader ? _self.wtReader : wtReader // ignore: cast_nullable_to_non_nullable
 as Assignment,customFields: null == customFields ? _self._customFields : customFields // ignore: cast_nullable_to_non_nullable
@@ -408,6 +443,18 @@ as List<String>,
 }
 
 /// Create a copy of WeekendWeek
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MemorialProgramCopyWith<$Res>? get memorial {
+    if (_self.memorial == null) {
+    return null;
+  }
+
+  return $MemorialProgramCopyWith<$Res>(_self.memorial!, (value) {
+    return _then(_self.copyWith(memorial: value));
+  });
+}/// Create a copy of WeekendWeek
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')

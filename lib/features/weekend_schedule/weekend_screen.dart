@@ -12,10 +12,12 @@ import '../../core/utils/dates.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/meeting_week_header.dart';
+import '../../core/widgets/program_kind_actions.dart';
 import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
 import '../lmm_schedule/lmm_screen.dart' show SupportAssignmentsCard;
+import '../memorial/memorial_program_view.dart';
 import '../songs/song_editor.dart';
 import 'talk_title_editor.dart';
 
@@ -49,7 +51,16 @@ class _WeekendWeekView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final weekAsync = ref.watch(weekendWeekProvider(weekId));
-    final canEdit = ref.watch(effectiveRolesProvider).canEditWeekend();
+    final roles = ref.watch(effectiveRolesProvider);
+    final canEdit = roles.canEditWeekend();
+    // The Memorial replaces whichever meeting it falls on and is arranged by
+    // either meeting-schedule role, so a midweek-schedule admin may plan one
+    // here (firestore.rules grants exactly the same).
+    final canPlanMemorial = canEditProgram(
+      roles,
+      ScheduleKind.weekend,
+      MeetingProgramKind.memorial,
+    );
 
     return weekAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -70,22 +81,60 @@ class _WeekendWeekView extends ConsumerWidget {
                     icon: const Icon(Icons.add),
                     label: Text(l10n.weekCreateEmpty),
                   ),
+                  const SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    onPressed: () => _save(
+                        ref,
+                        WeekendWeek(
+                          id: weekId,
+                          programKind: MeetingProgramKind.nothingPlanned,
+                        )),
+                    icon: const Icon(Icons.event_busy_outlined),
+                    label: Text(l10n.programKindNothingPlanned),
+                  ),
+                ],
+                if (canPlanMemorial) ...[
+                  const SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    onPressed: () => _save(
+                        ref,
+                        WeekendWeek(
+                          id: weekId,
+                          programKind: MeetingProgramKind.memorial,
+                          memorial: const MemorialProgram(),
+                        )),
+                    icon: const Icon(Icons.local_florist_outlined),
+                    label: Text(l10n.programKindMemorial),
+                  ),
                 ],
               ],
             ),
           );
         }
-        return _WeekContent(week: week, canEdit: canEdit);
+        return _WeekContent(
+          week: week,
+          canEdit:
+              canEditProgram(roles, ScheduleKind.weekend, week.programKind),
+          canDelete: canEdit,
+        );
       },
     );
   }
 }
 
 class _WeekContent extends ConsumerWidget {
-  const _WeekContent({required this.week, required this.canEdit});
+  const _WeekContent({
+    required this.week,
+    required this.canEdit,
+    required this.canDelete,
+  });
 
   final WeekendWeek week;
   final bool canEdit;
+
+  /// Deleting the week takes the weekend program with it, so it stays with
+  /// the weekend role even when a midweek admin is here for the Memorial.
+  final bool canDelete;
 
   Future<void> _editTalkTitle(BuildContext context, WidgetRef ref) async {
     final result = await showTalkTitleEditor(context,
@@ -161,6 +210,53 @@ class _WeekContent extends ConsumerWidget {
     ctrl.dispose();
   }
 
+  /// Switches the week to another program. Nothing is deleted: the talk,
+  /// song and assignments of the program being left stay in the document and
+  /// come back with it.
+  Future<void> _switchProgram(
+    BuildContext context,
+    WidgetRef ref,
+    MeetingProgramKind kind,
+  ) async {
+    if (kind != MeetingProgramKind.regular &&
+        !await confirmProgramSwitch(context, kind)) {
+      return;
+    }
+    await _save(
+      ref,
+      week.copyWith(
+        programKind: kind,
+        memorial: kind == MeetingProgramKind.memorial
+            ? week.memorialOrEmpty
+            : week.memorial,
+      ),
+    );
+  }
+
+  Future<void> _editNote(BuildContext context, WidgetRef ref) async {
+    final note = await showProgramNoteDialog(context, initial: week.programNote);
+    if (note != null) await _save(ref, week.copyWith(programNote: note));
+  }
+
+  Future<void> _onMenu(
+    BuildContext context,
+    WidgetRef ref,
+    WeekMenuAction action,
+  ) async {
+    switch (action) {
+      case WeekMenuAction.nothingPlanned:
+        await _switchProgram(context, ref, MeetingProgramKind.nothingPlanned);
+      case WeekMenuAction.memorial:
+        await _switchProgram(context, ref, MeetingProgramKind.memorial);
+      case WeekMenuAction.restoreProgram:
+        await _switchProgram(context, ref, MeetingProgramKind.regular);
+      case WeekMenuAction.editNote:
+        await _editNote(context, ref);
+      case WeekMenuAction.delete:
+        await _confirmDeleteWeek(context, ref);
+    }
+  }
+
   Future<void> _confirmDeleteWeek(BuildContext context, WidgetRef ref) async {
     final l10n = context.l10n;
     final confirmed = await showDialog<bool>(
@@ -204,6 +300,73 @@ class _WeekContent extends ConsumerWidget {
         weekId: week.id,
       )),
     );
+
+    // The program menu normally hangs off the talk-title tile; a week that
+    // runs no talk needs its own place for it.
+    Widget programMenuRow(String title) => Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 8, 0),
+                child: Text(title, style: theme.textTheme.titleMedium),
+              ),
+            ),
+            if (canEdit)
+              PopupMenuButton<WeekMenuAction>(
+                onSelected: (v) => _onMenu(context, ref, v),
+                itemBuilder: (_) => weekMenuItems(l10n, week.programKind,
+                    canDelete: canDelete),
+              ),
+          ],
+        );
+
+    // A week that runs something other than the regular program renders that
+    // instead — the talk, song and assignments below stay in the document,
+    // dormant, and come back when the week is switched back.
+    if (week.programKind == MeetingProgramKind.nothingPlanned) {
+      return ListView(
+        children: [
+          programMenuRow(l10n.programKindNothingPlanned),
+          NothingPlannedCard(
+            note: week.programNote,
+            canEdit: canEdit,
+            onEditNote: () => _editNote(context, ref),
+          ),
+          const SizedBox(height: 24),
+        ],
+      );
+    }
+
+    if (week.programKind == MeetingProgramKind.memorial) {
+      return ListView(
+        children: [
+          programMenuRow(l10n.programKindMemorial),
+          ShowToPublishersSwitch(
+              kind: ScheduleKind.weekend, weekId: week.id),
+          MemorialProgramView(
+            program: week.memorialOrEmpty,
+            canEdit: canEdit,
+            showNames: showNames,
+            date: meetingDate,
+            onChanged: (m) => _save(ref, week.copyWith(memorial: m)),
+          ),
+          if (showNames)
+            _SupportCard(
+              week: week,
+              date: meetingDate,
+              withMicrophones: false,
+            ),
+          if (meetingDate != null) ...[
+            MeetingAttendanceCard(
+              date: meetingDate,
+              meetingType: MeetingType.memorial,
+            ),
+            MemorialAttendanceHistory(excludeDate: dateKey(meetingDate)),
+          ],
+          const SizedBox(height: 24),
+        ],
+      );
+    }
 
     Widget assignmentRow({
       required String label,
@@ -253,17 +416,11 @@ class _WeekContent extends ConsumerWidget {
                 ),
                 onTap: canEdit ? () => _editTalkTitle(context, ref) : null,
                 trailing: canEdit
-                    ? PopupMenuButton<String>(
-                        onSelected: (v) {
-                          if (v == 'delete') {
-                            _confirmDeleteWeek(context, ref);
-                          }
-                        },
-                        itemBuilder: (_) => [
-                          PopupMenuItem(
-                              value: 'delete',
-                              child: Text(l10n.weekDelete)),
-                        ],
+                    ? PopupMenuButton<WeekMenuAction>(
+                        onSelected: (v) => _onMenu(context, ref, v),
+                        itemBuilder: (_) => weekMenuItems(
+                            l10n, week.programKind,
+                            canDelete: canDelete),
                       )
                     : null,
               ),
@@ -327,52 +484,7 @@ class _WeekContent extends ConsumerWidget {
           ),
         ),
         // Nothing but names: it has no program of its own to show a publisher.
-        if (showNames)
-          Builder(
-            builder: (context) {
-              final permanent =
-                  ref.watch(weekendPermanentAssignmentsProvider).value ??
-                      const [];
-              final configRepo = ref.read(scheduleConfigRepositoryProvider);
-              return SupportAssignmentsCard(
-                canEdit: canEdit,
-                date: meetingDate,
-                attendants: week.attendants,
-                microphones: week.microphones,
-                audioVideo: week.audioVideo,
-                customAssignments: week.customAssignments,
-                permanentAssignments: permanent,
-                onAddPermanent: (template) => configRepo.saveConfig(
-                  ScheduleConfigDoc.weekend,
-                  ScheduleConfig(
-                      permanentAssignments: [...permanent, template]),
-                ),
-                onRemovePermanent: (id) => configRepo.saveConfig(
-                  ScheduleConfigDoc.weekend,
-                  ScheduleConfig(
-                    permanentAssignments:
-                        permanent.where((c) => c.id != id).toList(),
-                  ),
-                ),
-                onChanged: ({
-                  attendants,
-                  microphones,
-                  audioVideo,
-                  customAssignments,
-                }) =>
-                    _save(
-                  ref,
-                  week.copyWith(
-                    attendants: attendants ?? week.attendants,
-                    microphones: microphones ?? week.microphones,
-                    audioVideo: audioVideo ?? week.audioVideo,
-                    customAssignments:
-                        customAssignments ?? week.customAssignments,
-                  ),
-                ),
-              );
-            },
-          ),
+        if (showNames) _SupportCard(week: week, date: meetingDate),
         if (meetingDate != null)
           MeetingAttendanceCard(
             date: meetingDate,
@@ -380,6 +492,64 @@ class _WeekContent extends ConsumerWidget {
           ),
         const SizedBox(height: 24),
       ],
+    );
+  }
+}
+
+/// Attendants / microphones / audio-video / custom assignments for one
+/// weekend week. Extracted so the Memorial branch can render the same card
+/// without the microphone row it does not arrange.
+class _SupportCard extends ConsumerWidget {
+  const _SupportCard({
+    required this.week,
+    required this.date,
+    this.withMicrophones = true,
+  });
+
+  final WeekendWeek week;
+  final DateTime? date;
+
+  /// The Memorial arranges attendants and audio/video and nothing else.
+  final bool withMicrophones;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final permanent =
+        ref.watch(weekendPermanentAssignmentsProvider).value ?? const [];
+    final configRepo = ref.read(scheduleConfigRepositoryProvider);
+    final canEdit = canEditProgram(
+      ref.watch(effectiveRolesProvider),
+      ScheduleKind.weekend,
+      week.programKind,
+    );
+    return SupportAssignmentsCard(
+      canEdit: canEdit,
+      date: date,
+      attendants: week.attendants,
+      microphones: withMicrophones ? week.microphones : null,
+      audioVideo: week.audioVideo,
+      customAssignments: week.customAssignments,
+      permanentAssignments: permanent,
+      onAddPermanent: (template) => configRepo.saveConfig(
+        ScheduleConfigDoc.weekend,
+        ScheduleConfig(permanentAssignments: [...permanent, template]),
+      ),
+      onRemovePermanent: (id) => configRepo.saveConfig(
+        ScheduleConfigDoc.weekend,
+        ScheduleConfig(
+          permanentAssignments: permanent.where((c) => c.id != id).toList(),
+        ),
+      ),
+      onChanged: ({attendants, microphones, audioVideo, customAssignments}) =>
+          _save(
+        ref,
+        week.copyWith(
+          attendants: attendants ?? week.attendants,
+          microphones: microphones ?? week.microphones,
+          audioVideo: audioVideo ?? week.audioVideo,
+          customAssignments: customAssignments ?? week.customAssignments,
+        ),
+      ),
     );
   }
 }

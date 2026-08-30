@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import '../data/admin_mode_provider.dart';
 import '../data/congregation_repository.dart';
 import '../data/lmm_repository.dart';
+import '../data/schedule_config_repository.dart';
 import '../data/weekend_repository.dart';
+import '../l10n/enum_labels.dart';
 import '../l10n/l10n.dart';
 import '../models/models.dart';
 import '../utils/dates.dart';
@@ -45,28 +47,38 @@ class MeetingWeekHeader extends ConsumerWidget {
   final MeetingKind kind;
   final void Function(DateTime day) goTo;
 
-  /// This week's stored day/time, or nulls when it follows the congregation.
-  ({int? weekday, String? time}) _override(WidgetRef ref) {
+  /// This week's stored day/time, or nulls when it follows the congregation,
+  /// plus the program it runs (regular unless an admin switched it).
+  ({int? weekday, String? time, MeetingProgramKind programKind}) _override(
+      WidgetRef ref) {
     if (kind == MeetingKind.midweek) {
       final week = ref.watch(lmmWeekProvider(weekId)).value;
-      return (weekday: week?.meetingWeekday, time: week?.meetingTime);
+      return (
+        weekday: week?.meetingWeekday,
+        time: week?.meetingTime,
+        programKind: week?.programKind ?? MeetingProgramKind.regular,
+      );
     }
     final week = ref.watch(weekendWeekProvider(weekId)).value;
-    return (weekday: week?.meetingWeekday, time: week?.meetingTime);
+    return (
+      weekday: week?.meetingWeekday,
+      time: week?.meetingTime,
+      programKind: week?.programKind ?? MeetingProgramKind.regular,
+    );
   }
 
   Future<void> _edit(
     BuildContext context,
     WidgetRef ref,
     CongregationMeta meta,
-    ({int? weekday, String? time}) current,
+    ({int? weekday, String? time, MeetingProgramKind programKind}) current,
   ) async {
     final l10n = context.l10n;
     final midweek = kind == MeetingKind.midweek;
     final result = await showMeetingWeekOverrideDialog(
       context,
       title: midweek ? l10n.settingsLmmMeeting : l10n.settingsWeekendMeeting,
-      current: current,
+      current: (weekday: current.weekday, time: current.time),
       defaultWeekday: midweek ? meta.lmmWeekday : meta.weekendWeekday,
       defaultTime: midweek ? meta.lmmTime : meta.weekendTime,
     );
@@ -94,11 +106,15 @@ class MeetingWeekHeader extends ConsumerWidget {
         ref.watch(congregationMetaProvider).value ?? const CongregationMeta();
     final midweek = kind == MeetingKind.midweek;
     final defaultWeekday = midweek ? meta.lmmWeekday : meta.weekendWeekday;
-    final canEdit = midweek
-        ? ref.watch(effectiveRolesProvider).canEditLmm()
-        : ref.watch(effectiveRolesProvider).canEditWeekend();
-
     final current = _override(ref);
+    // Moving the meeting is part of arranging the program it runs, so a
+    // Memorial week is movable by either meeting-schedule role — the day and
+    // time of the Memorial are exactly what they need to set.
+    final canEdit = canEditProgram(
+      ref.watch(effectiveRolesProvider),
+      midweek ? ScheduleKind.lmm : ScheduleKind.weekend,
+      current.programKind,
+    );
     final monday = parseDateKey(weekId);
     final meetingDate =
         meetingDateOf(weekId, current.weekday ?? defaultWeekday)!;
@@ -123,8 +139,13 @@ class MeetingWeekHeader extends ConsumerWidget {
                 '${meetingDate.year == DateTime.now().year ? DateFormat.MMMd(locale).format(meetingDate) : DateFormat.yMMMd(locale).format(meetingDate)}',
             subtitle: Text(
               [
-                current.time ?? (midweek ? meta.lmmTime : meta.weekendTime),
-                if (current.weekday != null || current.time != null)
+                // A week with nothing planned has no time to announce; one
+                // running the Memorial names it instead of a bare clock time.
+                if (current.programKind != MeetingProgramKind.nothingPlanned)
+                  current.time ?? (midweek ? meta.lmmTime : meta.weekendTime),
+                if (current.programKind != MeetingProgramKind.regular)
+                  programKindLabel(l10n, current.programKind)
+                else if (current.weekday != null || current.time != null)
                   l10n.meetingWeekChanged,
               ].join('  ·  '),
               maxLines: 1,

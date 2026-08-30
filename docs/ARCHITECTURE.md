@@ -53,6 +53,29 @@ core/          bootstrap, config, theme, l10n, shared widgets
   `lmm_weeks`, `weekend_weeks`. Every week doc carries a denormalized
   `allAssigneeIds` array so "my upcoming assignments" is a simple
   `array-contains` query per collection.
+- **What a week's meeting runs** is one field on the week document,
+  `programKind` (`MeetingProgramKind`), chosen per week *and* per meeting:
+  `regular`, `nothingPlanned` (an assembly or convention week — publishers see
+  `programNote` instead of a program and no attendance is expected), or
+  `memorial` (`MemorialProgram`, embedded in the same document). Nothing is
+  deleted when the kind changes: the regular program stays in the document and
+  comes back with it, which is why `allAssigneeIds` unions *every* stored slot
+  — the connect-publisher migration must still find a week whose Memorial is
+  dormant — while the display, reminder and rotation-history layers filter by
+  the kind actually running. The Memorial needs no day or time of its own: the
+  week's existing `meetingWeekday` / `meetingTime` override moves it, the same
+  mechanism a circuit overseer's visit uses. It is arranged by either
+  meeting-schedule role in either collection (firestore.rules grants exactly
+  that, `canEditProgram` mirrors it in the UI); deleting the week stays with
+  the schedule's own role, because that would take the whole program with it.
+- **Memorial attendance** is recorded in `attendance` like any other meeting,
+  under `MeetingType.memorial`, so it is entered and corrected through the
+  same form and the same roles. It is never one of `kCountedMeetingTypes`, and
+  that constant — not `MeetingType.values` — is what the monthly averages, the
+  statistics screen, the attendance history and the S-88 record sheet iterate.
+  The S-1 and the record sheet name `lmm`/`weekend` explicitly and are
+  unaffected. `test/s1_calculator_test.dart` and
+  `test/statistics_model_test.dart` pin the exclusion down.
 - **Least-recently-assigned ordering** in the publisher picker is computed on
   the fly from the last ~18 months of loaded week docs (small data), never
   from denormalized counters.
@@ -282,6 +305,18 @@ English `mwb_E_*`, Turkish `mwb_T_*`). Part instructions land in
 Re-importing an existing week merges via `week_merge.dart`: program content
 is refreshed while part ids, assignments and support roles are preserved
 (parts matched by section/type in order; manual custom parts survive).
+
+Hand-written content is never overwritten. `LmmPart.manual` marks a part
+whose title or description an admin typed — the part dialog sets it as soon
+as either field is edited, and shows it as a switch so a part can be handed
+back to the workbook. A manual part keeps its title, description and duration
+through a re-import, and survives even when the parse has no counterpart for
+it at all (which also fixes an older hole: only `custom` parts used to be
+rescued, so a hand-added `living` part could be dropped). The three song slots
+carry the same flag (`openingSongManual` / `livingSongManual` /
+`closingSongManual`), set by picking a song and toggled by the pin on the row.
+`protectedByMerge` counts what a merge would leave alone, which is what the
+import preview reports before anything is saved.
 
 The "check online" action queries the pub-media API (template in
 `core/config/app_config.dart`) for the current and next issue — the JSON

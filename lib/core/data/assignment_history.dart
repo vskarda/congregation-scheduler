@@ -17,6 +17,12 @@ abstract final class HistoryKeys {
   static const weekendSpeaker = 'weekend.speaker';
   static const weekendChairman = 'weekend.chairman';
   static const weekendWtReader = 'weekend.wtReader';
+  /// The Memorial. Kept apart from the weekend keys: the Memorial talk and
+  /// the two prayers rotate on their own, once a year.
+  static const memorialChairman = 'memorial.chairman';
+  static const memorialSpeaker = 'memorial.speaker';
+  static const memorialBreadPrayer = 'memorial.breadPrayer';
+  static const memorialWinePrayer = 'memorial.winePrayer';
   static const attendant = 'support.attendant';
   static const microphone = 'support.microphone';
   static const audioVideo = 'support.audioVideo';
@@ -53,11 +59,28 @@ final assignmentHistoryProvider =
         }
       }
 
+      // Only the program a week actually runs feeds the rotation: the parts
+      // of a week switched to the Memorial (or to nothing planned) are kept
+      // in the document but nobody is serving on them.
+      void recordMemorial(MemorialProgram m, String date) {
+        record(HistoryKeys.memorialChairman, m.chairman, date);
+        record(HistoryKeys.memorialSpeaker, m.speaker, date);
+        record(HistoryKeys.memorialBreadPrayer, m.breadPrayer, date);
+        record(HistoryKeys.memorialWinePrayer, m.winePrayer, date);
+        for (final c in m.customFields) {
+          record(HistoryKeys.custom, c.assignment, date);
+        }
+      }
+
       final lmmWeeks = await ref
           .watch(lmmRepositoryProvider)
           .getRange(from, until);
       for (final week in lmmWeeks) {
-        for (final part in week.parts) {
+        if (week.programKind == MeetingProgramKind.nothingPlanned) continue;
+        if (week.programKind == MeetingProgramKind.memorial) {
+          recordMemorial(week.memorialOrEmpty, week.id);
+        }
+        for (final part in week.isRegular ? week.parts : const <LmmPart>[]) {
           record(HistoryKeys.lmmPart(part.type), part.assignment, week.id);
           record(HistoryKeys.lmmAssistant, part.assistant, week.id);
           // Auxiliary classes share the main history keys: the student pool is
@@ -79,11 +102,17 @@ final assignmentHistoryProvider =
           .watch(weekendRepositoryProvider)
           .getRange(from, until);
       for (final week in weekendWeeks) {
-        record(HistoryKeys.weekendSpeaker, week.speaker, week.id);
-        record(HistoryKeys.weekendChairman, week.chairman, week.id);
-        record(HistoryKeys.weekendWtReader, week.wtReader, week.id);
-        for (final c in week.customFields) {
-          record(HistoryKeys.custom, c.assignment, week.id);
+        if (week.programKind == MeetingProgramKind.nothingPlanned) continue;
+        if (week.programKind == MeetingProgramKind.memorial) {
+          recordMemorial(week.memorialOrEmpty, week.id);
+        }
+        if (week.isRegular) {
+          record(HistoryKeys.weekendSpeaker, week.speaker, week.id);
+          record(HistoryKeys.weekendChairman, week.chairman, week.id);
+          record(HistoryKeys.weekendWtReader, week.wtReader, week.id);
+          for (final c in week.customFields) {
+            record(HistoryKeys.custom, c.assignment, week.id);
+          }
         }
         record(HistoryKeys.attendant, week.attendants, week.id);
         record(HistoryKeys.microphone, week.microphones, week.id);

@@ -52,6 +52,26 @@ class WeekendRepository {
     };
   }
 
+  /// Weeks in `[fromId, toId]` that do not run their regular program, as
+  /// `weekId -> kind`.
+  ///
+  /// `programKind` is only ever the default on the weeks that run the regular
+  /// program, so the `whereIn` returns just the handful that deviate. The id
+  /// range is applied here rather than in the query for the same reason as in
+  /// [getWeekdayOverrides].
+  Future<Map<String, MeetingProgramKind>> getProgramKinds(
+      String fromId, String toId) async {
+    final snap = await _col.where('programKind', whereIn: [
+      MeetingProgramKind.nothingPlanned.name,
+      MeetingProgramKind.memorial.name,
+    ]).get();
+    return {
+      for (final doc in snap.docs)
+        if (doc.id.compareTo(fromId) >= 0 && doc.id.compareTo(toId) <= 0)
+          doc.id: _fromDoc(doc).programKind,
+    };
+  }
+
   /// Rewrites talkTitle snapshots on weeks >= [fromWeekId] whose talkNo is in
   /// [titlesByNo] and whose stored title differs. Returns the updated count.
   Future<int> updateTalkTitles(Map<int, String> titlesByNo,

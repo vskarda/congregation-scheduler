@@ -2500,4 +2500,62 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get qMinistryMeetingConductor => 'Vedoucí schůzky před službou';
+
+  @override
+  String get programKindRegular => 'Běžný program';
+
+  @override
+  String get programKindNothingPlanned => 'Nic neplánováno';
+
+  @override
+  String get programKindMemorial => 'Památná slavnost';
+
+  @override
+  String get weekNothingPlannedHint => 'Tento týden se shromáždění nekoná.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Stávající program zůstane uložený a vrátí se, až ho přepnete zpět.';
+
+  @override
+  String get weekRestoreProgram => 'Obnovit běžný program';
+
+  @override
+  String get weekNoteLabel => 'Poznámka pro zvěstovatele';
+
+  @override
+  String get weekNoteEdit => 'Upravit poznámku';
+
+  @override
+  String get memorialBreadPrayer => 'Modlitba u chleba';
+
+  @override
+  String get memorialWinePrayer => 'Modlitba u vína';
+
+  @override
+  String get memorialAttendance => 'Návštěvnost Památné slavnosti';
+
+  @override
+  String get memorialPastTitle => 'Minulé Památné slavnosti';
+
+  @override
+  String get attMeetingMemorial => 'Památná slavnost';
+
+  @override
+  String get keepOnImport => 'Zachovat při importu';
+
+  @override
+  String get keepOnImportHint => 'Import z pracovního sešitu tohle nepřepíše.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Vaše úpravy zůstanou: $parts bodů, $songs písní';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Týdny bez shromáždění a Památná slavnost';
+
+  @override
+  String get helpProgramKindBody =>
+      'V přehledu týdne (uprostřed týdne i o víkendu) je vedle týdne nabídka, kterou ho přepnete na „Nic neplánováno“ (týden se sjezdem nebo shromážděním – zvěstovatelé uvidí místo programu vaši poznámku a nečeká se návštěvnost) nebo na Památnou slavnost, která může připadnout na kterýkoli z obou dnů. Program, ze kterého přepnete, zůstane uložený a vrátí se, až přepnete zpět. Den a čas Památné slavnosti nastavíte tužkou v záhlaví týdne a její návštěvnost se zapisuje přímo u ní – do průměrů shromáždění se nikdy nepočítá.';
 }

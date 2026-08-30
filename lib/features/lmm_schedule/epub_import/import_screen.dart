@@ -42,16 +42,22 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
     });
   }
 
+  /// The week as it would be stored: the parse merged into what is already
+  /// there, so the preview and the save agree.
+  LmmWeek _merged(LmmWeek parsed) {
+    final existing = _existing[parsed.id];
+    return existing == null
+        ? parsed
+        : mergeParsedWeek(existing: existing, parsed: parsed);
+  }
+
   Future<void> _save() async {
     setState(() => _busy = true);
     try {
       final repo = ref.read(lmmRepositoryProvider);
       for (final week in widget.weeks) {
         if (!_selected.contains(week.id)) continue;
-        final existing = _existing[week.id];
-        await repo.saveWeek(existing == null
-            ? week
-            : mergeParsedWeek(existing: existing, parsed: week));
+        await repo.saveWeek(_merged(week));
       }
       ref.invalidate(assignmentHistoryProvider);
       if (mounted) {
@@ -62,6 +68,16 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  /// "Your edits are kept: N parts, M songs" for a week that already exists
+  /// and holds hand-written content; null when there is nothing to keep.
+  String? _keptLabel(AppLocalizations l10n, LmmWeek parsed) {
+    final existing = _existing[parsed.id];
+    if (existing == null) return null;
+    final kept = protectedByMerge(existing: existing, parsed: parsed);
+    if (kept.parts == 0 && kept.songs == 0) return null;
+    return l10n.importKeepsEdits(kept.parts, kept.songs);
   }
 
   static Color _sectionColor(LmmSection s) => switch (s) {
@@ -113,9 +129,24 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(part.title,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                            color: _sectionColor(part.section))),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(part.title,
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: _sectionColor(part.section))),
+                        ),
+                        if (part.manual) ...[
+                          const SizedBox(width: 6),
+                          Tooltip(
+                            message: l10n.keepOnImport,
+                            child: Icon(Icons.push_pin,
+                                size: 13,
+                                color: theme.colorScheme.outline),
+                          ),
+                        ],
+                      ],
+                    ),
                     if (part.description.isNotEmpty)
                       Text(part.description, style: muted),
                   ],
@@ -152,10 +183,15 @@ class _EpubImportScreenState extends ConsumerState<EpubImportScreen> {
               subtitle: Text([
                 week.id,
                 if (_existing.containsKey(week.id)) l10n.importWeekExists,
+                // What this import will not touch, counted before it runs so
+                // an admin's own wording is never a surprise casualty.
+                ?_keptLabel(l10n, week),
               ].join(' — ')),
               childrenPadding: const EdgeInsets.fromLTRB(24, 0, 16, 12),
               expandedCrossAxisAlignment: CrossAxisAlignment.start,
-              children: _weekPreview(context, week),
+              // Preview what would actually be saved, protections applied,
+              // rather than the raw parse.
+              children: _weekPreview(context, _merged(week)),
             ),
         ],
       ),

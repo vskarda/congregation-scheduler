@@ -186,6 +186,30 @@ void main() {
       expect(stats.monthlySeries, isEmpty);
     });
 
+    test('a Memorial count moves nothing and gets no series of its own', () {
+      final withoutMemorial = computeAttendance([
+        entry('2026-07-07', MeetingType.lmm, 60),
+        entry('2026-07-05', MeetingType.weekend, 80),
+      ], currentMonth: '2026-07');
+      final withMemorial = computeAttendance([
+        entry('2026-07-07', MeetingType.lmm, 60),
+        entry('2026-07-05', MeetingType.weekend, 80),
+        // Ten times the size of a normal meeting, as a Memorial often is.
+        entry('2026-07-02', MeetingType.memorial, 800),
+      ], currentMonth: '2026-07');
+
+      expect(withMemorial.avg3Months, withoutMemorial.avg3Months);
+      expect(withMemorial.avg12Months, withoutMemorial.avg12Months);
+      expect(withMemorial.monthlySeries, withoutMemorial.monthlySeries);
+      expect(withMemorial.avg3Months.containsKey(MeetingType.memorial),
+          isFalse);
+      expect(
+        withMemorial.monthlySeries['2026-07']!
+            .containsKey(MeetingType.memorial),
+        isFalse,
+      );
+    });
+
     test('windows cover the last 3 and 12 months with data', () {
       final entries = [
         for (var m = 1; m <= 12; m++)

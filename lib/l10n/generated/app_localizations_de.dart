@@ -2531,4 +2531,65 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get qMinistryMeetingConductor =>
       'Leiter der Zusammenkunft für den Predigtdienst';
+
+  @override
+  String get programKindRegular => 'Reguläres Programm';
+
+  @override
+  String get programKindNothingPlanned => 'Nichts geplant';
+
+  @override
+  String get programKindMemorial => 'Gedächtnismahl';
+
+  @override
+  String get weekNothingPlannedHint =>
+      'In dieser Woche findet keine Zusammenkunft statt.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Das bisherige Programm bleibt erhalten und kommt zurück, wenn du zurückwechselst.';
+
+  @override
+  String get weekRestoreProgram => 'Reguläres Programm wiederherstellen';
+
+  @override
+  String get weekNoteLabel => 'Hinweis für die Verkündiger';
+
+  @override
+  String get weekNoteEdit => 'Hinweis bearbeiten';
+
+  @override
+  String get memorialBreadPrayer => 'Gebet zum Brot';
+
+  @override
+  String get memorialWinePrayer => 'Gebet zum Wein';
+
+  @override
+  String get memorialAttendance => 'Besucherzahl beim Gedächtnismahl';
+
+  @override
+  String get memorialPastTitle => 'Frühere Gedächtnismahle';
+
+  @override
+  String get attMeetingMemorial => 'Gedächtnismahl';
+
+  @override
+  String get keepOnImport => 'Beim Import behalten';
+
+  @override
+  String get keepOnImportHint =>
+      'Ein Import aus dem Arbeitsheft überschreibt das nicht.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Deine Änderungen bleiben: $parts Programmpunkte, $songs Lieder';
+  }
+
+  @override
+  String get helpProgramKindTitle =>
+      'Wochen ohne Zusammenkunft und das Gedächtnismahl';
+
+  @override
+  String get helpProgramKindBody =>
+      'In der Wochenansicht schaltet das Menü neben der Woche sie auf „Nichts geplant“ (eine Kongress- oder Kreiskongresswoche – die Verkündiger sehen deinen Hinweis statt eines Programms, und es wird keine Besucherzahl erwartet) oder auf das Gedächtnismahl, das auf beide Tage fallen kann. Was du verlässt, bleibt erhalten und kommt beim Zurückschalten wieder. Tag und Uhrzeit des Gedächtnismahls stellst du mit dem Stift in der Wochenüberschrift ein; seine Besucherzahl wird bei ihm selbst erfasst und nie in die Durchschnitte der Zusammenkünfte eingerechnet.';
 }

@@ -2530,4 +2530,62 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get qMinistryMeetingConductor =>
       'Conducteur de la réunion pour la prédication';
+
+  @override
+  String get programKindRegular => 'Programme habituel';
+
+  @override
+  String get programKindNothingPlanned => 'Rien de prévu';
+
+  @override
+  String get programKindMemorial => 'Mémorial';
+
+  @override
+  String get weekNothingPlannedHint => 'Aucune réunion cette semaine.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Le programme actuel est conservé et revient si vous rebasculez.';
+
+  @override
+  String get weekRestoreProgram => 'Rétablir le programme habituel';
+
+  @override
+  String get weekNoteLabel => 'Note pour les proclamateurs';
+
+  @override
+  String get weekNoteEdit => 'Modifier la note';
+
+  @override
+  String get memorialBreadPrayer => 'Prière pour le pain';
+
+  @override
+  String get memorialWinePrayer => 'Prière pour le vin';
+
+  @override
+  String get memorialAttendance => 'Assistance au Mémorial';
+
+  @override
+  String get memorialPastTitle => 'Mémoriaux précédents';
+
+  @override
+  String get attMeetingMemorial => 'Mémorial';
+
+  @override
+  String get keepOnImport => 'Conserver lors de l’import';
+
+  @override
+  String get keepOnImportHint => 'Un import du cahier ne l’écrasera pas.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Vos modifications sont conservées : $parts parties, $songs cantiques';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Semaines sans réunion, et le Mémorial';
+
+  @override
+  String get helpProgramKindBody =>
+      'Dans la vue de la semaine, le menu à côté de la semaine la bascule sur « Rien de prévu » (une semaine d’assemblée ou de congrès : les proclamateurs voient votre note à la place du programme et aucune assistance n’est attendue) ou sur le Mémorial, qui peut tomber l’un ou l’autre jour. Ce que vous quittez est conservé et revient si vous rebasculez. Le jour et l’heure du Mémorial se règlent avec le crayon de l’en-tête de la semaine, et son assistance se note sur lui-même — jamais comptée dans les moyennes des réunions.';
 }

@@ -17,9 +17,11 @@ import '../../core/utils/numeric_input.dart';
 import '../../core/widgets/assignment_chips.dart';
 import '../../core/widgets/assignment_editor.dart';
 import '../../core/widgets/meeting_week_header.dart';
+import '../../core/widgets/program_kind_actions.dart';
 import '../../core/widgets/show_to_publishers_switch.dart';
 import '../../core/widgets/week_navigator.dart';
 import '../attendance/meeting_attendance_card.dart';
+import '../memorial/memorial_program_view.dart';
 import '../songs/song_editor.dart';
 import 'epub_import/import_actions.dart';
 import 'epub_import/import_screen.dart';
@@ -118,7 +120,7 @@ class LmmWeekView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final weekAsync = ref.watch(lmmWeekProvider(weekId));
-    final canEdit = ref.watch(effectiveRolesProvider).canEditLmm();
+    final roles = ref.watch(effectiveRolesProvider);
 
     return weekAsync.when(
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -129,18 +131,46 @@ class LmmWeekView extends ConsumerWidget {
       // deliberately still counts as a week — it renders its meeting day and
       // the attendance card, and a later workbook import merges the program
       // into it (see mergeParsedWeek, which carries the meeting day over).
+      // A Memorial week may also be edited by the weekend-schedule admins —
+      // the Memorial is one program wherever it falls, so both meeting roles
+      // arrange it (firestore.rules grants exactly the same).
       data: (week) => week == null
-          ? _EmptyWeekView(weekId: weekId, canEdit: canEdit)
-          : _WeekContent(week: week, canEdit: canEdit),
+          ? _EmptyWeekView(
+              weekId: weekId,
+              canEdit: roles.canEditLmm(),
+              canPlanMemorial: canEditProgram(
+                roles,
+                ScheduleKind.lmm,
+                MeetingProgramKind.memorial,
+              ),
+            )
+          : _WeekContent(
+              week: week,
+              canEdit: canEditProgram(
+                roles,
+                ScheduleKind.lmm,
+                week.programKind,
+              ),
+              canDelete: roles.canEditLmm(),
+            ),
     );
   }
 }
 
 class _EmptyWeekView extends ConsumerStatefulWidget {
-  const _EmptyWeekView({required this.weekId, required this.canEdit});
+  const _EmptyWeekView({
+    required this.weekId,
+    required this.canEdit,
+    required this.canPlanMemorial,
+  });
 
   final String weekId;
   final bool canEdit;
+
+  /// The Memorial is arranged by either meeting-schedule role, so a
+  /// weekend-schedule admin can start one here even without the midweek
+  /// rights the other three buttons need.
+  final bool canPlanMemorial;
 
   static LmmWeek _skeleton(String weekId) {
     const uuid = Uuid();
@@ -240,6 +270,20 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
               icon: const Icon(Icons.add),
               label: Text(l10n.weekCreateEmpty),
             ),
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _busy
+                  ? null
+                  : () => saveLmmWeek(
+                      ref,
+                      LmmWeek(
+                        id: widget.weekId,
+                        programKind: MeetingProgramKind.nothingPlanned,
+                      ),
+                    ),
+              icon: const Icon(Icons.event_busy_outlined),
+              label: Text(l10n.programKindNothingPlanned),
+            ),
             if (_busy) ...[
               const SizedBox(height: 16),
               const SizedBox(
@@ -256,6 +300,25 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
               ),
             ],
           ],
+          // Outside the block above: the Memorial belongs to both meeting
+          // schedules, so a weekend-schedule admin may plan one here too.
+          if (widget.canPlanMemorial) ...[
+            const SizedBox(height: 8),
+            OutlinedButton.icon(
+              onPressed: _busy
+                  ? null
+                  : () => saveLmmWeek(
+                      ref,
+                      LmmWeek(
+                        id: widget.weekId,
+                        programKind: MeetingProgramKind.memorial,
+                        memorial: const MemorialProgram(),
+                      ),
+                    ),
+              icon: const Icon(Icons.local_florist_outlined),
+              label: Text(l10n.programKindMemorial),
+            ),
+          ],
         ],
       ),
     );
@@ -263,10 +326,18 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
 }
 
 class _WeekContent extends ConsumerWidget {
-  const _WeekContent({required this.week, required this.canEdit});
+  const _WeekContent({
+    required this.week,
+    required this.canEdit,
+    required this.canDelete,
+  });
 
   final LmmWeek week;
   final bool canEdit;
+
+  /// Deleting the week takes the midweek program with it, so it stays with
+  /// the midweek role even when a weekend admin is here for the Memorial.
+  final bool canDelete;
 
   static Color _sectionColor(LmmSection s) => switch (s) {
     LmmSection.treasures => const Color(0xFF2F6B77),
@@ -290,6 +361,56 @@ class _WeekContent extends ConsumerWidget {
         songNo: songNo,
         songTitle: songTitle);
     if (result != null) await saveLmmWeek(ref, apply(result));
+  }
+
+  /// Switches the week to another program. Nothing is deleted: the parts,
+  /// songs and assignments of the program being left stay in the document and
+  /// come back with it.
+  Future<void> _switchProgram(
+    BuildContext context,
+    WidgetRef ref,
+    MeetingProgramKind kind,
+  ) async {
+    if (kind != MeetingProgramKind.regular &&
+        !await confirmProgramSwitch(context, kind)) {
+      return;
+    }
+    await saveLmmWeek(
+      ref,
+      week.copyWith(
+        programKind: kind,
+        // A Memorial switched on for the first time needs its (empty)
+        // program; one switched on again keeps what was arranged before.
+        memorial: kind == MeetingProgramKind.memorial
+            ? week.memorialOrEmpty
+            : week.memorial,
+      ),
+    );
+  }
+
+  Future<void> _editNote(BuildContext context, WidgetRef ref) async {
+    final note = await showProgramNoteDialog(context, initial: week.programNote);
+    if (note != null) await saveLmmWeek(ref, week.copyWith(programNote: note));
+  }
+
+  Future<void> _onMenu(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    WeekMenuAction action,
+  ) async {
+    switch (action) {
+      case WeekMenuAction.nothingPlanned:
+        await _switchProgram(context, ref, MeetingProgramKind.nothingPlanned);
+      case WeekMenuAction.memorial:
+        await _switchProgram(context, ref, MeetingProgramKind.memorial);
+      case WeekMenuAction.restoreProgram:
+        await _switchProgram(context, ref, MeetingProgramKind.regular);
+      case WeekMenuAction.editNote:
+        await _editNote(context, ref);
+      case WeekMenuAction.delete:
+        await _confirmDeleteWeek(context, ref, l10n);
+    }
   }
 
   Future<void> _confirmDeleteWeek(
@@ -354,19 +475,66 @@ class _WeekContent extends ConsumerWidget {
               ),
             ),
             if (canEdit)
-              PopupMenuButton<String>(
-                onSelected: (v) {
-                  if (v == 'delete') _confirmDeleteWeek(context, ref, l10n);
-                },
-                itemBuilder: (_) => [
-                  PopupMenuItem(value: 'delete', child: Text(l10n.weekDelete)),
-                ],
+              PopupMenuButton<WeekMenuAction>(
+                onSelected: (v) => _onMenu(context, ref, l10n, v),
+                itemBuilder: (_) => weekMenuItems(l10n, week.programKind,
+                    canDelete: canDelete),
               ),
           ],
         ),
       ),
-      ShowToPublishersSwitch(kind: ScheduleKind.lmm, weekId: week.id),
+      // Nothing to show or hide on a week with no program and no names.
+      if (week.programKind != MeetingProgramKind.nothingPlanned)
+        ShowToPublishersSwitch(kind: ScheduleKind.lmm, weekId: week.id),
     ];
+
+    // A week that runs something other than the regular program renders that
+    // instead — the parts below stay in the document, dormant, and come back
+    // when the week is switched back.
+    if (week.programKind == MeetingProgramKind.nothingPlanned) {
+      children.add(
+        NothingPlannedCard(
+          note: week.programNote,
+          canEdit: canEdit,
+          onEditNote: () => _editNote(context, ref),
+        ),
+      );
+      children.add(const SizedBox(height: 24));
+      return ListView(children: children);
+    }
+
+    if (week.programKind == MeetingProgramKind.memorial) {
+      final memorialDate = meta == null
+          ? null
+          : meetingDateOf(week.id, week.weekdayOr(meta.lmmWeekday));
+      children.add(
+        MemorialProgramView(
+          program: week.memorialOrEmpty,
+          canEdit: canEdit,
+          showNames: showNames,
+          date: memorialDate,
+          onChanged: (m) => saveLmmWeek(ref, week.copyWith(memorial: m)),
+        ),
+      );
+      if (showNames) {
+        children.add(
+          _SupportCard(week: week, canEdit: canEdit, withMicrophones: false),
+        );
+      }
+      if (memorialDate != null) {
+        children.add(
+          MeetingAttendanceCard(
+            date: memorialDate,
+            meetingType: MeetingType.memorial,
+          ),
+        );
+        children.add(
+          MemorialAttendanceHistory(excludeDate: dateKey(memorialDate)),
+        );
+      }
+      children.add(const SizedBox(height: 24));
+      return ListView(children: children);
+    }
 
     if (classCount >= 2) {
       children.add(
@@ -389,10 +557,16 @@ class _WeekContent extends ConsumerWidget {
 
     // A meeting-song row at one of its three fixed positions. Hidden for
     // non-admins when neither number nor title is set.
+    //
+    // Picking a song by hand pins the slot ([manual]): the next workbook
+    // import leaves it alone. The pin is a toggle, so an admin who wants the
+    // workbook to take the slot over again can hand it back.
     Widget? songRow({
       required int? songNo,
       required String songTitle,
+      required bool manual,
       required LmmWeek Function(SongSelection) apply,
+      required LmmWeek Function(bool) setManual,
     }) {
       if (songNo == null && songTitle.isEmpty && !canEdit) return null;
       return ListTile(
@@ -403,6 +577,20 @@ class _WeekContent extends ConsumerWidget {
             ? () => _editSong(context, ref,
                 songNo: songNo, songTitle: songTitle, apply: apply)
             : null,
+        trailing: !canEdit
+            ? null
+            : IconButton(
+                tooltip: l10n.keepOnImport,
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  manual ? Icons.push_pin : Icons.push_pin_outlined,
+                  size: 18,
+                  color: manual
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.outline,
+                ),
+                onPressed: () => saveLmmWeek(ref, setManual(!manual)),
+              ),
       );
     }
 
@@ -414,8 +602,13 @@ class _WeekContent extends ConsumerWidget {
         final row = songRow(
           songNo: week.openingSongNo,
           songTitle: week.openingSongTitle,
-          apply: (s) =>
-              week.copyWith(openingSongNo: s.songNo, openingSongTitle: s.title),
+          manual: week.openingSongManual,
+          apply: (s) => week.copyWith(
+            openingSongNo: s.songNo,
+            openingSongTitle: s.title,
+            openingSongManual: true,
+          ),
+          setManual: (m) => week.copyWith(openingSongManual: m),
         );
         if (row != null) children.add(row);
       }
@@ -455,16 +648,26 @@ class _WeekContent extends ConsumerWidget {
         final row = songRow(
           songNo: week.livingSongNo,
           songTitle: week.livingSongTitle,
-          apply: (s) =>
-              week.copyWith(livingSongNo: s.songNo, livingSongTitle: s.title),
+          manual: week.livingSongManual,
+          apply: (s) => week.copyWith(
+            livingSongNo: s.songNo,
+            livingSongTitle: s.title,
+            livingSongManual: true,
+          ),
+          setManual: (m) => week.copyWith(livingSongManual: m),
         );
         if (row != null) children.add(row);
       } else if (section == LmmSection.closing) {
         final row = songRow(
           songNo: week.closingSongNo,
           songTitle: week.closingSongTitle,
-          apply: (s) =>
-              week.copyWith(closingSongNo: s.songNo, closingSongTitle: s.title),
+          manual: week.closingSongManual,
+          apply: (s) => week.copyWith(
+            closingSongNo: s.songNo,
+            closingSongTitle: s.title,
+            closingSongManual: true,
+          ),
+          setManual: (m) => week.copyWith(closingSongManual: m),
         );
         if (row != null) children.add(row);
       }
@@ -534,99 +737,149 @@ class _WeekContent extends ConsumerWidget {
 }
 
 /// Dialog for creating/editing a part (title, duration, type for new parts).
+///
+/// Typing into the title or the description switches "keep on import" on: the
+/// text is now the admin's, and a workbook re-import must not overwrite it
+/// (see [LmmPart.manual] and `mergeParsedWeek`). The switch stays visible and
+/// reversible, so a part can be handed back to the workbook.
 Future<LmmPart?> showLmmPartDialog(
   BuildContext context, {
   LmmPart? existing,
   LmmSection? section,
-}) async {
-  final l10n = context.l10n;
-  final titleCtrl = TextEditingController(text: existing?.title ?? '');
-  final descriptionCtrl = TextEditingController(
-    text: existing?.description ?? '',
+}) =>
+    showDialog<LmmPart>(
+      context: context,
+      builder: (_) => _LmmPartDialog(existing: existing, section: section),
+    );
+
+/// A widget rather than a `StatefulBuilder` inside `showDialog` so its three
+/// text controllers are disposed with it. `showDialog`'s future completes the
+/// moment the route is popped, while the dialog is still animating out — so
+/// disposing them after the await leaves the fading dialog holding
+/// controllers that are already gone.
+class _LmmPartDialog extends StatefulWidget {
+  const _LmmPartDialog({this.existing, this.section});
+
+  final LmmPart? existing;
+  final LmmSection? section;
+
+  @override
+  State<_LmmPartDialog> createState() => _LmmPartDialogState();
+}
+
+class _LmmPartDialogState extends State<_LmmPartDialog> {
+  late final _titleCtrl = TextEditingController(
+    text: widget.existing?.title ?? '',
   );
-  final durationCtrl = TextEditingController(
-    text: existing?.durationMin?.toString() ?? '',
+  late final _descriptionCtrl = TextEditingController(
+    text: widget.existing?.description ?? '',
   );
-  var type =
-      existing?.type ??
-      switch (section) {
+  late final _durationCtrl = TextEditingController(
+    text: widget.existing?.durationMin?.toString() ?? '',
+  );
+
+  /// A part added by hand is the admin's from the start.
+  late bool _manual = widget.existing?.manual ?? true;
+
+  late LmmPartType _type =
+      widget.existing?.type ??
+      switch (widget.section) {
         LmmSection.ministry => LmmPartType.fieldMinistry,
         LmmSection.living => LmmPartType.living,
         LmmSection.treasures => LmmPartType.treasures,
         _ => LmmPartType.custom,
       };
 
-  final result = await showDialog<LmmPart>(
-    context: context,
-    builder: (context) => StatefulBuilder(
-      builder: (context, setState) => AlertDialog(
-        title: Text(existing == null ? l10n.partAdd : l10n.partEdit),
-        content: Column(
+  @override
+  void dispose() {
+    _titleCtrl.dispose();
+    _descriptionCtrl.dispose();
+    _durationCtrl.dispose();
+    super.dispose();
+  }
+
+  /// The admin has made the text their own; protect it from the next import.
+  void _markManual() {
+    if (!_manual) setState(() => _manual = true);
+  }
+
+  void _save() {
+    final base =
+        widget.existing ??
+        LmmPart(
+          id: const Uuid().v4(),
+          section: widget.section ?? LmmSection.living,
+          type: _type,
+        );
+    Navigator.of(context).pop(
+      base.copyWith(
+        title: _titleCtrl.text.trim(),
+        description: _descriptionCtrl.text.trim(),
+        durationMin: int.tryParse(_durationCtrl.text.trim()),
+        manual: _manual,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return AlertDialog(
+      title: Text(widget.existing == null ? l10n.partAdd : l10n.partEdit),
+      content: SingleChildScrollView(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (existing == null)
+            if (widget.existing == null)
               DropdownButtonFormField<LmmPartType>(
-                initialValue: type,
+                initialValue: _type,
                 decoration: InputDecoration(labelText: l10n.partEdit),
                 items: [
                   for (final t in LmmPartType.values)
                     DropdownMenuItem(value: t, child: Text(t.name)),
                 ],
                 onChanged: (t) =>
-                    setState(() => type = t ?? LmmPartType.custom),
+                    setState(() => _type = t ?? LmmPartType.custom),
               ),
             const SizedBox(height: 12),
             TextField(
-              controller: titleCtrl,
+              controller: _titleCtrl,
               autofocus: true,
               decoration: InputDecoration(labelText: l10n.partTitle),
+              onChanged: (_) => _markManual(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: descriptionCtrl,
+              controller: _descriptionCtrl,
               decoration: InputDecoration(labelText: l10n.partDescription),
+              onChanged: (_) => _markManual(),
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: durationCtrl,
+              controller: _durationCtrl,
               keyboardType: numericKeyboardType,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(labelText: l10n.partDuration),
             ),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              value: _manual,
+              onChanged: (v) => setState(() => _manual = v),
+              title: Text(l10n.keepOnImport),
+              subtitle: Text(l10n.keepOnImportHint),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(l10n.commonCancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              final base =
-                  existing ??
-                  LmmPart(
-                    id: const Uuid().v4(),
-                    section: section ?? LmmSection.living,
-                    type: type,
-                  );
-              Navigator.of(context).pop(
-                base.copyWith(
-                  title: titleCtrl.text.trim(),
-                  description: descriptionCtrl.text.trim(),
-                  durationMin: int.tryParse(durationCtrl.text.trim()),
-                ),
-              );
-            },
-            child: Text(l10n.commonSave),
-          ),
-        ],
       ),
-    ),
-  );
-  titleCtrl.dispose();
-  descriptionCtrl.dispose();
-  durationCtrl.dispose();
-  return result;
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(l10n.commonCancel),
+        ),
+        FilledButton(onPressed: _save, child: Text(l10n.commonSave)),
+      ],
+    );
+  }
 }
 
 class _PartTile extends ConsumerWidget {
@@ -736,7 +989,20 @@ class _PartTile extends ConsumerWidget {
 
     return ListTile(
       dense: true,
-      title: Text(lmmPartDefaultLabel(l10n, part)),
+      title: Row(
+        children: [
+          Flexible(child: Text(lmmPartDefaultLabel(l10n, part))),
+          // Pinned: the workbook import will not overwrite this part's text.
+          if (part.manual && canEdit) ...[
+            const SizedBox(width: 6),
+            Tooltip(
+              message: l10n.keepOnImport,
+              child: Icon(Icons.push_pin,
+                  size: 13, color: theme.colorScheme.outline),
+            ),
+          ],
+        ],
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -819,10 +1085,17 @@ class _PartTile extends ConsumerWidget {
 /// Attendants / microphones / audio-video / custom assignments; shared by
 /// design with the weekend meeting via [SupportAssignmentsCard].
 class _SupportCard extends ConsumerWidget {
-  const _SupportCard({required this.week, required this.canEdit});
+  const _SupportCard({
+    required this.week,
+    required this.canEdit,
+    this.withMicrophones = true,
+  });
 
   final LmmWeek week;
   final bool canEdit;
+
+  /// The Memorial arranges attendants and audio/video and nothing else.
+  final bool withMicrophones;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -836,7 +1109,7 @@ class _SupportCard extends ConsumerWidget {
           ? null
           : meetingDateOf(week.id, week.weekdayOr(meta.lmmWeekday)),
       attendants: week.attendants,
-      microphones: week.microphones,
+      microphones: withMicrophones ? week.microphones : null,
       audioVideo: week.audioVideo,
       customAssignments: week.customAssignments,
       permanentAssignments: permanent,
@@ -871,7 +1144,7 @@ class SupportAssignmentsCard extends ConsumerWidget {
     super.key,
     required this.canEdit,
     required this.attendants,
-    required this.microphones,
+    this.microphones,
     required this.audioVideo,
     required this.customAssignments,
     required this.onChanged,
@@ -887,7 +1160,10 @@ class SupportAssignmentsCard extends ConsumerWidget {
 
   final bool canEdit;
   final Assignment attendants;
-  final Assignment microphones;
+
+  /// Null hides the row: the Memorial arranges attendants and audio/video
+  /// only.
+  final Assignment? microphones;
   final Assignment audioVideo;
   final List<CustomAssignment> customAssignments;
   final Future<void> Function({
@@ -1086,20 +1362,21 @@ class SupportAssignmentsCard extends ConsumerWidget {
                     save: (a) => onChanged(attendants: a),
                   ),
           ),
-          row(
-            label: l10n.supportMicrophones,
-            assignment: microphones,
-            onTap: !canEdit
-                ? null
-                : () => _edit(
-                    context,
-                    title: l10n.supportMicrophones,
-                    initial: microphones,
-                    historyKey: HistoryKeys.microphone,
-                    qualifies: (p) => p.qualifications.microphone,
-                    save: (a) => onChanged(microphones: a),
-                  ),
-          ),
+          if (microphones != null)
+            row(
+              label: l10n.supportMicrophones,
+              assignment: microphones!,
+              onTap: !canEdit
+                  ? null
+                  : () => _edit(
+                      context,
+                      title: l10n.supportMicrophones,
+                      initial: microphones!,
+                      historyKey: HistoryKeys.microphone,
+                      qualifies: (p) => p.qualifications.microphone,
+                      save: (a) => onChanged(microphones: a),
+                    ),
+            ),
           row(
             label: l10n.supportAudioVideo,
             assignment: audioVideo,

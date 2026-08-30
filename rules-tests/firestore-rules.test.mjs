@@ -600,6 +600,54 @@ describe('section roles', () => {
       setDoc(doc(db(LMM_ADMIN), 'weekend_weeks/2026-07-13'), {}),
     );
   });
+
+  // The Memorial replaces whichever meeting it falls on, and either
+  // meeting-schedule role arranges it — so each may write the other's week
+  // when, and only when, that week runs the Memorial.
+  it('either meeting admin writes a memorial week in either schedule',
+    async () => {
+      await assertSucceeds(
+        setDoc(doc(db(WEEKEND_ADMIN), 'lmm_weeks/2026-04-06'), {
+          programKind: 'memorial',
+          memorial: { chairman: { publisherIds: [], freeText: '' } },
+        }),
+      );
+      await assertSucceeds(
+        setDoc(doc(db(LMM_ADMIN), 'weekend_weeks/2026-04-06'), {
+          programKind: 'memorial',
+          memorial: { chairman: { publisherIds: [], freeText: '' } },
+        }),
+      );
+    });
+
+  it('the other meeting admin cannot write a non-memorial week', async () => {
+    await assertFails(
+      setDoc(doc(db(WEEKEND_ADMIN), 'lmm_weeks/2026-04-13'), { parts: [] }),
+    );
+    await assertFails(
+      setDoc(doc(db(WEEKEND_ADMIN), 'lmm_weeks/2026-04-13'), {
+        programKind: 'nothingPlanned',
+        programNote: 'assembly',
+      }),
+    );
+    await assertFails(
+      setDoc(doc(db(LMM_ADMIN), 'weekend_weeks/2026-04-13'), {
+        programKind: 'regular',
+      }),
+    );
+  });
+
+  // Deleting the week takes the whole schedule with it, so it never crosses
+  // roles however the week is currently programmed.
+  it('deleting a memorial week stays with the schedule own role', async () => {
+    await assertSucceeds(
+      setDoc(doc(db(LMM_ADMIN), 'lmm_weeks/2026-04-20'), {
+        programKind: 'memorial',
+      }),
+    );
+    await assertFails(deleteDoc(doc(db(WEEKEND_ADMIN), 'lmm_weeks/2026-04-20')));
+    await assertSucceeds(deleteDoc(doc(db(LMM_ADMIN), 'lmm_weeks/2026-04-20')));
+  });
 });
 
 describe('schedule config (permanent custom assignments)', () => {

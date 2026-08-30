@@ -789,5 +789,24 @@
   "qMicrophone": "Microfones",
   "qAudioVideo": "Áudio e vídeo",
   "qPublicWitnessing": "Testemunho público",
-  "qMinistryMeetingConductor": "Dirigente da reunião para o serviço de campo"
+  "qMinistryMeetingConductor": "Dirigente da reunião para o serviço de campo",
+
+  "programKindRegular": "Programa normal",
+  "programKindNothingPlanned": "Nada planejado",
+  "programKindMemorial": "Celebração",
+  "weekNothingPlannedHint": "Não há reunião nesta semana.",
+  "weekProgramSwitchConfirm": "O programa atual é mantido e volta quando você alternar de volta.",
+  "weekRestoreProgram": "Restaurar o programa normal",
+  "weekNoteLabel": "Aviso para os publicadores",
+  "weekNoteEdit": "Editar aviso",
+  "memorialBreadPrayer": "Oração pelo pão",
+  "memorialWinePrayer": "Oração pelo vinho",
+  "memorialAttendance": "Assistência da Celebração",
+  "memorialPastTitle": "Celebrações anteriores",
+  "attMeetingMemorial": "Celebração",
+  "keepOnImport": "Manter na importação",
+  "keepOnImportHint": "A importação da apostila não vai substituir isto.",
+  "importKeepsEdits": "Suas edições são mantidas: {parts} partes, {songs} cânticos", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Semanas sem reunião e a Celebração",
+  "helpProgramKindBody": "Na visão da semana, o menu ao lado da semana muda para «Nada planejado» (uma semana de assembleia ou congresso — os publicadores veem o seu aviso em vez do programa e não se espera assistência) ou para a Celebração, que pode cair em qualquer um dos dois dias. O que você deixa é mantido e volta quando alternar de volta. O dia e o horário da Celebração são definidos com o lápis no cabeçalho da semana, e a assistência dela é registrada nela mesma — nunca entra nas médias das reuniões."
 }

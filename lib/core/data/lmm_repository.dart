@@ -53,6 +53,26 @@ class LmmRepository {
     };
   }
 
+  /// Weeks in `[fromId, toId]` that do not run their regular program, as
+  /// `weekId -> kind`.
+  ///
+  /// `programKind` is only ever the default on the weeks that run the regular
+  /// program, so the `whereIn` returns just the handful that deviate. The id
+  /// range is applied here rather than in the query for the same reason as in
+  /// [getWeekdayOverrides].
+  Future<Map<String, MeetingProgramKind>> getProgramKinds(
+      String fromId, String toId) async {
+    final snap = await _col.where('programKind', whereIn: [
+      MeetingProgramKind.nothingPlanned.name,
+      MeetingProgramKind.memorial.name,
+    ]).get();
+    return {
+      for (final doc in snap.docs)
+        if (doc.id.compareTo(fromId) >= 0 && doc.id.compareTo(toId) <= 0)
+          doc.id: _fromDoc(doc).programKind,
+    };
+  }
+
   /// All weeks that mention [uid]; caller filters for upcoming (data volume
   /// is small and this avoids composite-index requirements).
   Future<List<LmmWeek>> getAssignedTo(String uid) async {

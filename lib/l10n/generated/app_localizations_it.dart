@@ -2525,4 +2525,65 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get qMinistryMeetingConductor =>
       'Conduttore dell\'adunanza per il servizio';
+
+  @override
+  String get programKindRegular => 'Programma abituale';
+
+  @override
+  String get programKindNothingPlanned => 'Niente in programma';
+
+  @override
+  String get programKindMemorial => 'Commemorazione';
+
+  @override
+  String get weekNothingPlannedHint =>
+      'Questa settimana non si tiene nessuna adunanza.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Il programma attuale viene conservato e torna quando lo si ripristina.';
+
+  @override
+  String get weekRestoreProgram => 'Ripristina il programma abituale';
+
+  @override
+  String get weekNoteLabel => 'Nota per i proclamatori';
+
+  @override
+  String get weekNoteEdit => 'Modifica la nota';
+
+  @override
+  String get memorialBreadPrayer => 'Preghiera per il pane';
+
+  @override
+  String get memorialWinePrayer => 'Preghiera per il vino';
+
+  @override
+  String get memorialAttendance => 'Presenze alla Commemorazione';
+
+  @override
+  String get memorialPastTitle => 'Commemorazioni precedenti';
+
+  @override
+  String get attMeetingMemorial => 'Commemorazione';
+
+  @override
+  String get keepOnImport => 'Mantieni all’importazione';
+
+  @override
+  String get keepOnImportHint =>
+      'L’importazione del quaderno non lo sovrascriverà.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Le tue modifiche vengono mantenute: $parts parti, $songs cantici';
+  }
+
+  @override
+  String get helpProgramKindTitle =>
+      'Settimane senza adunanza e la Commemorazione';
+
+  @override
+  String get helpProgramKindBody =>
+      'Nella vista della settimana, il menu accanto alla settimana la porta su «Niente in programma» (una settimana di assemblea o congresso: i proclamatori vedono la tua nota al posto del programma e non si attende nessuna presenza) o sulla Commemorazione, che può cadere in entrambi i giorni. Quello che lasci viene conservato e torna quando ripristini. Giorno e ora della Commemorazione si impostano con la matita nell’intestazione della settimana, e le sue presenze si registrano su di essa: non entrano mai nelle medie delle adunanze.';
 }

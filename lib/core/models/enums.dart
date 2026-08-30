@@ -91,6 +91,40 @@ enum MeetingType {
   lmm,
   @JsonValue('weekend')
   weekend,
+
+  /// Recorded like any other meeting, but deliberately kept out of the
+  /// midweek/weekend figures — see [kCountedMeetingTypes].
+  @JsonValue('memorial')
+  memorial,
+}
+
+/// The meetings whose attendance is averaged and reported (the monthly
+/// overview, the statistics screen, the S-1 and the S-88 record sheet).
+///
+/// The Memorial is recorded through the same collection so it can be entered
+/// and corrected like every other meeting, but it is not one of the two
+/// congregation meetings and must never move their averages. Iterate this
+/// rather than `MeetingType.values` wherever a figure is reported.
+const kCountedMeetingTypes = [MeetingType.lmm, MeetingType.weekend];
+
+/// Which program a week's meeting runs.
+///
+/// Chosen per week and per meeting, so a Memorial held on the midweek week
+/// leaves the weekend program untouched and the other way round. The regular
+/// program is never deleted when another kind is picked: it stays in the
+/// document and comes back when the week is switched back to [regular].
+enum MeetingProgramKind {
+  @JsonValue('regular')
+  regular,
+
+  /// No meeting this week (an assembly, a convention). Publishers see
+  /// `programNote` instead of a program, and no attendance is expected.
+  @JsonValue('nothingPlanned')
+  nothingPlanned,
+
+  /// The Memorial replaces this week's meeting; see [MemorialProgram].
+  @JsonValue('memorial')
+  memorial,
 }
 
 enum LmmSection {

@@ -2506,4 +2506,62 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get qMinistryMeetingConductor => 'Prowadzący zbiórkę do służby';
+
+  @override
+  String get programKindRegular => 'Zwykły program';
+
+  @override
+  String get programKindNothingPlanned => 'Nic nie zaplanowano';
+
+  @override
+  String get programKindMemorial => 'Pamiątka';
+
+  @override
+  String get weekNothingPlannedHint => 'W tym tygodniu nie ma zebrania.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Obecny program zostanie zachowany i wróci po przełączeniu z powrotem.';
+
+  @override
+  String get weekRestoreProgram => 'Przywróć zwykły program';
+
+  @override
+  String get weekNoteLabel => 'Uwaga dla głosicieli';
+
+  @override
+  String get weekNoteEdit => 'Edytuj uwagę';
+
+  @override
+  String get memorialBreadPrayer => 'Modlitwa przy chlebie';
+
+  @override
+  String get memorialWinePrayer => 'Modlitwa przy winie';
+
+  @override
+  String get memorialAttendance => 'Obecność na Pamiątce';
+
+  @override
+  String get memorialPastTitle => 'Poprzednie Pamiątki';
+
+  @override
+  String get attMeetingMemorial => 'Pamiątka';
+
+  @override
+  String get keepOnImport => 'Zachowaj przy imporcie';
+
+  @override
+  String get keepOnImportHint => 'Import ze skoroszytu tego nie nadpisze.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Twoje zmiany zostaną zachowane: $parts punktów, $songs pieśni';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Tygodnie bez zebrania i Pamiątka';
+
+  @override
+  String get helpProgramKindBody =>
+      'W widoku tygodnia menu obok tygodnia przełącza go na „Nic nie zaplanowano” (tydzień zgromadzenia albo kongresu – głosiciele widzą Twoją uwagę zamiast programu i nie oczekuje się obecności) albo na Pamiątkę, która może wypaść w każdy z tych dni. To, co opuszczasz, zostaje zachowane i wraca po przełączeniu z powrotem. Dzień i godzinę Pamiątki ustawiasz ołówkiem w nagłówku tygodnia, a jej obecność zapisuje się przy niej samej – nigdy nie wlicza się do średnich zebrań.';
 }

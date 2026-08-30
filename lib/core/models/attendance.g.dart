@@ -29,4 +29,5 @@ Map<String, dynamic> _$AttendanceEntryToJson(_AttendanceEntry instance) =>
 const _$MeetingTypeEnumMap = {
   MeetingType.lmm: 'lmm',
   MeetingType.weekend: 'weekend',
+  MeetingType.memorial: 'memorial',
 };

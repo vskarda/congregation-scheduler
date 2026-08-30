@@ -789,5 +789,24 @@
   "qMicrophone": "Microfoni",
   "qAudioVideo": "Audio e video",
   "qPublicWitnessing": "Testimonianza pubblica",
-  "qMinistryMeetingConductor": "Conduttore dell'adunanza per il servizio"
+  "qMinistryMeetingConductor": "Conduttore dell'adunanza per il servizio",
+
+  "programKindRegular": "Programma abituale",
+  "programKindNothingPlanned": "Niente in programma",
+  "programKindMemorial": "Commemorazione",
+  "weekNothingPlannedHint": "Questa settimana non si tiene nessuna adunanza.",
+  "weekProgramSwitchConfirm": "Il programma attuale viene conservato e torna quando lo si ripristina.",
+  "weekRestoreProgram": "Ripristina il programma abituale",
+  "weekNoteLabel": "Nota per i proclamatori",
+  "weekNoteEdit": "Modifica la nota",
+  "memorialBreadPrayer": "Preghiera per il pane",
+  "memorialWinePrayer": "Preghiera per il vino",
+  "memorialAttendance": "Presenze alla Commemorazione",
+  "memorialPastTitle": "Commemorazioni precedenti",
+  "attMeetingMemorial": "Commemorazione",
+  "keepOnImport": "Mantieni all’importazione",
+  "keepOnImportHint": "L’importazione del quaderno non lo sovrascriverà.",
+  "importKeepsEdits": "Le tue modifiche vengono mantenute: {parts} parti, {songs} cantici", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Settimane senza adunanza e la Commemorazione",
+  "helpProgramKindBody": "Nella vista della settimana, il menu accanto alla settimana la porta su «Niente in programma» (una settimana di assemblea o congresso: i proclamatori vedono la tua nota al posto del programma e non si attende nessuna presenza) o sulla Commemorazione, che può cadere in entrambi i giorni. Quello che lasci viene conservato e torna quando ripristini. Giorno e ora della Commemorazione si impostano con la matita nell’intestazione della settimana, e le sue presenze si registrano su di essa: non entrano mai nelle medie delle adunanze."
 }

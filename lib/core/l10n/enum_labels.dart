@@ -36,3 +36,17 @@ String lmmSectionLabel(AppLocalizations l10n, LmmSection s) => switch (s) {
       LmmSection.living => l10n.sectionLiving,
       LmmSection.closing => l10n.sectionClosing,
     };
+
+String meetingTypeLabel(AppLocalizations l10n, MeetingType type) =>
+    switch (type) {
+      MeetingType.lmm => l10n.attMeetingLmm,
+      MeetingType.weekend => l10n.attMeetingWeekend,
+      MeetingType.memorial => l10n.attMeetingMemorial,
+    };
+
+String programKindLabel(AppLocalizations l10n, MeetingProgramKind kind) =>
+    switch (kind) {
+      MeetingProgramKind.regular => l10n.programKindRegular,
+      MeetingProgramKind.nothingPlanned => l10n.programKindNothingPlanned,
+      MeetingProgramKind.memorial => l10n.programKindMemorial,
+    };

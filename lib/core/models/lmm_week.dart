@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'assignment.dart';
 import 'enums.dart';
+import 'memorial.dart';
 
 part 'lmm_week.freezed.dart';
 part 'lmm_week.g.dart';
@@ -33,6 +34,13 @@ abstract class LmmPart with _$LmmPart {
     @Default(Assignment()) Assignment assistant2,
     @Default(Assignment()) Assignment assignment3,
     @Default(Assignment()) Assignment assistant3,
+
+    /// Program content typed by an admin rather than parsed from the Meeting
+    /// Workbook. A re-import keeps this part's title, description and
+    /// duration instead of overwriting them, and keeps the part itself even
+    /// when the parsed program has no counterpart for it (see
+    /// `mergeParsedWeek`). Set by the part dialog, clearable there too.
+    @Default(false) bool manual,
   }) = _LmmPart;
 
   factory LmmPart.fromJson(Map<String, dynamic> json) =>
@@ -112,6 +120,25 @@ abstract class LmmWeek with _$LmmWeek {
     @Default('') String closingSongTitle,
     @JsonKey(includeIfNull: false) int? closingSongNo,
 
+    /// Song slots picked or typed by hand; a re-import leaves those alone,
+    /// exactly like [LmmPart.manual] does for a part.
+    @Default(false) bool openingSongManual,
+    @Default(false) bool livingSongManual,
+    @Default(false) bool closingSongManual,
+
+    /// Which program this week's meeting runs. The regular program below is
+    /// kept whatever this says, so switching to (and back from) a Memorial or
+    /// a week with nothing planned never destroys scheduling work.
+    @Default(MeetingProgramKind.regular) MeetingProgramKind programKind,
+
+    /// What publishers are shown instead of the program when the week has
+    /// [MeetingProgramKind.nothingPlanned] — "assembly in Brno", and so on.
+    @Default('') String programNote,
+
+    /// The Memorial program, when this week runs one. Kept (like the regular
+    /// program) even while another kind is selected.
+    @JsonKey(includeIfNull: false) MemorialProgram? memorial,
+
     /// epub | cdn | manual
     @Default('manual') String source,
     @Default(<LmmPart>[]) List<LmmPart> parts,
@@ -137,6 +164,17 @@ abstract class LmmWeek with _$LmmWeek {
 
   bool get hasMeetingOverride => meetingWeekday != null || meetingTime != null;
 
+  /// Whether the regular workbook program is what this week actually runs.
+  bool get isRegular => programKind == MeetingProgramKind.regular;
+
+  /// The Memorial program, defaulted so the view never has to null-check it.
+  MemorialProgram get memorialOrEmpty => memorial ?? const MemorialProgram();
+
+  /// The union covers every stored slot, the ones belonging to a program kind
+  /// this week is not currently running included: `allAssigneeIds` backs the
+  /// array-contains query the connect-publisher migration uses, which must
+  /// still find a week whose Memorial (or whose regular program) is dormant.
+  /// Filtering by the active program happens where assignments are shown.
   LmmWeek withRecomputedAssignees() {
     final ids = <String>{
       for (final p in parts) ...[
@@ -151,6 +189,7 @@ abstract class LmmWeek with _$LmmWeek {
       ...microphones.publisherIds,
       ...audioVideo.publisherIds,
       for (final c in customAssignments) ...c.assignment.publisherIds,
+      ...?memorial?.publisherIds,
     };
     return copyWith(allAssigneeIds: ids.toList()..sort());
   }
@@ -167,5 +206,6 @@ abstract class LmmWeek with _$LmmWeek {
           for (final c in customAssignments)
             c.copyWith(assignment: c.assignment.replaceAssignee(from, to)),
         ],
+        memorial: memorial?.replaceAssignee(from, to),
       ).withRecomputedAssignees();
 }

@@ -13,7 +13,7 @@ import '../../core/firebase/firebase_providers.dart';
 import '../../core/models/models.dart';
 import '../../core/utils/dates.dart';
 
-enum AssignmentSource { lmm, weekend, pw, fsm, coVisit }
+enum AssignmentSource { lmm, weekend, pw, fsm, coVisit, memorial }
 
 /// One row of "my upcoming assignments". [roleKey] is localized by the UI
 /// (part-type names, 'assistant', 'speaker', 'wtReader', 'attendants',
@@ -116,6 +116,35 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     }
   }
 
+  /// The Memorial's four name slots plus its own program fields. Emitted for
+  /// whichever meeting week runs it — the Memorial can fall on either day.
+  void addMemorial(MemorialProgram m, String date, String time) {
+    for (final slot in [
+      (roleKey: 'memorialChairman', assignment: m.chairman),
+      (roleKey: 'memorialSpeaker', assignment: m.speaker),
+      (roleKey: 'memorialBreadPrayer', assignment: m.breadPrayer),
+      (roleKey: 'memorialWinePrayer', assignment: m.winePrayer),
+    ]) {
+      if (!slot.assignment.contains(uid)) continue;
+      entries.add(MyAssignmentEntry(
+        source: AssignmentSource.memorial,
+        date: date,
+        roleKey: slot.roleKey,
+        time: time,
+      ));
+    }
+    for (final c in m.customFields) {
+      if (!c.assignment.contains(uid)) continue;
+      entries.add(MyAssignmentEntry(
+        source: AssignmentSource.memorial,
+        date: date,
+        roleKey: 'custom',
+        detail: c.label,
+        time: time,
+      ));
+    }
+  }
+
   final lmmWeeks = await ref.watch(lmmRepositoryProvider).getAssignedTo(uid);
   for (final week in lmmWeeks) {
     final monday = tryParseDateKey(week.id);
@@ -128,7 +157,13 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     );
     final time = week.timeOr(meta.lmmTime);
     if (date.compareTo(today) < 0) continue;
-    for (final part in week.parts) {
+    // No meeting, nobody serving: the parts stay in the document but they
+    // are not what this week runs, so they raise no line and no reminder.
+    if (week.programKind == MeetingProgramKind.nothingPlanned) continue;
+    if (week.programKind == MeetingProgramKind.memorial) {
+      addMemorial(week.memorialOrEmpty, date, time);
+    }
+    for (final part in week.isRegular ? week.parts : const <LmmPart>[]) {
       if (part.assignment.contains(uid)) {
         entries.add(
           MyAssignmentEntry(
@@ -183,7 +218,9 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
       date,
       time,
       attendants: week.attendants,
-      microphones: week.microphones,
+      // The Memorial arranges attendants and audio/video only, so a
+      // microphone slot left over from the regular program stays dormant.
+      microphones: week.isRegular ? week.microphones : const Assignment(),
       audioVideo: week.audioVideo,
       custom: week.customAssignments,
     );
@@ -201,7 +238,11 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
     );
     final time = week.timeOr(meta.weekendTime);
     if (date.compareTo(today) < 0) continue;
-    if (week.speaker.contains(uid)) {
+    if (week.programKind == MeetingProgramKind.nothingPlanned) continue;
+    if (week.programKind == MeetingProgramKind.memorial) {
+      addMemorial(week.memorialOrEmpty, date, time);
+    }
+    if (week.isRegular && week.speaker.contains(uid)) {
       entries.add(
         MyAssignmentEntry(
           source: AssignmentSource.weekend,
@@ -212,7 +253,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         ),
       );
     }
-    if (week.chairman.contains(uid)) {
+    if (week.isRegular && week.chairman.contains(uid)) {
       entries.add(
         MyAssignmentEntry(
           source: AssignmentSource.weekend,
@@ -222,7 +263,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         ),
       );
     }
-    if (week.wtReader.contains(uid)) {
+    if (week.isRegular && week.wtReader.contains(uid)) {
       entries.add(
         MyAssignmentEntry(
           source: AssignmentSource.weekend,
@@ -232,7 +273,7 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
         ),
       );
     }
-    for (final c in week.customFields) {
+    for (final c in week.isRegular ? week.customFields : const []) {
       if (c.assignment.contains(uid)) {
         entries.add(
           MyAssignmentEntry(
@@ -250,7 +291,9 @@ final myUpcomingAssignmentsProvider = FutureProvider<List<MyAssignmentEntry>>((
       date,
       time,
       attendants: week.attendants,
-      microphones: week.microphones,
+      // The Memorial arranges attendants and audio/video only, so a
+      // microphone slot left over from the regular program stays dormant.
+      microphones: week.isRegular ? week.microphones : const Assignment(),
       audioVideo: week.audioVideo,
       custom: week.customAssignments,
     );

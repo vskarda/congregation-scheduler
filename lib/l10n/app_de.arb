@@ -789,5 +789,24 @@
   "qMicrophone": "Mikrofone",
   "qAudioVideo": "Ton und Video",
   "qPublicWitnessing": "Öffentliches Zeugnisgeben",
-  "qMinistryMeetingConductor": "Leiter der Zusammenkunft für den Predigtdienst"
+  "qMinistryMeetingConductor": "Leiter der Zusammenkunft für den Predigtdienst",
+
+  "programKindRegular": "Reguläres Programm",
+  "programKindNothingPlanned": "Nichts geplant",
+  "programKindMemorial": "Gedächtnismahl",
+  "weekNothingPlannedHint": "In dieser Woche findet keine Zusammenkunft statt.",
+  "weekProgramSwitchConfirm": "Das bisherige Programm bleibt erhalten und kommt zurück, wenn du zurückwechselst.",
+  "weekRestoreProgram": "Reguläres Programm wiederherstellen",
+  "weekNoteLabel": "Hinweis für die Verkündiger",
+  "weekNoteEdit": "Hinweis bearbeiten",
+  "memorialBreadPrayer": "Gebet zum Brot",
+  "memorialWinePrayer": "Gebet zum Wein",
+  "memorialAttendance": "Besucherzahl beim Gedächtnismahl",
+  "memorialPastTitle": "Frühere Gedächtnismahle",
+  "attMeetingMemorial": "Gedächtnismahl",
+  "keepOnImport": "Beim Import behalten",
+  "keepOnImportHint": "Ein Import aus dem Arbeitsheft überschreibt das nicht.",
+  "importKeepsEdits": "Deine Änderungen bleiben: {parts} Programmpunkte, {songs} Lieder", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Wochen ohne Zusammenkunft und das Gedächtnismahl",
+  "helpProgramKindBody": "In der Wochenansicht schaltet das Menü neben der Woche sie auf „Nichts geplant“ (eine Kongress- oder Kreiskongresswoche – die Verkündiger sehen deinen Hinweis statt eines Programms, und es wird keine Besucherzahl erwartet) oder auf das Gedächtnismahl, das auf beide Tage fallen kann. Was du verlässt, bleibt erhalten und kommt beim Zurückschalten wieder. Tag und Uhrzeit des Gedächtnismahls stellst du mit dem Stift in der Wochenüberschrift ein; seine Besucherzahl wird bei ihm selbst erfasst und nie in die Durchschnitte der Zusammenkünfte eingerechnet."
 }

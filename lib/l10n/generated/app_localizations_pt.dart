@@ -2521,4 +2521,63 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get qMinistryMeetingConductor =>
       'Dirigente da reunião para o serviço de campo';
+
+  @override
+  String get programKindRegular => 'Programa normal';
+
+  @override
+  String get programKindNothingPlanned => 'Nada planejado';
+
+  @override
+  String get programKindMemorial => 'Celebração';
+
+  @override
+  String get weekNothingPlannedHint => 'Não há reunião nesta semana.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'O programa atual é mantido e volta quando você alternar de volta.';
+
+  @override
+  String get weekRestoreProgram => 'Restaurar o programa normal';
+
+  @override
+  String get weekNoteLabel => 'Aviso para os publicadores';
+
+  @override
+  String get weekNoteEdit => 'Editar aviso';
+
+  @override
+  String get memorialBreadPrayer => 'Oração pelo pão';
+
+  @override
+  String get memorialWinePrayer => 'Oração pelo vinho';
+
+  @override
+  String get memorialAttendance => 'Assistência da Celebração';
+
+  @override
+  String get memorialPastTitle => 'Celebrações anteriores';
+
+  @override
+  String get attMeetingMemorial => 'Celebração';
+
+  @override
+  String get keepOnImport => 'Manter na importação';
+
+  @override
+  String get keepOnImportHint =>
+      'A importação da apostila não vai substituir isto.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Suas edições são mantidas: $parts partes, $songs cânticos';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Semanas sem reunião e a Celebração';
+
+  @override
+  String get helpProgramKindBody =>
+      'Na visão da semana, o menu ao lado da semana muda para «Nada planejado» (uma semana de assembleia ou congresso — os publicadores veem o seu aviso em vez do programa e não se espera assistência) ou para a Celebração, que pode cair em qualquer um dos dois dias. O que você deixa é mantido e volta quando alternar de volta. O dia e o horário da Celebração são definidos com o lápis no cabeçalho da semana, e a assistência dela é registrada nela mesma — nunca entra nas médias das reuniões.';
 }

@@ -205,17 +205,19 @@ AttendanceStats computeAttendance(List<AttendanceEntry> entries,
     return (totals.reduce((a, b) => a + b) / totals.length).round();
   }
 
+  // The two congregation meetings only: a Memorial count is recorded in the
+  // same collection but is never averaged with them (see kCountedMeetingTypes).
   return AttendanceStats(
     avg3Months: {
-      for (final t in MeetingType.values) t: averageOver(last3, t),
+      for (final t in kCountedMeetingTypes) t: averageOver(last3, t),
     },
     avg12Months: {
-      for (final t in MeetingType.values) t: averageOver(last12, t),
+      for (final t in kCountedMeetingTypes) t: averageOver(last12, t),
     },
     monthlySeries: {
       for (final m in last12)
         m: {
-          for (final t in MeetingType.values)
+          for (final t in kCountedMeetingTypes)
             if (monthlyAvg(m, t) != null) t: monthlyAvg(m, t)!,
         },
     },

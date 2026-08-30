@@ -226,14 +226,33 @@ service cloud.firestore {
 
     // ---------- schedules ----------
 
+    // The Memorial replaces whichever meeting it falls on — it can be planned
+    // on the midweek week or on the weekend one — and the same brothers
+    // arrange it wherever it lands. So either meeting-schedule role may write
+    // a week whose 'programKind' is 'memorial', in either collection, while
+    // the regular programs stay with their own role.
+    function isMemorialWeek() {
+      return request.resource.data.get('programKind', 'regular') == 'memorial';
+    }
+
+    function canWriteMeetingWeek(ownRole) {
+      return hasRole(ownRole)
+        || (isMemorialWeek()
+            && (hasRole('lmmSchedule') || hasRole('weekendSchedule')));
+    }
+
     match /lmm_weeks/{weekId} {
       allow read: if isVerified();
-      allow write: if hasRole('lmmSchedule');
+      allow create, update: if canWriteMeetingWeek('lmmSchedule');
+      // Deleting the week removes the whole midweek program with it, so it
+      // stays with the role that owns the schedule.
+      allow delete: if hasRole('lmmSchedule');
     }
 
     match /weekend_weeks/{weekId} {
       allow read: if isVerified();
-      allow write: if hasRole('weekendSchedule');
+      allow create, update: if canWriteMeetingWeek('weekendSchedule');
+      allow delete: if hasRole('weekendSchedule');
     }
 
     // Per-schedule configuration: permanent custom assignments, and the weeks
@@ -379,6 +398,9 @@ service cloud.firestore {
     }
 
     // ---------- meeting attendance ----------
+    // One document per meeting, id '{date}_{type}'. The Memorial is recorded
+    // here like the two congregation meetings, by the same roles; the app
+    // keeps it out of every average and report (kCountedMeetingTypes).
 
     match /attendance/{entryId} {
       allow read: if hasRole('attendance') || hasRole('recordAttendance');

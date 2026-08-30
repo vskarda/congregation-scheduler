@@ -94,4 +94,23 @@ void main() {
     expect(result.avgMidweekAttendance, 50);
     expect(result.avgWeekendAttendance, isNull);
   });
+
+  test('a Memorial count never reaches the S-1 averages', () {
+    final result = computeS1(
+      monthReports: const [],
+      lastSixMonths: const [],
+      monthAttendance: const [
+        AttendanceEntry(
+            date: '2026-04-01', meetingType: MeetingType.lmm, total: 50),
+        AttendanceEntry(
+            date: '2026-04-05', meetingType: MeetingType.weekend, total: 70),
+        // The Memorial is recorded in the same collection; the S-1 reports
+        // the two congregation meetings and must not see it.
+        AttendanceEntry(
+            date: '2026-04-02', meetingType: MeetingType.memorial, total: 800),
+      ],
+    );
+    expect(result.avgMidweekAttendance, 50);
+    expect(result.avgWeekendAttendance, 70);
+  });
 }

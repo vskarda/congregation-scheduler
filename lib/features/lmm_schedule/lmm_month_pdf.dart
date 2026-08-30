@@ -160,6 +160,21 @@ Future<Uint8List> buildLmmMonthPdf({
       continue;
     }
 
+    // A week that runs no midweek program prints what it does run instead;
+    // the dormant parts below stay out of the sheet.
+    if (week.programKind != MeetingProgramKind.regular) {
+      widgets.addAll(programKindBlock(
+        kind: week.programKind,
+        programNote: week.programNote,
+        memorial: week.memorialOrEmpty,
+        attendants: week.attendants,
+        audioVideo: week.audioVideo,
+        names: names,
+        l10n: l10n,
+      ));
+      continue;
+    }
+
     pw.Widget songLine(int? no, String title) => pw.Padding(
           padding: const pw.EdgeInsets.only(left: 6, top: 2, bottom: 2),
           child: pw.Text('${l10n.songLabel}: ${songDisplayText(no, title)}',
@@ -225,4 +240,73 @@ Future<Uint8List> buildLmmMonthPdf({
     build: (_) => widgets,
   ));
   return doc.save();
+}
+
+/// The block printed for a week that runs something other than its regular
+/// program. Shared by the midweek and the weekend overview, because the
+/// Memorial can fall on either day. Returns an empty list for a regular week.
+List<pw.Widget> programKindBlock({
+  required MeetingProgramKind kind,
+  required String programNote,
+  required MemorialProgram memorial,
+  required Assignment attendants,
+  required Assignment audioVideo,
+  required String Function(Assignment) names,
+  required AppLocalizations l10n,
+}) {
+  pw.Widget row(String label, String value) => pw.Padding(
+        padding: const pw.EdgeInsets.only(bottom: 2),
+        child: pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.SizedBox(
+              width: 130,
+              child: pw.Text(label,
+                  style: pw.TextStyle(
+                      fontSize: 9, fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.Expanded(
+              child: pw.Text(value, style: const pw.TextStyle(fontSize: 9)),
+            ),
+          ],
+        ),
+      );
+
+  switch (kind) {
+    case MeetingProgramKind.regular:
+      return const [];
+    case MeetingProgramKind.nothingPlanned:
+      return [
+        pw.Padding(
+          padding: const pw.EdgeInsets.only(left: 6, bottom: 6),
+          child: pw.Text(
+            programNote.isEmpty
+                ? l10n.weekNothingPlannedHint
+                : '${l10n.programKindNothingPlanned}: $programNote',
+            style: const pw.TextStyle(fontSize: 9, color: _gray),
+          ),
+        ),
+      ];
+    case MeetingProgramKind.memorial:
+      return [
+        pw.Padding(
+          padding: const pw.EdgeInsets.only(top: 2, bottom: 3),
+          child: pw.Text(l10n.programKindMemorial,
+              style: pw.TextStyle(
+                  fontSize: 9, fontWeight: pw.FontWeight.bold)),
+        ),
+        row(l10n.songLabel,
+            songDisplayText(memorial.songNo, memorial.songTitle)),
+        row(l10n.partChairman, names(memorial.chairman)),
+        row(l10n.weekendSpeaker, names(memorial.speaker)),
+        row(l10n.memorialBreadPrayer, names(memorial.breadPrayer)),
+        row(l10n.memorialWinePrayer, names(memorial.winePrayer)),
+        for (final custom in memorial.customFields)
+          row(custom.label, names(custom.assignment)),
+        pw.SizedBox(height: 3),
+        // The Memorial arranges attendants and audio/video and nothing else.
+        row(l10n.supportAttendants, names(attendants)),
+        row(l10n.supportAudioVideo, names(audioVideo)),
+      ];
+  }
 }

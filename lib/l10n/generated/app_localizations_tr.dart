@@ -2502,4 +2502,64 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get qMinistryMeetingConductor => 'Tarla buluşmasını idare eden';
+
+  @override
+  String get programKindRegular => 'Normal program';
+
+  @override
+  String get programKindNothingPlanned => 'Program yok';
+
+  @override
+  String get programKindMemorial => 'Anma Yemeği';
+
+  @override
+  String get weekNothingPlannedHint => 'Bu hafta ibadet yapılmayacak.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'Mevcut program saklanır ve geri döndüğünüzde yeniden görünür.';
+
+  @override
+  String get weekRestoreProgram => 'Normal programa dön';
+
+  @override
+  String get weekNoteLabel => 'Müjdeciler için not';
+
+  @override
+  String get weekNoteEdit => 'Notu düzenle';
+
+  @override
+  String get memorialBreadPrayer => 'Ekmek için dua';
+
+  @override
+  String get memorialWinePrayer => 'Şarap için dua';
+
+  @override
+  String get memorialAttendance => 'Anma Yemeği katılımı';
+
+  @override
+  String get memorialPastTitle => 'Geçmiş Anma Yemekleri';
+
+  @override
+  String get attMeetingMemorial => 'Anma Yemeği';
+
+  @override
+  String get keepOnImport => 'İçe aktarırken koru';
+
+  @override
+  String get keepOnImportHint =>
+      'Çalışma kitabı içe aktarımı bunun üzerine yazmaz.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Düzenlemeleriniz korunur: $parts kısım, $songs ilahi';
+  }
+
+  @override
+  String get helpProgramKindTitle =>
+      'İbadetin olmadığı haftalar ve Anma Yemeği';
+
+  @override
+  String get helpProgramKindBody =>
+      'Hafta görünümünde, haftanın yanındaki menü onu “Program yok” durumuna (bölge veya çevre ibadeti haftası — müjdeciler programın yerine notunuzu görür ve katılım beklenmez) ya da hafta içi veya hafta sonu fark etmeksizin Anma Yemeği’ne geçirir. Ayrıldığınız program saklanır ve geri döndüğünüzde yeniden görünür. Anma Yemeği’nin günü ve saati hafta başlığındaki kalemle ayarlanır; katılımı kendi üzerinde kaydedilir ve ibadet ortalamalarına asla katılmaz.';
 }

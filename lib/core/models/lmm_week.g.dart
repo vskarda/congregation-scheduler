@@ -35,6 +35,7 @@ _LmmPart _$LmmPartFromJson(Map<String, dynamic> json) => _LmmPart(
   assistant3: json['assistant3'] == null
       ? const Assignment()
       : Assignment.fromJson(json['assistant3'] as Map<String, dynamic>),
+  manual: json['manual'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$LmmPartToJson(_LmmPart instance) => <String, dynamic>{
@@ -50,6 +51,7 @@ Map<String, dynamic> _$LmmPartToJson(_LmmPart instance) => <String, dynamic>{
   'assistant2': instance.assistant2.toJson(),
   'assignment3': instance.assignment3.toJson(),
   'assistant3': instance.assistant3.toJson(),
+  'manual': instance.manual,
 };
 
 const _$LmmSectionEnumMap = {
@@ -83,6 +85,16 @@ _LmmWeek _$LmmWeekFromJson(Map<String, dynamic> json) => _LmmWeek(
   livingSongNo: (json['livingSongNo'] as num?)?.toInt(),
   closingSongTitle: json['closingSongTitle'] as String? ?? '',
   closingSongNo: (json['closingSongNo'] as num?)?.toInt(),
+  openingSongManual: json['openingSongManual'] as bool? ?? false,
+  livingSongManual: json['livingSongManual'] as bool? ?? false,
+  closingSongManual: json['closingSongManual'] as bool? ?? false,
+  programKind:
+      $enumDecodeNullable(_$MeetingProgramKindEnumMap, json['programKind']) ??
+      MeetingProgramKind.regular,
+  programNote: json['programNote'] as String? ?? '',
+  memorial: json['memorial'] == null
+      ? null
+      : MemorialProgram.fromJson(json['memorial'] as Map<String, dynamic>),
   source: json['source'] as String? ?? 'manual',
   parts:
       (json['parts'] as List<dynamic>?)
@@ -120,6 +132,12 @@ Map<String, dynamic> _$LmmWeekToJson(_LmmWeek instance) => <String, dynamic>{
   'livingSongNo': ?instance.livingSongNo,
   'closingSongTitle': instance.closingSongTitle,
   'closingSongNo': ?instance.closingSongNo,
+  'openingSongManual': instance.openingSongManual,
+  'livingSongManual': instance.livingSongManual,
+  'closingSongManual': instance.closingSongManual,
+  'programKind': _$MeetingProgramKindEnumMap[instance.programKind]!,
+  'programNote': instance.programNote,
+  'memorial': ?instance.memorial?.toJson(),
   'source': instance.source,
   'parts': instance.parts.map((e) => e.toJson()).toList(),
   'attendants': instance.attendants.toJson(),
@@ -129,4 +147,10 @@ Map<String, dynamic> _$LmmWeekToJson(_LmmWeek instance) => <String, dynamic>{
       .map((e) => e.toJson())
       .toList(),
   'allAssigneeIds': instance.allAssigneeIds,
+};
+
+const _$MeetingProgramKindEnumMap = {
+  MeetingProgramKind.regular: 'regular',
+  MeetingProgramKind.nothingPlanned: 'nothingPlanned',
+  MeetingProgramKind.memorial: 'memorial',
 };

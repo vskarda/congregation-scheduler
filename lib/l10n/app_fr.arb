@@ -789,5 +789,24 @@
   "qMicrophone": "Microphones",
   "qAudioVideo": "Audio-vidéo",
   "qPublicWitnessing": "Témoignage public",
-  "qMinistryMeetingConductor": "Conducteur de la réunion pour la prédication"
+  "qMinistryMeetingConductor": "Conducteur de la réunion pour la prédication",
+
+  "programKindRegular": "Programme habituel",
+  "programKindNothingPlanned": "Rien de prévu",
+  "programKindMemorial": "Mémorial",
+  "weekNothingPlannedHint": "Aucune réunion cette semaine.",
+  "weekProgramSwitchConfirm": "Le programme actuel est conservé et revient si vous rebasculez.",
+  "weekRestoreProgram": "Rétablir le programme habituel",
+  "weekNoteLabel": "Note pour les proclamateurs",
+  "weekNoteEdit": "Modifier la note",
+  "memorialBreadPrayer": "Prière pour le pain",
+  "memorialWinePrayer": "Prière pour le vin",
+  "memorialAttendance": "Assistance au Mémorial",
+  "memorialPastTitle": "Mémoriaux précédents",
+  "attMeetingMemorial": "Mémorial",
+  "keepOnImport": "Conserver lors de l’import",
+  "keepOnImportHint": "Un import du cahier ne l’écrasera pas.",
+  "importKeepsEdits": "Vos modifications sont conservées : {parts} parties, {songs} cantiques", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Semaines sans réunion, et le Mémorial",
+  "helpProgramKindBody": "Dans la vue de la semaine, le menu à côté de la semaine la bascule sur « Rien de prévu » (une semaine d’assemblée ou de congrès : les proclamateurs voient votre note à la place du programme et aucune assistance n’est attendue) ou sur le Mémorial, qui peut tomber l’un ou l’autre jour. Ce que vous quittez est conservé et revient si vous rebasculez. Le jour et l’heure du Mémorial se règlent avec le crayon de l’en-tête de la semaine, et son assistance se note sur lui-même — jamais comptée dans les moyennes des réunions."
 }

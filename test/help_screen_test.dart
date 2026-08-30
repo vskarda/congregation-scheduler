@@ -11,7 +11,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   // Tall surface so every help card is mounted, not scrolled out of view.
   void enlarge(WidgetTester tester) {
-    tester.view.physicalSize = const Size(800, 2400);
+    // Tall enough for every topic to be built at once: a list item scrolled
+    // out of view does not exist, and "the topic is missing" would pass for
+    // the wrong reason. Grow this when topics are added.
+    tester.view.physicalSize = const Size(800, 3200);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
   }
@@ -90,6 +93,7 @@ void main() {
 
     expect(find.text(en.helpAdminToggleTitle), findsOneWidget);
     expect(find.text(en.helpPdfExportTitle), findsOneWidget);
+    expect(find.text(en.helpProgramKindTitle), findsOneWidget);
     expect(find.text(en.helpGoogleMyMapsTitle), findsOneWidget);
   });
 }

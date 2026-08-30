@@ -2497,4 +2497,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get qMinistryMeetingConductor => 'Ministry meeting conductor';
+
+  @override
+  String get programKindRegular => 'Regular program';
+
+  @override
+  String get programKindNothingPlanned => 'Nothing planned';
+
+  @override
+  String get programKindMemorial => 'Memorial';
+
+  @override
+  String get weekNothingPlannedHint => 'No meeting is held this week.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'The current program is kept and comes back when you switch back.';
+
+  @override
+  String get weekRestoreProgram => 'Restore regular program';
+
+  @override
+  String get weekNoteLabel => 'Note for publishers';
+
+  @override
+  String get weekNoteEdit => 'Edit note';
+
+  @override
+  String get memorialBreadPrayer => 'Prayer for the bread';
+
+  @override
+  String get memorialWinePrayer => 'Prayer for the wine';
+
+  @override
+  String get memorialAttendance => 'Memorial attendance';
+
+  @override
+  String get memorialPastTitle => 'Past Memorials';
+
+  @override
+  String get attMeetingMemorial => 'Memorial';
+
+  @override
+  String get keepOnImport => 'Keep on import';
+
+  @override
+  String get keepOnImportHint => 'A workbook import won\'t overwrite this.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Your edits are kept: $parts parts, $songs songs';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Weeks with no meeting, and the Memorial';
+
+  @override
+  String get helpProgramKindBody =>
+      'In the midweek or weekend view, the menu next to the week switches it to “Nothing planned” (an assembly or convention week — publishers see your note instead of a program and no attendance is expected) or to the Memorial, which can fall on either day. Whatever you switch away from is kept and comes back when you switch back. The Memorial’s own day and time are set with the pencil in the week header, and its attendance is recorded on the week itself — never counted into the midweek or weekend averages.';
 }

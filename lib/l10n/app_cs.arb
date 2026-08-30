@@ -799,5 +799,24 @@
   "qMicrophone": "Mikrofony",
   "qAudioVideo": "Audio/video",
   "qPublicWitnessing": "Veřejné svědectví",
-  "qMinistryMeetingConductor": "Vedoucí schůzky před službou"
+  "qMinistryMeetingConductor": "Vedoucí schůzky před službou",
+
+  "programKindRegular": "Běžný program",
+  "programKindNothingPlanned": "Nic neplánováno",
+  "programKindMemorial": "Památná slavnost",
+  "weekNothingPlannedHint": "Tento týden se shromáždění nekoná.",
+  "weekProgramSwitchConfirm": "Stávající program zůstane uložený a vrátí se, až ho přepnete zpět.",
+  "weekRestoreProgram": "Obnovit běžný program",
+  "weekNoteLabel": "Poznámka pro zvěstovatele",
+  "weekNoteEdit": "Upravit poznámku",
+  "memorialBreadPrayer": "Modlitba u chleba",
+  "memorialWinePrayer": "Modlitba u vína",
+  "memorialAttendance": "Návštěvnost Památné slavnosti",
+  "memorialPastTitle": "Minulé Památné slavnosti",
+  "attMeetingMemorial": "Památná slavnost",
+  "keepOnImport": "Zachovat při importu",
+  "keepOnImportHint": "Import z pracovního sešitu tohle nepřepíše.",
+  "importKeepsEdits": "Vaše úpravy zůstanou: {parts} bodů, {songs} písní", "@importKeepsEdits": {"placeholders": {"parts": {"type": "int"}, "songs": {"type": "int"}}},
+  "helpProgramKindTitle": "Týdny bez shromáždění a Památná slavnost",
+  "helpProgramKindBody": "V přehledu týdne (uprostřed týdne i o víkendu) je vedle týdne nabídka, kterou ho přepnete na „Nic neplánováno“ (týden se sjezdem nebo shromážděním – zvěstovatelé uvidí místo programu vaši poznámku a nečeká se návštěvnost) nebo na Památnou slavnost, která může připadnout na kterýkoli z obou dnů. Program, ze kterého přepnete, zůstane uložený a vrátí se, až přepnete zpět. Den a čas Památné slavnosti nastavíte tužkou v záhlaví týdne a její návštěvnost se zapisuje přímo u ní – do průměrů shromáždění se nikdy nepočítá."
 }

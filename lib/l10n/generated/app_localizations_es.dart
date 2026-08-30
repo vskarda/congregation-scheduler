@@ -2530,4 +2530,63 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get qMinistryMeetingConductor =>
       'Conductor de la reunión para predicar';
+
+  @override
+  String get programKindRegular => 'Programa habitual';
+
+  @override
+  String get programKindNothingPlanned => 'Nada previsto';
+
+  @override
+  String get programKindMemorial => 'Conmemoración';
+
+  @override
+  String get weekNothingPlannedHint => 'Esta semana no hay reunión.';
+
+  @override
+  String get weekProgramSwitchConfirm =>
+      'El programa actual se conserva y vuelve cuando cambies de nuevo.';
+
+  @override
+  String get weekRestoreProgram => 'Restaurar el programa habitual';
+
+  @override
+  String get weekNoteLabel => 'Nota para los publicadores';
+
+  @override
+  String get weekNoteEdit => 'Editar la nota';
+
+  @override
+  String get memorialBreadPrayer => 'Oración por el pan';
+
+  @override
+  String get memorialWinePrayer => 'Oración por el vino';
+
+  @override
+  String get memorialAttendance => 'Asistencia a la Conmemoración';
+
+  @override
+  String get memorialPastTitle => 'Conmemoraciones anteriores';
+
+  @override
+  String get attMeetingMemorial => 'Conmemoración';
+
+  @override
+  String get keepOnImport => 'Conservar al importar';
+
+  @override
+  String get keepOnImportHint =>
+      'La importación de la guía de actividades no lo sobrescribirá.';
+
+  @override
+  String importKeepsEdits(int parts, int songs) {
+    return 'Se conservan tus cambios: $parts partes, $songs canciones';
+  }
+
+  @override
+  String get helpProgramKindTitle => 'Semanas sin reunión y la Conmemoración';
+
+  @override
+  String get helpProgramKindBody =>
+      'En la vista de la semana, el menú junto a la semana la cambia a «Nada previsto» (una semana de asamblea o congreso: los publicadores ven tu nota en lugar del programa y no se espera asistencia) o a la Conmemoración, que puede caer en cualquiera de los dos días. Lo que dejas se conserva y vuelve al cambiar de nuevo. El día y la hora de la Conmemoración se fijan con el lápiz del encabezado de la semana, y su asistencia se registra en ella misma: nunca cuenta en los promedios de las reuniones.';
 }

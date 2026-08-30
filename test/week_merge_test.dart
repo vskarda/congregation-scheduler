@@ -15,6 +15,7 @@ LmmPart _part(
   String? assistant2,
   String? assignee3,
   String? assistant3,
+  bool manual = false,
 }) => LmmPart(
   id: id,
   section: section,
@@ -28,6 +29,7 @@ LmmPart _part(
   assistant2: Assignment(publisherIds: [?assistant2]),
   assignment3: Assignment(publisherIds: [?assignee3]),
   assistant3: Assignment(publisherIds: [?assistant3]),
+  manual: manual,
 );
 
 LmmWeek _existingWeek() => LmmWeek(
@@ -307,6 +309,130 @@ void main() {
       final customIndex = merged.parts.indexOf(custom);
       expect(merged.parts[customIndex - 1].section, LmmSection.living);
       expect(merged.parts.last.type, LmmPartType.prayer);
+    });
+
+    test('a hand-written part keeps its own text, and its assignment', () {
+      final existing = _existingWeek();
+      final edited = [
+        for (final p in existing.parts)
+          if (p.id == 'e-t1')
+            p.copyWith(
+              title: 'Local needs — elders',
+              description: 'Our own arrangement',
+              durationMin: 12,
+              manual: true,
+            )
+          else
+            p,
+      ];
+
+      final merged = mergeParsedWeek(
+        existing: existing.copyWith(parts: edited),
+        parsed: _parsedWeek(),
+      );
+
+      final talk = merged.parts.firstWhere(
+        (p) => p.type == LmmPartType.treasures,
+      );
+      expect(talk.title, 'Local needs — elders');
+      expect(talk.description, 'Our own arrangement');
+      expect(talk.durationMin, 12);
+      expect(talk.manual, isTrue);
+      // Protecting the text must not cost the part its assignee or its id.
+      expect(talk.assignment.publisherIds, ['talk']);
+      expect(talk.id, 'e-t1');
+
+      // Everything untouched still refreshes from the workbook.
+      final reading = merged.parts.firstWhere(
+        (p) => p.type == LmmPartType.bibleReading,
+      );
+      expect(reading.description, 'Jer 50:24-40 (th study 11)');
+      expect(reading.manual, isFalse);
+    });
+
+    test('a hand-written part survives when the parse has no counterpart', () {
+      final existing = _existingWeek();
+      // A fourth demonstration the workbook does not have: without the flag
+      // it would be dropped, because only custom parts used to survive.
+      final withExtra = existing.copyWith(parts: [
+        ...existing.parts,
+        _part(
+          'e-fm-extra',
+          LmmSection.ministry,
+          LmmPartType.fieldMinistry,
+          title: 'Our own demonstration',
+          assignee: 'demo-extra',
+          manual: true,
+        ),
+      ]);
+      // A parse with a single ministry part, so the extra has no match.
+      final parsed = _parsedWeek();
+      final thin = parsed.copyWith(parts: [
+        for (final p in parsed.parts)
+          if (p.id != 'p-fm2' && p.id != 'p-fm3') p,
+      ]);
+
+      final merged = mergeParsedWeek(existing: withExtra, parsed: thin);
+      final extra = merged.parts.firstWhere((p) => p.id == 'e-fm-extra');
+      expect(extra.title, 'Our own demonstration');
+      expect(extra.assignment.publisherIds, ['demo-extra']);
+      expect(extra.section, LmmSection.ministry);
+    });
+
+    test('a hand-picked song slot is kept, the others refresh', () {
+      final merged = mergeParsedWeek(
+        existing: _existingWeek().copyWith(
+          openingSongNo: 7,
+          openingSongTitle: 'Our pick',
+          openingSongManual: true,
+        ),
+        parsed: _parsedWeek(),
+      );
+      expect(merged.openingSongNo, 7);
+      expect(merged.openingSongTitle, 'Our pick');
+      expect(merged.openingSongManual, isTrue);
+      // Untouched slots still take the workbook's numbers.
+      expect(merged.livingSongNo, 45);
+      expect(merged.closingSongNo, 34);
+    });
+
+    test('protectedByMerge counts what the import would leave alone', () {
+      final existing = _existingWeek().copyWith(
+        openingSongManual: true,
+        livingSongManual: true,
+        parts: [
+          for (final p in _existingWeek().parts)
+            if (p.id == 'e-t1') p.copyWith(manual: true) else p,
+        ],
+      );
+      final kept = protectedByMerge(existing: existing, parsed: _parsedWeek());
+      // The hand-written part, plus the custom part that always survives.
+      expect(kept.parts, 1);
+      expect(kept.songs, 2);
+      expect(
+        protectedByMerge(existing: _existingWeek(), parsed: _parsedWeek()),
+        (parts: 0, songs: 0),
+      );
+    });
+
+    test('the program a week runs is the week own, not the workbook one',
+        () {
+      final merged = mergeParsedWeek(
+        existing: _existingWeek().copyWith(
+          programKind: MeetingProgramKind.memorial,
+          programNote: 'assembly',
+          memorial: const MemorialProgram(
+            chairman: Assignment(publisherIds: ['chair']),
+          ),
+        ),
+        parsed: _parsedWeek(),
+      );
+      expect(merged.programKind, MeetingProgramKind.memorial);
+      expect(merged.programNote, 'assembly');
+      expect(merged.memorial?.chairman.publisherIds, ['chair']);
+      // The imported program still lands underneath, ready for the switch back.
+      expect(merged.weekLabel, 'NOVEMBER 2-8 | JEREMIAH 49-50');
+      expect(merged.parts, isNotEmpty);
     });
 
     test('keeps support-role assignments', () {
