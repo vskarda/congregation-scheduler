@@ -315,7 +315,7 @@ class _EmptyWeekViewState extends ConsumerState<_EmptyWeekView> {
                         memorial: const MemorialProgram(),
                       ),
                     ),
-              icon: const Icon(Icons.local_florist_outlined),
+              icon: const Icon(Icons.wine_bar_outlined),
               label: Text(l10n.programKindMemorial),
             ),
           ],

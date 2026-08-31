@@ -103,7 +103,7 @@ class _WeekendWeekView extends ConsumerWidget {
                           programKind: MeetingProgramKind.memorial,
                           memorial: const MemorialProgram(),
                         )),
-                    icon: const Icon(Icons.local_florist_outlined),
+                    icon: const Icon(Icons.wine_bar_outlined),
                     label: Text(l10n.programKindMemorial),
                   ),
                 ],

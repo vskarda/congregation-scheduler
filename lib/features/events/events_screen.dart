@@ -280,8 +280,7 @@ class EventsScreen extends ConsumerWidget {
                         AssignmentSource.pw => Icons.storefront_outlined,
                         AssignmentSource.fsm => Icons.diversity_3_outlined,
                         AssignmentSource.coVisit => Icons.co_present_outlined,
-                        AssignmentSource.memorial =>
-                          Icons.local_florist_outlined,
+                        AssignmentSource.memorial => Icons.wine_bar_outlined,
                       }, size: 20),
                       title: Text(assignmentTitle(l10n, entry)),
                       subtitle: Text(

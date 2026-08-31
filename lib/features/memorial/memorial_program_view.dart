@@ -143,7 +143,7 @@ class MemorialProgramView extends ConsumerWidget {
         children: [
           ListTile(
             dense: true,
-            leading: const Icon(Icons.local_florist_outlined),
+            leading: const Icon(Icons.wine_bar_outlined),
             title: Text(l10n.programKindMemorial,
                 style: theme.textTheme.titleMedium),
           ),
