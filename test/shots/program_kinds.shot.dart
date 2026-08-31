@@ -117,8 +117,10 @@ void main() {
     final db = await seeded(week(
       kind: MeetingProgramKind.memorial,
       memorial: const MemorialProgram(
-        songNo: 18,
-        songTitle: 'Song of praise',
+        openingSongNo: 18,
+        openingSongTitle: 'Song of praise',
+        closingSongNo: 32,
+        closingSongTitle: 'Closing song',
         chairman: Assignment(publisherIds: ['p1']),
         speaker: Assignment(freeText: 'Visiting brother'),
         breadPrayer: Assignment(publisherIds: ['p2']),

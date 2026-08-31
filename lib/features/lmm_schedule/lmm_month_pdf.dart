@@ -296,13 +296,15 @@ List<pw.Widget> programKindBlock({
                   fontSize: 9, fontWeight: pw.FontWeight.bold)),
         ),
         row(l10n.songLabel,
-            songDisplayText(memorial.songNo, memorial.songTitle)),
+            songDisplayText(memorial.openingSongNo, memorial.openingSongTitle)),
         row(l10n.partChairman, names(memorial.chairman)),
         row(l10n.weekendSpeaker, names(memorial.speaker)),
         row(l10n.memorialBreadPrayer, names(memorial.breadPrayer)),
         row(l10n.memorialWinePrayer, names(memorial.winePrayer)),
         for (final custom in memorial.customFields)
           row(custom.label, names(custom.assignment)),
+        row(l10n.songLabel,
+            songDisplayText(memorial.closingSongNo, memorial.closingSongTitle)),
         pw.SizedBox(height: 3),
         // The Memorial arranges attendants and audio/video and nothing else.
         row(l10n.supportAttendants, names(attendants)),

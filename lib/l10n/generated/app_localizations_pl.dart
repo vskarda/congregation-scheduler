@@ -2533,10 +2533,10 @@ class AppLocalizationsPl extends AppLocalizations {
   String get weekNoteEdit => 'Edytuj uwagę';
 
   @override
-  String get memorialBreadPrayer => 'Modlitwa przy chlebie';
+  String get memorialBreadPrayer => 'Modlitwa za chleb';
 
   @override
-  String get memorialWinePrayer => 'Modlitwa przy winie';
+  String get memorialWinePrayer => 'Modlitwa za wino';
 
   @override
   String get memorialAttendance => 'Obecność na Pamiątce';

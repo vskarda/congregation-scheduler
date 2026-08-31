@@ -35,7 +35,7 @@ class MemorialProgramView extends ConsumerWidget {
   final MemorialProgram program;
   final bool canEdit;
 
-  /// False for a publisher on a week switched off: the song still renders,
+  /// False for a publisher on a week switched off: both songs still render,
   /// the name rows do not.
   final bool showNames;
 
@@ -46,17 +46,33 @@ class MemorialProgramView extends ConsumerWidget {
 
   final Future<void> Function(MemorialProgram) onChanged;
 
-  Future<void> _editSong(BuildContext context) async {
+  Future<void> _editOpeningSong(BuildContext context) async {
     final result = await showSongEditor(
       context,
       dialogTitle: context.l10n.songLabel,
-      songNo: program.songNo,
-      songTitle: program.songTitle,
+      songNo: program.openingSongNo,
+      songTitle: program.openingSongTitle,
     );
     if (result != null) {
-      await onChanged(
-        program.copyWith(songNo: result.songNo, songTitle: result.title),
-      );
+      await onChanged(program.copyWith(
+        openingSongNo: result.songNo,
+        openingSongTitle: result.title,
+      ));
+    }
+  }
+
+  Future<void> _editClosingSong(BuildContext context) async {
+    final result = await showSongEditor(
+      context,
+      dialogTitle: context.l10n.songLabel,
+      songNo: program.closingSongNo,
+      songTitle: program.closingSongTitle,
+    );
+    if (result != null) {
+      await onChanged(program.copyWith(
+        closingSongNo: result.songNo,
+        closingSongTitle: result.title,
+      ));
     }
   }
 
@@ -150,11 +166,13 @@ class MemorialProgramView extends ConsumerWidget {
           ListTile(
             dense: true,
             title: Text(l10n.songLabel),
-            subtitle: Text(songDisplayText(program.songNo, program.songTitle)),
-            onTap: canEdit ? () => _editSong(context) : null,
+            subtitle: Text(songDisplayText(
+                program.openingSongNo, program.openingSongTitle)),
+            onTap: canEdit ? () => _editOpeningSong(context) : null,
           ),
-          // Every row below carries a name and nothing else: a week switched
-          // off keeps the Memorial heading and the song.
+          // Every row below but the closing song carries a name and nothing
+          // else: a week switched off keeps the Memorial heading and both
+          // songs, and drops only the assignments in between.
           if (showNames) ...[
             assignmentRow(
               label: l10n.partChairman,
@@ -196,6 +214,15 @@ class MemorialProgramView extends ConsumerWidget {
                 },
               ),
           ],
+          // Outside the names block, like the opening song: the closing song
+          // carries no name and stays visible on a week switched off.
+          ListTile(
+            dense: true,
+            title: Text(l10n.songLabel),
+            subtitle: Text(songDisplayText(
+                program.closingSongNo, program.closingSongTitle)),
+            onTap: canEdit ? () => _editClosingSong(context) : null,
+          ),
           if (canEdit)
             Padding(
               padding: const EdgeInsets.all(8),

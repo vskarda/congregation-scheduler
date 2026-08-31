@@ -2559,10 +2559,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get weekNoteEdit => 'Hinweis bearbeiten';
 
   @override
-  String get memorialBreadPrayer => 'Gebet zum Brot';
+  String get memorialBreadPrayer => 'Gebet für das Brot';
 
   @override
-  String get memorialWinePrayer => 'Gebet zum Wein';
+  String get memorialWinePrayer => 'Gebet für den Wein';
 
   @override
   String get memorialAttendance => 'Besucherzahl beim Gedächtnismahl';

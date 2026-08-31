@@ -8,8 +8,10 @@ part of 'memorial.dart';
 
 _MemorialProgram _$MemorialProgramFromJson(Map<String, dynamic> json) =>
     _MemorialProgram(
-      songTitle: json['songTitle'] as String? ?? '',
-      songNo: (json['songNo'] as num?)?.toInt(),
+      openingSongTitle: json['songTitle'] as String? ?? '',
+      openingSongNo: (json['songNo'] as num?)?.toInt(),
+      closingSongTitle: json['closingSongTitle'] as String? ?? '',
+      closingSongNo: (json['closingSongNo'] as num?)?.toInt(),
       chairman: json['chairman'] == null
           ? const Assignment()
           : Assignment.fromJson(json['chairman'] as Map<String, dynamic>),
@@ -31,8 +33,10 @@ _MemorialProgram _$MemorialProgramFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$MemorialProgramToJson(_MemorialProgram instance) =>
     <String, dynamic>{
-      'songTitle': instance.songTitle,
-      'songNo': ?instance.songNo,
+      'songTitle': instance.openingSongTitle,
+      'songNo': ?instance.openingSongNo,
+      'closingSongTitle': instance.closingSongTitle,
+      'closingSongNo': ?instance.closingSongNo,
       'chairman': instance.chairman.toJson(),
       'speaker': instance.speaker.toJson(),
       'breadPrayer': instance.breadPrayer.toJson(),

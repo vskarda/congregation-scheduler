@@ -1,6 +1,7 @@
 import 'package:congregation_scheduler/core/data/admin_mode_provider.dart';
 import 'package:congregation_scheduler/core/data/congregation_repository.dart';
 import 'package:congregation_scheduler/core/data/publishers_repository.dart';
+import 'package:congregation_scheduler/core/data/schedule_config_repository.dart';
 import 'package:congregation_scheduler/core/firebase/firebase_providers.dart';
 import 'package:congregation_scheduler/core/models/models.dart';
 import 'package:congregation_scheduler/core/utils/dates.dart';
@@ -63,8 +64,10 @@ void main() {
       );
 
   const memorial = MemorialProgram(
-    songTitle: 'Song of praise',
-    songNo: 18,
+    openingSongTitle: 'Song of praise',
+    openingSongNo: 18,
+    closingSongTitle: 'Closing song',
+    closingSongNo: 32,
     chairman: Assignment(publisherIds: ['p1']),
     speaker: Assignment(freeText: 'Visiting brother'),
   );
@@ -305,6 +308,28 @@ void main() {
       expect(find.text(l10n().memorialWinePrayer), findsOneWidget);
       expect(find.text('Visiting brother'), findsOneWidget);
       expect(find.text('Bible reading'), findsNothing);
+      // Opening and closing song, in that order.
+      expect(find.text('18. Song of praise'), findsOneWidget);
+      expect(find.text('32. Closing song'), findsOneWidget);
+    });
+
+    testWidgets(
+        'keeps both songs on a week switched off, unlike the names',
+        (tester) async {
+      tallScreen(tester);
+      final db = await seedMidweek(midweek(
+        kind: MeetingProgramKind.memorial,
+        memorialProgram: memorial,
+      ));
+      await ScheduleConfigRepository(db)
+          .setWeekAssigneesVisible(ScheduleConfigDoc.lmm, weekId, false);
+      await tester.pumpWidget(wrap(db, const Roles(), const LmmScreen()));
+      await tester.pumpAndSettle();
+
+      expect(find.text('18. Song of praise'), findsOneWidget);
+      expect(find.text('32. Closing song'), findsOneWidget);
+      expect(find.text('Visiting brother'), findsNothing);
+      expect(find.text(l10n().memorialBreadPrayer), findsNothing);
     });
 
     testWidgets('replaces the weekend program just the same', (tester) async {

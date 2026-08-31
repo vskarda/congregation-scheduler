@@ -6,8 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 /// Memorial payload both meeting schedules can carry.
 void main() {
   const memorial = MemorialProgram(
-    songTitle: 'Song',
-    songNo: 18,
+    openingSongTitle: 'Song',
+    openingSongNo: 18,
+    closingSongTitle: 'Closing song',
+    closingSongNo: 32,
     chairman: Assignment(publisherIds: ['chair']),
     speaker: Assignment(freeText: 'Visiting brother'),
     breadPrayer: Assignment(publisherIds: ['bread']),
@@ -90,6 +92,27 @@ void main() {
       expect(back.programKind, MeetingProgramKind.nothingPlanned);
       expect(back.programNote, 'Regional convention');
       expect(back.memorial?.chairman.publisherIds, ['chair']);
+      expect(back.memorial?.openingSongTitle, 'Song');
+      expect(back.memorial?.closingSongTitle, 'Closing song');
+      expect(back.memorial?.closingSongNo, 32);
+    });
+
+    test('the opening song keeps its original JSON keys', () {
+      // MemorialProgram.openingSongTitle/openingSongNo predate those Dart
+      // names — they were plain songTitle/songNo before the closing song was
+      // added — so a Memorial saved by an earlier build must still read back
+      // correctly, and a fresh save must still be readable by it.
+      final json = memorial.toJson();
+      expect(json['songTitle'], 'Song');
+      expect(json['songNo'], 18);
+      expect(json.containsKey('openingSongTitle'), isFalse);
+
+      final fromLegacyKeys = MemorialProgram.fromJson({
+        'songTitle': 'Legacy pick',
+        'songNo': 7,
+      });
+      expect(fromLegacyKeys.openingSongTitle, 'Legacy pick');
+      expect(fromLegacyKeys.openingSongNo, 7);
     });
 
     test('a document written before program kinds existed reads as regular',

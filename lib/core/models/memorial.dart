@@ -23,10 +23,19 @@ abstract class MemorialProgram with _$MemorialProgram {
   const MemorialProgram._();
 
   const factory MemorialProgram({
-    /// Opening song. [songTitle] is a snapshot; [songNo] is the catalog
-    /// number when picked from the song list, null for free text.
-    @Default('') String songTitle,
-    @JsonKey(includeIfNull: false) int? songNo,
+    /// Opening song, before the talk. [openingSongTitle] is a snapshot;
+    /// [openingSongNo] is the catalog number when picked from the song list,
+    /// null for free text.
+    ///
+    /// JSON keys stay `songTitle`/`songNo` — the Memorial had only the one
+    /// song when those were chosen, and renaming them would orphan the
+    /// opening song on every Memorial already saved.
+    @JsonKey(name: 'songTitle') @Default('') String openingSongTitle,
+    @JsonKey(name: 'songNo', includeIfNull: false) int? openingSongNo,
+
+    /// Closing song, after the wine is passed.
+    @Default('') String closingSongTitle,
+    @JsonKey(includeIfNull: false) int? closingSongNo,
     @Default(Assignment()) Assignment chairman,
     @Default(Assignment()) Assignment speaker,
 

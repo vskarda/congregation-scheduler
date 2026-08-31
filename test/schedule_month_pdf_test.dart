@@ -177,7 +177,8 @@ void main() {
         '2026-07-06': lmmWeek.copyWith(
           programKind: MeetingProgramKind.memorial,
           memorial: const MemorialProgram(
-            songNo: 18,
+            openingSongNo: 18,
+            closingSongNo: 32,
             chairman: Assignment(publisherIds: ['p1']),
             speaker: Assignment(freeText: 'Visiting brother'),
             breadPrayer: Assignment(publisherIds: ['p2']),

@@ -15,9 +15,15 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$MemorialProgram {
 
-/// Opening song. [songTitle] is a snapshot; [songNo] is the catalog
-/// number when picked from the song list, null for free text.
- String get songTitle;@JsonKey(includeIfNull: false) int? get songNo; Assignment get chairman; Assignment get speaker;/// The two prayers said over the emblems.
+/// Opening song, before the talk. [openingSongTitle] is a snapshot;
+/// [openingSongNo] is the catalog number when picked from the song list,
+/// null for free text.
+///
+/// JSON keys stay `songTitle`/`songNo` — the Memorial had only the one
+/// song when those were chosen, and renaming them would orphan the
+/// opening song on every Memorial already saved.
+@JsonKey(name: 'songTitle') String get openingSongTitle;@JsonKey(name: 'songNo', includeIfNull: false) int? get openingSongNo;/// Closing song, after the wine is passed.
+ String get closingSongTitle;@JsonKey(includeIfNull: false) int? get closingSongNo; Assignment get chairman; Assignment get speaker;/// The two prayers said over the emblems.
  Assignment get breadPrayer; Assignment get winePrayer;/// Extra program fields (label + assignment/free text), this Memorial
 /// only — the schedule's permanent custom assignments recur on every
 /// week and belong to the week document instead.
@@ -34,16 +40,16 @@ $MemorialProgramCopyWith<MemorialProgram> get copyWith => _$MemorialProgramCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemorialProgram&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.breadPrayer, breadPrayer) || other.breadPrayer == breadPrayer)&&(identical(other.winePrayer, winePrayer) || other.winePrayer == winePrayer)&&const DeepCollectionEquality().equals(other.customFields, customFields));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemorialProgram&&(identical(other.openingSongTitle, openingSongTitle) || other.openingSongTitle == openingSongTitle)&&(identical(other.openingSongNo, openingSongNo) || other.openingSongNo == openingSongNo)&&(identical(other.closingSongTitle, closingSongTitle) || other.closingSongTitle == closingSongTitle)&&(identical(other.closingSongNo, closingSongNo) || other.closingSongNo == closingSongNo)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.breadPrayer, breadPrayer) || other.breadPrayer == breadPrayer)&&(identical(other.winePrayer, winePrayer) || other.winePrayer == winePrayer)&&const DeepCollectionEquality().equals(other.customFields, customFields));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,songTitle,songNo,chairman,speaker,breadPrayer,winePrayer,const DeepCollectionEquality().hash(customFields));
+int get hashCode => Object.hash(runtimeType,openingSongTitle,openingSongNo,closingSongTitle,closingSongNo,chairman,speaker,breadPrayer,winePrayer,const DeepCollectionEquality().hash(customFields));
 
 @override
 String toString() {
-  return 'MemorialProgram(songTitle: $songTitle, songNo: $songNo, chairman: $chairman, speaker: $speaker, breadPrayer: $breadPrayer, winePrayer: $winePrayer, customFields: $customFields)';
+  return 'MemorialProgram(openingSongTitle: $openingSongTitle, openingSongNo: $openingSongNo, closingSongTitle: $closingSongTitle, closingSongNo: $closingSongNo, chairman: $chairman, speaker: $speaker, breadPrayer: $breadPrayer, winePrayer: $winePrayer, customFields: $customFields)';
 }
 
 
@@ -54,7 +60,7 @@ abstract mixin class $MemorialProgramCopyWith<$Res>  {
   factory $MemorialProgramCopyWith(MemorialProgram value, $Res Function(MemorialProgram) _then) = _$MemorialProgramCopyWithImpl;
 @useResult
 $Res call({
- String songTitle,@JsonKey(includeIfNull: false) int? songNo, Assignment chairman, Assignment speaker, Assignment breadPrayer, Assignment winePrayer, List<CustomAssignment> customFields
+@JsonKey(name: 'songTitle') String openingSongTitle,@JsonKey(name: 'songNo', includeIfNull: false) int? openingSongNo, String closingSongTitle,@JsonKey(includeIfNull: false) int? closingSongNo, Assignment chairman, Assignment speaker, Assignment breadPrayer, Assignment winePrayer, List<CustomAssignment> customFields
 });
 
 
@@ -71,10 +77,12 @@ class _$MemorialProgramCopyWithImpl<$Res>
 
 /// Create a copy of MemorialProgram
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? songTitle = null,Object? songNo = freezed,Object? chairman = null,Object? speaker = null,Object? breadPrayer = null,Object? winePrayer = null,Object? customFields = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? openingSongTitle = null,Object? openingSongNo = freezed,Object? closingSongTitle = null,Object? closingSongNo = freezed,Object? chairman = null,Object? speaker = null,Object? breadPrayer = null,Object? winePrayer = null,Object? customFields = null,}) {
   return _then(_self.copyWith(
-songTitle: null == songTitle ? _self.songTitle : songTitle // ignore: cast_nullable_to_non_nullable
-as String,songNo: freezed == songNo ? _self.songNo : songNo // ignore: cast_nullable_to_non_nullable
+openingSongTitle: null == openingSongTitle ? _self.openingSongTitle : openingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,openingSongNo: freezed == openingSongNo ? _self.openingSongNo : openingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,closingSongTitle: null == closingSongTitle ? _self.closingSongTitle : closingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,closingSongNo: freezed == closingSongNo ? _self.closingSongNo : closingSongNo // ignore: cast_nullable_to_non_nullable
 as int?,chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as Assignment,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
 as Assignment,breadPrayer: null == breadPrayer ? _self.breadPrayer : breadPrayer // ignore: cast_nullable_to_non_nullable
@@ -201,10 +209,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'songTitle')  String openingSongTitle, @JsonKey(name: 'songNo', includeIfNull: false)  int? openingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MemorialProgram() when $default != null:
-return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
+return $default(_that.openingSongTitle,_that.openingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
   return orElse();
 
 }
@@ -222,10 +230,10 @@ return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'songTitle')  String openingSongTitle, @JsonKey(name: 'songNo', includeIfNull: false)  int? openingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)  $default,) {final _that = this;
 switch (_that) {
 case _MemorialProgram():
-return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
+return $default(_that.openingSongTitle,_that.openingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -242,10 +250,10 @@ return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String songTitle, @JsonKey(includeIfNull: false)  int? songNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'songTitle')  String openingSongTitle, @JsonKey(name: 'songNo', includeIfNull: false)  int? openingSongNo,  String closingSongTitle, @JsonKey(includeIfNull: false)  int? closingSongNo,  Assignment chairman,  Assignment speaker,  Assignment breadPrayer,  Assignment winePrayer,  List<CustomAssignment> customFields)?  $default,) {final _that = this;
 switch (_that) {
 case _MemorialProgram() when $default != null:
-return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
+return $default(_that.openingSongTitle,_that.openingSongNo,_that.closingSongTitle,_that.closingSongNo,_that.chairman,_that.speaker,_that.breadPrayer,_that.winePrayer,_that.customFields);case _:
   return null;
 
 }
@@ -257,13 +265,21 @@ return $default(_that.songTitle,_that.songNo,_that.chairman,_that.speaker,_that.
 @JsonSerializable()
 
 class _MemorialProgram extends MemorialProgram {
-  const _MemorialProgram({this.songTitle = '', @JsonKey(includeIfNull: false) this.songNo, this.chairman = const Assignment(), this.speaker = const Assignment(), this.breadPrayer = const Assignment(), this.winePrayer = const Assignment(), final  List<CustomAssignment> customFields = const <CustomAssignment>[]}): _customFields = customFields,super._();
+  const _MemorialProgram({@JsonKey(name: 'songTitle') this.openingSongTitle = '', @JsonKey(name: 'songNo', includeIfNull: false) this.openingSongNo, this.closingSongTitle = '', @JsonKey(includeIfNull: false) this.closingSongNo, this.chairman = const Assignment(), this.speaker = const Assignment(), this.breadPrayer = const Assignment(), this.winePrayer = const Assignment(), final  List<CustomAssignment> customFields = const <CustomAssignment>[]}): _customFields = customFields,super._();
   factory _MemorialProgram.fromJson(Map<String, dynamic> json) => _$MemorialProgramFromJson(json);
 
-/// Opening song. [songTitle] is a snapshot; [songNo] is the catalog
-/// number when picked from the song list, null for free text.
-@override@JsonKey() final  String songTitle;
-@override@JsonKey(includeIfNull: false) final  int? songNo;
+/// Opening song, before the talk. [openingSongTitle] is a snapshot;
+/// [openingSongNo] is the catalog number when picked from the song list,
+/// null for free text.
+///
+/// JSON keys stay `songTitle`/`songNo` — the Memorial had only the one
+/// song when those were chosen, and renaming them would orphan the
+/// opening song on every Memorial already saved.
+@override@JsonKey(name: 'songTitle') final  String openingSongTitle;
+@override@JsonKey(name: 'songNo', includeIfNull: false) final  int? openingSongNo;
+/// Closing song, after the wine is passed.
+@override@JsonKey() final  String closingSongTitle;
+@override@JsonKey(includeIfNull: false) final  int? closingSongNo;
 @override@JsonKey() final  Assignment chairman;
 @override@JsonKey() final  Assignment speaker;
 /// The two prayers said over the emblems.
@@ -296,16 +312,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemorialProgram&&(identical(other.songTitle, songTitle) || other.songTitle == songTitle)&&(identical(other.songNo, songNo) || other.songNo == songNo)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.breadPrayer, breadPrayer) || other.breadPrayer == breadPrayer)&&(identical(other.winePrayer, winePrayer) || other.winePrayer == winePrayer)&&const DeepCollectionEquality().equals(other._customFields, _customFields));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MemorialProgram&&(identical(other.openingSongTitle, openingSongTitle) || other.openingSongTitle == openingSongTitle)&&(identical(other.openingSongNo, openingSongNo) || other.openingSongNo == openingSongNo)&&(identical(other.closingSongTitle, closingSongTitle) || other.closingSongTitle == closingSongTitle)&&(identical(other.closingSongNo, closingSongNo) || other.closingSongNo == closingSongNo)&&(identical(other.chairman, chairman) || other.chairman == chairman)&&(identical(other.speaker, speaker) || other.speaker == speaker)&&(identical(other.breadPrayer, breadPrayer) || other.breadPrayer == breadPrayer)&&(identical(other.winePrayer, winePrayer) || other.winePrayer == winePrayer)&&const DeepCollectionEquality().equals(other._customFields, _customFields));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,songTitle,songNo,chairman,speaker,breadPrayer,winePrayer,const DeepCollectionEquality().hash(_customFields));
+int get hashCode => Object.hash(runtimeType,openingSongTitle,openingSongNo,closingSongTitle,closingSongNo,chairman,speaker,breadPrayer,winePrayer,const DeepCollectionEquality().hash(_customFields));
 
 @override
 String toString() {
-  return 'MemorialProgram(songTitle: $songTitle, songNo: $songNo, chairman: $chairman, speaker: $speaker, breadPrayer: $breadPrayer, winePrayer: $winePrayer, customFields: $customFields)';
+  return 'MemorialProgram(openingSongTitle: $openingSongTitle, openingSongNo: $openingSongNo, closingSongTitle: $closingSongTitle, closingSongNo: $closingSongNo, chairman: $chairman, speaker: $speaker, breadPrayer: $breadPrayer, winePrayer: $winePrayer, customFields: $customFields)';
 }
 
 
@@ -316,7 +332,7 @@ abstract mixin class _$MemorialProgramCopyWith<$Res> implements $MemorialProgram
   factory _$MemorialProgramCopyWith(_MemorialProgram value, $Res Function(_MemorialProgram) _then) = __$MemorialProgramCopyWithImpl;
 @override @useResult
 $Res call({
- String songTitle,@JsonKey(includeIfNull: false) int? songNo, Assignment chairman, Assignment speaker, Assignment breadPrayer, Assignment winePrayer, List<CustomAssignment> customFields
+@JsonKey(name: 'songTitle') String openingSongTitle,@JsonKey(name: 'songNo', includeIfNull: false) int? openingSongNo, String closingSongTitle,@JsonKey(includeIfNull: false) int? closingSongNo, Assignment chairman, Assignment speaker, Assignment breadPrayer, Assignment winePrayer, List<CustomAssignment> customFields
 });
 
 
@@ -333,10 +349,12 @@ class __$MemorialProgramCopyWithImpl<$Res>
 
 /// Create a copy of MemorialProgram
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? songTitle = null,Object? songNo = freezed,Object? chairman = null,Object? speaker = null,Object? breadPrayer = null,Object? winePrayer = null,Object? customFields = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? openingSongTitle = null,Object? openingSongNo = freezed,Object? closingSongTitle = null,Object? closingSongNo = freezed,Object? chairman = null,Object? speaker = null,Object? breadPrayer = null,Object? winePrayer = null,Object? customFields = null,}) {
   return _then(_MemorialProgram(
-songTitle: null == songTitle ? _self.songTitle : songTitle // ignore: cast_nullable_to_non_nullable
-as String,songNo: freezed == songNo ? _self.songNo : songNo // ignore: cast_nullable_to_non_nullable
+openingSongTitle: null == openingSongTitle ? _self.openingSongTitle : openingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,openingSongNo: freezed == openingSongNo ? _self.openingSongNo : openingSongNo // ignore: cast_nullable_to_non_nullable
+as int?,closingSongTitle: null == closingSongTitle ? _self.closingSongTitle : closingSongTitle // ignore: cast_nullable_to_non_nullable
+as String,closingSongNo: freezed == closingSongNo ? _self.closingSongNo : closingSongNo // ignore: cast_nullable_to_non_nullable
 as int?,chairman: null == chairman ? _self.chairman : chairman // ignore: cast_nullable_to_non_nullable
 as Assignment,speaker: null == speaker ? _self.speaker : speaker // ignore: cast_nullable_to_non_nullable
 as Assignment,breadPrayer: null == breadPrayer ? _self.breadPrayer : breadPrayer // ignore: cast_nullable_to_non_nullable

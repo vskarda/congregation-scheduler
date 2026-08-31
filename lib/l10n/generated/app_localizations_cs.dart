@@ -2527,10 +2527,10 @@ class AppLocalizationsCs extends AppLocalizations {
   String get weekNoteEdit => 'Upravit poznámku';
 
   @override
-  String get memorialBreadPrayer => 'Modlitba u chleba';
+  String get memorialBreadPrayer => 'Modlitba za chléb';
 
   @override
-  String get memorialWinePrayer => 'Modlitba u vína';
+  String get memorialWinePrayer => 'Modlitba za víno';
 
   @override
   String get memorialAttendance => 'Návštěvnost Památné slavnosti';
