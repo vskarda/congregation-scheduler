@@ -577,6 +577,7 @@
   "reportMissing": "Non inviato",
   "reportEmpty": "Rapporto vuoto — nessun servizio",
   "reportNotCountedMoved": "Trasferito — non conteggiato",
+  "reportFormerMember": "Ex membro",
   "reportEnterFor": "Inserisci rapporto — {name}",
   "reportSummaryReported": "Hanno riferito: {reported} / {total}",
   "reportCheckTitle": "Controlla il rapporto",

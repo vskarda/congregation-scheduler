@@ -1833,7 +1833,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get reportNotCountedMoved => 'Trasferito — non conteggiato';
 
   @override
-  String get reportFormerMember => 'Former member';
+  String get reportFormerMember => 'Ex membro';
 
   @override
   String reportEnterFor(String name) {

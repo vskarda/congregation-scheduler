@@ -1841,7 +1841,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get reportNotCountedMoved => 'Déménagé — non compté';
 
   @override
-  String get reportFormerMember => 'Former member';
+  String get reportFormerMember => 'Ancien membre';
 
   @override
   String reportEnterFor(String name) {

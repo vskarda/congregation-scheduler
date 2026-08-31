@@ -577,6 +577,7 @@
   "reportMissing": "未送信",
   "reportEmpty": "報告は空 — 奉仕なし",
   "reportNotCountedMoved": "転出 — 集計外",
+  "reportFormerMember": "元メンバー",
   "reportEnterFor": "報告を入力 — {name}",
   "reportSummaryReported": "報告済み: {reported} / {total}",
   "reportCheckTitle": "報告を確認してください",

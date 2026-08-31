@@ -577,6 +577,7 @@
   "reportMissing": "No enviado",
   "reportEmpty": "Informe vacío — sin servicio",
   "reportNotCountedMoved": "Se mudó — no cuenta",
+  "reportFormerMember": "Miembro anterior",
   "reportEnterFor": "Introducir informe — {name}",
   "reportSummaryReported": "Informaron: {reported} / {total}",
   "reportCheckTitle": "Revisa el informe",

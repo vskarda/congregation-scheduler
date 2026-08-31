@@ -577,6 +577,7 @@
   "reportMissing": "Nicht gesendet",
   "reportEmpty": "Leerer Bericht — kein Dienst",
   "reportNotCountedMoved": "Weggezogen — zählt nicht",
+  "reportFormerMember": "Ehemaliges Mitglied",
   "reportEnterFor": "Bericht eingeben – {name}",
   "reportSummaryReported": "Berichtet: {reported} / {total}",
   "reportCheckTitle": "Bericht prüfen",

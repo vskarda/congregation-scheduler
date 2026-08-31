@@ -1837,7 +1837,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get reportNotCountedMoved => 'Weggezogen — zählt nicht';
 
   @override
-  String get reportFormerMember => 'Former member';
+  String get reportFormerMember => 'Ehemaliges Mitglied';
 
   @override
   String reportEnterFor(String name) {

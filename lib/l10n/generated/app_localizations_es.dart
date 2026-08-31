@@ -1839,7 +1839,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reportNotCountedMoved => 'Se mudó — no cuenta';
 
   @override
-  String get reportFormerMember => 'Former member';
+  String get reportFormerMember => 'Miembro anterior';
 
   @override
   String reportEnterFor(String name) {

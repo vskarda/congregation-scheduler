@@ -577,6 +577,7 @@
   "reportMissing": "Nie wysłano",
   "reportEmpty": "Pusty raport — brak służby",
   "reportNotCountedMoved": "Przeprowadził się — nie liczy się",
+  "reportFormerMember": "Były członek",
   "reportEnterFor": "Wprowadź sprawozdanie — {name}",
   "reportSummaryReported": "Zgłosiło: {reported} / {total}",
   "reportCheckTitle": "Sprawdź sprawozdanie",
